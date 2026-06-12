@@ -29,6 +29,7 @@
             --grad-b1: linear-gradient(135deg, #10b981, #047857);
             --grad-b2: linear-gradient(135deg, #f97316, #c2410c);
             --grad-c1: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            --grad-dashboard: linear-gradient(135deg, #6366f1, #4f46e5); /* Nuevo gradiente para SMART DASHBOARD */
         }
 
         [data-theme="dark"] {
@@ -140,6 +141,16 @@
         .level-card:nth-child(4) { animation-delay: 0.35s; --accent-g: var(--grad-b1); }
         .level-card:nth-child(5) { animation-delay: 0.45s; --accent-g: var(--grad-b2); }
         .level-card:nth-child(6) { animation-delay: 0.55s; --accent-g: var(--grad-c1); }
+        
+        /* Modificación para centrar la séptima tarjeta en la parte inferior */
+        .level-card:nth-child(7) { 
+            animation-delay: 0.65s; 
+            --accent-g: var(--grad-dashboard); 
+            grid-column: 1 / -1; 
+            max-width: 380px; 
+            width: 100%;
+            margin: 0 auto; 
+        }
 
         .level-card::before {
             content: '';
@@ -226,6 +237,12 @@
             .welcome h1 { font-size: 2rem; }
             .matrix-grid { grid-template-columns: 1fr; gap: 1.5rem; }
             .theme-toggle { top: 1rem; right: 1rem; }
+            
+            /* En pantallas móviles se cancela el centrado de grid para que actúe normal */
+            .level-card:nth-child(7) {
+                grid-column: auto;
+                max-width: none;
+            }
         }
 
         /* --- CONFIGURACIÓN DE LOS PERSONAJES (RESPONSIVOS) --- */
@@ -325,6 +342,13 @@
                     desc: "Command complex structural variations. Read demanding literature and configure expressions effortlessly for executive spaces.",
                     icon: "🎓",
                     destination: "english_C1.html"
+                },
+                {
+                    tag: "TOOL",
+                    title: "SMART DASHBOARD",
+                    desc: "A tool to master the order of your class.",
+                    icon: "📊",
+                    destination: "https://script.google.com/macros/s/AKfycbz41nnyfqYtYurRR537nc_UFn4MTbMTm6Jnq1PYIIMQn5PKzZ2gh-vMX4GLxtOMpE6u/exec"
                 }
             ]
         };

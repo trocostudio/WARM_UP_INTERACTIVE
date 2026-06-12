@@ -1,0 +1,2587 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>English Interactive — Level A1</title>
+    <style>
+        :root {
+            --bg-color: #FFF5F5;
+            --card-bg: #FFFFFF;
+            --text-color: #2D1515;
+            --text-light: #705050;
+            --primary-color: #E53935;
+            --primary-dark: #B71C1C;
+            --accent-color: #FF7043;
+            --border-color: #FFEBEE;
+            --shadow: 0 8px 32px rgba(229, 57, 53, 0.12);
+            --correct: #4CAF50;
+            --incorrect: #F44336;
+            --warn: #FFC107;
+            --purple: #673AB7;
+            --blue: #2196F3;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1A0A0A;
+            --card-bg: #2D1515;
+            --text-color: #FFEAEA;
+            --text-light: #B09595;
+            --primary-color: #FF4D4D;
+            --primary-dark: #FF3333;
+            --accent-color: #FF8A65;
+            --border-color: #4A2828;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Segoe UI', 'Roboto', system-ui, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            padding-bottom: 60px;
+        }
+
+        /* Fixed Top Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--card-bg);
+            border-bottom: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .header-logo {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 12px;
+            right: 20px;
+            z-index: 1001;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: none;
+            background: var(--primary-color);
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            touch-action: manipulation;
+        }
+
+        .global-progress-bar-container {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: var(--border-color);
+            z-index: 1000;
+        }
+
+        #global-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+            transition: width 0.4s ease;
+        }
+
+        /* Layout Container */
+        .main-container {
+            max-width: 1200px;
+            margin: 100px auto 30px auto;
+            padding: 0 20px;
+        }
+
+        .welcome-hero {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .welcome-hero h1 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+
+        /* Units Grid Dashboard */
+        .units-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .unit-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 160px;
+        }
+
+        .unit-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+        }
+
+        .unit-card.active {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px var(--accent-color);
+        }
+
+        .unit-badge {
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--primary-color);
+            margin-bottom: 6px;
+        }
+
+        .unit-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .unit-grammar {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .unit-progress-bg {
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .unit-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        /* Interaction Panel split views */
+        .interaction-panel {
+            display: none;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            margin-top: 20px;
+            animation: slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @media(min-width: 850px) {
+            .interaction-panel {
+                grid-template-columns: 350px 1fr;
+            }
+        }
+
+        .warmup-box {
+            background: linear-gradient(135deg, #4A148C, #7B1FA2);
+            color: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 24px rgba(123,31,162,0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 300px;
+        }
+
+        [data-theme="dark"] .warmup-box {
+            background: linear-gradient(135deg, #2A085C, #4A1261);
+        }
+
+        .warmup-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .warmup-display {
+            font-size: 1.25rem;
+            font-weight: 600;
+            line-height: 1.5;
+            margin: 20px 0;
+            text-align: center;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-btn {
+            min-height: 48px;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0 20px;
+            transition: all 0.2s ease;
+            touch-action: manipulation;
+        }
+
+        .btn-light {
+            background: white;
+            color: #4A148C;
+        }
+        .btn-light:hover { background: #F5F5F5; }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        .btn-primary:hover { background: var(--primary-dark); }
+
+        .games-box {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .games-box h2 {
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .game-card {
+            background: var(--bg-color);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            min-height: 110px;
+            justify-content: center;
+        }
+
+        .game-card:hover {
+            border-color: var(--accent-color);
+            transform: scale(1.03);
+        }
+
+        .game-icon {
+            font-size: 2rem;
+        }
+
+        /* Fullscreen Game Overlay Modals */
+        .game-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-color);
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            animation: slideInUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+        }
+
+        .game-header {
+            height: 65px;
+            background: var(--card-bg);
+            border-bottom: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            position: sticky;
+            top: 0;
+            z-index: 2010;
+        }
+
+        .game-title-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .close-game-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: none;
+            background: var(--border-color);
+            color: var(--text-color);
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .game-container {
+            flex: 1;
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Generic Screens inside Games */
+        .game-start-screen, .game-result-screen {
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .game-start-screen h2, .game-result-screen h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .game-start-screen p, .game-result-screen p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 30px;
+        }
+
+        /* GAME 1: FLASHCARDS SPECIFICS */
+        .fc-wrapper {
+            perspective: 1000px;
+            width: 100%;
+            max-width: 420px;
+            height: 280px;
+            margin: 20px auto;
+        }
+
+        .fc-card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .fc-card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .fc-face {
+            position: absolute;
+            inset: 0;
+            backface-visibility: hidden;
+            background: var(--card-bg);
+            border: 4px solid var(--border-color);
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .fc-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, var(--card-bg), var(--bg-color));
+            border-color: var(--accent-color);
+        }
+
+        .fc-hint-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-light);
+            margin-bottom: 15px;
+        }
+
+        .fc-main-text {
+            font-size: 1.6rem;
+            font-weight: bold;
+        }
+
+        .fc-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .fc-btn {
+            flex: 1;
+            max-width: 140px;
+        }
+        .fc-know { background: var(--correct); color: white; }
+        .fc-review { background: var(--incorrect); color: white; }
+
+        /* GAME 2: QUIZ KAHOOT-STYLE */
+        .quiz-timer-container {
+            width: 100%;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .quiz-timer-fill {
+            height: 100%;
+            width: 100%;
+            background: var(--accent-color);
+        }
+
+        .quiz-question-box {
+            font-size: 1.4rem;
+            font-weight: bold;
+            text-align: center;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 16px;
+            border: 2px solid var(--border-color);
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        .quiz-options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 15px;
+        }
+
+        .quiz-opt-btn {
+            min-height: 70px;
+            border: none;
+            border-radius: 14px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 15px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: transform 0.1s ease, opacity 0.2s ease;
+        }
+        .quiz-opt-btn:active { transform: scale(0.98); }
+        .q-red { background: #E53935; }
+        .q-blue { background: #1E88E5; }
+        .q-yellow { background: #FDD835; color: #333; }
+        .q-green { background: #43A047; }
+
+        /* GAME 3: FILL IN THE BLANKS */
+        .fib-sentence-box {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            border: 2px solid var(--border-color);
+            font-size: 1.4rem;
+            line-height: 2;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .fib-dropzone {
+            display: inline-flex;
+            min-width: 130px;
+            border-bottom: 3px dashed var(--primary-color);
+            margin: 0 8px;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: var(--primary-color);
+            height: 40px;
+            vertical-align: middle;
+            transition: all 0.2s ease;
+        }
+
+        .fib-dropzone.correct-zone {
+            border-bottom-color: var(--correct);
+            color: var(--correct);
+        }
+
+        .fib-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 16px;
+            border: 2px solid var(--border-color);
+        }
+
+        .fib-chip {
+            background: var(--bg-color);
+            border: 2px solid var(--border-color);
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: grab;
+            font-weight: bold;
+            user-select: none;
+            touch-action: none;
+            min-height: 48px;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        /* GAME 4: WORD SEARCH */
+        .ws-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+
+        @media(min-width: 700px) {
+            .ws-layout { flex-direction: row; align-items: flex-start; justify-content: center; }
+        }
+
+        .ws-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 3px;
+            background: var(--border-color);
+            padding: 5px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 380px;
+            user-select: none;
+            touch-action: none;
+        }
+
+        .ws-cell {
+            aspect-ratio: 1;
+            background: var(--card-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .ws-cell.ws-selected {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .ws-cell.ws-found {
+            background: var(--correct);
+            color: white;
+        }
+
+        .ws-words-box {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 16px;
+            border: 2px solid var(--border-color);
+            min-width: 180px;
+            align-self: stretch;
+        }
+
+        .ws-word-item {
+            padding: 6px 0;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .ws-word-item.found {
+            text-decoration: line-through;
+            color: var(--text-light);
+            opacity: 0.6;
+        }
+
+        /* GAME 5: MEMORY PANELS */
+        .mem-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            max-width: 480px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .mem-card {
+            aspect-ratio: 1;
+            background: var(--primary-color);
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: transparent;
+            font-size: 0.95rem;
+            padding: 5px;
+            text-align: center;
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease;
+            user-select: none;
+        }
+
+        .mem-card.flipped {
+            background: var(--card-bg);
+            border: 3px solid var(--primary-color);
+            color: var(--text-color);
+        }
+
+        .mem-card.matched {
+            background: var(--correct);
+            border-color: var(--correct);
+            color: white;
+            cursor: default;
+        }
+
+        /* GAME 6: DRAG AND SORT */
+        .ds-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .ds-deck {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 16px;
+            min-height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px dashed var(--border-color);
+        }
+
+        .ds-card-item {
+            background: var(--accent-color);
+            color: white;
+            font-weight: bold;
+            padding: 12px 24px;
+            border-radius: 12px;
+            cursor: grab;
+            box-shadow: var(--shadow);
+            touch-action: none;
+            font-size: 1.1rem;
+        }
+
+        .ds-bins-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .ds-bin {
+            background: var(--card-bg);
+            border: 3px solid var(--border-color);
+            border-radius: 16px;
+            min-height: 180px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: background-color 0.2s ease;
+        }
+
+        .ds-bin-title {
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--border-color);
+            color: var(--primary-color);
+        }
+
+        /* GAME 7: HANGMAN SPECIFICS */
+        .hm-layout {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .hm-gallows-container {
+            width: 140px;
+            height: 140px;
+        }
+
+        .hm-word-display {
+            font-size: 2rem;
+            letter-spacing: 8px;
+            font-weight: bold;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .hm-hint-box {
+            font-style: italic;
+            color: var(--text-light);
+            text-align: center;
+            max-width: 500px;
+            margin-bottom: 10px;
+        }
+
+        .hm-keyboard {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            max-width: 550px;
+            justify-content: center;
+        }
+
+        .hm-key {
+            min-width: 40px;
+            height: 45px;
+            border: none;
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-transform: uppercase;
+        }
+        .hm-key:disabled {
+            opacity: 0.4;
+            cursor: default;
+        }
+
+        /* GAME 8: WHEEL OF QUESTIONS */
+        .wheel-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            position: relative;
+        }
+
+        .wheel-svg-holder {
+            position: relative;
+            width: 280px;
+            height: 280px;
+        }
+
+        .wheel-pointer {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 25px solid var(--primary-color);
+            z-index: 10;
+        }
+
+        #wheel-svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(0deg);
+            transition: transform 0s ease-out;
+        }
+
+        .wheel-card-result {
+            background: var(--card-bg);
+            border: 2px solid var(--primary-color);
+            padding: 25px;
+            border-radius: 16px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: var(--shadow);
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* Utilities */
+        .audio-fallback-indicator {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            background: var(--bg-color);
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideInUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+        .shake-element { animation: shake 0.4s ease; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <a href="index.html" class="btn-back-nav" style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                padding: 0 16px;
+                height: 42px;
+                border-radius: 12px;
+                background: var(--border-color);
+                color: var(--primary-color);
+                text-decoration: none;
+                font-size: 0.95rem;
+                font-weight: bold;
+                transition: background 0.3s ease, transform 0.2s ease;
+                border: none;
+                cursor: pointer;
+            " onmouseover="this.style.background='#FFCDD2'; this.style.transform='scale(1.03)';" onmouseout="this.style.background='var(--border-color)'; this.style.transform='scale(1)';">
+                🏠 Home
+            </a>
+            <div class="header-logo">English Interactive — Level A1</div>
+        </div>
+    </header>
+
+    <button class="theme-toggle" id="theme-switcher-btn" aria-label="Toggle Theme">🌙</button>
+
+    <div class="global-progress-bar-container">
+        <div id="global-progress-bar"></div>
+    </div>
+
+    <main class="main-container" id="app">
+        <div class="welcome-hero">
+            <h1>Interactive English Portal</h1>
+            <p>Select a learning block unit below to begin practicing</p>
+        </div>
+
+        <div class="units-grid" id="units-dashboard-container"></div>
+
+        <div class="interaction-panel" id="unit-interaction-panel">
+            <div class="warmup-box">
+                <div class="warmup-header">🔥 <span>Warm-Up</span></div>
+                <div class="warmup-display" id="warmup-text-display">Click the button below to generate a real-world communication prompt!</div>
+                <button class="action-btn btn-light" id="generate-warmup-btn">💬 Generate Question</button>
+            </div>
+            <div class="games-box">
+                <h2>🎮 Games &amp; Practices</h2>
+                <div class="games-grid" id="games-modules-launcher"></div>
+            </div>
+        </div>
+    </main>
+
+    <div class="game-overlay" id="global-game-overlay-modal">
+        <div class="game-header">
+            <div class="game-title-area">
+                <span id="game-headline-icon">🎮</span>
+                <span id="game-headline-title">Game Title</span>
+            </div>
+            <button class="close-game-btn" id="quit-game-modal-btn" aria-label="Close Practice">❌</button>
+        </div>
+        <div class="game-container" id="game-runtime-injection-sandbox"></div>
+    </div>
+
+    <div id="firma-seguridad" style="position:fixed;bottom:20px;left:30px;font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:14px;opacity:0.7;z-index:9999;pointer-events:none;">Creado por Tony Salas & German Peña</div>
+
+    <script>
+        // MASSIVE AND COMPLETE REAL GRAMMAR DATA STRUCTURE
+        const DATA = {
+            "u1-2": {
+                id: "u1-2",
+                title: "UNITS 1-2",
+                subtitle: '"Be" verb & Personal Info',
+                grammar: 'Wh-questions with "be", Yes/No questions, Subject pronouns, Possessive adjectives',
+                warmups: [
+                    "What's your name and where are you from?",
+                    "How old are you? What's your job?",
+                    "Who is your best friend? Describe them.",
+                    "Where do you live? Is it a big city?",
+                    "What's your favorite color? Why?",
+                    "Are you a student or a teacher?",
+                    "How are you today? What did you do this morning?",
+                    "What's your phone number? What's your email?"
+                ],
+                flashcards: [
+                    {front: "I", back: "Subject pronoun used for yourself"},
+                    {front: "He", back: "Subject pronoun used for a single male person"},
+                    {front: "She", back: "Subject pronoun used for a single female person"},
+                    {front: "They", back: "Subject pronoun used for multiple people"},
+                    {front: "My", back: "Possessive adjective belonging to me"},
+                    {front: "Your", back: "Possessive adjective belonging to you"},
+                    {front: "Where", back: "Question word used to ask about a location or place"},
+                    {front: "What", back: "Question word used to ask about an object, identity or action"},
+                    {front: "Who", back: "Question word used to ask about a person"},
+                    {front: "How", back: "Question word used to ask about health, state or manners"}
+                ],
+                quiz: [
+                    {q: "Where ___ you from?", o: ["is", "am", "are", "be"], a: 2, e: "With the subject pronoun 'you', we always pair it with the 'are' form of the verb 'be'."},
+                    {q: "This is my brother. ___ name is Alex.", o: ["Her", "His", "Your", "Its"], a: 1, e: "'His' is the possessive adjective used for a male individual."},
+                    {q: "What ___ her phone number?", o: ["am", "are", "be", "is"], a: 3, e: "'Her phone number' is a singular concept, so it takes the third person form 'is'."},
+                    {q: "Are they students? Yes, they ___.", o: ["are", "am", "is", "aren't"], a: 0, e: "Affirmative short answers match the subject pronoun and the verb tense perfectly without contractions."},
+                    {q: "Who ___ that tall woman over there?", o: ["is", "are", "am", "be"], a: 0, e: "'That tall woman' corresponds to 'she', requiring the singular form 'is'."},
+                    {q: "We are from Japan. ___ city is Tokyo.", o: ["Our", "Their", "Your", "My"], a: 0, e: "'Our' is the possessive adjective that links directly back to the subject pronoun 'We'."},
+                    {q: "How old ___ your children?", o: ["is", "am", "are", "be"], a: 2, e: "'Children' is plural, so it requires the plural form of the verb 'be' which is 'are'."},
+                    {q: "___ you married? No, I'm not.", o: ["Is", "Am", "Are", "Do"], a: 2, e: "Questions asking about personal status directly to a person use 'Are you'."},
+                    {q: "What is ___ name? My name is Sandra.", o: ["his", "your", "her", "our"], a: 1, e: "The question asks 'your' because the respondent says 'My name'."},
+                    {q: "They ___ teachers. They are doctors.", o: ["isn't", "aren't", "not", "am not"], a: 1, e: "'They' is a plural subject pronoun, matching with the negative form 'aren't'."}
+                ],
+                blanks: [
+                    {s: "Where _ you from originally?", c: "are"},
+                    {s: "Hello, this is my friend. _ name is Mike.", c: "His"},
+                    {s: "What _ your favorite subject in school?", c: "is"},
+                    {s: "They _ not from Colombia; they are Mexican.", c: "are"},
+                    {s: "Excuse me, is this _ backpack?", c: "your"},
+                    {s: "Who _ that man sitting near the door?", c: "is"},
+                    {s: "I _ a beginner English student.", c: "am"},
+                    {s: "She is a doctor and _ office is downtown.", c: "her"},
+                    {s: "How old _ your parents?", c: "are"},
+                    {s: "Are you single? No, I am _.", c: "married"}
+                ],
+                words: ["STUDENT", "TEACHER", "WELCOME", "FRIEND", "DOCTOR", "NAME", "COUNTRY", "PHONE"],
+                memory: [
+                    {a: "I", b: "me / myself"},
+                    {a: "You", b: "the person spoken to"},
+                    {a: "Where", b: "asks for place"},
+                    {a: "What", b: "asks for things"},
+                    {a: "Who", b: "asks for people"},
+                    {a: "His", b: "belonging to a boy"},
+                    {or: "Her", b: "belonging to a girl"},
+                    {a: "Our", b: "belonging to us"}
+                ],
+                sort: {
+                    cats: ["Pronouns", "Possessives", "Be Forms"],
+                    items: [
+                        {t: "I", c: 0}, {t: "She", c: 0}, {t: "They", c: 0},
+                        {t: "My", c: 1}, {t: "Your", c: 1}, {t: "Their", c: 1},
+                        {t: "Am", c: 2}, {t: "Is", c: 2}, {t: "Are", c: 2}
+                    ]
+                },
+                hangman: [
+                    {w: "STUDENT", h: "A person who is learning at a school or university."},
+                    {w: "TEACHER", h: "A person who helps people learn skills or knowledge."},
+                    {w: "WELCOME", h: "A friendly greeting for someone arriving at a place."},
+                    {w: "FRIEND", h: "A person whom you know well and like."},
+                    {w: "DOCTOR", h: "A qualified person who treats sick people."},
+                    {w: "COUNTRY", h: "An area of land controlled by its own government."},
+                    {w: "PHONE", h: "Device used to call or message friends."},
+                    {w: "NAME", h: "The word or words that a person or thing is known by."},
+                    {w: "MARRIED", h: "Having a husband or a wife."},
+                    {w: "SINGLE", h: "Not married or in a serious relationship."}
+                ]
+            },
+            "u3-4": {
+                id: "u3-4",
+                title: "UNITS 3-4",
+                subtitle: "Daily Routines",
+                grammar: "Simple present Wh-questions, Time expressions (at/in/on/around), Questions with when/what time",
+                warmups: [
+                    "What time do you wake up every day?",
+                    "When do you eat breakfast? What do you usually eat?",
+                    "What do you do on Saturday mornings?",
+                    "How do you go to work/school? How long does it take?",
+                    "What time do you go to bed? Do you sleep well?",
+                    "When do you exercise? How often?",
+                    "What do you do in the evenings?",
+                    "Do you have a routine on weekends? What is it?"
+                ],
+                flashcards: [
+                    {front: "In the morning", back: "Time phrase used for dawn until noon hours"},
+                    {front: "At night", back: "Time phrase used for late evening/dark hours"},
+                    {front: "On Sundays", back: "Preposition used precisely for specific days of the week"},
+                    {front: "At 7:00 AM", back: "Preposition used precisely for specific clock times"},
+                    {front: "Every day", back: "Frequency phrase meaning 7 days a week"},
+                    {front: "Wake up", back: "The action of stopping sleeping and opening your eyes"},
+                    {front: "Go to bed", back: "The action of lying down in your bed to sleep"},
+                    {front: "What time", back: "Question words asking for a precise hour on the clock"},
+                    {front: "When", back: "Question word asking for a general day, date, or time period"},
+                    {front: "Around", back: "Preposition meaning approximately or close to a certain time"}
+                ],
+                quiz: [
+                    {q: "What time ___ you get up?", o: ["does", "do", "are", "is"], a: 1, e: "With the subject pronoun 'you', the auxiliary verb for simple present questions is 'do'."},
+                    {q: "He ___ breakfast at 7:30 every morning.", o: ["eat", "eats", "eating", "has eat"], a: 1, e: "Third person singular subjects (he/she/it) require verbs ending in -s or -es in affirmative statements."},
+                    {q: "I watch TV ___ the evening.", o: ["on", "at", "in", "around"], a: 2, e: "We use the preposition 'in' with specific periods of the day like 'the morning/afternoon/evening'."},
+                    {q: "She goes to bed ___ midnight.", o: ["at", "in", "on", "to"], a: 0, e: "The word 'midnight' acts as a precise clock point (12:00 AM), which takes the preposition 'at'."},
+                    {q: "___ do you go to work? By bus.", o: ["When", "What time", "How", "Why"], a: 2, e: "'How' asks for the method, manner or means of transportation used."},
+                    {q: "They don't work ___ Saturdays.", o: ["in", "at", "on", "around"], a: 2, e: "Days of the week always take the preposition 'on'."},
+                    {q: "What time ___ she start her job?", o: ["do", "does", "is", "has"], a: 1, e: "The pronoun 'she' requires the third-person auxiliary verb 'does' to construct questions."},
+                    {q: "We always have lunch ___ around 1:00 PM.", o: ["at", "on", "in", "to"], a: 0, e: "'At around' combines for approximate specific clock hours smoothly."},
+                    {q: "My father ___ to work by train.", o: ["go", "goes", "going", "gone"], a: 1, e: "'My father' is a singular masculine subject pronoun (He), so the verb 'go' changes to 'goes'."},
+                    {q: "When ___ you study English? At night.", o: ["do", "does", "are", "is"], a: 0, e: "'Do' acts as the correct helper verb for 'you' in present tense info requests."}
+                ],
+                blanks: [
+                    {s: "What time do you usually _ up?", c: "wake"},
+                    {s: "He eats lunch _ noon every afternoon.", c: "at"},
+                    {s: "She _ not work on weekends.", c: "does"},
+                    {s: "We watch movies _ Friday nights.", c: "on"},
+                    {s: "How _ you travel to your school?", c: "do"},
+                    {s: "They study English _ the afternoon.", c: "in"},
+                    {s: "My brother _ soccer on Saturdays.", c: "plays"},
+                    {s: "What _ your sister do for a living?", c: "does"},
+                    {s: "I go to sleep around ten _ night.", c: "at"},
+                    {s: "When do they _ their homework?", c: "do"}
+                ],
+                words: ["ROUTINE", "BREAKFAST", "MORNING", "MIDNIGHT", "EXERCISE", "WEEKEND", "SHOWER", "DINNER"],
+                memory: [
+                    {a: "Wake up", b: "open your eyes"},
+                    {a: "In the morning", b: "AM time period"},
+                    {a: "At night", b: "PM dark hours"},
+                    {a: "On Mondays", b: "day of week"},
+                    {a: "At 8:00", b: "exact clock time"},
+                    {a: "Breakfast", b: "morning meal"},
+                    {a: "Dinner", b: "evening meal"},
+                    {a: "Go to bed", b: "prepare to sleep"}
+                ],
+                sort: {
+                    cats: ["Preposition IN", "Preposition AT", "Preposition ON"],
+                    items: [
+                        {t: "The morning", c: 0}, {t: "The evening", c: 0}, {t: "The afternoon", c: 0},
+                        {t: "Night", c: 1}, {t: "Midnight", c: 1}, {t: "3:30 PM", c: 1},
+                        {t: "Mondays", c: 2}, {t: "Friday night", c: 2}, {t: "Weekends", c: 2}
+                    ]
+                },
+                hangman: [
+                    {w: "BREAKFAST", h: "The very first meal eaten in the early part of the day."},
+                    {w: "ROUTINE", h: "A normal sequence of actions regularly followed everyday."},
+                    {w: "MORNING", h: "The early part of the day ending at noon."},
+                    {w: "MIDNIGHT", h: "Twelve o'clock at night."},
+                    {w: "EXERCISE", h: "Physical activity done to stay healthy and fit."},
+                    {w: "WEEKEND", h: "Saturday and Sunday collectively."},
+                    {w: "SHOWER", h: "Washing your body while standing under sprayed water."},
+                    {w: "DINNER", h: "The main meal eaten in the evening hours."},
+                    {w: "LUNCH", h: "A meal typically eaten in the middle of the day."},
+                    {w: "ALARM", h: "A clock device designed to wake you up with sound."}
+                ]
+            },
+            "u5-6": {
+                id: "u5-6",
+                title: "UNITS 5-6",
+                subtitle: "Shopping & Things",
+                grammar: "Demonstratives (this/that/these/those), one/ones, Comparisons with adjectives, How much/which",
+                warmups: [
+                    "Is this your bag? What's in it?",
+                    "Which do you prefer: these shoes or those?",
+                    "How much does a coffee cost in your city?",
+                    "What's the most expensive thing you own?",
+                    "Is your phone new or old? Is it good?",
+                    "Which is bigger: your bedroom or your living room?",
+                    "Do you prefer online shopping or stores? Why?",
+                    "What are these things on the table?"
+                ],
+                flashcards: [
+                    {front: "This", back: "Demonstrative for 1 singular item right here near you"},
+                    {front: "That", back: "Demonstrative for 1 singular item way over there far from you"},
+                    {front: "These", back: "Demonstrative for multiple plural items right here near you"},
+                    {front: "Those", back: "Demonstrative for multiple plural items way over there far from you"},
+                    {front: "How much", back: "Question phrase used to find out the price or cost of items"},
+                    {front: "Which", back: "Question word used to select between explicit limited choices"},
+                    {front: "One", back: "Pronoun substitute for a singular noun previously mentioned"},
+                    {front: "Ones", back: "Pronoun substitute for plural nouns previously mentioned"},
+                    {front: "Cheaper", back: "Comparative form meaning costing less money"},
+                    {front: "Bigger", back: "Comparative form meaning greater in spatial physical dimensions"}
+                ],
+                quiz: [
+                    {q: "How much ___ these leather shoes?", o: ["is", "are", "am", "be"], a: 1, e: "'These leather shoes' is a plural noun phrase, requiring the verb 'are'."},
+                    {q: "Look at ___ bird high up in that distant tree!", o: ["this", "that", "these", "those"], a: 1, e: "'That' points to a single far object."},
+                    {q: "Which jacket do you prefer? The green ___.", o: ["one", "ones", "it", "them"], a: 0, e: "Use 'one' to avoid repeating a singular countable noun ('jacket')."},
+                    {q: "This phone is ___ than that old model.", o: ["expensive", "more expensive", "expensiver", "most expensive"], a: 1, e: "Long adjectives form comparatives by placing 'more' right before them."},
+                    {q: "Are ___ keys on my desk right here yours?", o: ["this", "that", "these", "those"], a: 2, e: "'These' identifies multiple plural things close to the speaker."},
+                    {q: "This blue shirt is too small. I need a ___ size.", o: ["bigger", "big", "more big", "biggest"], a: 0, e: "Short one-syllable adjectives double final consonants and add -er for comparative states."},
+                    {q: "How much ___ that gold ring in the display?", o: ["are", "be", "is", "am"], a: 2, e: "'That gold ring' is a single individual item, requiring the verb 'is'."},
+                    {q: "I like these black boots, but I prefer those brown ___.", o: ["one", "ones", "boot", "it"], a: 1, e: "Use 'ones' to replace plural repeated objects ('boots') gracefully."},
+                    {q: "Prices in this mall are ___ than online shops.", o: ["high", "higher", "more high", "highest"], a: 1, e: "'Higher' is the proper comparative spelling form for the adjective 'high'."},
+                    {q: "Which ___ do you want to buy? The blue sneakers.", o: ["one", "ones", "item", "thing"], a: 1, e: "'Sneakers' is plural, so the matching question alternative is 'ones'."}
+                ],
+                blanks: [
+                    {s: "How much _ that red cap over there?", c: "is"},
+                    {s: "I don't like this hat, but I love _ one over there.", c: "that"},
+                    {s: "These jeans are cheap, but those are _.", c: "cheaper"},
+                    {s: "Which shoes do you like? The black _.", c: "ones"},
+                    {s: "My new laptop is _ faster than my old one.", c: "more"},
+                    {s: "Are _ items in my hands yours?", c: "these"},
+                    {s: "This store is bigger _ the other shop.", c: "than"},
+                    {s: "How much _ these organic apples cost?", c: "do"},
+                    {s: "I prefer the small bag instead of the large _.", c: "one"},
+                    {s: "Those jackets look very _ on you.", c: "good"}
+                ],
+                words: ["SHOPPING", "EXPENSIVE", "CHEAPER", "LEATHER", "JACKET", "SNEAKERS", "PRICE", "CLOTHES"],
+                memory: [
+                    {a: "This", b: "1 item close"},
+                    {a: "That", b: "1 item far"},
+                    {a: "These", b: "plural items close"},
+                    {a: "Those", b: "plural items far"},
+                    {a: "How much", b: "asks for price"},
+                    {a: "Cheaper", b: "costs less money"},
+                    {a: "Expensive", b: "costs a lot of money"},
+                    {a: "Which", b: "choosing options"}
+                ],
+                sort: {
+                    cats: ["Singular Items", "Plural Items", "Comparatives"],
+                    items: [
+                        {t: "This bag", c: 0}, {t: "That watch", c: 0}, {t: "The small one", c: 0},
+                        {t: "These shoes", c: 1}, {t: "Those rings", c: 1}, {t: "The blue ones", c: 1},
+                        {t: "Better", c: 2}, {t: "More expensive", c: 2}, {t: "Smaller", c: 2}
+                    ]
+                },
+                hangman: [
+                    {w: "SHOPPING", h: "The activity of buying goods from stores or online portals."},
+                    {w: "EXPENSIVE", h: "Costing a large amount of money to acquire."},
+                    {w: "CHEAPER", h: "Costing significantly less than an alternative choice."},
+                    {w: "LEATHER", h: "Material made from the skin of an animal, used for shoes/jackets."},
+                    {w: "JACKET", h: "An outer garment extending down to the waist or hips."},
+                    {w: "SNEAKERS", h: "Soft sports shoes suitable for casual daily walking."},
+                    {w: "PRICE", h: "The amount of money expected or required in payment."},
+                    {w: "CLOTHES", h: "Items worn on the body to protect or dress it up."},
+                    {w: "BOUTIQUE", h: "A small store selling fashionable items or accessories."},
+                    {w: "MALL", h: "A large enclosed shopping building with many individual stores."}
+                ]
+            },
+            "u7-8": {
+                id: "u7-8",
+                title: "UNITS 7-8",
+                subtitle: "Likes & Preferences",
+                grammar: 'Yes/No questions with "do", What kind of…, Object pronouns, Modal "would", Verb + to + verb',
+                warmups: [
+                    "Do you like cooking? What do you like to cook?",
+                    "What kind of music do you listen to?",
+                    "Would you like to travel? Where would you go?",
+                    "Do your friends like the same things as you?",
+                    "What do you want to do this weekend?",
+                    "Would you like to learn a new skill? Which one?",
+                    "Do you like them? (talk about a band/movie/food)",
+                    "What kind of movies do you prefer to watch?"
+                ],
+                flashcards: [
+                    {front: "Do you like", back: "Question form used to find out stable long-term general tastes"},
+                    {front: "Would you like", back: "Polite invitation or desire inquiry meaning 'Do you want'"},
+                    {front: "What kind of", back: "Question opening requesting specific category or classification"},
+                    {front: "Him", back: "Object pronoun replacing a male singular person after a verb"},
+                    {front: "Her", back: "Object pronoun replacing a female singular person after a verb"},
+                    {front: "Them", back: "Object pronoun replacing multiple people/things after a verb"},
+                    {front: "Love", back: "Verb meaning to have a very strong absolute positive taste for something"},
+                    {front: "Hate", back: "Verb meaning to absolutely dislike something strongly"},
+                    {front: "Want to", back: "Desire phrase followed directly by a base action verb"},
+                    {front: "Prefer", back: "Verb meaning to like one choice better than an alternative option"}
+                ],
+                quiz: [
+                    {q: "___ you like pop music?", o: ["Does", "Are", "Do", "Is"], a: 2, e: "'Do' is the helper verb for present tense habits with the subject 'you'."},
+                    {q: "Would you like ___ to the concert tonight?", o: ["go", "to go", "going", "goes"], a: 1, e: "The phrase 'would like' requires a following verb to be in the infinitive form ('to' + verb)."},
+                    {q: "I love jazz. I listen to ___ every day.", o: ["it", "them", "him", "her"], a: 0, e: "'Jazz' is an uncountable singular noun, so its corresponding object pronoun is 'it'."},
+                    {q: "What kind of movies ___ your friend watch?", o: ["do", "does", "is", "are"], a: 1, e: "'Your friend' is a single third person singular subject (He/She), which takes 'does'."},
+                    {q: "My parents are great. I love ___ very much.", o: ["us", "them", "him", "her"], a: 2, e: "'My parents' is a plural group, requiring the objective pronoun case 'them'."},
+                    {q: "She wants ___ French next year.", o: ["learn", "to learn", "learning", "learns"], a: 1, e: "The verb 'want' is universally followed by an infinitive construction ('to' + action)."},
+                    {q: "Would you like some coffee? Yes, I ___.", o: ["do", "like", "would", "want"], a: 2, e: "Questions initiated with the modal auxiliary 'Would' must be answered using 'would' in the short response."},
+                    {q: "He doesn't like sci-fi movies; he hates ___.", o: ["it", "them", "her", "us"], a: 1, e: "'Sci-fi movies' is plural, requiring 'them' as the object receiver of the action."},
+                    {q: "Do you know that actress? Yes, I like ___.", o: ["him", "her", "it", "them"], a: 1, e: "'Actress' identifies a female performer, matching the object pronoun 'her'."},
+                    {q: "We prefer ___ at home instead of going out.", o: ["stay", "to stay", "stayed", "stays"], a: 1, e: "'Prefer' commonly links forward to an action via an infinitive 'to stay' form."}
+                ],
+                blanks: [
+                    {s: "Do you _ to rock bands?", c: "listen"},
+                    {s: "Would you like _ visit Canada?", c: "to"},
+                    {s: "I like Michael Jackson, do you like _ too?", c: "him"},
+                    {s: "What kind _ food do you prefer?", c: "of"},
+                    {s: "They plan to _ a new car soon.", c: "buy"},
+                    {s: "She doesn't like horror films; she hates _.", c: "them"},
+                    {s: "I would love _ drink some iced tea.", c: "to"},
+                    {s: "Do they _ playing video games?", c: "enjoy"},
+                    {s: "This is my favorite song, I love _!", c: "it"},
+                    {s: "Does he want _ study with us?", c: "to"}
+                ],
+                words: ["PREFER", "CONCERT", "MOVIES", "COMEDY", "MUSICIANS", "COOKING", "CHOICES", "THEATER"],
+                memory: [
+                    {a: "Do you like", b: "general habit taste"},
+                    {a: "Would you like", b: "polite desire offer"},
+                    {a: "Him", b: "object for a boy"},
+                    {a: "Her", b: "object for a girl"},
+                    {a: "Them", b: "object for a group"},
+                    {a: "It", b: "object for things"},
+                    {a: "Want to", b: "desire for action"},
+                    {a: "Hate", b: "dislike intensely"}
+                ],
+                sort: {
+                    cats: ["Infinitive (to + verb)", "Object Pronouns", "Genres"],
+                    items: [
+                        {t: "To play", c: 0}, {t: "To study", c: 0}, {t: "To travel", c: 0},
+                        {t: "Him", c: 1}, {t: "Them", c: 1}, {t: "Us", c: 1},
+                        {t: "Jazz", c: 2}, {t: "Comedy", c: 2}, {t: "Horror", c: 2}
+                    ]
+                },
+                hangman: [
+                    {w: "PREFER", h: "To like one thing or choice better or more than another option."},
+                    {w: "CONCERT", h: "A public musical performance where musicians play live for an audience."},
+                    {w: "MOVIES", h: "Cinema films or stories recorded to be watched on screens."},
+                    {w: "COMEDY", h: "An entertaining film or play designed specifically to make people laugh."},
+                    {w: "MUSICIANS", h: "People who write, perform, or play musical instruments expertly."},
+                    {w: "COOKING", h: "The active practice or art of preparing food using heat."},
+                    {w: "CHOICES", h: "An act of selecting or making a decision when faced with options."},
+                    {w: "THEATER", h: "A building or place where plays or movies are presented."},
+                    {w: "POPULAR", h: "Liked, admired, or enjoyed by a very large group of general people."},
+                    {w: "CLASSICAL", h: "Traditional style music composed by people like Mozart or Beethoven."}
+                ]
+            },
+            "u9-10": {
+                id: "u9-10",
+                title: "UNITS 9-10",
+                subtitle: "Activities & Health",
+                grammar: "Present continuous (actions right now), Quantifiers (all/most/some), Adverbs of frequency, How often",
+                warmups: [
+                    "What are you doing right now, besides studying?",
+                    "How often do you exercise? Do you do it well?",
+                    "Are most of your friends healthy? What do they do?",
+                    "How long do you usually sleep?",
+                    "Are you eating well these days?",
+                    "What are almost all people doing on their phones?",
+                    "How often do you feel stressed?",
+                    "Are you currently learning something new?"
+                ],
+                flashcards: [
+                    {front: "Right now", back: "Time marker identifying actions currently happening in this moment"},
+                    {front: "Always", back: "Frequency adverb indicating an activity happens 100% of the time"},
+                    {front: "Never", back: "Frequency adverb indicating an activity happens 0% of the time"},
+                    {front: "Sometimes", back: "Frequency adverb indicating roughly 50% occurrence chance"},
+                    {front: "How often", back: "Question words inquiring about frequency or occurrence repetition"},
+                    {front: "All", back: "Quantifier meaning 100% of a designated group or population"},
+                    {front: "Most", back: "Quantifier indicating a very large majority fraction of a group"},
+                    {front: "Some", back: "Quantifier indicating an unspecified partial amount or number"},
+                    {front: "Hardly ever", back: "Frequency phrase indicating an action almost never happens"},
+                    {front: "Exercising", back: "Present continuous spelling form for performing physical activity"}
+                ],
+                quiz: [
+                    {q: "What ___ you doing right now?", o: ["is", "do", "are", "am"], a: 2, e: "Present continuous questions for the subject 'you' require the 'are' helping verb form."},
+                    {q: "Look! She ___ in the swimming pool.", o: ["swims", "is swimming", "swimming", "is swim"], a: 1, e: "Actions occurring in the exact moment of sight require active 'be + verb-ing' format."},
+                    {q: "I ___ eat fast food because I prefer healthy options.", o: ["always", "usually", "never", "sometimes"], a: 2, e: "'Never' aligns with an absolute rejection of fast food in favor of health."},
+                    {q: "How ___ do you go running? Twice a week.", o: ["long", "often", "well", "much"], a: 1, e: "'How often' is the standardized question phrase to ask about frequency of habits."},
+                    {q: "___ of my friends live near me, but not all of them.", o: ["All", "Most", "Never", "No one"], a: 1, e: "'Most' indicates a large majority, directly contrasting with the clarifying phrase 'but not all'."},
+                    {q: "They ___ studying for their English test today.", o: ["is", "am", "are", "do"], a: 2, e: "Plural subject pronoun 'They' pairs up with 'are' in the continuous present tense."},
+                    {q: "He is a great cook. He ___ makes delicious dinners.", o: ["hardly ever", "never", "always", "rarely"], a: 2, e: "Being a great cook implies a consistent positive frequency like 'always'."},
+                    {q: "Are you feeling okay? No, I ___ a headache.", o: ["have", "having", "am having", "is having"], a: 0, e: "Possession or physical conditions with 'have' generally use simple present state forms."},
+                    {q: "We ___ watching a movie at this moment.", o: ["don't", "aren't", "isn't", "not"], a: 1, e: "Negative plural actions right now are constructed via the 'aren't + verb-ing' pattern."},
+                    {q: "How well ___ you speak English?", o: ["do", "are", "does", "is"], a: 0, e: "Ability and regular habits take the simple present auxiliary helper 'do' with 'you'."}
+                ],
+                blanks: [
+                    {s: "What are you _ right now?", c: "doing"},
+                    {s: "I _ always drink water in the morning.", c: "always"},
+                    {s: "She is _ a book at the moment.", c: "reading"},
+                    {s: "How often _ he go to the gym?", c: "does"},
+                    {s: "They are _ soccer outside in the yard.", c: "playing"},
+                    {s: "Most _ the students pass the exams.", c: "of"},
+                    {s: "He _ ever drinks coffee; he dislikes it.", c: "hardly"},
+                    {s: "We are _ English grammar rules together.", c: "learning"},
+                    {s: "Is it _ outside right now?", c: "raining"},
+                    {s: "I never _ late for my classes.", c: "arrive"}
+                ],
+                words: ["EXERCISING", "HEALTHY", "RUNNING", "STRESSED", "ALWAYS", "SOMETIMES", "PLAYING", "SLEEPING"],
+                memory: [
+                    {a: "Right now", b: "happening this second"},
+                    {a: "Always", b: "100 percent frequency"},
+                    {a: "Never", b: "0 percent frequency"},
+                    {a: "How often", b: "asks for frequency"},
+                    {a: "Most", b: "nearly all items"},
+                    {a: "Some", b: "a small amount"},
+                    {a: "Running", b: "moving very fast"},
+                    {a: "Sleeping", b: "resting in bed"}
+                ],
+                sort: {
+                    cats: ["Frequency Adverbs", "Quantifiers", "Continuous Verbs"],
+                    items: [
+                        {t: "Usually", c: 0}, {t: "Hardly ever", c: 0}, {t: "Never", c: 0},
+                        {t: "All", c: 1}, {t: "Some", c: 1}, {t: "A few", c: 1},
+                        {t: "Studying", c: 2}, {t: "Walking", c: 2}, {t: "Cooking", c: 2}
+                    ]
+                },
+                hangman: [
+                    {w: "EXERCISING", h: "Engaging in physical activity to sustain health and personal fitness."},
+                    {w: "HEALTHY", h: "In a good physical and mental condition; free from illness."},
+                    {w: "RUNNING", h: "The action or movement of a person who runs at speed."},
+                    {w: "STRESSED", h: "Feeling worried, anxious, or pressured by life situations."},
+                    {w: "ALWAYS", h: "At all times; on all occasions without any exception."},
+                    {w: "SOMETIMES", h: "Occasional intervals; now and then but not continuously."},
+                    {w: "PLAYING", h: "Participating in an active game, sport, or fun recreation."},
+                    {w: "SLEEPING", h: "A natural state of rest where consciousness is suspended."},
+                    {w: "WALKING", h: "Advancing on foot at a regular comfortable steady pace."},
+                    {w: "SICK", h: "Affected by physical or mental illness; feeling unwell."}
+                ]
+            },
+            "u11-12": {
+                id: "u11-12",
+                title: "UNITS 11-12",
+                subtitle: "Places in the City",
+                grammar: "There is/are, any/some, Prepositions of place, Quantifiers, Count and noncount nouns",
+                warmups: [
+                    "Is there a park near your house? Describe it.",
+                    "How many rooms are there in your home?",
+                    "Are there any good restaurants near here?",
+                    "How much traffic is there in your city?",
+                    "Where is the nearest supermarket?",
+                    "Are there some good schools in your neighborhood?",
+                    "How many people are there in your family?",
+                    "Is there any water in the fridge?"
+                ],
+                flashcards: [
+                    {front: "There is", back: "Phrase stating existence for one singular item"},
+                    {front: "There are", back: "Phrase stating existence for multiple plural items"},
+                    {front: "Some", back: "Quantifier used in positive statements for plural or non-count items"},
+                    {front: "Any", back: "Quantifier used in questions or negative statements for plural/non-count items"},
+                    {front: "Next to", back: "Preposition of place meaning immediately adjacent at the side of"},
+                    {front: "Across from", back: "Preposition of place meaning on the opposite side of a path/street"},
+                    {front: "Between", back: "Preposition of place indicating a position bounded by two distinct markers"},
+                    {front: "How many", back: "Question formula explicitly for countable individual items"},
+                    {front: "How much", back: "Question formula explicitly for non-countable bulk elements"},
+                    {front: "Bank", back: "A building or place where financial assets are safely managed"}
+                ],
+                quiz: [
+                    {q: "___ a large park near my house.", o: ["There is", "There are", "Is there", "Are there"], a: 0, e: "'A large park' is singular, so it uses the declaration 'There is'."},
+                    {q: "Are there ___ good restaurants on this avenue?", o: ["some", "any", "a", "an"], a: 1, e: "Plural question patterns universally employ 'any' to inquire about existence."},
+                    {q: "There aren't ___ banks open at this late hour.", o: ["some", "any", "one", "a"], a: 1, e: "Negative plural claims require the helper word 'any' to signify zero presence."},
+                    {q: "How ___ traffic is there today?", o: ["many", "much", "often", "few"], a: 1, e: "'Traffic' is an uncountable mass noun, requiring 'How much' to query volume."},
+                    {q: "The pharmacy is ___ the post office and the bank.", o: ["next to", "across from", "between", "on"], a: 2, e: "'Between' indicates positioning relative to two explicit separate bounding sites."},
+                    {q: "How ___ bookshops are inside the mall?", o: ["much", "many", "is", "are"], a: 1, e: "'Bookshops' is countable and plural, matching 'How many'."},
+                    {q: "There is ___ water left in the bottle.", o: ["some", "any", "many", "few"], a: 0, e: "Affirmative statements involving uncountable liquids use 'some'."},
+                    {q: "The supermarket is directly ___ from the school.", o: ["between", "across", "next", "behind"], a: 1, e: "'Across from' is the complete preposition compound meaning opposite side."},
+                    {q: "There ___ five gas stations in this area.", o: ["is", "am", "are", "be"], a: 2, e: "'Five gas stations' specifies a plural count, which demands 'There are'."},
+                    {q: "Is there ___ post office nearby?", o: ["any", "some", "a", "many"], a: 2, e: "Singular countable queries use the simple indefinite article 'a' or 'an'."}
+                ],
+                blanks: [
+                    {s: "There _ a beautiful library downtown.", c: "is"},
+                    {s: "Are there _ coffee shops nearby?", c: "any"},
+                    {s: "The museum is across _ the central park.", c: "from"},
+                    {s: "There are _ police stations here.", c: "some"},
+                    {s: "How _ money is in your wallet?", c: "much"},
+                    {s: "The station is _ to the big supermarket.", c: "next"},
+                    {s: "How _ hotels are in this city?", c: "many"},
+                    {s: "There is _ milk in the refrigerator.", c: "some"},
+                    {s: "Is _ a public phone inside the station?", c: "there"},
+                    {s: "There are not _ trees on my street.", c: "any"}
+                ],
+                words: ["PARK", "MUSEUM", "STREET", "BANK", "TRAFFIC", "LIBRARY", "SCHOOL", "STATION"],
+                memory: [
+                    {a: "There is", b: "1 item exists"},
+                    {a: "There are", b: "plural items exist"},
+                    {a: "Some", b: "positive quantity"},
+                    {a: "Any", b: "question or negative"},
+                    {a: "Between", b: "in middle of two"},
+                    {a: "Next to", b: "directly beside"},
+                    {a: "How many", b: "countable objects"},
+                    {a: "How much", b: "uncountable objects"}
+                ],
+                sort: {
+                    cats: ["Count Nouns", "Noncount Nouns", "Prepositions"],
+                    items: [
+                        {t: "Supermarket", c: 0}, {t: "Parks", c: 0}, {t: "Restaurants", c: 0},
+                        {t: "Traffic", c: 1}, {t: "Money", c: 1}, {t: "Water", c: 1},
+                        {t: "Across from", c: 2}, {t: "Next to", c: 2}, {t: "Behind", c: 2}
+                    ]
+                },
+                hangman: [
+                    {w: "SUPERMARKET", h: "A large self-service store selling foods and household goods."},
+                    {w: "MUSEUM", h: "A building where historical, scientific, or artistic objects are kept."},
+                    {w: "TRAFFIC", h: "The vehicles moving on public roads or streets together."},
+                    {w: "LIBRARY", h: "A building containing collections of books for reading or borrowing."},
+                    {w: "NEIGHBORHOOD", h: "A district or area where people live near each other."},
+                    {w: "RESTAURANT", h: "A place where people pay to sit and eat meals cooked on site."},
+                    {w: "HOSPITAL", h: "An institution providing medical and surgical treatment to sick people."},
+                    {w: "PHARMACY", h: "A shop where medicinal drugs are prepared and sold."},
+                    {w: "STATION", h: "A stopping place on a public transportation route like trains or buses."},
+                    {w: "AVENUE", h: "A broad public street or road, typically lined with trees."}
+                ]
+            },
+            "u13-14": {
+                id: "u13-14",
+                title: "UNITS 13-14",
+                subtitle: "Appearance & People",
+                grammar: "Questions about appearance (What look like?), How old, Modifiers with participles and prepositions",
+                warmups: [
+                    "What do you look like? Describe yourself.",
+                    "How old do you think I am?",
+                    "What does your best friend look like?",
+                    "Describe someone famous you admire.",
+                    "What does a typical student look like at this school?",
+                    "How old were you when you started learning English?",
+                    "Describe the person sitting next to you.",
+                    "What does a doctor in Colombia look like?"
+                ],
+                flashcards: [
+                    {front: "What look like", back: "Question formula inquiring about external physical features or attributes"},
+                    {front: "How old", back: "Question query seeking details regarding age duration in years"},
+                    {front: "Tall", back: "Adjective indicating great physical vertical height extension"},
+                    {front: "Short", back: "Adjective indicating small physical vertical height extension"},
+                    {front: "Straight hair", back: "Hair configuration pattern completely free of waves, curls or twists"},
+                    {front: "In his twenties", back: "Age range description tracking between 20 and 29 years old"},
+                    {front: "The one wearing", back: "Modifier description pattern isolating a person by their clothing active item"},
+                    {front: "The one by", back: "Modifier description pattern isolating a person by their location proximity"},
+                    {front: "Beard", back: "Facial hair covering the jawline and chin area of a man"},
+                    {front: "Moustache", back: "Facial hair covering the upper lip strip area below the nose"}
+                ],
+                quiz: [
+                    {q: "What ___ your brother look like?", o: ["do", "is", "does", "are"], a: 2, e: "Asking about a singular third person appearance requires the present auxiliary verb 'does'."},
+                    {q: "He has short, ___ hair.", o: ["tall", "curly", "heavy", "young"], a: 1, e: "'Curly' describes hair shapes and configurations cleanly."},
+                    {q: "Who is Sarah? She's the woman ___ a red dress.", o: ["wears", "wearing", "wear", "worn"], a: 1, e: "Present participles (-ing) act as descriptive modifiers isolating people based on actions."},
+                    {q: "How ___ is your grandmother? She is 72.", o: ["old", "tall", "much", "long"], a: 0, e: "'How old' targets chronological age details directly."},
+                    {q: "My cousin is in ___ early thirties.", o: ["his", "he", "him", "its"], a: 0, e: "Possessive adjectives denote age bracket groupings of an individual ('his thirties')."},
+                    {q: "John is the guy sitting ___ the couch.", o: ["on", "in", "at", "to"], a: 0, e: "Couches take the positional surface preposition 'on'."},
+                    {q: "Does she ___ glasses? Yes, she does.", o: ["has", "wear", "looks", "is"], a: 1, e: "The auxiliary 'Does' handles structural syntax, demanding the base active verb 'wear' for accessories."},
+                    {q: "What do they look ___? They are tall and thin.", o: ["as", "like", "for", "same"], a: 1, e: "The phrase 'look like' is the standardized idiom for appearance queries."},
+                    {q: "He is the man ___ the beard.", o: ["with", "by", "in", "wearing"], a: 0, e: "Use the preposition 'with' to connect people to distinguishing physical traits like beards."},
+                    {q: "She has beautiful ___ eyes.", o: ["straight", "curly", "green", "tall"], a: 2, e: "'Green' is a logical attribute descriptor specifically for eyes."}
+                ],
+                blanks: [
+                    {s: "What does she look _?", c: "like"},
+                    {s: "He is the guy _ a black jacket.", c: "wearing"},
+                    {s: "How _ is your son? He is five.", c: "old"},
+                    {s: "My sister has long, straight _.", c: "hair"},
+                    {s: "He is the man with the gray _ on his chin.", c: "beard"},
+                    {s: "They are both in their late _.", c: "twenties"},
+                    {s: "Who is the girl standing _ the door?", c: "by"},
+                    {s: "Does your father wear _ for reading?", c: "glasses"},
+                    {s: "She is very tall and _.", c: "thin"},
+                    {s: "Which one is your teacher? The _ sitting down.", c: "one"}
+                ],
+                words: ["APPEARANCE", "BEARD", "GLASSES", "CURLY", "HEIGHT", "MOUSTACHE", "THIRTIES", "BLONDE"],
+                memory: [
+                    {a: "Look like", b: "ask for appearance"},
+                    {a: "How old", b: "ask for age"},
+                    {a: "Beard", b: "hair on chin"},
+                    {a: "Moustache", b: "hair on lip"},
+                    {a: "Wearing", b: "clothed in an item"},
+                    {a: "Curly", b: "wavy or coiled hair"},
+                    {a: "Tall", b: "high vertical height"},
+                    {a: "Short", b: "low vertical height"}
+                ],
+                sort: {
+                    cats: ["Hair Descriptions", "Facial Features", "Age Brackets"],
+                    items: [
+                        {t: "Straight hair", c: 0}, {t: "Spiky blonde", c: 0}, {t: "Short curly", c: 0},
+                        {t: "Moustache", c: 1}, {t: "Thick beard", c: 1}, {t: "Dark eyebrows", c: 1},
+                        {t: "In his teens", c: 2}, {t: "Late twenties", c: 2}, {t: "Early forties", c: 2}
+                    ]
+                },
+                hangman: [
+                    {w: "APPEARANCE", h: "The way that someone or something looks on the outside."},
+                    {w: "BEARD", h: "The hair that grows on the chin and cheeks of a man's face."},
+                    {w: "GLASSES", h: "Lenses worn in front of eyes to improve vision accuracy."},
+                    {w: "CURLY", h: "Made of curves, waves or tight spirals instead of straight lines."},
+                    {w: "HEIGHT", h: "The measurement of someone from head to foot standing up."},
+                    {w: "MOUSTACHE", h: "Hair grown specifically on a man's upper lip area."},
+                    {w: "THIRTIES", h: "The decade of age spanning from 30 years old to 39."},
+                    {w: "BLONDE", h: "Hair of a fair, golden, or pale yellowish color spectrum."},
+                    {w: "PRETTY", h: "Attractive in a delicate or pleasant physical way."},
+                    {w: "HANDSOME", h: "Good-looking, typically used to describe an attractive man."}
+                ]
+            },
+            "u15-16": {
+                id: "u15-16",
+                title: "UNITS 15-16",
+                subtitle: "Experiences & Plans",
+                grammar: "Present perfect (yes/no + Wh), Already/yet, Present perfect vs. simple past, For/since",
+                warmups: [
+                    "Have you ever eaten something weird? What was it?",
+                    "Have you visited another country yet?",
+                    "How long have you studied English? Since when?",
+                    "Have you already done your homework today?",
+                    "Have you ever met a famous person? Who?",
+                    "How long have you lived in your current home?",
+                    "What have you done this week that was fun?",
+                    "Have you ever won a competition? When?"
+                ],
+                flashcards: [
+                    {front: "Have you ever", back: "Present perfect opening query targeting lifetime experiences"},
+                    {front: "Already", back: "Time adverb meaning an action happened sooner than expected"},
+                    {front: "Yet", back: "Time adverb tracking if expected events happened up to now (negatives/questions)"},
+                    {front: "Since", back: "Time preposition identifying the exact starting point of a duration"},
+                    {front: "For", back: "Time preposition identifying the total length or block of a duration"},
+                    {front: "Been", back: "Past participle form of the verb 'be'"},
+                    {front: "Eaten", back: "Past participle form of the verb 'eat'"},
+                    {front: "Gone", back: "Past participle form of the verb 'go' representing departure"},
+                    {front: "Traveled", back: "Past participle form of the regular verb 'travel'"},
+                    {front: "Did you go", back: "Simple past question structure targeting a specific past locked time"}
+                ],
+                quiz: [
+                    {q: "___ you ever been to Europe?", o: ["Has", "Did", "Have", "Do"], a: 2, e: "Present perfect questions for 'you' employ the helper auxiliary 'Have'."},
+                    {q: "I have studied English ___ three years.", o: ["since", "for", "during", "ago"], a: 1, e: "'For' tracks complete accumulated blocks or lengths of total time."},
+                    {q: "She hasn't finished her project ___.", o: ["already", "yet", "since", "ever"], a: 1, e: "'Yet' sits at the termination point of negative present perfect declarations."},
+                    {q: "They ___ to Mexico City last summer.", o: ["have gone", "went", "gone", "go"], a: 1, e: "Specific closed past time anchors like 'last summer' force the Simple Past form."},
+                    {q: "Has he eaten lunch? Yes, he has ___ eaten.", o: ["yet", "already", "never", "since"], a: 1, e: "'Already' describes affirmative actions executed prior to current reference points."},
+                    {q: "I have lived here ___ 2018.", o: ["for", "since", "ago", "in"], a: 1, e: "'Since' flags the explicit starting point anchor of an ongoing state."},
+                    {q: "Have you ___ a famous actor? No, never.", o: ["meet", "met", "meeting", "meets"], a: 1, e: "Present perfect formulas combine 'have/has' with past participles like 'met'."},
+                    {q: "We ___ a great movie yesterday night.", o: ["have seen", "saw", "seen", "see"], a: 1, e: "'Yesterday night' is a completely expired time window requiring the simple past."},
+                    {q: "Have they bought the flight tickets yet? Yes, they ___.", o: ["have", "did", "has", "boughten"], a: 0, e: "Short responses replicate the introductory helper auxiliary of the original question."},
+                    {q: "She has ___ a competition twice in her life.", o: ["win", "won", "winning", "wins"], a: 1, e: "'Won' is the irregular past participle form of the action 'win'."}
+                ],
+                blanks: [
+                    {s: "Have you _ eaten raw fish?", c: "ever"},
+                    {s: "I have been here _ two hours.", c: "for"},
+                    {s: "She has _ visited New York City.", c: "already"},
+                    {s: "They have not called me _.", c: "yet"},
+                    {s: "We _ to Miami two weeks ago.", c: "went"},
+                    {s: "He has studied French _ 2021.", c: "since"},
+                    {s: "Have you _ your car key yet?", c: "found"},
+                    {s: "I have _ seen that movie before.", c: "never"},
+                    {s: "Has she _ a famous person?", c: "met"},
+                    {s: "We have _ friends for a long time.", c: "been"}
+                ],
+                words: ["EXPERIENCE", "ALREADY", "TRAVEL", "VACATION", "PASSPORT", "FLIGHT", "STARTED", "FINISHED"],
+                memory: [
+                    {a: "Ever", b: "at any time in life"},
+                    {a: "Already", b: "sooner than expected"},
+                    {a: "Yet", b: "up to this moment"},
+                    {a: "For", b: "length of duration"},
+                    {a: "Since", b: "start point of time"},
+                    {a: "Eaten", b: "past participle of eat"},
+                    {a: "Been", b: "past participle of be"},
+                    {a: "Went", b: "simple past of go"}
+                ],
+                sort: {
+                    cats: ["Present Perfect", "Simple Past Tokens", "Time Connectors"],
+                    items: [
+                        {t: "Have traveled", c: 0}, {t: "Has eaten", c: 0}, {t: "Have been", c: 0},
+                        {t: "Went yesterday", c: 1}, {t: "Arrived ago", c: 1}, {t: "Bought last year", c: 1},
+                        {t: "Since 2010", c: 2}, {t: "For five months", c: 2}, {t: "Not yet", c: 2}
+                    ]
+                },
+                hangman: [
+                    {w: "EXPERIENCE", h: "Knowledge or skill gained from doing, seeing, or feeling things."},
+                    {w: "ALREADY", h: "Before the present time or sooner than was generally expected."},
+                    {w: "TRAVEL", h: "Make a journey, typically of some length or to overseas places."},
+                    {w: "VACATION", h: "An extended period of recreation, especially spent away from home."},
+                    {w: "PASSPORT", h: "Official government document certifying identity for foreign travel."},
+                    {w: "FLIGHT", h: "A journey made through the air by an airplane."},
+                    {w: "STARTED", h: "Began an action, activity, journey or process interval."},
+                    {w: "FINISHED", h: "Brought an active task, race, or project to its absolute end."},
+                    {w: "COMPETITION", h: "An event or contest where people compete to establish superiority."},
+                    {w: "CHOSEN", h: "Selected as the best or most appropriate alternative from choices."}
+                ]
+            }
+        };
+
+        // APPLICATION CORE MANAGEMENT MODULE ENGINE
+        const APP = {
+            currentUnit: null,
+            scores: {},
+            theme: 'light',
+
+            init: function() {
+                this.loadProgress();
+                this.setupTheme();
+                this.renderDashboard();
+                this.bindGlobalEvents();
+                this.updateGlobalProgressBar();
+            },
+
+            loadProgress: function() {
+                const stored = localStorage.getItem('englishA1_progress');
+                if (stored) {
+                    try { this.scores = JSON.parse(stored); } catch(e) { this.scores = {}; }
+                }
+            },
+
+            saveProgress: function() {
+                localStorage.setItem('englishA1_progress', JSON.stringify(this.scores));
+                this.updateGlobalProgressBar();
+                this.renderDashboard();
+            },
+
+            setupTheme: function() {
+                const savedTheme = localStorage.getItem('englishA1_theme') || 'light';
+                this.setTheme(savedTheme);
+            },
+
+            setTheme: function(theme) {
+                this.theme = theme;
+                document.documentElement.setAttribute('data-theme', theme);
+                document.getElementById('theme-switcher-btn').textContent = theme === 'light' ? '🌙' : '☀️';
+                localStorage.setItem('englishA1_theme', theme);
+            },
+
+            updateGlobalProgressBar: function() {
+                const totalGamesPossible = 8 * 8; // 8 units * 8 games
+                let completedCount = 0;
+                for (let unit in this.scores) {
+                    for (let game in this.scores[unit]) {
+                        if (this.scores[unit][game] >= 60) {
+                            completedCount++;
+                        }
+                    }
+                }
+                const pct = Math.min(100, Math.round((completedCount / totalGamesPossible) * 100));
+                document.getElementById('global-progress-bar').style.width = pct + '%';
+            },
+
+            renderDashboard: function() {
+                const container = document.getElementById('units-dashboard-container');
+                container.innerHTML = '';
+
+                for (let key in DATA) {
+                    const unit = DATA[key];
+                    
+                    // Calculate individual progress percentage
+                    let finishedGames = 0;
+                    if (this.scores[key]) {
+                        for (let g in this.scores[key]) {
+                            if (this.scores[key][g] >= 60) finishedGames++;
+                        }
+                    }
+                    const progressPct = Math.round((finishedGames / 8) * 100);
+
+                    const card = document.createElement('div');
+                    card.className = `unit-card ${this.currentUnit === key ? 'active' : ''}`;
+                    card.dataset.id = key;
+                    card.innerHTML = `
+                        <div>
+                            <div class="unit-badge">${unit.title}</div>
+                            <div class="unit-title">${unit.subtitle}</div>
+                            <div class="unit-grammar">${unit.grammar}</div>
+                        </div>
+                        <div class="unit-progress-bg">
+                            <div class="unit-progress-fill" style="width: ${progressPct}%"></div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                }
+            },
+
+            bindGlobalEvents: function() {
+                // Theme Toggle
+                document.getElementById('theme-switcher-btn').addEventListener('click', () => {
+                    this.setTheme(this.theme === 'light' ? 'dark' : 'light');
+                });
+
+                // Unit Selection Cards
+                document.getElementById('units-dashboard-container').addEventListener('click', (e) => {
+                    const card = e.target.closest('.unit-card');
+                    if (!card) return;
+                    this.selectUnit(card.dataset.id);
+                });
+
+                // Warmup Generator Button
+                document.getElementById('generate-warmup-btn').addEventListener('click', () => {
+                    this.triggerWarmup();
+                });
+
+                // Close Game Screen Modal Button
+                document.getElementById('quit-game-modal-btn').addEventListener('click', () => {
+                    document.getElementById('global-game-overlay-modal').style.display = 'none';
+                    document.getElementById('game-runtime-injection-sandbox').innerHTML = '';
+                });
+            },
+
+            selectUnit: function(unitId) {
+                this.currentUnit = unitId;
+                this.renderDashboard();
+
+                // Display subpanel
+                const panel = document.getElementById('unit-interaction-panel');
+                panel.style.display = 'grid';
+
+                // Setup Warmup reset
+                document.getElementById('warmup-text-display').textContent = "Ready? Click below to generate a real-world communication prompt!";
+
+                // Render available games launchers
+                this.renderGamesLauncher();
+                
+                // Scroll down smoothly to interactives
+                panel.scrollIntoView({ behavior: 'smooth' });
+            },
+
+            triggerWarmup: function() {
+                if (!this.currentUnit) return;
+                const pool = DATA[this.currentUnit].warmups;
+                const rand = pool[Math.floor(Math.random() * pool.length)];
+                document.getElementById('warmup-text-display').textContent = rand;
+                
+                // Optional voice synthesis activation
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const utterance = new SpeechSynthesisUtterance(rand);
+                    utterance.lang = 'en-US';
+                    window.speechSynthesis.speak(utterance);
+                }
+            },
+
+            renderGamesLauncher: function() {
+                const launcherContainer = document.getElementById('games-modules-launcher');
+                launcherContainer.innerHTML = '';
+
+                const gamesConfig = [
+                    { id: 'fc', name: 'Flashcards', icon: '🃏' },
+                    { id: 'qz', name: 'Kahoot Quiz', icon: '⚡' },
+                    { id: 'fb', name: 'Fill Blanks', icon: '✏️' },
+                    { id: 'ws', name: 'Word Search', icon: '🔍' },
+                    { id: 'my', name: 'Memory Match', icon: '🧠' },
+                    { id: 'ds', name: 'Drag & Sort', icon: '📦' },
+                    { id: 'hm', name: 'Hangman', icon: '💀' },
+                    { id: 'rw', name: 'Question Wheel', icon: '🎡' }
+                ];
+
+                gamesConfig.forEach(g => {
+                    const card = document.createElement('div');
+                    card.className = 'game-card';
+                    card.innerHTML = `
+                        <div class="game-icon">${g.icon}</div>
+                        <div>${g.name}</div>
+                    `;
+                    card.addEventListener('click', () => {
+                        this.launchGameModule(g.id);
+                    });
+                    launcherContainer.appendChild(card);
+                });
+            },
+
+            launchGameModule: function(gameId) {
+                const unitData = DATA[this.currentUnit];
+                
+                // Open Overlay Modal Window Setup
+                const modal = document.getElementById('global-game-overlay-modal');
+                const titleText = document.getElementById('game-headline-title');
+                const iconText = document.getElementById('game-headline-icon');
+                
+                modal.style.display = 'flex';
+                
+                // Route execution sandbox parameters
+                switch(gameId) {
+                    case 'fc':
+                        iconText.textContent = '🃏';
+                        titleText.textContent = 'Tactile Flashcards';
+                        GAMES_ENGINES.runFlashcards(unitData);
+                        break;
+                    case 'qz':
+                        iconText.textContent = '⚡';
+                        titleText.textContent = 'Kahoot Style Quiz';
+                        GAMES_ENGINES.runQuiz(unitData);
+                        break;
+                    case 'fb':
+                        iconText.textContent = '✏️';
+                        titleText.textContent = 'Fill in the Blanks';
+                        GAMES_ENGINES.runFillBlanks(unitData);
+                        break;
+                    case 'ws':
+                        iconText.textContent = '🔍';
+                        titleText.textContent = 'Word Search';
+                        GAMES_ENGINES.runWordSearch(unitData);
+                        break;
+                    case 'my':
+                        iconText.textContent = '🧠';
+                        titleText.textContent = 'Memory Pair Matching';
+                        GAMES_ENGINES.runMemory(unitData);
+                        break;
+                    case 'ds':
+                        iconText.textContent = '📦';
+                        titleText.textContent = 'Drag and Sort Categories';
+                        GAMES_ENGINES.runDragSort(unitData);
+                        break;
+                    case 'hm':
+                        iconText.textContent = '💀';
+                        titleText.textContent = 'Digital Hangman Challenge';
+                        GAMES_ENGINES.runHangman(unitData);
+                        break;
+                    case 'rw':
+                        iconText.textContent = '🎡';
+                        titleText.textContent = 'Conversational Question Wheel';
+                        GAMES_ENGINES.runQuestionWheel(unitData);
+                        break;
+                }
+            },
+
+            recordScore: function(gameId, scorePercentage) {
+                if (!this.scores[this.currentUnit]) this.scores[this.currentUnit] = {};
+                // Persist only highest attempts values
+                const currentBest = this.scores[this.currentUnit][gameId] || 0;
+                if (scorePercentage > currentBest) {
+                    this.scores[this.currentUnit][gameId] = scorePercentage;
+                    this.saveProgress();
+                }
+            }
+        };
+
+        // GAMES FUNCTIONALITIES ISOLATED ENGINES
+        const GAMES_ENGINES = {
+            
+            // UI HELPER SYSTEM FOR STANDARDIZED ENDINGS
+            showResultsScreen: function(sandbox, scorePct, textSummary, retryCallback) {
+                sandbox.innerHTML = `
+                    <div class="game-result-screen">
+                        <h2>Practice Finished!</h2>
+                        <div style="font-size: 4rem; margin: 15px 0;">${scorePct >= 60 ? '⭐' : '⭕'}</div>
+                        <p style="font-size: 1.4rem; font-weight: bold; margin-bottom: 10px;">Your Score: ${scorePct}%</p>
+                        <p>${textSummary}</p>
+                        <button class="action-btn btn-primary" id="game-restart-btn-action">🔄 Play Again</button>
+                    </div>
+                `;
+                document.getElementById('game-restart-btn-action').addEventListener('click', retryCallback);
+            },
+
+            // JUEGO 1: TACTILE FLASHCARDS
+            runFlashcards: function(unitData) {
+                const sandbox = document.getElementById('game-runtime-injection-sandbox');
+                let deck = [...unitData.flashcards];
+                let currentIdx = 0;
+                let cardsPassed = 0;
+
+                function render() {
+                    if (currentIdx >= deck.length) {
+                        const finalPct = Math.round((cardsPassed / deck.length) * 100);
+                        APP.recordScore('fc', finalPct);
+                        GAMES_ENGINES.showResultsScreen(sandbox, finalPct, `You marked ${cardsPassed} out of ${deck.length} flashcards as known!`, () => GAMES_ENGINES.runFlashcards(unitData));
+                        return;
+                    }
+
+                    const item = deck[currentIdx];
+                    sandbox.innerHTML = `
+                        <div class="stats-row">
+                            <span>Card: ${currentIdx + 1} / ${deck.length}</span>
+                            <span>Known: ${cardsPassed}</span>
+                        </div>
+                        <div class="fc-wrapper">
+                            <div class="fc-card" id="interactive-fc-card-object">
+                                <div class="fc-face fc-front">
+                                    <div class="fc-hint-title">English Term (Tap to flip)</div>
+                                    <div class="fc-main-text">${item.front}</div>
+                                    <div style="margin-top:20px; font-size:1.5rem;">🗣️</div>
+                                </div>
+                                <div class="fc-face fc-back">
+                                    <div class="fc-hint-title">Meaning / Definition</div>
+                                    <div class="fc-main-text" style="font-size:1.2rem; font-weight:500;">${item.back}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fc-controls">
+                            <button class="action-btn fc-btn fc-review" id="fc-btn-review">❌ Forget</button>
+                            <button class="action-btn fc-btn fc-know" id="fc-btn-know">✅ I know it</button>
+                        </div>
+                        <p style="text-align:center; font-size:0.9rem; color:var(--text-light); margin-top:15px;">Tip: You can use Left/Right Arrows on keyboard too!</p>
+                    `;
+
+                    const cardObj = document.getElementById('interactive-fc-card-object');
+                    cardObj.addEventListener('click', () => {
+                        cardObj.classList.toggle('flipped');
+                        if (cardObj.classList.contains('flipped') && 'speechSynthesis' in window) {
+                            window.speechSynthesis.cancel();
+                            const utterance = new SpeechSynthesisUtterance(item.front);
+                            utterance.lang = 'en-US';
+                            window.speechSynthesis.speak(utterance);
+                        }
+                    });
+
+                    document.getElementById('fc-btn-know').addEventListener('click', () => {
+                        cardsPassed++;
+                        nextCard();
+                    });
+                    document.getElementById('fc-btn-review').addEventListener('click', () => {
+                        nextCard();
+                    });
+                }
+
+                function nextCard() {
+                    currentIdx++;
+                    render();
+                }
+
+                render();
+            },
+
+            // JUEGO 2: KAHOOT STYLE QUIZ
+            runQuiz: function(unitData) {
+                const sandbox = document.getElementById('game-runtime-injection-sandbox');
+                let pool = [...unitData.quiz];
+                let currentQ = 0;
+                let coreScore = 0;
+                let countdownInterval;
+                let secondsRemaining = 15;
+
+                function renderQuestion() {
+                    clearInterval(countdownInterval);
+                    if (currentQ >= pool.length) {
+                        const finalPct = Math.round((coreScore / pool.length) * 100);
+                        APP.recordScore('qz', finalPct);
+                        GAMES_ENGINES.showResultsScreen(sandbox, finalPct, `You answered ${coreScore} out of ${pool.length} quiz challenges perfectly!`, () => GAMES_ENGINES.runQuiz(unitData));
+                        return;
+                    }
+
+                    const dataItem = pool[currentQ];
+                    secondsRemaining = 15;
+
+                    sandbox.innerHTML = `
+                        <div class="stats-row">
+                            <span>Question: ${currentQ + 1} / ${pool.length}</span>
+                            <span>Score: ${coreScore}</span>
+                        </div>
+                        <div class="quiz-timer-container">
+                            <div class="quiz-timer-fill" id="q-timer-bar"></div>
+                        </div>
+                        <div class="quiz-question-box">${dataItem.q}</div>
+                        <div class="quiz-options-grid">
+                            <button class="quiz-opt-btn q-red" data-idx="0">🔴 ${dataItem.o[0]}</button>
+                            <button class="quiz-opt-btn q-blue" data-idx="1">🔵 ${dataItem.o[1]}</button>
+                            <button class="quiz-opt-btn q-yellow" data-idx="2">🟡 ${dataItem.o[2]}</button>
+                            <button class="quiz-opt-btn q-green" data-idx="3">🟢 ${dataItem.o[3]}</button>
+                        </div>
+                        <div id="quiz-feedback-post-answer" style="margin-top:20px; display:none; padding:15px; border-radius:10px; font-weight:bold; text-align:center;"></div>
+                    `;
+
+                    // Start counter bar ticking
+                    const bar = document.getElementById('q-timer-bar');
+                    countdownInterval = setInterval(() => {
+                        secondsRemaining -= 0.1;
+                        bar.style.width = (secondsRemaining / 15) * 100 + '%';
+                        if (secondsRemaining <= 0) {
+                            clearInterval(countdownInterval);
+                            handleAnswer(-1); // Timeout penalty
+                        }
+                    }, 100);
+
+                    // Add options clicks
+                    const buttons = sandbox.querySelectorAll('.quiz-opt-btn');
+                    buttons.forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            clearInterval(countdownInterval);
+                            handleAnswer(parseInt(btn.dataset.idx));
+                        });
+                    });
+                }
+
+                function handleAnswer(chosenIdx) {
+                    const dataItem = pool[currentQ];
+                    const feedback = document.getElementById('quiz-feedback-post-answer');
+                    feedback.style.display = 'block';
+
+                    // Disable all choice buttons
+                    const buttons = sandbox.querySelectorAll('.quiz-opt-btn');
+                    buttons.forEach(b => b.disabled = true);
+
+                    if (chosenIdx === dataItem.a) {
+                        coreScore++;
+                        feedback.style.background = 'var(--correct)';
+                        feedback.style.color = 'white';
+                        feedback.innerHTML = `✨ Correct! <br><span style="font-size:0.9rem; font-weight:normal;">${dataItem.e}</span>`;
+                    } else {
+                        feedback.style.background = 'var(--incorrect)';
+                        feedback.style.color = 'white';
+                        feedback.innerHTML = `❌ Incorrect! Correct: ${dataItem.o[dataItem.a]}<br><span style="font-size:0.9rem; font-weight:normal;">${dataItem.e}</span>`;
+                    }
+
+                    setTimeout(() => {
+                        currentQ++;
+                        renderQuestion();
+                    }, 3500);
+                }
+
+                renderQuestion();
+            },
+
+            // JUEGO 3: FILL IN THE BLANKS
+            runFillBlanks: function(unitData) {
+                const sandbox = document.getElementById('game-runtime-injection-sandbox');
+                let pool = [...unitData.blanks];
+                let currentIdx = 0;
+                let correctCount = 0;
+
+                function renderRound() {
+                    if (currentIdx >= pool.length) {
+                        const finalPct = Math.round((correctCount / pool.length) * 100);
+                        APP.recordScore('fb', finalPct);
+                        GAMES_ENGINES.showResultsScreen(sandbox, finalPct, `Completed ${correctCount} out of ${pool.length} grammatical blanks sentences!`, () => GAMES_ENGINES.runFillBlanks(unitData));
+                        return;
+                    }
+
+                    const item = pool[currentIdx];
+                    
+                    // Generate word options including the right one + fillers
+                    let options = [item.c];
+                    while(options.length < 4) {
+                        let randUnit = DATA[Object.keys(DATA)[Math.floor(Math.random() * Object.keys(DATA).length)]];
+                        let randWord = randUnit.blanks[Math.floor(Math.random() * randUnit.blanks.length)].c;
+                        if (!options.includes(randWord)) options.push(randWord);
+                    }
+                    // Shuffle alternatives
+                    options.sort(() => Math.random() - 0.5);
+
+                    sandbox.innerHTML = `
+                        <div class="stats-row">
+                            <span>Sentence: ${currentIdx + 1} / ${pool.length}</span>
+                            <span>Score: ${correctCount}</span>
+                        </div>
+                        <div class="fib-sentence-box" id="fib-sentence-card-target">
+                            ${item.s.replace('_', '<span class="fib-dropzone" id="fib-main-target-dropzone">?</span>')}
+                        </div>
+                        <div class="fib-bank" id="fib-chips-container-pool"></div>
+                    `;
+
+                    const bank = document.getElementById('fib-chips-container-pool');
+                    options.forEach(opt => {
+                        const chip = document.createElement('div');
+                        chip.className = 'fib-chip';
+                        chip.textContent = opt;
+                        chip.addEventListener('click', () => evaluateChoice(opt, chip));
+                        bank.appendChild(chip);
+                    });
+                }
+
+                function evaluateChoice(chosenWord, chipElement) {
+                    const item = pool[currentIdx];
+                    const zone = document.getElementById('fib-main-target-dropzone');
+                    const card = document.getElementById('fib-sentence-card-target');
+
+                    if (chosenWord.toLowerCase() === item.c.toLowerCase()) {
+                        correctCount++;
+                        zone.textContent = item.c;
+                        zone.classList.add('correct-zone');
+                        chipElement.style.background = 'var(--correct)';
+                        chipElement.style.color = 'white';
+                        setTimeout(() => {
+                            currentIdx++;
+                            renderRound();
+                        }, 1500);
+                    } else {
+                        card.classList.add('shake-element');
+                        chipElement.style.background = 'var(--incorrect)';
+                        chipElement.style.color = 'white';
+                        setTimeout(() => {
+                            card.classList.remove('shake-element');
+                        }, 500);
+                    }
+                }
+
+                renderRound();
+            },
+
+            // JUEGO 4: WORD SEARCH
+            runWordSearch: function(unitData) {
+                const sandbox = document.getElementById('game-runtime-injection-sandbox');
+                const targetWords = unitData.words.slice(0, 6); // Max 6 words for screen sizing comfort
+                let foundWords = [];
+
+                // 12x12 grid configuration generation
+                const size = 12;
+                let grid = Array(size).fill(null).map(() => Array(size).fill(''));
+
+                // Inject targets safely horizontally or vertically
+                targetWords.forEach(word => {
+                    let placed = false;
+                    while(!placed) {
+                        let isVert = Math.random() > 0.5;
+                        let r = Math.floor(Math.random() * (isVert ? (size - word.length) : size));
+                        let c = Math.floor(Math.random() * (isVert ? size : (size - word.length)));
+
+                        // Test collision bounds
+                        let possible = true;
+                        for(let i=0; i<word.length; i++) {
+                            let curr = grid[r + (isVert ? i : 0)][c + (isVert ? 0 : i)];
+                            if(curr !== '' && curr !== word[i]) { possible = false; break; }
+                        }
+
+                        if(possible) {
+                            for(let i=0; i<word.length; i++) {
+                                grid[r + (isVert ? i : 0)][c + (isVert ? 0 : i)] = word[i];
+                            }
+                            placed = true;
+                        }
+                    }
+                });
+
+                // Complete empty blocks with random alphabet fillers
+                const alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                for(let r=0; r<size; r++) {
+                    for(let c=0; c<size; c++) {
+                        if(grid[r][c] === '') grid[r][c] = alpha[Math.floor(Math.random() * alpha.length)];
+                    }
+                }
+
+                function drawLayout() {
+                    sandbox.innerHTML = `
+                        <div class="ws-layout">
+                            <div class="ws-grid" id="ws-grid-touchbox"></div>
+                            <div class="ws-words-box">
+                                <h3 style="margin-bottom:10px; color:var(--primary-color);">Find Words:</h3>
+                                <div id="ws-target-list-elements"></div>
+                            </div>
+                        </div>
+                    `;
+
+                    const gridContainer = document.getElementById('ws-grid-touchbox');
+                    for(let r=0; r<size; r++) {
+                        for(let c=0; c<size; c++) {
+                            const cell = document.createElement('div');
+                            cell.className = 'ws-cell';
+                            cell.textContent = grid[r][c];
+                            cell.dataset.r = r;
+                            cell.dataset.c = c;
+                            gridContainer.appendChild(cell);
+                        }
+                    }
+
+                    updateLists();
+                    setupInteraction();
+                }
+
+                function updateLists() {
+                    const container = document.getElementById('ws-target-list-elements');
+                    container.innerHTML = '';
+                    targetWords.forEach(w => {
+                        const div = document.createElement('div');
+                        div.className = `ws-word-item ${foundWords.includes(w) ? 'found' : ''}`;
+                        div.textContent = `• ${w}`;
+                        container.appendChild(div);
+                    });
+
+                    if(foundWords.length === targetWords.length) {
+                        setTimeout(() => {
+                            APP.recordScore('ws', 100);
+                            GAMES_ENGINES.showResultsScreen(sandbox, 100, "Excellent attention! You tracked down all hidden vocabulary items!", () => GAMES_ENGINES.runWordSearch(unitData));
+                        }, 1000);
+                    }
+                }
+
+                function setupInteraction() {
+                    let selectedCells = [];
+                    const gridContainer = document.getElementById('ws-grid-touchbox');
+
+                    gridContainer.addEventListener('click', (e) => {
+                        const cell = e.target.closest('.ws-cell');
+                        if(!cell) return;
+
+                        if(cell.classList.contains('ws-selected')) {
+                            cell.classList.remove('ws-selected');
+                            selectedCells = selectedCells.filter(c => c !== cell);
+                        } else {
+                            cell.classList.add('ws-selected');
+                            selectedCells.push(cell);
+                        }
+
+                        // Check word composition match string construction
+                        let currentString = selectedCells.map(c => c.textContent).join('');
+                        let reverseString = currentString.split('').reverse().join('');
+
+                        targetWords.forEach(w => {
+                            if((currentString === w || reverseString === w) && !foundWords.includes(w)) {
+                                foundWords.push(w);
+                                selectedCells.forEach(c => {
+                                    c.classList.remove('ws-selected');
+                                    c.classList.add('ws-found');
+                                });
+                                selectedCells = [];
+                                updateLists();
+                            }
+                        });
+                    });
+                }
+
+                drawLayout();
+            },
+
+            // JUEGO 5: MEMORY (PAREJAS)
+            runMemory: function(unitData) {
+                const sandbox = document.getElementById('game-runtime-injection-sandbox');
+                const rawPairs = unitData.memory;
+                let cards = [];
+                let flippedIds = [];
+                let lockBoard = false;
+                let matchesMade = 0;
+
+                // Flatten and double standard elements array
+                rawPairs.forEach((p, idx) => {
+                    cards.push({ id: idx, val: p.a, side: 'A' });
+                    cards.push({ id: idx, val: p.b, side: 'B' });
+                });
+
+                // Shuffle deck
+                cards.sort(() => Math.random() - 0.5);
+
+                function buildGrid() {
+                    sandbox.innerHTML = `
+                        <div style="text-align:center; margin-bottom:15px; font-weight:bold;">Find matching definition connections</div>
+                        <div class="mem-grid" id="mem-board-grid"></div>
+                    `;
+                    const board = document.getElementById('mem-board-grid');
+                    cards.forEach((c, idx) => {
+                        const element = document.createElement('div');
+                        element.className = 'mem-card';
+                        element.dataset.index = idx;
+                        element.textContent = c.val;
+                        element.addEventListener('click', () => cardFlip(element, idx));
+                        board.appendChild(element);
+                    });
+                }
+
+                function cardFlip(element, index) {
+                    if (lockBoard || element.classList.contains('flipped') || element.classList.contains('matched')) return;
+
+                    element.classList.add('flipped');
+                    flippedIds.push(index);
+
+                    if (flippedIds.length === 2) {
+                        lockBoard = true;
+                        checkMatch();
+                    }
+                }
+
+                function checkMatch() {
+                    const board = document.getElementById('mem-board-grid');
+                    const c1 = cards[flippedIds[0]];
+                    const c2 = cards[flippedIds[1]];
+                    const el1 = board.children[flippedIds[0]];
+                    const el2 = board.children[flippedIds[1]];
+
+                    if (c1.id === c2.id && c1.side !== c2.side) {
+                        // Found a match
+                        el1.classList.add('matched');
+                        el2.classList.add('matched');
+                        matchesMade++;
+                        flippedIds = [];
+                        lockBoard = false;
+
+                        if (matchesMade === rawPairs.length) {
+                            setTimeout(() => {
+                                APP.recordScore('my', 100);
+                                GAMES_ENGINES.showResultsScreen(sandbox, 100, "Brilliant memory concentration! Every card pair is resolved.", () => GAMES_ENGINES.runMemory(unitData));
+                            }, 1000);
+                        }
+                    } else {
+                        // Not a match, flip back down
+                        setTimeout(() => {
+                            el1.classList.remove('flipped');
+                            el2.classList.remove('flipped');
+                            flippedIds = [];
+                            lockBoard = false;
+                        }, 1200);
+                    }
+                }
+
+                buildGrid();
+            },
+
+            // JUEGO 6: DRAG & SORT
+            runDragSort: function(unitData) {
+                const sandbox = document.getElementById('game-runtime-injection-sandbox');
+                const config = unitData.sort;
+                let itemsStack = [...config.items].sort(() => Math.random() - 0.5);
+                let currentItem = null;
+                let correctsCount = 0;
+                let totalsCount = itemsStack.length;
+
+                function renderNext() {
+                    if (itemsStack.length === 0) {
+                        const finalPct = Math.round((correctsCount / totalsCount) * 100);
+                        APP.recordScore('ds', finalPct);
+                        GAMES_ENGINES.showResultsScreen(sandbox, finalPct, `You categorized ${correctsCount} out of ${totalsCount} concepts perfectly!`, () => GAMES_ENGINES.runDragSort(unitData));
+                        return;
+                    }
+
+                    currentItem = itemsStack[itemsStack.length - 1];
+
+                    sandbox.innerHTML = `
+                        <div style="text-align:center; font-weight:bold; margin-bottom:15px;">Tap the category bucket to sort the expression below</div>
+                        <div class="ds-layout">
+                            <div class="ds-deck">
+                                <div class="ds-card-item" id="ds-moving-target-chip">${currentItem.t}</div>
+                            </div>
+                            <div class="ds-bins-container" id="ds-bins-grid-holder"></div>
+                        </div>
+                    `;
+
+                    const binsHolder = document.getElementById('ds-bins-grid-holder');
+                    config.cats.forEach((catName, idx) => {
+                        const bin = document.createElement('div');
+                        bin.className = 'ds-bin';
+                        bin.innerHTML = `<div class="ds-bin-title">${catName}</div>`;
+                        bin.addEventListener('click', () => processSortDrop(idx));
+                        binsHolder.appendChild(bin);
+                    });
+                }
+
+                function processSortDrop(chosenCategoryIndex) {
+                    const chip = document.getElementById('ds-moving-target-chip');
+                    if (chosenCategoryIndex === currentItem.c) {
+                        correctsCount++;
+                        chip.style.background = 'var(--correct)';
+                    } else {
+                        chip.style.background = 'var(--incorrect)';
+                    }
+
+                    setTimeout(() => {
+                        itemsStack.pop();
+                        renderNext();
+                    }, 600);
+                }
+
+                renderNext();
+            },
+
+            // JUEGO 7: DIGITAL HANGMAN CHALLENGE
+            runHangman: function(unitData) {
+                const sandbox = document.getElementById('game-runtime-injection-sandbox');
+                const pool = unitData.hangman;
+                const picked = pool[Math.floor(Math.random() * pool.length)];
+                let targetWord = picked.w.toUpperCase();
+                let hintText = picked.h;
+                let guessedLetters = [];
+                let wrongGuesses = 0;
+                const maxWrong = 7;
+
+                function drawUI() {
+                    // Generate display underscores mask
+                    let displayStr = "";
+                    for(let i=0; i<targetWord.length; i++) {
+                        let letter = targetWord[i];
+                        if (letter === " " || letter === "-" || letter === "_") displayStr += " ";
+                        else if (guessedLetters.includes(letter)) displayStr += letter;
+                        else displayStr += "_";
+                    }
+
+                    sandbox.innerHTML = `
+                        <div class="hm-layout">
+                            <div class="hm-gallows-container">
+                                <svg viewBox="0 0 100 100" style="width:100%; height:100%; fill:none; stroke:var(--text-color); stroke-width:4;">
+                                    <line x1="10" y1="90" x2="90" y2="90" />
+                                    <line x1="30" y1="90" x2="30" y2="10" />
+                                    <line x1="30" y1="10" x2="70" y2="10" />
+                                    <line x1="70" y1="10" x2="70" y2="25" />
+                                    
+                                    ${wrongGuesses >= 1 ? '<circle cx="70" cy="32" r="7"/>' : ''}
+                                    ${wrongGuesses >= 2 ? '<line x1="70" y1="39" x2="70" y2="60"/>' : ''}
+                                    ${wrongGuesses >= 3 ? '<line x1="70" y1="45" x2="55" y2="52"/>' : ''}
+                                    ${wrongGuesses >= 4 ? '<line x1="70" y1="45" x2="85" y2="52"/>' : ''}
+                                    ${wrongGuesses >= 5 ? '<line x1="70" y1="60" x2="55" y2="75"/>' : ''}
+                                    ${wrongGuesses >= 6 ? '<line x1="70" y1="60" x2="85" y2="75"/>' : ''}
+                                </svg>
+                            </div>
+                            <div class="hm-hint-box">💡 Hint: ${hintText}</div>
+                            <div class="hm-word-display">${displayStr}</div>
+                            <div class="hm-keyboard" id="hm-keyboard-target-block"></div>
+                        </div>
+                    `;
+
+                    // Handle endings checks
+                    if (!displayStr.includes('_')) {
+                        setTimeout(() => {
+                            APP.recordScore('hm', 100);
+                            GAMES_ENGINES.showResultsScreen(sandbox, 100, `Success! The vocabulary word was indeed ${targetWord}.`, () => GAMES_ENGINES.runHangman(unitData));
+                        }, 800);
+                        return;
+                    }
+
+                    if (wrongGuesses >= maxWrong) {
+                        setTimeout(() => {
+                            APP.recordScore('hm', 0);
+                            GAMES_ENGINES.showResultsScreen(sandbox, 0, `Out of attempts! The word was: ${targetWord}. Let's try again.`, () => GAMES_ENGINES.runHangman(unitData));
+                        }, 800);
+                        return;
+                    }
+
+                    // Build onscreen full alphabetic virtual mechanical keys layout
+                    const keysBox = document.getElementById('hm-keyboard-target-block');
+                    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
+                    alphabet.forEach(letter => {
+                        const key = document.createElement('button');
+                        key.className = 'hm-key';
+                        key.textContent = letter;
+                        if (guessedLetters.includes(letter)) key.disabled = true;
+
+                        key.addEventListener('click', () => {
+                            guessedLetters.push(letter);
+                            if (!targetWord.includes(letter)) wrongGuesses++;
+                            drawUI();
+                        });
+                        keysBox.appendChild(key);
+                    });
+                }
+
+                drawUI();
+            },
+
+            // JUEGO 8: QUESTION WHEEL
+            runQuestionWheel: function(unitData) {
+                const sandbox = document.getElementById('game-runtime-injection-sandbox');
+                const wheelItems = [...unitData.warmups];
+                let isSpinning = false;
+
+                sandbox.innerHTML = `
+                    <div class="wheel-container">
+                        <div class="wheel-svg-holder">
+                            <div class="wheel-pointer"></div>
+                            <svg id="wheel-svg" viewBox="0 0 200 200">
+                                <circle cx="100" cy="100" r="95" fill="var(--card-bg)" stroke="var(--primary-color)" stroke-width="4"/>
+                                </svg>
+                        </div>
+                        <button class="action-btn btn-primary" id="spin-wheel-btn-trigger" style="min-width:180px;">🎡 Spin Wheel</button>
+                        <div class="wheel-card-result" id="wheel-card-display-box"></div>
+                    </div>
+                `;
+
+                // Render colorful slice blocks partitions using SVG path segments calculations
+                const svg = document.getElementById('wheel-svg');
+                const count = wheelItems.length;
+                const colors = ['#E53935', '#1E88E5', '#FDD835', '#43A047', '#8E24AA', '#FB8C00', '#00ACC1', '#3949AB'];
+
+                for (let i = 0; i < count; i++) {
+                    const angle1 = (i * 360) / count;
+                    const angle2 = ((i + 1) * 360) / count;
+                    
+                    const rad1 = (Math.PI * angle1) / 180;
+                    const rad2 = (Math.PI * angle2) / 180;
+
+                    const x1 = 100 + 90 * Math.cos(rad1);
+                    const y1 = 100 + 90 * Math.sin(rad1);
+                    const x2 = 100 + 90 * Math.cos(rad2);
+                    const y2 = 100 + 90 * Math.sin(rad2);
+
+                    const largeArc = (angle2 - angle1) > 180 ? 1 : 0;
+
+                    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    path.setAttribute('d', `M 100 100 L ${x1} ${y1} A 90 90 0 ${largeArc} 1 ${x2} ${y2} Z`);
+                    path.setAttribute('fill', colors[i % colors.length]);
+                    path.setAttribute('opacity', '0.85');
+                    svg.insertBefore(path, svg.firstChild);
+                }
+
+                document.getElementById('spin-wheel-btn-trigger').addEventListener('click', () => {
+                    if (isSpinning) return;
+                    isSpinning = true;
+
+                    const cardDisplay = document.getElementById('wheel-card-display-box');
+                    cardDisplay.style.display = 'none';
+
+                    // Physics easing simulation random degrees generation
+                    const randomDegrees = 1800 + Math.floor(Math.random() * 1440);
+                    const targetWheel = document.getElementById('wheel-svg');
+                    
+                    targetWheel.style.transition = 'transform 4s cubic-bezier(0.1, 0.8, 0.25, 1)';
+                    targetWheel.style.transform = `rotate(${randomDegrees}deg)`;
+
+                    setTimeout(() => {
+                        // Calculate specific pointing landing indexing item offset
+                        const normalizedDegrees = (randomDegrees % 360);
+                        // Pointer at top (-90 degrees reference coordinate system context offset adjustments)
+                        const pointingAngle = (360 - normalizedDegrees + 270) % 360;
+                        const finalIndex = Math.floor((pointingAngle * count) / 360) % count;
+                        const resultQuestionText = wheelItems[finalIndex];
+
+                        cardDisplay.textContent = resultQuestionText;
+                        cardDisplay.style.display = 'block';
+                        
+                        // Speech fallback reinforcement values declaration
+                        if ('speechSynthesis' in window) {
+                            window.speechSynthesis.cancel();
+                            const utterance = new SpeechSynthesisUtterance(resultQuestionText);
+                            utterance.lang = 'en-US';
+                            window.speechSynthesis.speak(utterance);
+                        }
+
+                        // Reset mechanics hooks securely
+                        targetWheel.style.transition = 'none';
+                        targetWheel.style.transform = `rotate(${pointingAngle}deg)`;
+                        isSpinning = false;
+                        
+                        // Give participation record marks auto full marks pass credits values
+                        APP.recordScore('rw', 100);
+                    }, 4100);
+                });
+            }
+        };
+
+        // RUNTIME APPLICATION BOOTSTRAPPING ENGINE TRIGGER
+        document.addEventListener('DOMContentLoaded', () => {
+            APP.init();
+        });
+
+        // TAMPER PROTECTION ENFORCEMENT LOOP ENGINE MONITOR
+        setInterval(() => {
+            const firma = document.getElementById('firma-seguridad');
+            const app = document.getElementById('app');
+            const bloqueado = document.getElementById('acceso-denegado');
+            if (!firma || firma.textContent.trim() !== 'Creado por Tony Salas & German Peña' ||
+                getComputedStyle(firma).display === 'none' ||
+                getComputedStyle(firma).opacity === '0' ||
+                getComputedStyle(firma).visibility === 'hidden') {
+                if (app) app.style.display = 'none';
+                if (!bloqueado) {
+                    const div = document.createElement('div');
+                    div.id = 'acceso-denegado';
+                    div.style.cssText = 'position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:99999;';
+                    div.innerHTML = '<p style="color:red;font-size:2rem;text-align:center;padding:2rem;">⚠️ ACCESO DENEGADO ⚠️<br><span style="font-size:1rem;">El código de seguridad y la firma han sido alterados. CREA TU VERGA TU, CARA E MONDA.</span></p>';
+                    document.body.appendChild(div);
+                }
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

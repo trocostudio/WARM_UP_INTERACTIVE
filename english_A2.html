@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>English Interactive — Nivel A2</title>
+    <style>
+        :root {
+            --bg-primary: #F0F4FF;
+            --bg-card: #FFFFFF;
+            --text-main: #0D47A1;
+            --text-muted: #3A609E;
+            --color-primary: #1565C0;
+            --color-accent: #42A5F5;
+            --color-danger: #D32F2F;
+            --color-success: #2E7D32;
+            --border-radius-card: 16px;
+            --border-radius-modal: 24px;
+            --shadow-main: 0 8px 32px rgba(21, 101, 192, 0.15);
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #070D1A;
+            --bg-card: #0D1B35;
+            --text-main: #E3F2FD;
+            --text-muted: #90CAF9;
+            --color-primary: #0D47A1;
+            --color-accent: #42A5F5;
+            --color-danger: #EF5350;
+            --color-success: #81C784;
+            --shadow-main: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Segoe UI', 'Roboto', system-ui, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            transition: var(--transition-smooth);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #theme-toggle {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 1000;
+            background: var(--bg-card);
+            border: 2px solid var(--color-primary);
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow-main);
+            touch-action: manipulation;
+        }
+
+        header {
+            background: var(--bg-card);
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow-main);
+            border-bottom: 3px solid var(--color-primary);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            color: var(--color-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        main {
+            flex: 1;
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn {
+            min-height: 48px;
+            padding: 12px 24px;
+            border-radius: 12px;
+            border: none;
+            background-color: var(--color-primary);
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            touch-action: manipulation;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-accent {
+            background-color: var(--color-accent);
+            color: #000000;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--color-primary);
+            color: var(--text-main);
+        }
+
+        .grid-units {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        @media(min-width: 600px) {
+            .grid-units { grid-template-columns: 1fr 1fr; }
+        }
+
+        .card-unit {
+            background: var(--bg-card);
+            border-radius: var(--border-radius-card);
+            padding: 20px;
+            box-shadow: var(--shadow-main);
+            border: 1px solid rgba(21, 101, 192, 0.1);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .card-unit:hover {
+            transform: translateY(-4px);
+            border-color: var(--color-accent);
+        }
+
+        .card-unit h3 {
+            margin-bottom: 8px;
+            color: var(--color-primary);
+        }
+
+        .card-unit p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .workspace-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        @media(min-width: 768px) {
+            .workspace-layout { grid-template-columns: 1fr 1.2fr; }
+        }
+
+        .panel-column {
+            background: var(--bg-card);
+            border-radius: var(--border-radius-card);
+            padding: 20px;
+            box-shadow: var(--shadow-main);
+        }
+
+        .grid-games {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .instruction-text {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        /* Flashcards Styling */
+        .flashcard-wrapper {
+            perspective: 1000px;
+            width: 100%;
+            height: 240px;
+            margin: 20px 0;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: var(--border-radius-card);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow-main);
+        }
+
+        .card-front {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .card-back {
+            background: var(--bg-card);
+            border: 3px solid var(--color-primary);
+            color: var(--text-main);
+            transform: rotateY(180deg);
+        }
+
+        /* Quiz Choices Layout */
+        .quiz-option {
+            background: var(--bg-card);
+            border: 2px solid var(--text-muted);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            font-size: 1rem;
+            color: var(--text-main);
+            transition: var(--transition-smooth);
+            min-height: 48px;
+        }
+
+        .quiz-option.correct {
+            background: var(--color-success);
+            color: white;
+            border-color: var(--color-success);
+        }
+
+        .quiz-option.incorrect {
+            background: var(--color-danger);
+            color: white;
+            border-color: var(--color-danger);
+        }
+
+        /* Word Games Elements */
+        .word-display {
+            font-size: 2rem;
+            letter-spacing: 0.4rem;
+            text-align: center;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .keyboard-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            margin-top: 15px;
+        }
+
+        .key-btn {
+            min-height: 44px;
+            background: var(--bg-card);
+            border: 1px solid var(--color-primary);
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--text-main);
+        }
+
+        .key-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* Word Search Matrix */
+        .wordsearch-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 4px;
+            margin: 15px auto;
+            max-width: 320px;
+        }
+
+        .ws-cell {
+            aspect-ratio: 1;
+            background: var(--bg-card);
+            border: 1px solid var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            user-select: none;
+            border-radius: 4px;
+        }
+
+        .ws-cell.selected {
+            background: var(--color-accent);
+            color: black;
+        }
+
+        .ws-cell.found {
+            background: var(--color-success);
+            color: white;
+        }
+
+        /* Memory Elements */
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .memory-card {
+            aspect-ratio: 1;
+            background: var(--color-primary);
+            color: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-align: center;
+            padding: 4px;
+            border-radius: 8px;
+            cursor: pointer;
+            user-select: none;
+            word-break: break-word;
+        }
+
+        .memory-card.flipped {
+            background: var(--bg-card);
+            border: 2px solid var(--color-primary);
+            color: var(--text-main);
+        }
+
+        .memory-card.matched {
+            background: var(--color-success);
+            color: white;
+            opacity: 0.6;
+        }
+
+        /* Roulette Object */
+        .roulette-container {
+            position: relative;
+            width: 240px;
+            height: 240px;
+            margin: 20px auto;
+        }
+
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 8px solid var(--color-primary);
+            position: relative;
+            overflow: hidden;
+            transition: transform 3s cubic-bezier(0.1, 0.8, 0.1, 1);
+            background: conic-gradient(
+                var(--color-primary) 0deg 45deg,
+                var(--color-accent) 45deg 90deg,
+                var(--color-primary) 90deg 135deg,
+                var(--color-accent) 135deg 180deg,
+                var(--color-primary) 180deg 225deg,
+                var(--color-accent) 225deg 270deg,
+                var(--color-primary) 270deg 315deg,
+                var(--color-accent) 315deg 360deg
+            );
+        }
+
+        .wheel-pointer {
+            position: absolute;
+            top: -10px;
+            left: calc(50% - 15px);
+            width: 30px;
+            height: 30px;
+            background: var(--color-danger);
+            clip-path: polygon(50% 100%, 0 0, 100% 0);
+            z-index: 10;
+        }
+
+        .feedback-message {
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 8px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--color-accent);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .app-footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <button id="theme-toggle" aria-label="Toggle structural theme">🌓</button>
+
+    <header>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <a href="index.html" class="btn-back-nav" style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                padding: 0 16px;
+                height: 42px;
+                border-radius: 12px;
+                background: var(--border-color);
+                color: var(--primary-color);
+                text-decoration: none;
+                font-size: 0.95rem;
+                font-weight: bold;
+                transition: background 0.3s ease, transform 0.2s ease;
+                border: none;
+                cursor: pointer;
+            " onmouseover="this.style.background='#FFCDD2'; this.style.transform='scale(1.03)';" onmouseout="this.style.background='var(--border-color)'; this.style.transform='scale(1)';">
+                🏠 Home
+            </a>
+            <div class="header-logo">English Interactive — Level A2</div>
+        </div>
+    </header>
+
+    <main id="app">
+        <div id="screen-units" class="screen active">
+            <h2 style="margin-bottom:10px; text-align:center;">Select Learning Unit Module</h2>
+            <div class="grid-units" id="units-list"></div>
+        </div>
+
+        <div id="screen-dashboard" class="screen">
+            <button class="btn btn-outline" id="dash-back-btn">⬅️ Back to All Units</button>
+            <h2 id="dash-title" style="margin: 15px 0 5px 0; color: var(--color-primary);"></h2>
+            <p id="dash-grammar" style="font-size:0.95rem; margin-bottom:20px; color: var(--text-muted);"></p>
+            
+            <div class="workspace-layout">
+                <div class="panel-column">
+                    <h3 style="margin-bottom:10px;">💬 Section: Warm-Up</h3>
+                    <p class="instruction-text">Answer the prompts aloud to practice conversation.</p>
+                    <div id="warmup-prompts-container"></div>
+                </div>
+
+                <div class="panel-column">
+                    <h3 style="margin-bottom:15px;">🎮 Section: Learning Games</h3>
+                    <div class="grid-games" id="games-hub-buttons">
+                        <button class="btn" data-game="1">🃏 Flashcards Game</button>
+                        <button class="btn" data-game="2">⚡ Kahoot-Style Quiz</button>
+                        <button class="btn" data-game="3">✏️ Fill in the Blanks</button>
+                        <button class="btn" data-game="4">🔍 Word Search</button>
+                        <button class="btn" data-game="5">🧠 Memory Pairs Match</button>
+                        <button class="btn" data-game="6">📦 Drag & Sort Categories</button>
+                        <button class="btn" data-game="7">💀 Digital Hangman</button>
+                        <button class="btn" data-game="8">🎡 Wheel of Questions</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-game" class="screen">
+            <button class="btn btn-outline" id="game-back-btn">📋 Return to Workspace</button>
+            <div id="game-container-zone"></div>
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        English Interactive Platform &bull; Level A2 Elementary
+    </footer>
+
+    <div id="firma-seguridad" style="position:fixed;bottom:20px;left:30px;font-family:Georgia, 'Times New Roman', serif;font-style:italic;font-size:14px;opacity:0.7;z-index:9999;pointer-events:none;">Creado por Tony Salas & German Peña</div>
+
+    <script>
+        // COMPREHENSIVE A2 GRAMMAR ENGINE DATA
+        const DATA = {
+            modules: [
+                {
+                    id: 1,
+                    title: "Units 1-2: Past Habits & Used To",
+                    grammar: "Past tense, Used to (habitual actions), Expressions of quantity (too many/much, fewer, less, more, not enough)",
+                    warmup: [
+                        "What did you use to do as a child that you don't do anymore?",
+                        "Did you use to have a pet? What happened to it?",
+                        "How much free time did you use to have when you were younger?",
+                        "What TV shows did you use to watch as a kid?",
+                        "Did you use to live somewhere different? What was it like?",
+                        "Were there too many rules in your house when you were a child?",
+                        "Did you use to be afraid of something? What?",
+                        "What sports did you use to play? Do you still play them?"
+                    ],
+                    flashcards: [
+                        { front: "I used to ride a bicycle", back: "Past habit: I did it regularly, but I don't now" },
+                        { front: "Did you use to play?", back: "Question form: note 'use to' without 'd'" },
+                        { front: "Too many cars", back: "Countable quantity: more than the correct amount" },
+                        { front: "Too much traffic", back: "Uncountable quantity: more than necessary" },
+                        { front: "Fewer rules", back: "Countable comparative: a smaller number" },
+                        { front: "Less pollution", back: "Uncountable comparative: a smaller amount" },
+                        { front: "More space", back: "Comparative quantity for both countable and uncountable" },
+                        { front: "Not enough time", back: "Insufficiency: less than what is needed" },
+                        { front: "Went", back: "Past simple of 'go' (Irregular verb)" },
+                        { front: "Bought", back: "Past simple of 'buy' (Irregular verb)" }
+                    ],
+                    quiz: [
+                        { q: "What did she ___ to do every morning as a child?", options: ["use", "used", "using", "uses"], correct: 0 },
+                        { q: "There are ___ students in this small class. It's not crowded, it's perfect.", options: ["too many", "not enough", "too much", "fewer"], correct: 1 },
+                        { q: "We have too ___ traffic in the city center during rush hour.", options: ["much", "many", "fewer", "less"], correct: 0 },
+                        { q: "Children have ___ free time nowadays than in the past.", options: ["less", "fewer", "many", "too much"], correct: 0 },
+                        { q: "I ___ to like broccoli, but now I absolutely love it.", options: ["didn't use", "didn't used", "used not", "never use"], correct: 0 },
+                        { q: "There are too ___ plastic bottles polluting our oceans.", options: ["many", "much", "less", "enough"], correct: 0 },
+                        { q: "We need more parks and ___ industrial factories.", options: ["fewer", "less", "too many", "not enough"], correct: 0 },
+                        { q: "Did your brother ___ to play professional soccer?", options: ["use", "used", "uses", "using"], correct: 0 },
+                        { q: "He cooked too ___ food and had to throw away the leftovers.", options: ["much", "many", "fewer", "enough"], correct: 0 },
+                        { q: "I don't have ___ money to buy a brand new luxury vehicle.", options: ["enough", "too much", "fewer", "less"], correct: 0 }
+                    ],
+                    fillblanks: [
+                        { text: "My grandfather used to [live] in a beautiful country farm house.", answer: "live" },
+                        { text: "There is too [much] salt in this chicken soup recipe.", answer: "much" },
+                        { text: "We should spend [less] time on social media applications.", answer: "less" },
+                        { text: "Did you [use] to collect comic books when you were young?", answer: "use" },
+                        { text: "There are too [many] old cars driving around the neighborhood.", answer: "many" }
+                    ],
+                    wordsearch: ["USED", "QUANTITY", "FEWER", "LESS", "MUCH", "MANY", "ENOUGH", "HABIT"],
+                    memory: [
+                        { a: "go", b: "went" }, { a: "buy", b: "bought" }, { a: "see", b: "saw" }, { a: "have", b: "had" }
+                    ],
+                    dragsort: {
+                        categories: ["Countable", "Uncountable"],
+                        items: [
+                            { text: "Too many cars", cat: "Countable" },
+                            { text: "Fewer options", cat: "Countable" },
+                            { text: "Too much sugar", cat: "Uncountable" },
+                            { text: "Less money", cat: "Uncountable" }
+                        ]
+                    },
+                    hangman: [
+                        { word: "HABIT", hint: "Something you used to do regularly in your routine" },
+                        { word: "ENOUGH", hint: "Sufficient quantity for your specific necessities" }
+                    ],
+                    roulette: [
+                        "What did you use to do on family weekends?",
+                        "Is there too much noise where you live?",
+                        "Did you use to play video games?",
+                        "Name one past habit you successfully changed."
+                    ]
+                },
+                {
+                    id: 2,
+                    title: "Units 3-4: Opinions & Comparisons",
+                    grammar: "Indirect questions from Wh-questions, Evaluations/comparisons (not enough, too, not as…as), Wishes",
+                    warmup: [
+                        "Do you know where the nearest gym is?",
+                        "Are you good enough at English to have a job interview?",
+                        "Is English too difficult for you, or not difficult enough?",
+                        "Do you wish you could speak another language? Which one?",
+                        "Can you tell me what time the class finishes?",
+                        "Is your city as big as you'd like it to be?",
+                        "Do you wish you had more money? What would you do with it?",
+                        "Is your phone as fast as you need it to be?"
+                    ],
+                    flashcards: [
+                        { front: "Where is it? (Direct)", back: "Do you know where it is? (Indirect form)" },
+                        { front: "Too expensive", back: "Negative evaluation: higher price than acceptable" },
+                        { front: "Not fast enough", back: "Insufficient trait: below standard expectations" },
+                        { front: "Not as big as", back: "Comparison: unequal size status setup" },
+                        { front: "I wish I could fly", back: "Wish: imaginary present desire expression" },
+                        { front: "Can you tell me...", back: "Polite introductory phrase for indirect questions" },
+                        { front: "Comfortable enough", back: "Sufficient level of physical relaxation or luxury" },
+                        { front: "Too small", back: "Inadequate physical dimension properties" },
+                        { front: "I wish I had a car", back: "Regret or desire about current ownership" },
+                        { front: "As beautiful as", back: "Equality comparison highlighting similar visual traits" }
+                    ],
+                    quiz: [
+                        { q: "Could you tell me where the bank ___?", options: ["is", "does", "are", "was"], correct: 0 },
+                        { q: "This apartment is ___ small for a large family of five.", options: ["too", "enough", "as", "fewer"], correct: 0 },
+                        { q: "My phone is not ___ fast as your new device.", options: ["as", "too", "enough", "than"], correct: 0 },
+                        { q: "I wish I ___ speak perfect fluent Japanese.", options: ["could", "can", "will", "would"], correct: 0 },
+                        { q: "Do you know what time the supermarket ___?", options: ["opens", "does open", "is open", "opening"], correct: 0 },
+                        { q: "The old laptop wasn't powerful ___ to run the modern game.", options: ["enough", "too", "as", "less"], correct: 0 },
+                        { q: "I wish my house ___ a larger backyard garden space.", options: ["had", "has", "have", "having"], correct: 0 },
+                        { q: "Can you explain how this machine ___?", options: ["works", "does work", "working", "is work"], correct: 0 },
+                        { q: "Bus tickets are not as cheap ___ they used to be.", options: ["as", "than", "too", "enough"], correct: 0 },
+                        { q: "He thinks grammar is too complicated. It's not simple ___.", options: ["enough", "too", "as", "much"], correct: 0 }
+                    ],
+                    fillblanks: [
+                        { text: "Do you know where the teacher [lives] nowadays?", answer: "lives" },
+                        { text: "This classroom is [too] cold for the students.", answer: "too" },
+                        { text: "The local gym is not as modern [as] the hotel gym.", answer: "as" },
+                        { text: "I wish I [had] more time to complete this evaluation quiz.", answer: "had" },
+                        { text: "Your smartphone is not clear [enough] to take night photos.", answer: "enough" }
+                    ],
+                    wordsearch: ["INDIRECT", "WISH", "ENOUGH", "COMPARE", "AS", "TOO", "OPINION", "COULD"],
+                    memory: [
+                        { a: "Where is he?", b: "Do you know where he is?" },
+                        { a: "What time is it?", b: "Can you tell me what time it is?" },
+                        { a: "cheap", b: "expensive" },
+                        { a: "small", b: "big" }
+                    ],
+                    dragsort: {
+                        categories: ["Direct Quest", "Indirect Quest"],
+                        items: [
+                            { text: "Where is the station?", cat: "Direct Quest" },
+                            { text: "What do you want?", cat: "Direct Quest" },
+                            { text: "Do you know where it is?", cat: "Indirect Quest" },
+                            { text: "Can you tell me your name?", cat: "Indirect Quest" }
+                        ]
+                    },
+                    hangman: [
+                        { word: "INDIRECT", hint: "A polite type of question structure starting with: Do you know..." },
+                        { word: "COMPARE", hint: "To examine traits to discover similarities or differences" }
+                    ],
+                    roulette: [
+                        "What is something you wish you could do right now?",
+                        "Is your current neighborhood quiet enough for you?",
+                        "Ask your teacher an indirect question about their age.",
+                        "Is public transportation too expensive in your region?"
+                    ]
+                },
+                {
+                    id: 3,
+                    title: "Units 5-6: Travel & Experiences",
+                    grammar: "Simple past vs. present perfect, Sequence adverbs (first/then/next/after that/finally)",
+                    warmup: [
+                        "Have you ever traveled by plane? Where did you go first?",
+                        "Tell me about a trip: what happened first, then, finally?",
+                        "Have you visited Bogotá? When did you go?",
+                        "What did you do last vacation? Use: first, then, after that...",
+                        "Have you ever gotten lost? What did you do next?",
+                        "Did you have a good trip last time you traveled? What happened?",
+                        "Have you ever tried street food? What did you try first?",
+                        "Tell me about your day yesterday using sequence adverbs."
+                    ],
+                    flashcards: [
+                        { front: "I have visited Rome", back: "Present perfect: Unspecified time in the past" },
+                        { front: "I went to Rome in 2022", back: "Simple past: Specific completed time point" },
+                        { front: "First", back: "Sequence adverb used to start a step-by-step description" },
+                        { front: "Then / Next", back: "Sequence adverbs for subsequent intermediate events" },
+                        { front: "Finally", back: "Sequence adverb indicating the concluding past action step" },
+                        { front: "Have you ever...?", back: "Standard inquiry regarding total lifetime experiences" },
+                        { front: "Seen", back: "Past participle form of the irregular verb 'see'" },
+                        { front: "Ridden", back: "Past participle form of the irregular verb 'ride'" },
+                        { front: "After that", back: "Transition phrase moving narrative to the following stage" },
+                        { front: "Never", back: "Adverb indicating zero occurrence within life experience" }
+                    ],
+                    quiz: [
+                        { q: "I have never ___ Paris in my entire lifetime.", options: ["visited", "visit", "visiting", "visits"], correct: 0 },
+                        { q: "She went to London last summer and ___ the Queen.", options: ["met", "has met", "meet", "meeting"], correct: 0 },
+                        { q: "___, we bought the tickets. Then, we boarded the morning train.", options: ["First", "Finally", "After that", "Next"], correct: 0 },
+                        { q: "Have you ___ eaten raw seafood or traditional sushi?", options: ["ever", "never", "did", "already"], correct: 0 },
+                        { q: "We arrived at the luxury hotel. ___, we unpacked our baggage.", options: ["Next", "First", "Finally", "Since"], correct: 0 },
+                        { q: "They ___ down to the beach three distinct times last weekend.", options: ["went", "have gone", "go", "going"], correct: 0 },
+                        { q: "I have ___ a wild elephant during my vacation to India.", options: ["seen", "saw", "see", "seeing"], correct: 0 },
+                        { q: "He explored the museum. ___, he finally took a taxi back home.", options: ["After that", "First", "Ever", "Never"], correct: 0 },
+                        { q: "Did you ___ a good time during your historical tour?", options: ["have", "had", "has", "having"], correct: 0 },
+                        { q: "We walked for hours. ___, we found the lost tourist site.", options: ["Finally", "First", "Then", "Next"], correct: 0 }
+                    ],
+                    fillblanks: [
+                        { text: "I have never [flown] in a helicopter before.", answer: "flown" },
+                        { text: "Yesterday, we [visited] the gold museum downtown.", answer: "visited" },
+                        { text: "First, book a hotel. [Then], packs your suitcases.", answer: "then" },
+                        { text: "Have you ever [tried] Mexican spicy street food?", answer: "tried" },
+                        { text: "Finally, they [returned] to the airport safely.", answer: "returned" }
+                    ],
+                    wordsearch: ["FIRST", "THEN", "FINALLY", "TRAVEL", "PAST", "PERFECT", "EVER", "NEVER"],
+                    memory: [
+                        { a: "Simple Past", b: "Specific past time" },
+                        { a: "Present Perfect", b: "Unspecified lifetime experience" },
+                        { a: "see", b: "seen" },
+                        { a: "fly", b: "flown" }
+                    ],
+                    dragsort: {
+                        categories: ["Simple Past", "Present Perfect"],
+                        items: [
+                            { text: "I ate pizza yesterday", cat: "Simple Past" },
+                            { text: "She left at 5 PM", cat: "Simple Past" },
+                            { text: "I have never traveled", cat: "Present Perfect" },
+                            { text: "They have won a trophy", cat: "Present Perfect" }
+                        ]
+                    },
+                    hangman: [
+                        { word: "FINALLY", hint: "The sequence adverb used to introduce the last action step" },
+                        { word: "EXPERIENCE", hint: "Knowledge or skill gained from doing things in life" }
+                    ],
+                    roulette: [
+                        "Have you ever won a competition or sports medal?",
+                        "Describe your morning routine using sequence adverbs.",
+                        "Where did you go on your very best vacation trip?",
+                        "Have you ever met a famous celebrity person?"
+                    ]
+                },
+                {
+                    id: 4,
+                    title: "Units 7-8: Future Plans",
+                    grammar: "Future with be going to and will, Modals for necessity/suggestion (must/need to/have to/ought to/should/better)",
+                    warmup: [
+                        "What are you going to do after this class?",
+                        "Do you think it will rain this weekend?",
+                        "What must you do before going to sleep tonight?",
+                        "Should you study more English? What do you need to do?",
+                        "Are you going to travel this year? Where?",
+                        "What do you have to do at work/school this week?",
+                        "Will technology change our lives in 10 years? How?",
+                        "What ought people to do more of in this city?"
+                    ],
+                    flashcards: [
+                        { front: "I am going to study", back: "Future: A prior plan or intention made before speaking" },
+                        { front: "I think it will rain", back: "Future prediction based on personal opinion" },
+                        { front: "You must wear a seatbelt", back: "Necessity: Strong obligation or legal rule" },
+                        { front: "You should practice daily", back: "Suggestion: Good advice or recommendation" },
+                        { front: "You had better study", back: "Strong warning suggestion: negative consequence if ignored" },
+                        { front: "I have to work", back: "External necessity: rule imposed by circumstances" },
+                        { front: "We need to buy food", back: "Essential requirement or necessity for survival" },
+                        { front: "Ought to", back: "Synonym for should: moral recommendation" },
+                        { front: "Will drop you home", back: "Spontaneous future decision made at the moment of speaking" },
+                        { front: "Are you going to cook?", back: "Inquiry regarding future planned structural items" }
+                    ],
+                    quiz: [
+                        { q: "Look at those dark grey clouds! It ___ rain very soon.", options: ["is going to", "will", "must", "should"], correct: 0 },
+                        { q: "I think artificial intelligence ___ transform schools in ten years.", options: ["will", "is going to", "must", "ought to"], correct: 0 },
+                        { q: "You ___ possess a valid passport to board international flights.", options: ["must", "should", "ought to", "had better"], correct: 0 },
+                        { q: "Drivers ___ stop their vehicles completely when traffic lights turn red.", options: ["have to", "should", "ought", "better"], correct: 0 },
+                        { q: "It's getting late. You ___ better finish your homework now.", options: ["had", "should", "must", "need"], correct: 0 },
+                        { q: "What ___ you going to do during the Christmas holiday?", options: ["are", "will", "do", "must"], correct: 0 },
+                        { q: "You ___ eat more fresh vegetables. It's excellent advice.", options: ["should", "have to", "must", "had better"], correct: 0 },
+                        { q: "Wait! I ___ open the entrance gate for you right now.", options: ["will", "am going to", "need to", "must"], correct: 0 },
+                        { q: "Citizens ___ to obey municipal laws to preserve public order.", options: ["ought", "should", "must", "have"], correct: 0 },
+                        { q: "I ___ to practice vocabulary flashcards every single night.", options: ["need", "must", "should", "had better"], correct: 0 }
+                    ],
+                    fillblanks: [
+                        { text: "Next week, I am going to [travel] to San Andres island.", answer: "travel" },
+                        { text: "I believe global temperatures [will] rise over time.", answer: "will" },
+                        { text: "You must [show] your official identification card at the gate.", answer: "show" },
+                        { text: "Students have to [wear] uniforms inside this school.", answer: "wear" },
+                        { text: "You should [listen] carefully to your teacher's guidance.", answer: "listen" }
+                    ],
+                    wordsearch: ["FUTURE", "GOING", "WILL", "MUST", "SHOULD", "OUGHT", "BETTER", "NEED"],
+                    memory: [
+                        { a: "Plan/Intention", b: "be going to" },
+                        { a: "Prediction/Spontaneous", b: "will" },
+                        { a: "Strong Rule", b: "must / have to" },
+                        { a: "Good Advice", b: "should / ought to" }
+                    ],
+                    dragsort: {
+                        categories: ["Will Future", "Going To Plan"],
+                        items: [
+                            { text: "I will help you now", cat: "Will Future" },
+                            { text: "I think he will win", cat: "Will Future" },
+                            { text: "I am going to study tonight", cat: "Going To Plan" },
+                            { text: "They are going to build a pool", cat: "Going To Plan" }
+                        ]
+                    },
+                    hangman: [
+                        { word: "PREDICTION", hint: "A statement forecasting what you think will happen in the future" },
+                        { word: "OBLIGATION", hint: "A necessity imposed by rules or absolute laws" }
+                    ],
+                    roulette: [
+                        "Where are you going to go after finishing this course?",
+                        "What must a good student do to earn excellent marks?",
+                        "Predict how your life will look in five years.",
+                        "What should tourists visit when they travel to your nation?"
+                    ]
+                },
+                {
+                    id: 5,
+                    title: "Units 9-10: Home & Requests",
+                    grammar: "Two-part verbs (turn on/off, pick up, etc.), Will for responding to requests, Requests with modals and 'Would you mind...?'",
+                    warmup: [
+                        "Could you turn off your phone during this class? Why?",
+                        "Would you mind helping me with something right now?",
+                        "Can you pick up your things? Will you do it now?",
+                        "Would you mind if I opened the window?",
+                        "Will someone please hand out these papers?",
+                        "Could you speak up? I can't hear you.",
+                        "Would you mind waiting outside for a moment?",
+                        "Will you turn down the music? It's too loud."
+                    ],
+                    flashcards: [
+                        { front: "Turn on the light", back: "Two-part verb: Connect or start an electrical appliance" },
+                        { front: "Turn off the light", back: "Two-part verb: Disconnect or stop an appliance" },
+                        { front: "Pick up your clothes", back: "Two-part verb: Lift something from the floor or surface" },
+                        { front: "Put away your books", back: "Two-part verb: Return objects to their proper storage place" },
+                        { front: "Would you mind closing...?", back: "Polite request pattern: Requires an -ing gerund verb" },
+                        { front: "Could you help me?", back: "Polite modal request followed by base form verb" },
+                        { front: "I'll do that right now", back: "Will: Used to immediately agree to a sudden request" },
+                        { front: "Take out the garbage", back: "Two-part verb: Move waste materials outside the house" },
+                        { front: "Hang up your jacket", back: "Two-part verb: Place clothes on a hook or hanger tool" },
+                        { front: "Would you mind if I left?", back: "Polite permission query using past tense clause" }
+                    ],
+                    quiz: [
+                        { q: "Please turn ___ the television screen. Nobody is watching it.", options: ["off", "on", "up", "away"], correct: 0 },
+                        { q: "Would you mind ___ the volume? The music is way too loud.", options: ["turning down", "turn down", "turned down", "to turn down"], correct: 0 },
+                        { q: "Don't leave your shoes on the floor. Please pick them ___.", options: ["up", "off", "away", "out"], correct: 0 },
+                        { q: "A: Can you clean the table? B: Sure, I ___ do it immediately.", options: ["will", "am going to", "must", "mind"], correct: 0 },
+                        { q: "Could you please ___ up? We cannot hear your voice at the back.", options: ["speak", "speaking", "spoke", "speaks"], correct: 0 },
+                        { q: "Would you mind ___ I borrowed your pen for a quick second?", options: ["if", "for", "to", "that"], correct: 0 },
+                        { q: "It's dark in here. Could you turn ___ the ceiling lights?", options: ["on", "off", "out", "away"], correct: 0 },
+                        { q: "Please put ___ your toys before your mother arrives home.", options: ["away", "up", "on", "down"], correct: 0 },
+                        { q: "Would you mind ___ me move this heavy wooden cabinet?", options: ["helping", "to help", "help", "helped"], correct: 0 },
+                        { q: "Will you please take ___ the recycling bags to the bin?", options: ["out", "off", "up", "away"], correct: 0 }
+                    ],
+                    fillblanks: [
+                        { text: "Can you turn [on] the radio? I want to hear the news.", answer: "on" },
+                        { text: "Would you mind [closing] the main office door?", answer: "closing" },
+                        { text: "Please pick [up] those paper scraps from the rug.", answer: "up" },
+                        { text: "A: Could you wash the dishes? B: OK, I [will] wash them.", answer: "will" },
+                        { text: "You should put [away] your textbooks after studying.", answer: "away" }
+                    ],
+                    wordsearch: ["TURN", "PICK", "AWAY", "MIND", "REQUEST", "MODAL", "SPEAK", "CLEAN"],
+                    memory: [
+                        { a: "turn on", b: "start an appliance" },
+                        { a: "turn off", b: "stop an appliance" },
+                        { a: "pick up", b: "lift from floor" },
+                        { a: "Would you mind", b: "requires verb-ING" }
+                    ],
+                    dragsort: {
+                        categories: ["Phrasal Verb", "Polite Request"],
+                        items: [
+                            { text: "Turn off the radio", cat: "Phrasal Verb" },
+                            { text: "Put away the dishes", cat: "Phrasal Verb" },
+                            { text: "Would you mind helping?", cat: "Polite Request" },
+                            { text: "Could you wait outside?", cat: "Polite Request" }
+                        ]
+                    },
+                    hangman: [
+                        { word: "REQUEST", hint: "An act of politely asking someone to do something for you" },
+                        { word: "VOLUME", hint: "What you turn up or down when music is too soft or loud" }
+                    ],
+                    roulette: [
+                        "Would you mind helping your teacher clean the board?",
+                        "What objects do you have to put away every morning?",
+                        "How do you politely respond when someone asks for a favor?",
+                        "What appliances do you turn off before leaving home?"
+                    ]
+                },
+                {
+                    id: 6,
+                    title: "Units 11-12: Activities & Suggestions",
+                    grammar: "Infinitives and gerunds (uses/purposes), Imperatives and infinitives for suggestions",
+                    warmup: [
+                        "What do you use your phone for? List 5 things.",
+                        "To improve your English, what should you do every day?",
+                        "What do you enjoy doing on rainy days?",
+                        "Try closing your eyes. What do you hear?",
+                        "What's the best way to learn new vocabulary? Give advice.",
+                        "Do you prefer watching movies or reading books to relax?",
+                        "To stay healthy, what do doctors recommend doing?",
+                        "What do you use social media for?"
+                    ],
+                    flashcards: [
+                        { front: "I use my phone to call", back: "Infinitive of purpose: explains why I do something" },
+                        { front: "Used for calling friends", back: "For + gerund: explains the general function of an item" },
+                        { front: "I enjoy reading books", back: "Gerund after specific verbs like enjoy, miss, love" },
+                        { front: "I want to study tonight", back: "Infinitive after specific verbs like want, hope, decide" },
+                        { front: "Take an aspirin (Suggestion)", back: "Imperative statement used to provide direct health advice" },
+                        { front: "It's a good idea to rest", back: "Phrase + infinitive pattern used to give casual suggestions" },
+                        { front: "Avoid eating junk food", back: "Avoid followed directly by a gerund structure form" },
+                        { front: "Remember to lock up", back: "Action instruction: don't forget to perform a task" },
+                        { front: "To stay healthy, run daily", back: "Infinitive clause placed at start to highlight core goal" },
+                        { front: "Prefer swimming", back: "Expressing leisure habit preferences using a gerund format" }
+                    ],
+                    quiz: [
+                        { q: "I bought a brand new laptop ___ online programming classes.", options: ["to take", "for take", "taking", "for to take"], correct: 0 },
+                        { q: "Microwaves are primarily used for ___ cold meals rapidly.", options: ["heating", "to heat", "heat", "heats"], correct: 0 },
+                        { q: "If you feel exhausted, it's a wise idea ___ a short nap.", options: ["to take", "taking", "take", "for take"], correct: 0 },
+                        { q: "You should avoid ___ sugary sodas late at night.", options: ["drinking", "to drink", "drink", "drinks"], correct: 0 },
+                        { q: "___ your pronunciation skills, practice with fluent streams.", options: ["To improve", "For improve", "Improving", "Improved"], correct: 0 },
+                        { q: "My sister always enjoys ___ romantic fiction novels.", options: ["reading", "to read", "read", "reads"], correct: 0 },
+                        { q: "___ a digital map if you get completely lost in town.", options: ["Use", "To use", "Using", "Used"], correct: 0 },
+                        { q: "I decided ___ an intensive English language module this year.", options: ["to study", "studying", "study", "for study"], correct: 0 },
+                        { q: "Knives are instruments used for ___ food ingredients.", options: ["cutting", "to cut", "cut", "cuts"], correct: 0 },
+                        { q: "Be certain ___ your password safely in a secret booklet.", options: ["to write", "writing", "write", "for write"], correct: 0 }
+                    ],
+                    fillblanks: [
+                        { text: "I open my bank app to [check] my financial balance.", answer: "check" },
+                        { text: "Pens are items used for [writing] notes on paper documents.", answer: "writing" },
+                        { text: "She loves [learning] diverse aspects of foreign cultures.", answer: "learning" },
+                        { text: "To stay fit, make an effort [to] exercise every morning.", answer: "to" },
+                        { text: "[Drink] plenty of clean mineral water throughout the day.", answer: "drink" }
+                    ],
+                    wordsearch: ["PURPOSE", "GERUND", "SUGGEST", "HEARING", "HEALTH", "ADVICE", "LEARN", "STUDY"],
+                    memory: [
+                        { a: "Infinitive of purpose", b: "to + verb base" },
+                        { a: "Function structure", b: "for + verb-ING" },
+                        { a: "enjoy", b: "requires gerund" },
+                        { a: "decide", b: "requires infinitive" }
+                    ],
+                    dragsort: {
+                        categories: ["Infinitive", "Gerund"],
+                        items: [
+                            { text: "To learn English", cat: "Infinitive" },
+                            { text: "Decided to go", cat: "Infinitive" },
+                            { text: "Used for cooking", cat: "Gerund" },
+                            { text: "Enjoy playing tennis", cat: "Gerund" }
+                        ]
+                    },
+                    hangman: [
+                        { word: "PURPOSE", hint: "The primary objective or reason why you perform an action" },
+                        { word: "SUGGEST", hint: "To offer an idea or practical plan for someone to consider" }
+                    ],
+                    roulette: [
+                        "What is the best way to earn excellent test scores?",
+                        "What do you utilize computer technology systems for?",
+                        "Name three recreational activities you thoroughly love doing.",
+                        "Provide advice for a person suffering from a painful flu."
+                    ]
+                },
+                {
+                    id: 7,
+                    title: "Units 13-14: Habits & Contrast",
+                    grammar: "Relative clauses of time, Adverbial clauses (when/after/before), Time contrasts, Conditional sentences with 'if', Clauses with 'because'",
+                    warmup: [
+                        "What do you do when you feel nervous?",
+                        "What happens after you finish work/school each day?",
+                        "If it rains tomorrow, what will you do?",
+                        "What do you do before you go to sleep?",
+                        "Why do you study English? Tell me because...",
+                        "What was different about your life when you were 10?",
+                        "If you had more time, what would you study?",
+                        "What do you do after you wake up?"
+                    ],
+                    flashcards: [
+                        { front: "When I arrive, I rest", back: "Adverbial time clause: present scenario description" },
+                        { front: "Before I sleep, I read", back: "Action order sequence: prior activity step" },
+                        { front: "After I study, I play", back: "Action order sequence: subsequent activity step" },
+                        { front: "If it rains, I will stay", back: "First conditional: realistic future possibility outcome" },
+                        { front: "Because I want a job", back: "Reason clause explaining motivation factors clearly" },
+                        { front: "A time when I was happy", back: "Relative clause of time referencing a past era" },
+                        { front: "In the past, life was slow", back: "Time contrast element emphasizing past realities" },
+                        { front: "Nowadays, we use apps", back: "Time contrast element highlighting present modern ways" },
+                        { front: "If I find it, I'll call", back: "Conditional format: dependent clause contains simple present" },
+                        { front: "I study because it's key", back: "Linking an action to its root intellectual objective" }
+                    ],
+                    quiz: [
+                        { q: "I always brush my teeth ___ I go to sleep at night.", options: ["before", "after", "because", "if"], correct: 0 },
+                        { q: "If you ___ hard today, you will pass the final assessment.", options: ["study", "will study", "studied", "studying"], correct: 0 },
+                        { q: "I am taking this intensive course ___ I require English for work.", options: ["because", "before", "when", "if"], correct: 0 },
+                        { q: "___ I finish my university classes, I usually visit my friends.", options: ["After", "Before", "If", "Because"], correct: 0 },
+                        { q: "If it ___ extremely hot tomorrow, we will head to the pool.", options: ["is", "will be", "was", "are"], correct: 0 },
+                        { q: "Many years ago, people ___ possess any mobile smartphones.", options: ["didn't", "don't", "haven't", "will not"], correct: 0 },
+                        { q: "I feel incredibly joyful ___ the weekend finally arrives.", options: ["when", "before", "because of", "if"], correct: 0 },
+                        { q: "She will buy a fantastic house if she ___ enough money.", options: ["saves", "will save", "saved", "saving"], correct: 0 },
+                        { q: "We can't travel out to the countryside ___ the car is broken.", options: ["because", "after", "before", "when"], correct: 0 },
+                        { q: "___ I wake up in the morning, I make a cup of coffee.", options: ["As soon as", "Before", "Because", "If"], correct: 0 }
+                    ],
+                    fillblanks: [
+                        { text: "I wash my hands [before] I touch food items.", answer: "before" },
+                        { text: "If you arrive early, I [will] buy you a tasty treat.", answer: "will" },
+                        { text: "He goes to the gym [because] he wants to stay fit.", answer: "because" },
+                        { text: "[When] it rains, the streets become very slick.", answer: "when" },
+                        { text: "I usually read books after I [finish] my work.", answer: "finish" }
+                    ],
+                    wordsearch: ["BEFORE", "AFTER", "BECAUSE", "CONDITIONAL", "WHEN", "HABIT", "PAST", "FUTURE"],
+                    memory: [
+                        { a: "Prior action", b: "before" },
+                        { a: "Subsequent action", b: "after" },
+                        { a: "Cause / Reason", b: "because" },
+                        { a: "Future outcome condition", b: "if + will" }
+                    ],
+                    dragsort: {
+                        categories: ["Time Clause", "Condition Clause"],
+                        items: [
+                            { text: "When the clock strikes five", cat: "Time Clause" },
+                            { text: "Before you leave the building", cat: "Time Clause" },
+                            { text: "If you complete the task", cat: "Condition Clause" },
+                            { text: "If the weather stays sunny", cat: "Condition Clause" }
+                        ]
+                    },
+                    hangman: [
+                        { word: "BECAUSE", hint: "Conjunction connector used to introduce a clear explanation reason" },
+                        { word: "CONDITIONAL", hint: "Grammar form containing 'if' to describe dependency structures" }
+                    ],
+                    roulette: [
+                        "What do you execute immediately after returning home?",
+                        "Where will you venture if the weather remains gorgeous?",
+                        "Why are you interested in mastering intermediate grammar?",
+                        "Contrast how you spent leisure time ten years ago vs today."
+                    ]
+                },
+                {
+                    id: 8,
+                    title: "Units 15-16: Advanced Grammar Mix",
+                    grammar: "Passive with/without 'by', Past continuous vs. simple past, Present perfect continuous, Relative pronouns, Unreal conditionals, Past modals, Reported speech",
+                    warmup: [
+                        "Have you been studying English for a long time?",
+                        "What were you doing when the last earthquake happened?",
+                        "If you could change one law, what would it be?",
+                        "Tell me something your teacher told you to do.",
+                        "What has been happening in your neighborhood lately?",
+                        "If you had been born in another country, how would your life be different?",
+                        "What should you have done differently last year?",
+                        "English is spoken in many countries. Name 5."
+                    ],
+                    flashcards: [
+                        { front: "The book was written by him", back: "Passive voice: Emphasizes the object receiving action" },
+                        { front: "I was sleeping when it rang", back: "Past continuous interrupted by simple past action" },
+                        { front: "I have been working all day", back: "Present perfect continuous: Ongoing activity from past to now" },
+                        { front: "The man who called you", back: "Relative pronoun 'who' defining a subject person" },
+                        { front: "If I won, I would travel", back: "Unreal conditional: Imaginary hypothetical scenario" },
+                        { front: "You should have studied", back: "Past modal expressing criticism or past regret" },
+                        { front: "He said he was tired", back: "Reported speech updating tense back into past" },
+                        { front: "Coffee is grown in Colombia", back: "Passive voice without 'by' because origin is obvious" },
+                        { front: "The car which I rented", back: "Relative pronoun 'which' defining an object item" },
+                        { front: "They were playing soccer", back: "Past continuous background scene setting description" }
+                    ],
+                    quiz: [
+                        { q: "This gorgeous glass tower ___ designed by a brilliant local architect.", options: ["was", "is being", "were", "has"], correct: 0 },
+                        { q: "I ___ my homework when the power unexpectedly went out.", options: ["was doing", "did", "have done", "done"], correct: 0 },
+                        { q: "We ___ English for three consecutive hours this afternoon.", options: ["have been studying", "studied", "were studying", "study"], correct: 0 },
+                        { q: "The woman ___ lives next door operates a popular local bakery shop.", options: ["who", "which", "whose", "where"], correct: 0 },
+                        { q: "If I ___ a million dollars, I would purchase a private aircraft.", options: ["won", "win", "would win", "have won"], correct: 0 },
+                        { q: "You ___ have locked the entry gate. A thief stole your laptop.", options: ["should", "must", "could", "would"], correct: 0 },
+                        { q: "The manager said that he ___ occupied with client accounts.", options: ["was", "is", "be", "been"], correct: 0 },
+                        { q: "America ___ discovered by historic explorers centuries ago.", options: ["was", "did", "has been", "is"], correct: 0 },
+                        { q: "What were you doing when the fire alarm ___ ringing?", options: ["started", "was starting", "has started", "starts"], correct: 0 },
+                        { q: "The movie ___ we watched last night won multiple media awards.", options: ["which", "who", "where", "whose"], correct: 0 }
+                    ],
+                    fillblanks: [
+                        { text: "The stadium was [built] by a massive construction company.", answer: "built" },
+                        { text: "I was walking home when it [started] to pour rain.", answer: "started" },
+                        { text: "They have [been] living in Bogotá for a long time.", answer: "been" },
+                        { text: "The student [who] answered the prompt correctly won a prize.", answer: "who" },
+                        { text: "If I were you, I [would] review the grammar notes again.", answer: "would" }
+                    ],
+                    wordsearch: ["PASSIVE", "CONTINUOUS", "PERFECT", "RELATIVE", "UNREAL", "MODAL", "REPORTED", "SPEECH"],
+                    memory: [
+                        { a: "Active", b: "He wrote the book" },
+                        { a: "Passive", b: "The book was written" },
+                        { a: "Interrupted action", b: "was working when you called" },
+                        { a: "Hypothetical dream", b: "If I were king, I would rule" }
+                    ],
+                    dragsort: {
+                        categories: ["Active Voice", "Passive Voice"],
+                        items: [
+                            { text: "The chef cooked dinner", cat: "Active Voice" },
+                            { text: "I wrote the message", cat: "Active Voice" },
+                            { text: "Dinner was cooked by the chef", cat: "Passive Voice" },
+                            { text: "The message was written", cat: "Passive Voice" }
+                        ]
+                    },
+                    hangman: [
+                        { word: "PASSIVE", hint: "The voice used when focus is entirely on the recipient of the action" },
+                        { word: "REPORTER", hint: "The style of speech used to relay what someone else expressed" }
+                    ],
+                    roulette: [
+                        "What were you executing when this learning session began?",
+                        "How long have you been practicing vocabulary systems?",
+                        "If you could reside anywhere on Earth, where would you go?",
+                        "State a classic rule your parents mentioned when you were young."
+                    ]
+                }
+            ]
+        };
+
+        // APPLICATION MAIN CENTRAL ENGINE
+        const STATE = {
+            currentModule: null,
+            currentGameId: null,
+            progress: JSON.parse(localStorage.getItem('englishA2_progress')) || {}
+        };
+
+        const UI = {
+            init() {
+                this.renderModulesSelector();
+                this.bindGlobalActions();
+                this.applySavedTheme();
+            },
+
+            renderModulesSelector() {
+                const container = document.getElementById('units-list');
+                container.innerHTML = '';
+                DATA.modules.forEach(m => {
+                    const card = document.createElement('div');
+                    card.className = 'card-unit';
+                    card.innerHTML = `
+                        <h3>${m.title}</h3>
+                        <p>${m.grammar}</p>
+                        <button class="btn btn-accent" style="margin:0; width:auto; font-size:0.85rem; padding:6px 12px; min-height:36px;">Enter Workspace</button>
+                    `;
+                    card.addEventListener('click', () => this.openDashboardWorkspace(m));
+                    container.appendChild(card);
+                });
+            },
+
+            bindGlobalActions() {
+                document.getElementById('theme-toggle').addEventListener('click', () => {
+                    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                    document.documentElement.setAttribute('data-theme', theme);
+                    localStorage.setItem('englishA2_theme', theme);
+                });
+
+                document.getElementById('dash-back-btn').addEventListener('click', () => {
+                    this.toggleScreen('screen-units');
+                });
+
+                document.getElementById('game-back-btn').addEventListener('click', () => {
+                    this.toggleScreen('screen-dashboard');
+                });
+
+                const gameButtons = document.querySelectorAll('#games-hub-buttons .btn');
+                gameButtons.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const id = parseInt(e.currentTarget.getAttribute('data-game'));
+                        this.launchGameArea(id);
+                    });
+                });
+            },
+
+            applySavedTheme() {
+                const theme = localStorage.getItem('englishA2_theme') || 'light';
+                document.documentElement.setAttribute('data-theme', theme);
+            },
+
+            toggleScreen(id) {
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                document.getElementById(id).classList.add('active');
+                window.scrollTo(0, 0);
+            },
+
+            openDashboardWorkspace(mod) {
+                STATE.currentModule = mod;
+                document.getElementById('dash-title').innerText = mod.title;
+                document.getElementById('dash-grammar').innerText = mod.grammar;
+
+                // Build Warmup Elements lists cleanly
+                const container = document.getElementById('warmup-prompts-container');
+                container.innerHTML = '';
+                mod.warmup.forEach((q, idx) => {
+                    const item = document.createElement('div');
+                    item.style.cssText = 'padding:12px; border-bottom:1px solid rgba(21,101,192,0.1); font-size:0.95rem; line-height:1.4;';
+                    item.innerHTML = `<strong>${idx + 1}.</strong> ${q}`;
+                    container.appendChild(item);
+                });
+
+                this.toggleScreen('screen-dashboard');
+            },
+
+            launchGameArea(gameId) {
+                STATE.currentGameId = gameId;
+                const zone = document.getElementById('game-container-zone');
+                zone.innerHTML = ''; // Wipe playground frame
+
+                switch(gameId) {
+                    case 1: GamesEngine.playFlashcards(zone); break;
+                    case 2: GamesEngine.playQuiz(zone); break;
+                    case 3: GamesEngine.playFillBlanks(zone); break;
+                    case 4: GamesEngine.playWordSearch(zone); break;
+                    case 5: GamesEngine.playMemory(zone); break;
+                    case 6: GamesEngine.playDragSort(zone); break;
+                    case 7: GamesEngine.playHangman(zone); break;
+                    case 8: GamesEngine.playRoulette(zone); break;
+                }
+                this.toggleScreen('screen-game');
+            }
+        };
+
+        // GAMES ENGINE CORE CONTROLLER
+        const GamesEngine = {
+
+            // JUEGO 1: FLASHCARDS TÁCTILES
+            playFlashcards(target) {
+                const cards = STATE.currentModule.flashcards;
+                let idx = 0;
+
+                const view = document.createElement('div');
+                view.className = 'game-box';
+                view.innerHTML = `
+                    <h2>🃏 Flashcards Game</h2>
+                    <p class="instruction-text">Tap the card to flip between grammar structures and conceptual analysis descriptions.</p>
+                    <div class="flashcard-wrapper">
+                        <div class="flashcard" id="fc-card-obj">
+                            <div class="card-face card-front"><h3 id="fc-f-txt" style="font-size:1.3rem;"></h3><span style="font-size:0.75rem; margin-top:25px; opacity:0.7;">[Tap To Flip Card]</span></div>
+                            <div class="card-face card-back"><p id="fc-b-txt" style="font-size:1.1rem; font-weight:600;"></p><span style="font-size:0.75rem; margin-top:25px; opacity:0.7;">[Tap To See Structure]</span></div>
+                        </div>
+                    </div>
+                    <button class="btn" id="fc-next-trigger">Next Card ➡️</button>
+                `;
+                target.appendChild(view);
+
+                const cardObj = document.getElementById('fc-card-obj');
+                cardObj.addEventListener('click', () => cardObj.classList.toggle('flipped'));
+
+                const refreshFC = () => {
+                    cardObj.classList.remove('flipped');
+                    setTimeout(() => {
+                        document.getElementById('fc-f-txt').innerText = cards[idx].front;
+                        document.getElementById('fc-b-txt').innerText = cards[idx].back;
+                    }, 150);
+                };
+
+                document.getElementById('fc-next-trigger').addEventListener('click', () => {
+                    idx++;
+                    if(idx < cards.length) {
+                        refreshFC();
+                    } else {
+                        view.innerHTML = `<h2 style="text-align:center; color:var(--color-success);">🎉 Deck Complete!</h2><p style="text-align:center; margin:15px 0;">Excellent! You have successfully reviewed all cards in this block.</p>`;
+                    }
+                });
+
+                refreshFC();
+            },
+
+            // JUEGO 2: QUIZ KAHOOT-STYLE
+            playQuiz(target) {
+                const questions = STATE.currentModule.quiz;
+                let idx = 0;
+                let score = 0;
+
+                const view = document.createElement('div');
+                view.className = 'game-box';
+                view.innerHTML = `
+                    <h2>⚡ Kahoot-Style Quiz</h2>
+                    <p class="instruction-text">Analyze syntax rules and choose the single structurally accurate option block.</p>
+                    <div class="progress-bar-container"><div class="progress-bar" id="qz-pb"></div></div>
+                    <h3 id="qz-prompt-string" style="margin:20px 0; min-height:60px;"></h3>
+                    <div id="qz-choices-stack"></div>
+                    <div id="qz-alert-box" class="feedback-message"></div>
+                `;
+                target.appendChild(view);
+
+                const renderQuestion = () => {
+                    document.getElementById('qz-alert-box').style.display = 'none';
+                    document.getElementById('qz-pb').style.width = `${((idx) / questions.length) * 100}%`;
+
+                    const currentQ = questions[idx];
+                    document.getElementById('qz-prompt-string').innerText = `${idx + 1}. ${currentQ.q}`;
+
+                    const stack = document.getElementById('qz-choices-stack');
+                    stack.innerHTML = '';
+
+                    // Safe structural randomization mapping layout array
+                    let indices = currentQ.options.map((_, i) => i);
+                    indices.sort(() => Math.random() - 0.5);
+
+                    indices.forEach(oIdx => {
+                        const optBtn = document.createElement('button');
+                        optBtn.className = 'quiz-option';
+                        optBtn.innerText = currentQ.options[oIdx];
+                        optBtn.addEventListener('click', () => verifySelection(oIdx, optBtn));
+                        stack.appendChild(optBtn);
+                    });
+                };
+
+                const verifySelection = (chosenIdx, btn) => {
+                    const correct = questions[idx].correct;
+                    const options = document.querySelectorAll('.quiz-option');
+                    options.forEach(b => b.disabled = true);
+
+                    const alertBox = document.getElementById('qz-alert-box');
+                    alertBox.style.display = 'block';
+
+                    if(chosenIdx === correct) {
+                        btn.classList.add('correct');
+                        alertBox.innerText = "¡Correcto! Outstanding syntax recognition.";
+                        alertBox.style.cssText = "background: rgba(46,125,50,0.15); color: var(--color-success); display:block;";
+                        score++;
+                    } else {
+                        btn.classList.add('incorrect');
+                        alertBox.innerText = "¡Incorrecto! Study the structural architecture definitions.";
+                        alertBox.style.cssText = "background: rgba(211,47,47,0.15); color: var(--color-danger); display:block;";
+                        
+                        // Find and highlight correct answer
+                        options.forEach(b => {
+                            if(b.innerText === questions[idx].options[correct]) b.classList.add('correct');
+                        });
+                    }
+
+                    setTimeout(() => {
+                        idx++;
+                        if(idx < questions.length) {
+                            renderQuestion();
+                        } else {
+                            view.innerHTML = `
+                                <h2 style="text-align:center; color:var(--color-primary);">Quiz Finished</h2>
+                                <p style="text-align:center; font-size:1.6rem; margin:20px 0; font-weight:bold;">Final Score: ${score} / ${questions.length}</p>
+                                <p style="text-align:center; color:var(--text-muted);">Evaluation block sequence fully finalized.</p>
+                            `;
+                        }
+                    }, 2000);
+                };
+
+                renderQuestion();
+            },
+
+            // JUEGO 3: FILL IN THE BLANKS
+            playFillBlanks(target) {
+                const sentences = STATE.currentModule.fillblanks;
+                let idx = 0;
+
+                const view = document.createElement('div');
+                view.className = 'game-box';
+                view.innerHTML = `
+                    <h2>✏️ Fill in the Blanks</h2>
+                    <p class="instruction-text">Type down the precise missing grammar term key to establish contextual validation alignment.</p>
+                    <h3 id="fb-string" style="margin:30px 0; line-height:1.6;"></h3>
+                    <div style="display:flex; gap:12px;">
+                        <input type="text" id="fb-user-input" style="flex:1; padding:12px; font-size:1rem; border-radius:10px; border:2px solid var(--color-primary); background:var(--bg-card); color:var(--text-main);" placeholder="Write missing string here...">
+                        <button class="btn btn-accent" id="fb-check-btn" style="margin:0; width:auto;">Check</button>
+                    </div>
+                    <div id="fb-msg" class="feedback-message"></div>
+                `;
+                target.appendChild(view);
+
+                const setupBlank = () => {
+                    document.getElementById('fb-msg').style.display = 'none';
+                    document.getElementById('fb-user-input').value = '';
+                    const exercise = sentences[idx];
+                    document.getElementById('fb-string').innerText = exercise.text.replace(/\[.*?\]/g, "_______");
+                };
+
+                document.getElementById('fb-check-btn').addEventListener('click', () => {
+                    const input = document.getElementById('fb-user-input').value.trim().toLowerCase();
+                    const correct = sentences[idx].answer.toLowerCase();
+                    const msg = document.getElementById('fb-msg');
+                    msg.style.display = 'block';
+
+                    if(input === correct) {
+                        msg.innerText = "¡Correcto! Flawless term application.";
+                        msg.style.cssText = "background: rgba(46,125,50,0.15); color: var(--color-success); display:block;";
+                        
+                        setTimeout(() => {
+                            idx++;
+                            if(idx < sentences.length) setupBlank();
+                            else view.innerHTML = `<h2 style="text-align:center; color:var(--color-success);">🎉 Blanks Finished!</h2><p style="text-align:center; margin-top:10px;">All contextual fill challenges resolved successfully.</p>`;
+                        }, 1800);
+                    } else {
+                        msg.innerText = "¡Incorrecto! Analyze the word context constraints carefully.";
+                        msg.style.cssText = "background: rgba(211,47,47,0.15); color: var(--color-danger); display:block;";
+                    }
+                });
+
+                setupBlank();
+            },
+
+            // JUEGO 4: WORD SEARCH
+            playWordSearch(target) {
+                const words = STATE.currentModule.wordsearch;
+                const size = 8;
+                let grid = Array(size).fill(null).map(() => Array(size).fill(''));
+                let selected = [];
+                let found = [];
+
+                const view = document.createElement('div');
+                view.className = 'game-box';
+                view.innerHTML = `
+                    <h2>🔍 Word Search</h2>
+                    <p class="instruction-text">Click individual cell matrix keys to isolate the expected list targets vocabulary keys.</p>
+                    <div style="margin-bottom:12px; font-weight:bold;">Find words: <span id="ws-keys-pool" style="color:var(--color-primary);"></span></div>
+                    <div class="wordsearch-grid" id="ws-matrix"></div>
+                    <button class="btn btn-accent" id="ws-evaluate-trigger">Submit Combination</button>
+                `;
+                target.appendChild(view);
+
+                // Basic grid filler logic loop
+                words.forEach(w => {
+                    let placed = false;
+                    while(!placed) {
+                        let r = Math.floor(Math.random() * size);
+                        let c = Math.floor(Math.random() * (size - w.length));
+                        let clean = true;
+                        for(let i=0; i<w.length; i++) {
+                            if(grid[r][c+i] !== '') clean = false;
+                        }
+                        if(clean) {
+                            for(let i=0; i<w.length; i++) grid[r][c+i] = w[i];
+                            placed = true;
+                        }
+                    }
+                });
+
+                const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                for(let r=0; r<size; r++) {
+                    for(let c=0; c<size; c++) {
+                        if(grid[r][c] === '') grid[r][c] = letters[Math.floor(Math.random() * 26)];
+                    }
+                }
+
+                const printGrid = () => {
+                    const mEl = document.getElementById('ws-matrix');
+                    mEl.innerHTML = '';
+                    document.getElementById('ws-keys-pool').innerText = words.filter(item => !found.includes(item)).join(", ");
+
+                    for(let r=0; r<size; r++) {
+                        for(let c=0; c<size; c++) {
+                            const cell = document.createElement('div');
+                            cell.className = 'ws-cell';
+                            cell.innerText = grid[r][c];
+                            cell.setAttribute('data-coord', `${r}-${c}`);
+                            
+                            cell.addEventListener('click', () => {
+                                cell.classList.toggle('selected');
+                                toggleSelectionState(`${r}-${c}`);
+                            });
+                            mEl.appendChild(cell);
+                        }
+                    }
+                };
+
+                const toggleSelectionState = (coord) => {
+                    const index = selected.indexOf(coord);
+                    if(index > -1) selected.splice(index, 1);
+                    else selected.push(coord);
+                };
+
+                document.getElementById('ws-evaluate-trigger').addEventListener('click', () => {
+                    let collectedStr = selected.map(coord => {
+                        const [r, c] = coord.split("-").map(Number);
+                        return grid[r][c];
+                    }).join("");
+
+                    let reversedStr = collectedStr.split("").reverse().join("");
+                    let match = words.find(w => (w === collectedStr || w === reversedStr) && !found.includes(w));
+
+                    if(match) {
+                        found.push(match);
+                        selected.forEach(coord => {
+                            const matchedCell = document.querySelector(`[data-coord="${coord}"]`);
+                            if(matchedCell) {
+                                matchedCell.classList.remove('selected');
+                                matchedCell.classList.add('found');
+                            }
+                        });
+                        selected = [];
+                        if(found.length === words.length) {
+                            alert("¡Ganaste! Entire matrix grid parameters fully extracted.");
+                        } else {
+                            document.getElementById('ws-keys-pool').innerText = words.filter(item => !found.includes(item)).join(", ");
+                        }
+                    } else {
+                        alert("Selection does not correspond to an undetected targets term list component.");
+                    }
+                });
+
+                printGrid();
+            },
+
+            // JUEGO 5: MEMORY (PAREJAS)
+            playMemory(target) {
+                const pairs = STATE.currentModule.memory;
+                let deck = [];
+                pairs.forEach((p, index) => {
+                    deck.push({ text: p.a, matchId: index, uid: Math.random() });
+                    deck.push({ text: p.b, matchId: index, uid: Math.random() });
+                });
+                deck.sort(() => Math.random() - 0.5);
+
+                const view = document.createElement('div');
+                view.className = 'game-box';
+                view.innerHTML = `
+                    <h2>🧠 Memory Pairs Match</h2>
+                    <p class="instruction-text">Reveal hidden entities pairwise to bridge relational grammar links.</p>
+                    <div class="memory-grid" id="mm-board"></div>
+                `;
+                target.appendChild(view);
+
+                let flippedCards = [];
+                let lockBoard = false;
+                let pairsFound = 0;
+
+                const board = document.getElementById('mm-board');
+                deck.forEach((cardData, idx) => {
+                    const cNode = document.createElement('div');
+                    cNode.className = 'memory-card';
+                    cNode.innerText = cardData.text;
+                    cNode.setAttribute('data-id', idx);
+                    
+                    cNode.addEventListener('click', () => {
+                        if(lockBoard || cNode.classList.contains('flipped') || cNode.classList.contains('matched')) return;
+                        
+                        cNode.classList.add('flipped');
+                        flippedCards.push({ data: cardData, node: cNode });
+
+                        if(flippedCards.length === 2) {
+                            lockBoard = true;
+                            if(flippedCards[0].data.matchId === flippedCards[1].data.matchId) {
+                                flippedCards[0].node.classList.add('matched');
+                                flippedCards[1].node.classList.add('matched');
+                                pairsFound++;
+                                flippedCards = [];
+                                lockBoard = false;
+                                if(pairsFound === pairs.length) {
+                                    setTimeout(() => alert("¡Ganaste! Complete cognitive network synchronized successfully."), 300);
+                                }
+                            } else {
+                                setTimeout(() => {
+                                    flippedCards[0].node.classList.remove('flipped');
+                                    flippedCards[1].node.classList.remove('flipped');
+                                    flippedCards = [];
+                                    lockBoard = false;
+                                }, 1200);
+                            }
+                        }
+                    });
+                    board.appendChild(cNode);
+                });
+            },
+
+            // JUEGO 6: DRAG & SORT (Using drop-down selectors for rock-solid smartphone execution)
+            playDragSort(target) {
+                const config = STATE.currentModule.dragsort;
+
+                const view = document.createElement('div');
+                view.className = 'game-box';
+                view.innerHTML = `
+                    <h2>📦 Drag & Sort Categories</h2>
+                    <p class="instruction-text">Map each grammatical segment card to its correct taxonomy box folder destination.</p>
+                    <div id="ds-stack-area" style="display:flex; flex-direction:column; gap:10px; margin:20px 0;"></div>
+                    <button class="btn btn-accent" id="ds-evaluate-btn">Verify Category Sorting</button>
+                `;
+                target.appendChild(view);
+
+                const stack = document.getElementById('ds-stack-area');
+                config.items.forEach((item, index) => {
+                    const elementRow = document.createElement('div');
+                    elementRow.className = 'quiz-option';
+                    elementRow.style.cssText = 'display:flex; align-items:center; justify-content:space-between; cursor:default; margin-bottom:6px;';
+                    
+                    let selectorOptions = config.categories.map(catName => `<option value="${catName}">${catName}</option>`).join("");
+                    
+                    elementRow.innerHTML = `
+                        <span style="font-weight:600;">"${item.text}"</span>
+                        <select id="ds-opt-sel-${index}" style="padding:8px; border-radius:6px; background:var(--bg-primary); color:var(--text-main); font-weight:bold; border:1px solid var(--color-primary);">
+                            ${selectorOptions}
+                        </select>
+                    `;
+                    stack.appendChild(elementRow);
+                });
+
+                document.getElementById('ds-evaluate-btn').addEventListener('click', () => {
+                    let totalItems = config.items.length;
+                    let matchesCount = 0;
+
+                    config.items.forEach((item, index) => {
+                        const alignedSelection = document.getElementById(`ds-opt-sel-${index}`).value;
+                        if(alignedSelection === item.cat) matchesCount++;
+                    });
+
+                    alert(`Evaluation completed: ${matchesCount} out of ${totalItems} categories aligned correctly.`);
+                });
+            },
+
+            // JUEGO 7: DIGITAL HANGMAN
+            playHangman(target) {
+                const itemsPool = STATE.currentModule.hangman;
+                const activeSession = itemsPool[Math.floor(Math.random() * itemsPool.length)];
+                let pickedLetters = [];
+                let structuralLifelines = 6;
+
+                const view = document.createElement('div');
+                view.className = 'game-box';
+                view.innerHTML = `
+                    <h2>💀 Digital Hangman</h2>
+                    <p class="instruction-text">Deduce target lexical strings before exhausting systemic life tolerances.</p>
+                    <p style="font-weight:bold; color:var(--color-primary); margin-bottom:8px;">HINT CLAUSE: "${activeSession.hint}"</p>
+                    <p style="font-size:1rem; font-weight:bold; margin-bottom:12px;">Remaining Lifelines: <span id="hm-life-span" style="color:var(--color-danger);">${structuralLifelines}</span> 🩸</p>
+                    <div class="word-display" id="hm-crypt-display"></div>
+                    <div class="keyboard-grid" id="hm-onscreen-keyboard"></div>
+                `;
+                target.appendChild(view);
+
+                const refreshCryptString = () => {
+                    let currentString = "";
+                    let completeSuccess = true;
+
+                    for(let letterChar of activeSession.word) {
+                        if(pickedLetters.includes(letterChar)) {
+                            currentString += letterChar + " ";
+                        } else {
+                            currentString += "_ ";
+                            completeSuccess = false;
+                        }
+                    }
+                    document.getElementById('hm-crypt-display').innerText = currentString.trim();
+
+                    if(completeSuccess) {
+                        terminateSession(true);
+                    } else if(structuralLifelines <= 0) {
+                        terminateSession(false);
+                    }
+                };
+
+                const terminateSession = (wonFlag) => {
+                    document.getElementById('hm-onscreen-keyboard').innerHTML = wonFlag ? 
+                        `<h3 style="grid-column: span 7; text-align:center; color:var(--color-success); padding:10px;">¡Ganaste! Core vocabulary sequence resolved perfectly.</h3>` :
+                        `<h3 style="grid-column: span 7; text-align:center; color:var(--color-danger); padding:10px;">¡Incorrecto! Target sequence resolved: ${activeSession.word}</h3>`;
+                };
+
+                const alphabetList = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+                const keyboardNode = document.getElementById('hm-onscreen-keyboard');
+                alphabetList.forEach(letter => {
+                    const keyButton = document.createElement('button');
+                    keyButton.className = 'key-btn';
+                    keyButton.innerText = letter;
+                    keyButton.addEventListener('click', () => {
+                        keyButton.disabled = true;
+                        pickedLetters.push(letter);
+                        if(!activeSession.word.includes(letter)) {
+                            structuralLifelines--;
+                            document.getElementById('hm-life-span').innerText = structuralLifelines;
+                        }
+                        refreshCryptString();
+                    });
+                    keyboardNode.appendChild(keyButton);
+                });
+
+                refreshCryptString();
+            },
+
+            // JUEGO 8: RULETA DE PREGUNTAS
+            playRoulette(target) {
+                const promptPool = STATE.currentModule.roulette;
+
+                const view = document.createElement('div');
+                view.className = 'game-box';
+                view.innerHTML = `
+                    <h2>🎡 Wheel of Questions</h2>
+                    <p class="instruction-text">Spin the active radial wheel to select an existential conversation prompt statement.</p>
+                    <div class="roulette-container">
+                        <div class="wheel-pointer"></div>
+                        <div class="wheel" id="ui-wheel-object"></div>
+                    </div>
+                    <button class="btn btn-accent" id="wheel-spin-trigger">Spin Radial Wheel</button>
+                    <h3 id="wheel-output-panel" style="text-align:center; min-height:45px; margin-top:20px; color:var(--color-primary); padding:10px; line-height:1.4;"></h3>
+                `;
+                target.appendChild(view);
+
+                let wheelSpinningState = false;
+                document.getElementById('wheel-spin-trigger').addEventListener('click', () => {
+                    if(wheelSpinningState) return;
+                    wheelSpinningState = true;
+                    document.getElementById('wheel-output-panel').innerText = "";
+
+                    const rotationDegreesTarget = Math.floor(Math.random() * 360) + 1440; // min 4 full radial sweeps
+                    const wheelNode = document.getElementById('ui-wheel-object');
+                    wheelNode.style.transform = `rotate(${rotationDegreesTarget}deg)`;
+
+                    setTimeout(() => {
+                        wheelSpinningState = false;
+                        const finalSelectedPrompt = promptPool[Math.floor(Math.random() * promptPool.length)];
+                        document.getElementById('wheel-output-panel').innerText = `🎯 Selected Prompt: "${finalSelectedPrompt}"`;
+                        
+                        // Reset rotation transform properties safely without visual stutter
+                        wheelNode.style.transition = 'none';
+                        wheelNode.style.transform = `rotate(${rotationDegreesTarget % 360}deg)`;
+                        setTimeout(() => { wheelNode.style.transition = 'transform 3s cubic-bezier(0.1, 0.8, 0.1, 1)'; }, 40);
+                    }, 3050);
+                });
+            }
+        };
+
+        // RUN INIT ROUTINE ON LOAD
+        document.addEventListener('DOMContentLoaded', () => UI.init());
+
+        // MANDATORY RUNTIME SECURITY INTERVAL COMPLIANCE VERIFICATION CHECK
+        setInterval(() => {
+            const firma = document.getElementById('firma-seguridad');
+            const app = document.getElementById('app');
+            const bloqueado = document.getElementById('acceso-denegado');
+            if (!firma || firma.textContent.trim() !== 'Creado por Tony Salas & German Peña' ||
+                getComputedStyle(firma).display === 'none' ||
+                getComputedStyle(firma).opacity === '0' ||
+                getComputedStyle(firma).visibility === 'hidden') {
+                if (app) app.style.display = 'none';
+                if (!bloqueado) {
+                    const div = document.createElement('div');
+                    div.id = 'acceso-denegado';
+                    div.style.cssText = 'position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:99999;';
+                    div.innerHTML = '<p style="color:red;font-size:2rem;text-align:center;padding:2rem;">⚠️ ACCESO DENEGADO ⚠️<br><span style="font-size:1rem;">El código de seguridad y la firma han sido alterados. CREA TU VERGA TU, CARA E MONDA.</span></p>';
+                    document.body.appendChild(div);
+                }
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

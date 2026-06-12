@@ -1,0 +1,1872 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>English Interactive — Nivel B2</title>
+    <style>
+        :root {
+            --bg-primary: #FFF8F0;
+            --bg-card: #FFFFFF;
+            --text-main: #3E1500;
+            --text-muted: #7D4020;
+            --color-primary: #E65100;
+            --color-accent: #FFB300;
+            --color-danger: #D84315;
+            --color-success: #2E7D32;
+            --border-radius-card: 16px;
+            --border-radius-modal: 24px;
+            --shadow-main: 0 8px 32px rgba(230, 81, 0, 0.15);
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1A0800;
+            --bg-card: #2D1500;
+            --text-main: #FFE0B2;
+            --text-muted: #BCAAA4;
+            --color-primary: #BF360C;
+            --color-accent: #FFB300;
+            --shadow-main: 0 8px 32px rgba(0, 0, 0, 0.6);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Segoe UI', 'Roboto', system-ui, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            transition: var(--transition-smooth);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #theme-toggle {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 1000;
+            background: var(--bg-card);
+            border: 2px solid var(--color-primary);
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow-main);
+            touch-action: manipulation;
+        }
+
+        header {
+            background: var(--bg-card);
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow-main);
+            border-bottom: 3px solid var(--color-primary);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            color: var(--color-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        main {
+            flex: 1;
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn {
+            min-height: 48px;
+            padding: 12px 24px;
+            border-radius: 12px;
+            border: none;
+            background-color: var(--color-primary);
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            touch-action: manipulation;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+
+        .btn:active { transform: scale(0.98); }
+        .btn-accent { background-color: var(--color-accent); color: #3E1500; }
+        .btn-outline { background-color: transparent; border: 2px solid var(--color-primary); color: var(--text-main); }
+
+        .grid-units {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        @media(min-width: 600px) { .grid-units { grid-template-columns: repeat(2, 1fr); } }
+        @media(min-width: 900px) { .grid-units { grid-template-columns: repeat(3, 1fr); } }
+
+        .card-unit {
+            background: var(--bg-card);
+            border-radius: var(--border-radius-card);
+            padding: 20px;
+            box-shadow: var(--shadow-main);
+            border-left: 6px solid var(--color-primary);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .card-unit:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(230, 81, 0, 0.25);
+        }
+
+        .card-unit h3 { margin-bottom: 8px; color: var(--text-main); }
+        .card-unit p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 12px; }
+
+        .workspace-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        @media(min-width: 768px) { .workspace-layout { grid-template-columns: 1fr 1.2fr; } }
+
+        .panel-column {
+            background: var(--bg-card);
+            border-radius: var(--border-radius-card);
+            padding: 20px;
+            box-shadow: var(--shadow-main);
+        }
+
+        .grid-games {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        @media(min-width: 480px) { .grid-games { grid-template-columns: repeat(2, 1fr); } }
+
+        .instruction-text {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        /* Flashcards */
+        .flashcard-wrapper { perspective: 1000px; width: 100%; height: 260px; margin: 20px 0; }
+        .flashcard { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
+        .flashcard.flipped { transform: rotateY(180deg); }
+        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: var(--border-radius-card); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 25px; text-align: center; box-shadow: var(--shadow-main); }
+        .card-front { background: var(--color-primary); color: white; }
+        .card-back { background: var(--bg-card); border: 3px solid var(--color-primary); color: var(--text-main); transform: rotateY(180deg); }
+
+        /* Quiz Choices Layout */
+        .quiz-option { background: var(--bg-card); border: 2px solid var(--text-muted); border-radius: 12px; padding: 14px; margin-bottom: 10px; cursor: pointer; width: 100%; text-align: left; font-size: 1rem; color: var(--text-main); transition: var(--transition-smooth); min-height: 48px; }
+        .quiz-option.correct { background: var(--color-success); color: white; border-color: var(--color-success); }
+        .quiz-option.incorrect { background: var(--color-danger); color: white; border-color: var(--color-danger); }
+
+        /* Word Search */
+        .wordsearch-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; margin: 15px auto; max-width: 400px; }
+        .ws-cell { aspect-ratio: 1; background: var(--bg-card); border: 1px solid var(--text-muted); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1rem; cursor: pointer; user-select: none; border-radius: 4px; }
+        .ws-cell.selected { background: var(--color-accent); color: #3E1500; }
+        .ws-cell.found { background: var(--color-success); color: white; }
+
+        /* Memory */
+        .memory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 15px 0; }
+        .memory-card { aspect-ratio: 1.2; background: var(--color-primary); color: transparent; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.85rem; text-align: center; padding: 6px; border-radius: 8px; cursor: pointer; user-select: none; word-break: break-word; }
+        .memory-card.flipped { background: var(--bg-card); border: 2px solid var(--color-primary); color: var(--text-main); }
+        .memory-card.matched { background: var(--color-success); color: white; opacity: 0.6; }
+
+        /* Roulette */
+        .roulette-container { position: relative; width: 240px; height: 240px; margin: 20px auto; }
+        .wheel { width: 100%; height: 100%; border-radius: 50%; border: 8px solid var(--color-primary); position: relative; overflow: hidden; transition: transform 3s cubic-bezier(0.1, 0.8, 0.1, 1); background: conic-gradient(var(--color-primary) 0deg 45deg, var(--color-accent) 45deg 90deg, var(--color-primary) 90deg 135deg, var(--color-accent) 135deg 180deg, var(--color-primary) 180deg 225deg, var(--color-accent) 225deg 270deg, var(--color-primary) 270deg 315deg, var(--color-accent) 315deg 360deg); }
+        .wheel-pointer { position: absolute; top: -10px; left: calc(50% - 15px); width: 30px; height: 30px; background: var(--text-main); clip-path: polygon(50% 100%, 0 0, 100% 0); z-index: 10; }
+
+        /* Find Errors */
+        .error-text-container { background: var(--bg-primary); padding: 20px; border-radius: 12px; border: 1px dashed var(--color-primary); line-height: 2; font-size: 1.1rem; }
+        .err-word { position: relative; cursor: pointer; display: inline-block; padding: 0 4px; border-radius: 4px; transition: var(--transition-smooth); }
+        .err-word:hover { background: rgba(230, 81, 0, 0.15); }
+        .err-word.corrected { border: 2px solid var(--color-success); background: rgba(46, 125, 50, 0.1); color: var(--color-success); font-weight: bold; }
+        .err-word.corrected::after { content: " ✓"; color: var(--color-success); font-size: 0.8rem; }
+
+        /* Jeopardy Board */
+        .jeopardy-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 20px 0; overflow-x: auto; }
+        .jeopardy-cat { background: var(--color-primary); color: white; padding: 10px; text-align: center; font-weight: bold; border-radius: 8px; font-size: 0.85rem; min-height: 48px; display: flex; align-items: center; justify-content: center; }
+        .jeopardy-cell { background: var(--bg-card); border: 2px solid var(--color-primary); color: var(--color-primary); font-size: 1.2rem; font-weight: bold; aspect-ratio: 1.3; display: flex; align-items: center; justify-content: center; border-radius: 8px; cursor: pointer; transition: var(--transition-smooth); }
+        .jeopardy-cell.played { background: rgba(125,64,32,0.2); border-color: var(--text-muted); color: var(--text-muted); cursor: not-allowed; }
+        .scoreboard { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 15px; }
+        .score-box { padding: 10px; border-radius: 8px; color: white; font-weight: bold; text-align: center; min-width: 100px; }
+        .score-box.team-0 { background: #D32F2F; } .score-box.team-1 { background: #1976D2; } .score-box.team-2 { background: #388E3C; } .score-box.team-3 { background: #FBC02D; color: #3E1500; }
+
+        /* Generic items layout */
+        .word-display { font-size: 2rem; letter-spacing: 0.4rem; text-align: center; margin: 20px 0; font-weight: bold; }
+        .keyboard-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-top: 15px; }
+        .key-btn { min-height: 44px; background: var(--bg-card); border: 1px solid var(--color-primary); border-radius: 6px; font-weight: bold; cursor: pointer; color: var(--text-main); }
+        .key-btn:disabled { opacity: 0.4; }
+        .feedback-message { padding: 12px; border-radius: 8px; margin: 10px 0; text-align: center; font-weight: bold; display: none; }
+        .progress-bar-container { width: 100%; background: #e0e0e0; border-radius: 10px; height: 8px; margin: 15px 0; overflow: hidden; }
+        .progress-bar { height: 100%; background: var(--color-accent); width: 0%; transition: width 0.3s ease; }
+        .app-footer { text-align: center; padding: 20px; font-size: 0.85rem; color: var(--text-muted); margin-top: auto; }
+    </style>
+</head>
+<body>
+
+    <button id="theme-toggle" aria-label="Toggle structural theme">🌓</button>
+
+    <header>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <a href="index.html" class="btn-back-nav" style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                padding: 0 16px;
+                height: 42px;
+                border-radius: 12px;
+                background: var(--border-color);
+                color: var(--primary-color);
+                text-decoration: none;
+                font-size: 0.95rem;
+                font-weight: bold;
+                transition: background 0.3s ease, transform 0.2s ease;
+                border: none;
+                cursor: pointer;
+            " onmouseover="this.style.background='#FFCDD2'; this.style.transform='scale(1.03)';" onmouseout="this.style.background='var(--border-color)'; this.style.transform='scale(1)';">
+                🏠 Home
+            </a>
+            <div class="header-logo">English Interactive — Level B2</div>
+        </div>
+    </header>
+
+    <main id="app">
+        <div id="screen-units" class="screen active">
+            <h2 style="margin-bottom:15px; text-align:center;">Select Learning Module</h2>
+            <div class="grid-units" id="units-list"></div>
+        </div>
+
+        <div id="screen-dashboard" class="screen">
+            <button class="btn btn-outline" id="dash-back-btn">⬅️ Back to All Units</button>
+            <h2 id="dash-title" style="margin: 15px 0 5px 0; color: var(--color-primary);"></h2>
+            <p id="dash-grammar" style="font-size:0.95rem; margin-bottom:20px; color: var(--text-muted);"></p>
+            
+            <div class="workspace-layout">
+                <div class="panel-column">
+                    <h3 style="margin-bottom:10px;">💬 Section: Warm-Up Prompts</h3>
+                    <p class="instruction-text">Answer the prompts aloud to practice conversation fluency.</p>
+                    <div id="warmup-prompts-container"></div>
+                </div>
+
+                <div class="panel-column">
+                    <h3 style="margin-bottom:15px;">🎮 Section: Learning Games</h3>
+                    <div class="grid-games" id="games-hub-buttons">
+                        <button class="btn" data-game="1">🃏 Flashcards</button>
+                        <button class="btn" data-game="2">⚡ Quiz Mode</button>
+                        <button class="btn" data-game="3">✏️ Fill Blanks</button>
+                        <button class="btn" data-game="4">🔍 Word Search</button>
+                        <button class="btn" data-game="5">🧠 Memory Pairs</button>
+                        <button class="btn" data-game="6">📦 Drag & Sort</button>
+                        <button class="btn" data-game="7">💀 Hangman</button>
+                        <button class="btn" data-game="8">🎡 Roulette</button>
+                        <button class="btn btn-accent" data-game="9">🔎 Find Errors</button>
+                        <button class="btn btn-accent" data-game="10">🏆 Jeopardy</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-game" class="screen">
+            <button class="btn btn-outline" id="game-back-btn">📋 Return to Workspace</button>
+            <div id="game-container-zone"></div>
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        English Interactive Platform &bull; Level B2 Core Engine
+    </footer>
+
+    <div id="firma-seguridad" style="position:fixed;bottom:20px;left:30px;font-family:Georgia, 'Times New Roman', serif;font-style:italic;font-size:14px;opacity:0.7;z-index:9999;pointer-events:none;">Creado por Tony Salas & German Peña</div>
+
+    <script>
+        // STRUCTURAL B2 COMPREHENSIVE DATA ARCHITECTURE
+        const DATA = {
+            modules: [
+                {
+                    id: 1,
+                    title: "Unit 1: Gerunds & Noun Clauses",
+                    grammar: "Verbs followed by gerunds, noun clauses after 'be'",
+                    color: "#FF8A65",
+                    warmup: [
+                        "What matters is finding time to practice speaking everyday.",
+                        "The fact is that learning advanced vocabulary requires consistent review.",
+                        "Do you avoid taking risks when speaking a foreign language?",
+                        "What drives your ambition is achieving fluent professional communication.",
+                        "Have you ever considered moving abroad to boost your career prospects?",
+                        "What puzzles me is why some grammar exceptions exist at all.",
+                        "The main challenge is that native speakers talk incredibly fast.",
+                        "Would you recommend listening to podcasts for advanced input?"
+                    ],
+                    flashcards: [
+                        { front: "I enjoy studying syntax structures", back: "Gerund acting as direct object after transactional verb enjoy" },
+                        { front: "What matters is your effort", back: "Noun clause starting with 'What' acting as the dynamic sentence subject configuration" },
+                        { front: "The reality is that it takes time", back: "Noun clause introduced by 'that' following an explicit form of 'be'" },
+                        { front: "They postposed executing the strategy", back: "Gerund required after specific verbs like postpone" }
+                    ],
+                    quiz: [
+                        { q: "She keeps ___ about her promotion opportunities.", options: ["talking", "to talk", "talk", "talked"], correct: 0 },
+                        { q: "What really dynamic tracking demands ___ a high level of performance metrics.", options: ["is", "are", "be", "been"], correct: 0 }
+                    ],
+                    fillblanks: [
+                        { text: "The fact is that he avoids [taking] structural responsibilities.", answer: "taking" }
+                    ],
+                    wordsearch: ["GERUND", "CLAUSE", "AVOID", "MATTERS", "REALITY", "ENJOY", "SUCCEED", "EFFORT"],
+                    memory: [{ a: "Avoid", b: "Gerund" }, { a: "What matters", b: "Noun Clause" }],
+                    dragsort: {
+                        categories: ["Gerund Core", "Noun Clause Core"],
+                        items: [
+                            { text: "Suggest going out", cat: "Gerund Core" },
+                            { text: "The issue is that...", cat: "Noun Clause Core" }
+                        ]
+                    },
+                    hangman: [{ word: "GERUND", hint: "A noun form completely generated directly from a base verb form adding ing" }],
+                    roulette: ["Explain what matters most to your professional growth goals.", "How do you avoid making common production errors?"],
+                    errors: {
+                        text: "He suggested *to* *go* *to* *the* *cinema* but what matters are that we stay here.",
+                        targets: ["to", "go", "to", "the", "cinema", "are"],
+                        corrections: { "to go to the cinema": "going to the cinema", "are": "is" }
+                    },
+                    jeopardy: [
+                        { cat: "Gerunds", val: 100, q: "Name a verb that must be followed exclusively by a gerund.", a: "Enjoy/Avoid/Postpone" },
+                        { cat: "Gerunds", val: 200, q: "Is 'He decided going' grammatically correct?", a: "No, decided takes an infinitive" },
+                        { cat: "Gerunds", val: 300, q: "Correct: 'I look forward to hear from you'.", a: "I look forward to hearing from you" },
+                        { cat: "Gerunds", val: 400, q: "What role does 'Swimming' play in: 'Swimming is great'?", a: "Subject of the sentence" },
+                        { cat: "Gerunds", val: 500, q: "Form a complex sentence using the verb 'risk' and a gerund.", a: "Any valid example (e.g., I risk losing money)" },
+                        { cat: "Noun Clauses", val: 100, q: "Complete: 'What I need ___ a long vacation break'.", a: "is" },
+                        { cat: "Noun Clauses", val: 200, q: "Identify the noun clause: 'The problem is that we are completely lost'.", a: "that we are completely lost" },
+                        { cat: "Noun Clauses", val: 300, q: "Transform into a noun clause subject: 'She loves music'.", a: "What she loves is music" },
+                        { cat: "Noun Clauses", val: 400, q: "True or False: Noun clauses can function as objects.", a: "True" },
+                        { cat: "Noun Clauses", val: 500, q: "Create a sentence using 'The fact is that...' concerning language study.", a: "Any valid contextual statement" },
+                        { cat: "Vocabulary", val: 100, q: "What does 'postpone' mean?", a: "To delay or put off until a later time" },
+                        { cat: "Vocabulary", val: 200, q: "Synonym of 'puzzle' as a verb.", a: "Confuse / Perplex / Bewilder" },
+                        { cat: "Vocabulary", val: 300, q: "What is an 'ambition'?", a: "A strong desire to achieve something" },
+                        { cat: "Vocabulary", val: 400, q: "Use 'prospects' correctly in a business context.", a: "Any valid statement" },
+                        { cat: "Vocabulary", val: 500, q: "What does 'consistent' imply?", a: "Steady, unchanging, or reliable over time" },
+                        { cat: "Syntax", val: 100, q: "Fix: 'What she said are wrong'.", a: "What she said is wrong" },
+                        { cat: "Syntax", val: 200, q: "Fix: 'I dynamic keep to remember it'.", a: "I keep remembering it" },
+                        { cat: "Syntax", val: 300, q: "Fix: 'The reality stands that...'", a: "The reality is that..." },
+                        { cat: "Syntax", val: 400, q: "Fix: 'He denies to steal the structural token'.", a: "He denies stealing the token" },
+                        { cat: "Syntax", val: 500, q: "Explain the syntactic structure of a cleft sentence starting with What.", a: "What + clause + is/are + emphasized element" },
+                        { cat: "Mixed Mode", val: 100, q: "Provide the gerund form of the verb 'run'.", a: "running" },
+                        { cat: "Mixed Mode", val: 200, q: "Is 'that' optional after 'be' in noun clauses?", a: "Often yes in informal speech, but preferred in formal B2 contexts" },
+                        { cat: "Mixed Mode", val: 300, q: "Combine: 'He failed'. 'That surprised us'. (Use a noun clause)", a: "That he failed surprised us / What surprised us was that he failed" },
+                        { cat: "Mixed Mode", val: 400, q: "Give three verbs followed by gerunds.", a: "Enjoy, mind, avoid (or equivalents)" },
+                        { cat: "Mixed Mode", val: 500, q: "Analyze: 'What matters most is achieving fluency'. Identify structural categories.", a: "What matters most (Noun clause subject), achieving fluency (Gerund phrase complement)" }
+                    ]
+                },
+                {
+                    id: 2,
+                    title: "Unit 2: Obligation & Modals",
+                    grammar: "Past modals and phrasal modals of obligation, modals with multiple uses",
+                    color: "#FF8A65",
+                    warmup: [
+                        "Should you have warned them about the systemic alterations?",
+                        "What rules did you have to obey at your primary school?",
+                        "Could you have done anything differently in your past career choice?",
+                        "Are you supposed to follow every single social custom in your town?",
+                        "You might have misplaced your keys; where do you usually drop them?",
+                        "What implies absolute strict necessity: 'must' or 'should'?",
+                        "How do you handle situations where you are supposed to work late?",
+                        "Can you think of a past obligation that no longer applies today?"
+                    ],
+                    flashcards: [
+                        { front: "You should have called me", back: "Past modal expressing criticism or a missed past advice recommendation" },
+                        { front: "We were supposed to submit it", back: "Phrasal modal showing an unfulfilled expectation or requirement context" },
+                        { front: "He must have left already", back: "Modal of logical deduction pointing with high certainty to the past time frame" }
+                    ],
+                    quiz: [
+                        { q: "I ___ checked the contract logic before signing it yesterday.", options: ["should have", "must to", "supposed to", "ought"], correct: 0 }
+                    ],
+                    fillblanks: [
+                        { text: "We were [supposed] to meet them at five o'clock.", answer: "supposed" }
+                    ],
+                    wordsearch: ["SHOULD", "MUST", "OBLIGATION", "SUPPOSED", "COULD", "MIGHT", "OUGHT", "RULES"],
+                    memory: [{ a: "Missed Advice", b: "should have" }, { a: "Past Certainty", b: "must have" }],
+                    dragsort: {
+                        categories: ["High Certainty", "Past Obligation"],
+                        items: [
+                            { text: "He must have arrived", cat: "High Certainty" },
+                            { text: "I had to execute it", cat: "Past Obligation" }
+                        ]
+                    },
+                    hangman: [{ word: "OBLIGATION", hint: "A structural binding state or legal duty to fulfill an action" }],
+                    roulette: ["Share something you should have done last weekend.", "What are you supposed to do when a fire alarm rings?"],
+                    errors: {
+                        text: "I *must* *to* *have* *known* the truth but I didn't verify the parameters.",
+                        targets: ["must", "to", "have", "known"],
+                        corrections: { "must to have known": "should have known" }
+                    },
+                    jeopardy: [
+                        { cat: "Past Modals", val: 100, q: "What past modal indicates absolute criticism of an action?", a: "Should have + past participle" },
+                        { cat: "Past Modals", val: 200, q: "Explain the meaning of 'He could have won'.", a: "He had the ability but did not win" },
+                        { cat: "Past Modals", val: 300, q: "Deduce with high certainty: 'The floor is wet. It ___ rained'.", a: "must have" },
+                        { cat: "Past Modals", val: 400, q: "What is the negative form of 'should have done'?", a: "should not have done" },
+                        { cat: "Past Modals", val: 500, q: "Contrast 'must have done' vs 'should have done'.", a: "Must have = certain deduction; Should have = missed advice/regret" },
+                        { cat: "Phrasal Modals", val: 100, q: "Complete: 'I am ___ to report to my manager'.", a: "supposed" },
+                        { cat: "Phrasal Modals", val: 200, q: "What phrasal modal replaces 'must' in the past tense?", a: "Had to" },
+                        { cat: "Phrasal Modals", val: 300, q: "True or False: 'Was supposed to' always means the action happened.", a: "False, usually implies it didn't happen" },
+                        { cat: "Phrasal Modals", val: 400, q: "What is the present alternative to 'had to'?", a: "Have to / Has to" },
+                        { cat: "Phrasal Modals", val: 500, q: "Form a complex statement with 'was under no obligation to'.", a: "Any valid student response" },
+                        { cat: "Multiple Uses", val: 100, q: "Name two distinct meanings for the modal 'can'.", a: "Ability and Permission (or possibility)" },
+                        { cat: "Multiple Uses", val: 200, q: "How is 'might' used besides expressing low possibility?", a: "Making formal suggestions or requests" },
+                        { cat: "Multiple Uses", val: 300, q: "What does 'should' express besides obligation?", a: "High probability / expectation" },
+                        { cat: "Multiple Uses", val: 400, q: "Give an example of 'would' used for past habitual actions.", a: "When I was young, I would play outside every day" },
+                        { cat: "Multiple Uses", val: 500, q: "Analyze the use of 'could' in: 'Could you pass the salt?'", a: "Polite request pattern" },
+                        { cat: "Obligations", val: 100, q: "Which modal indicates zero option or alternative?", a: "Must / Have to" },
+                        { cat: "Obligations", val: 200, q: "What does 'You needn't have worried' mean?", a: "You worried but it wasn't necessary" },
+                        { cat: "Obligations", val: 300, q: "Is 'You don't have to go' a prohibition?", a: "No, it means lack of obligation / optional" },
+                        { cat: "Obligations", val: 400, q: "Which modal explicitly signals a strict legal prohibition?", a: "Must not / Musn't" },
+                        { cat: "Obligations", val: 500, q: "Rewrite using a modal: 'It was mandatory for us to wear uniforms'.", a: "We had to wear uniforms" },
+                        { cat: "Contextual B2", val: 100, q: "Provide the past participle of 'seek'.", a: "sought" },
+                        { cat: "Contextual B2", val: 200, q: "What is a 'custom'?", a: "A traditional and widely accepted way of behaving" },
+                        { cat: "Contextual B2", val: 300, q: "Use 'ought to have' in a sentence expressing a missed target.", a: "Any valid example" },
+                        { cat: "Contextual B2", val: 400, q: "Is 'supposed to' followed by a base verb or gerund?", a: "Base verb form" },
+                        { cat: "Contextual B2", val: 500, q: "Explain the nuance difference between 'I had to work' and 'I was supposed to work'.", a: "Had to = definitely executed obligation; Supposed to = expected, but performance could be unfulfilled" }
+                    ]
+                },
+                {
+                    id: 3,
+                    title: "Unit 3: Relative Clauses & Contrast",
+                    grammar: "Defining and non-defining relative clauses, order of modifiers, connecting contrasting ideas",
+                    color: "#FF8A65",
+                    warmup: [
+                        "Who is the teacher that inspired your current language learning strategy?",
+                        "Although it was raining heavily, did you decide to attend the structural meeting?",
+                        "What is the most beautiful, ancient, wooden artifact you own?",
+                        "Can you describe your ideal city, which should have excellent transport systems?",
+                        "How do you connect contrasting ideas during an argumentative presentation?",
+                        "Despite the high cost of living, why do people love living in major capitals?",
+                        "Is there a piece of technology whose function you completely depend on?",
+                        "What are the benefits of using non-defining relative clauses in academic writing?"
+                    ],
+                    flashcards: [
+                        { front: "The book which I bought is fantastic", back: "Defining relative clause specifying exactly which book asset is targeted" },
+                        { front: "My mother, who turns sixty today, loves art", back: "Non-defining relative clause providing extra non-essential structural details separated by commas" },
+                        { front: "Despite the storm, we arrived safely", back: "Contrast connector 'despite' followed directly by a noun phrase framework" }
+                    ],
+                    quiz: [
+                        { q: "The city, ___ has a population of two million, is very modern.", options: ["which", "that", "who", "where"], correct: 0 }
+                    ],
+                    fillblanks: [
+                        { text: "Although the exam was complex, [everyone] passed easily.", answer: "everyone" }
+                    ],
+                    wordsearch: ["WHICH", "THAT", "DESPITE", "ALTHOUGH", "RELATIVE", "CONTRAST", "MODIFIER", "WHOSE"],
+                    memory: [{ a: "Extra detail with commas", b: "Non-defining" }, { a: "Essential detail", b: "Defining" }],
+                    dragsort: {
+                        categories: ["Connectors", "Relative Words"],
+                        items: [
+                            { text: "In spite of", cat: "Connectors" },
+                            { text: "Whose / Whom", cat: "Relative Words" }
+                        ]
+                    },
+                    hangman: [{ word: "DEFINING", hint: "Essential to identifying the precise specific item under discussion" }],
+                    roulette: ["Describe a historical place that you would love to explore.", "Contrast your current daily schedule with your past routine layout."],
+                    errors: {
+                        text: "The man *which* *lives* *here* is an expert, despite he lacks a certificate.",
+                        targets: ["which", "lives", "here"],
+                        corrections: { "which lives here": "who lives here" }
+                    },
+                    jeopardy: [
+                        { cat: "Relative Clause", val: 100, q: "Which relative pronoun is used strictly for non-human entities?", a: "Which" },
+                        { cat: "Relative Clause", val: 200, q: "Can you use 'that' in a non-defining relative clause?", a: "No, never after a comma" },
+                        { cat: "Relative Clause", val: 300, q: "What relative pronoun indicates possession?", a: "Whose" },
+                        { cat: "Relative Clause", val: 400, q: "When can you omit the relative pronoun in a defining clause?", a: "When it functions as the object of the clause" },
+                        { cat: "Relative Clause", val: 500, q: "Rewrite using 'whom': 'He is the leader. I talked to him'.", a: "He is the leader to whom I talked / He is the leader whom I talked to" },
+                        { cat: "Contrast", val: 100, q: "What structural element follows 'despite' or 'in spite of'?", a: "A noun, pronoun, or gerund (noun phrase)" },
+                        { cat: "Contrast", val: 200, q: "Complete: '___ it was late, we finished the structural evaluation'.", a: "Although / Even though" },
+                        { cat: "Contrast", val: 300, q: "Turn this into a contrast using 'however': 'It was cold. We walked outside'.", a: "It was cold. However, we walked outside" },
+                        { cat: "Contrast", val: 400, q: "What is the primary syntactic difference between 'although' and 'despite'?", a: "Although takes a subject+verb clause; despite takes a noun phrase object" },
+                        { cat: "Contrast", val: 500, q: "Create a sentence using 'nevertheless' tracking business choices.", a: "Any valid example statement" },
+                        { cat: "Modifier Order", val: 100, q: "Which adjective comes first: opinion or size?", a: "Opinion" },
+                        { cat: "Modifier Order", val: 200, q: "Correct the alignment: 'A round old small table'.", a: "A small old round table" },
+                        { cat: "Modifier Order", val: 300, q: "Where does color go relative to material?", a: "Before material" },
+                        { cat: "Modifier Order", val: 400, q: "Order these: 'Italian / leather / gorgeous / black / shoes'.", a: "Gorgeous black Italian leather shoes" },
+                        { cat: "Modifier Order", val: 500, q: "State the general acronym rule for ordering English modifiers.", a: "OSASCOMP (Opinion, Size, Age, Shape, Color, Origin, Material, Purpose)" },
+                        { cat: "Grammar Core", val: 100, q: "Is 'whom' formal or informal?", a: "Formal" },
+                        { cat: "Grammar Core", val: 200, q: "What punctuation marks non-defining clauses?", a: "Commas" },
+                        { cat: "Grammar Core", val: 300, q: "Fix: 'The school where I studied it was old'.", a: "The school where I studied was old (omit 'it')" },
+                        { cat: "Grammar Core", val: 400, q: "Is 'Even though' stronger than 'Although'?", a: "Yes, it adds greater emphasis to the contrast" },
+                        { cat: "Grammar Core", val: 500, q: "Form a complex sentence using a non-defining clause containing 'whose'.", a: "Any valid structural model" },
+                        { cat: "Advanced B2", val: 100, q: "Synonym for 'ancient'.", a: "Very old / Antique" },
+                        { cat: "Advanced B2", val: 200, q: "Use 'whereas' to contrast two things.", a: "Any valid comparison" },
+                        { cat: "Advanced B2", val: 300, q: "What type of word is 'gorgeous'?", a: "Opinion adjective" },
+                        { cat: "Advanced B2", val: 400, q: "Can 'that' introduce a defining relative clause for a place?", a: "Yes, if it acts as subject or object (e.g., the house that I built)" },
+                        { cat: "Advanced B2", val: 500, q: "Explain sentence modification using an entire 'which' clause.", a: "Using a comma + which to modify the whole preceding clause action statement" }
+                    ]
+                },
+                {
+                    id: 4,
+                    title: "Unit 4: Time & Condition Clauses",
+                    grammar: "Reduced time clauses, clauses stating reasons and conditions",
+                    color: "#FF8A65",
+                    warmup: [
+                        "While studying for exams, do you listen to classical audio streams?",
+                        "As long as you complete the project, will you get a bonus reward?",
+                        "Unless it rains heavily, are you planning an outdoor trip?",
+                        "Provided that conditions are stable, can we expand operations?",
+                        "On entering the academy campus, what is the first thing you notice?",
+                        "Why did you choose your current career path, considering how competitive it is?",
+                        "Can you stay focused even if there are constant background noises?",
+                        "What precautions do you execute before launching a major software application?"
+                    ],
+                    flashcards: [
+                        { front: "While walking home, I met Sarah", back: "Reduced time clause removing subject and 'be' verb form cleanly" },
+                        { front: "Provided that you finish, you can go", back: "Condition clause indicating a strict operational requirement setup" },
+                        { front: "Unless you hurry, we will be late", back: "Negative condition statement meaning 'if you do not hurry'" }
+                    ],
+                    quiz: [
+                        { q: "___ entering the facility, all visitors must log their digital identity parameters.", options: ["Upon", "While", "Unless", "As long as"], correct: 0 }
+                    ],
+                    fillblanks: [
+                        { text: "You can borrow my car as [long] as you drive carefully.", answer: "long" }
+                    ],
+                    wordsearch: ["WHILE", "UNLESS", "PROVIDED", "CONDITION", "REDUCED", "SINCE", "BECAUSE", "UPON"],
+                    memory: [{ a: "If not", b: "unless" }, { a: "On condition that", b: "provided that" }],
+                    dragsort: {
+                        categories: ["Time Condition", "Reason Condition"],
+                        items: [
+                            { text: "Before leaving", cat: "Time Condition" },
+                            { text: "Seeing that...", cat: "Reason Condition" }
+                        ]
+                    },
+                    hangman: [{ word: "REDUCED", hint: "Shortened clause layout by deleting standard subjects and auxiliary units" }],
+                    roulette: ["What habits do you practice while preparing for an interview layout?", "Under what terms would you accept a job transfer abroad?"],
+                    errors: {
+                        text: "While *to* *walk* *in* *the* *park*, I found a golden key asset.",
+                        targets: ["to", "walk", "in", "the", "park"],
+                        corrections: { "to walk in the park": "walking in the park" }
+                    },
+                    jeopardy: [
+                        { cat: "Time Clauses", val: 100, q: "Reduce: 'While I was driving, I saw a bird'.", a: "While driving, I saw a bird" },
+                        { cat: "Time Clauses", val: 200, q: "What preposition means 'at the exact moment of' before an -ing verb?", a: "Upon / On" },
+                        { cat: "Time Clauses", val: 300, q: "Can you reduce a time clause if subjects are different?", a: "No, subjects must be identical" },
+                        { cat: "Time Clauses", val: 400, q: "Reduce: 'After he completed the task, he logged off'.", a: "After completing the task, he logged off" },
+                        { cat: "Time Clauses", val: 500, q: "Explain the logical trap of a dangling modifier in reduced clauses.", a: "When the reduced clause accidentally modifies the wrong subject in the main clause" },
+                        { cat: "Conditions", val: 100, q: "What does 'unless' mean?", a: "If not / Except if" },
+                        { cat: "Conditions", val: 200, q: "Give a synonym phrase for 'if' starting with 'p'.", a: "Provided that / Providing that" },
+                        { cat: "Conditions", val: 300, q: "Complete: 'We will invest, as ___ as the risk is low'.", a: "long" },
+                        { cat: "Conditions", val: 400, q: "What is the structural constraint of 'in case of' vs 'in case'?", a: "In case of takes a noun; in case takes a full clause" },
+                        { cat: "Conditions", val: 500, q: "Form an advanced condition using 'on condition that'.", a: "Any valid tracking response" },
+                        { cat: "Reasons", val: 100, q: "Name a formal synonym for 'because' starting with 's'.", a: "Since" },
+                        { cat: "Reasons", val: 200, q: "What phrase meaning 'because of' starts with 'due'?", a: "Due to" },
+                        { cat: "Reasons", val: 300, q: "Complete: '___ that you are here, let's start the evaluation'.", a: "Now / Seeing" },
+                        { cat: "Reasons", val: 400, q: "Is 'inasmuch as' used for reasons or time?", a: "Reasons (highly formal)" },
+                        { cat: "Reasons", val: 500, q: "Contrast the syntax of 'because' vs 'because of'.", a: "Because + clause; because of + noun phrase" },
+                        { cat: "Syntax Mix", val: 100, q: "Fix: 'Unless you don't study, you will fail'.", a: "Unless you study, you will fail" },
+                        { cat: "Syntax Mix", val: 200, q: "Fix: 'Before to leave, lock the node door'.", a: "Before leaving, lock the door" },
+                        { cat: "Syntax Mix", val: 300, q: "Fix: 'Provided you will pass, we will celebrate'.", a: "Provided you pass (use present for future conditions)" },
+                        { cat: "Syntax Mix", val: 400, q: "Can 'as' mean both time and reason?", a: "Yes, it is highly versatile" },
+                        { cat: "Syntax Mix", val: 500, q: "Analyze the reduction: 'Once chosen, the system cannot be altered'.", a: "Reduced past participle time clause meaning 'Once it is chosen'" },
+                        { cat: "B2 Context", val: 100, q: "What does 'precaution' mean?", a: "An action taken in advance to protect against danger or failure" },
+                        { cat: "B2 Context", val: 200, q: "Use 'even if' in a sentence about climate or weather.", a: "Any valid example" },
+                        { cat: "B2 Context", val: 300, q: "What does 'stable' mean?", a: "Not likely to change or fail; firmly established" },
+                        { cat: "B2 Context", val: 400, q: "Complete: '___ consideration of the parameters, we accepted'.", a: "In" },
+                        { cat: "B2 Context", val: 500, q: "Construct a multi-clause sentence containing both a reduced time clause and a condition.", a: "Example: While walking, you will get lost unless you check the map tracker" }
+                    ]
+                },
+                {
+                    id: 5,
+                    title: "Unit 5: Reported Speech & Gerunds",
+                    grammar: "Infinitives and gerund phrases, reported speech",
+                    color: "#FF7043",
+                    warmup: [
+                        "What did your manager report about the project status last Monday?",
+                        "Did she ask you if you wanted to coordinate the next presentation?",
+                        "He told me that he would resign; how would you react to that news?",
+                        "What are the core reporting verbs you use to summarize conversations?",
+                        "Is speaking in public something you consider challenging to execute?",
+                        "Have you ever been told that your pronunciation was excellent?",
+                        "What did your parents say when you chose your university major?",
+                        "How do you report a question that originally started with 'Why'?"
+                    ],
+                    flashcards: [
+                        { front: "He said, 'I am working hard'", back: "Reported: He said that he was working hard (tense shift down)" },
+                        { front: "She asked where I lived", back: "Reported question using statement word order without 'do/does/did'" },
+                        { front: "To learn grammar is vital", back: "Infinitive phrase functioning as the sentence conceptual subject" }
+                    ],
+                    quiz: [
+                        { q: "David said he ___ finish the document structural verification the following day.", options: ["would", "will", "can", "is going to"], correct: 0 }
+                    ],
+                    fillblanks: [
+                        { text: "She asked me if I [had] verified the data parameters.", answer: "had" }
+                    ],
+                    wordsearch: ["REPORTED", "SPEECH", "INFINITIVE", "PHRASE", "WHETHER", "DEMAND", "SUGGEST", "DENIED"],
+                    memory: [{ a: "Direct: Present Simple", b: "Reported: Past Simple" }, { a: "Direct: Will", b: "Reported: Would" }],
+                    dragsort: {
+                        categories: ["Reporting Statements", "Reporting Questions"],
+                        items: [
+                            { text: "He claimed that...", cat: "Reporting Statements" },
+                            { text: "She inquired whether...", cat: "Reporting Questions" }
+                        ]
+                    },
+                    hangman: [{ word: "WHETHER", hint: "Reporting link term used for yes or no questions instead of if" }],
+                    roulette: ["Report a memorable piece of advice someone gave you recently.", "What do you think about using infinitives as subjects?"],
+                    errors: {
+                        text: "She *asked* *me* *where* *did* *I* *go* during the conference yesterday.",
+                        targets: ["asked", "me", "where", "did", "I", "go"],
+                        corrections: { "asked me where did I go": "asked me where I went" }
+                    },
+                    jeopardy: [
+                        { cat: "Tense Shifts", val: 100, q: "What does Present Simple shift to in reported speech?", a: "Past Simple" },
+                        { cat: "Tense Shifts", val: 200, q: "Shift this: 'I have done it'. He said...", a: "He said he had done it" },
+                        { cat: "Tense Shifts", val: 300, q: "What does 'will' transform into?", a: "would" },
+                        { cat: "Tense Shifts", val: 400, q: "Shift past simple: 'I arrived early'. She mentioned...", a: "She mentioned she had arrived early" },
+                        { cat: "Tense Shifts", val: 500, q: "Does a permanent universal truth require a tense shift?", a: "No, it can remain in the present tense" },
+                        { cat: "Questions", val: 100, q: "What word changes yes/no questions into reported items?", a: "If / Whether" },
+                        { cat: "Questions", val: 200, q: "Report: 'Where are you going?' He asked me...", a: "He asked me where I was going" },
+                        { cat: "Questions", val: 300, q: "True or False: Reported questions use a question mark.", a: "False" },
+                        { cat: "Questions", val: 400, q: "Fix: 'She asked me what time is it'.", a: "She asked me what time it was" },
+                        { cat: "Questions", val: 500, q: "Report this: 'Did you see the matrix code?'", a: "He asked if/whether I had seen the matrix code" },
+                        { cat: "Reporting Verbs", val: 100, q: "Which verb requires a personal object: say or tell?", a: "tell" },
+                        { cat: "Reporting Verbs", val: 200, q: "What structure follows 'suggest'?", a: "Gerund or a 'that' clause with subjunctive/should" },
+                        { cat: "Reporting Verbs", val: 300, q: "Name a reporting verb that implies flat denial.", a: "Deny / Reject" },
+                        { cat: "Reporting Verbs", val: 400, q: "Change into reported speech using 'refuse': 'No, I won't do it'.", a: "He refused to do it" },
+                        { cat: "Reporting Verbs", val: 500, q: "Name three reporting verbs followed directly by an infinitive structure.", a: "Offer, refuse, promise, agree, threaten" },
+                        { cat: "Infinitives/Gerunds", val: 100, q: "What is the subject in: 'To err is human'?", a: "To err (Infinitive phrase)" },
+                        { cat: "Infinitives/Gerunds", val: 200, q: "Is 'Mastering English' a gerund phrase or an infinitive?", a: "Gerund phrase" },
+                        { cat: "Infinitives/Gerunds", val: 300, q: "Complete: 'It is essential ___ verify all systems'.", a: "to" },
+                        { cat: "Infinitives/Gerunds", val: 400, q: "Which pattern is more common as a subject in modern speech: Gerund or Infinitive?", a: "Gerund phrase" },
+                        { cat: "Infinitives/Gerunds", val: 500, q: "Rewrite as a gerund subject: 'To analyze data requires strict patience'.", a: "Analyzing data requires strict patience" },
+                        { cat: "Advanced Mix", val: 100, q: "What does 'tomorrow' shift to in reported fields?", a: "The next day / The following day" },
+                        { cat: "Advanced Mix", val: 200, q: "What does 'here' shift to?", a: "there" },
+                        { cat: "Advanced Mix", val: 300, q: "Report: 'Don't touch the wire!' The engineer warned us...", a: "The engineer warned us not to touch the wire" },
+                        { cat: "Advanced Mix", val: 400, q: "Identify the reporting verb: 'She claimed the prize'.", a: "claimed" },
+                        { cat: "Advanced Mix", val: 500, q: "Explain the grammatical function of a split infinitive and if B2 allows it.", a: "Placing an adverb between 'to' and the verb (e.g., to boldly go). Accepted in descriptive usage, avoided in prescriptive rules" }
+                    ]
+                },
+                {
+                    id: 6,
+                    title: "Unit 6: Perfect Tenses",
+                    grammar: "Present perfect continuous vs simple past, present perfect vs present perfect continuous, adverbs with simple past and past perfect",
+                    color: "#FF7043",
+                    warmup: [
+                        "How long have you been studying English at this upper-intermediate level?",
+                        "What had you completed before the manager arrived at the office?",
+                        "Have you ever traveled to a destination that completely changed your perspective?",
+                        "Why have you been working so intensely on this code execution tracker?",
+                        "By the time you turned eighteen, had you already mastered a skill?",
+                        "Did you study grammar yesterday or were you practicing conversation?",
+                        "How many times have you updated your status profile this week?",
+                        "What had occurred prior to the sudden structural system crash?"
+                    ],
+                    flashcards: [
+                        { front: "I have been writing all morning", back: "Present perfect continuous emphasizing the continuous ongoing nature of an action" },
+                        { front: "By then, the train had left", back: "Past perfect indicating an action completed before another definite past benchmark point" },
+                        { front: "She has visited Paris twice", back: "Present perfect simple highlighting the total completed score experience" }
+                    ],
+                    quiz: [
+                        { q: "By the time the meeting started, the system core ___ crashed.", options: ["had already", "has been", "did", "was"], correct: 0 }
+                    ],
+                    fillblanks: [
+                        { text: "I have been [studying] for three hours straight.", answer: "studying" }
+                    ],
+                    wordsearch: ["PERFECT", "CONTINUOUS", "ALREADY", "BEFORE", "SINCE", "FOR", "WRITTEN", "STARTED"],
+                    memory: [{ a: "Action before past point", b: "Past Perfect" }, { a: "Duration up to now", b: "Present Perfect Cont." }],
+                    dragsort: {
+                        categories: ["Past Perfect Element", "Present Perfect Cont."],
+                        items: [
+                            { text: "Had already left", cat: "Past Perfect Element" },
+                            { text: "Have been trying", cat: "Present Perfect Cont." }
+                        ]
+                    },
+                    hangman: [{ word: "CONTINUOUS", hint: "Grammar mode focusing entirely on the progression or duration of events" }],
+                    roulette: ["Detail an activity you have been doing all week.", "What had you done before logging into this digital dashboard today?"],
+                    errors: {
+                        text: "Yesterday I *have* *seen* him, but he had already checked out from the node.",
+                        targets: ["have", "seen"],
+                        corrections: { "have seen": "saw" }
+                    },
+                    jeopardy: [
+                        { cat: "Past vs Present", val: 100, q: "Which tense requires a specific finished past time marker?", a: "Simple Past" },
+                        { cat: "Past vs Present", val: 200, q: "True or False: Present Perfect can look at specific times like 'yesterday'.", a: "False" },
+                        { cat: "Past vs Present", val: 300, q: "Complete: 'I ___ (live) here since 2010'.", a: "have lived / have been living" },
+                        { cat: "Past vs Present", val: 400, q: "Identify the tense: 'She has been running a marathon'.", a: "Present Perfect Continuous" },
+                        { cat: "Past vs Present", val: 500, q: "Contrast 'I worked there for 5 years' vs 'I have worked there for 5 years'.", a: "Worked = finished action; Have worked = action continues to present" },
+                        { cat: "Continuous Mode", val: 100, q: "Form the present perfect continuous of 'study' for 'He'.", a: "He has been studying" },
+                        { cat: "Continuous Mode", val: 200, q: "What is the primary emphasis of the continuous perfect tense?", a: "Duration, process, or ongoing activity status" },
+                        { cat: "Continuous Mode", val: 300, q: "Can stative verbs like 'know' be used in continuous forms?", a: "No, they take the simple perfect instead" },
+                        { cat: "Continuous Mode", val: 400, q: "Fix: 'I have been knowing him for a long period'.", a: "I have known him" },
+                        { cat: "Continuous Mode", val: 500, q: "Create a sentence explaining tired eyes using present perfect continuous.", a: "Example: My eyes hurt because I have been staring at screens all day" },
+                        { cat: "Past Perfect", val: 100, q: "What is the auxiliary layout for Past Perfect?", a: "Had + past participle" },
+                        { cat: "Past Perfect", val: 200, q: "Which happens first: Past Perfect action or Simple Past action?", a: "Past Perfect action" },
+                        { cat: "Past Perfect", val: 300, q: "Complete: 'When I arrived, they ___ already dinner'.", a: "had already eaten / had" },
+                        { cat: "Past Perfect", val: 400, q: "What adverb meaning 'almost not' goes with past perfect?", a: "Hardly / Scarcely / Barely" },
+                        { cat: "Past Perfect", val: 500, q: "Form a double-had structure correctly: 'He had...'", a: "He had had a bad day before things improved" },
+                        { cat: "Time Adverbs", val: 100, q: "Does 'since' require a point in time or a duration?", a: "A specific point in time" },
+                        { cat: "Time Adverbs", val: 200, q: "Does 'for' require a specific point or a duration period?", a: "A duration period" },
+                        { cat: "Time Adverbs", val: 300, q: "Where does 'already' sit in a perfect structure?", a: "Between the auxiliary have/had and the main participle verb" },
+                        { cat: "Time Adverbs", val: 400, q: "Which adverb meaning 'up to now' is common in negatives?", a: "Yet" },
+                        { cat: "Time Adverbs", val: 500, q: "Explain the adverbial difference between 'just' and 'recently'.", a: "Just implies a very immediate past moment; recently points to a broader recent period block" },
+                        { cat: "Perfect Mix", val: 100, q: "What is the past participle of 'broadcast'?", a: "broadcast" },
+                        { cat: "Perfect Mix", val: 200, q: "Form a negative past perfect continuous question.", a: "Had you not been listening?" },
+                        { cat: "Perfect Mix", val: 300, q: "Fix: 'She is living here for five months'.", a: "She has been living here for five months" },
+                        { cat: "Perfect Mix", val: 400, q: "Provide the past participle of 'undergo'.", a: "undergone" },
+                        { cat: "Perfect Mix", val: 500, q: "Syntactically decode: 'By next year, I will have been tracking logs'. Identify the tense.", a: "Future Perfect Continuous (advanced expansion aspect)" }
+                    ]
+                },
+                {
+                    id: 7,
+                    title: "Unit 7: Passive Voice Advanced",
+                    grammar: "Passive voice of present perfect, continuous, future; negative and tag questions",
+                    color: "#FF7043",
+                    warmup: [
+                        "Has your smartphone ever been repaired by an authorized technician?",
+                        "The data is being uploaded right now; can you verify the progress bar?",
+                        "Will the final structural assessment be finalized before next month?",
+                        "You live in Colombia, don't you?",
+                        "What massive structural changes have been implemented in your city recently?",
+                        "Why should corporate accounts be carefully audited every calendar cycle?",
+                        "The architecture wasn't updated on time, was it?",
+                        "How is advanced passive voice deployed to maintain professional objectivity?"
+                    ],
+                    flashcards: [
+                        { front: "The target code has been updated", back: "Present perfect passive structural configuration eliminating the agent" },
+                        { front: "The system is being audited", back: "Present continuous passive highlighting an ongoing process mechanism" },
+                        { front: "You are an engineer, aren't you?", back: "Standard tag question tracking structural affirmation verification" }
+                    ],
+                    quiz: [
+                        { q: "A new database schema ___ implemented as we speak.", options: ["is being", "has been", "will be", "was"], correct: 0 }
+                    ],
+                    fillblanks: [
+                        { text: "The code will be [reviewed] by the engineering director tomorrow.", answer: "reviewed" }
+                    ],
+                    wordsearch: ["PASSIVE", "AUDITED", "BEING", "REPAIRED", "SCHEMA", "AGENT", "TAGS", "FUTURE"],
+                    memory: [{ a: "Ongoing process passive", b: "is being done" }, { a: "Completed passive", b: "has been done" }],
+                    dragsort: {
+                        categories: ["Passive Structures", "Tag Inclusions"],
+                        items: [
+                            { text: "Is being built", cat: "Passive Structures" },
+                            { text: "Won't they?", cat: "Tag Inclusions" }
+                        ]
+                    },
+                    hangman: [{ word: "AUDITED", hint: "Officially inspected, reviewed, or verified by an external authority core" }],
+                    roulette: ["Formulate a complex passive sentence regarding global technology updates.", "Explain how to generate a tag question for a negative statement."],
+                    errors: {
+                        text: "The new highway system *is* *been* *constructed* rapidly, wasn't it?",
+                        targets: ["is", "been", "constructed"],
+                        corrections: { "is been constructed": "is being constructed" }
+                    },
+                    jeopardy: [
+                        { cat: "Passives Base", val: 100, q: "What auxiliary verb is always required to form the passive voice?", a: "To be" },
+                        { cat: "Passives Base", val: 200, q: "Turn active to passive: 'They clean the office'.", a: "The office is cleaned" },
+                        { cat: "Passives Base", val: 300, q: "What do we call the performer of the action in a passive setup?", a: "The agent" },
+                        { cat: "Passives Base", val: 400, q: "What preposition introduces the agent?", a: "by" },
+                        { cat: "Passives Base", val: 500, q: "Why do we frequently omit the agent in technical B2 reporting?", a: "Because the agent is unknown, obvious, or unimportant compared to the action" },
+                        { cat: "Advanced Aspects", val: 100, q: "Form the Present Perfect Passive for 'The file / delete'.", a: "The file has been deleted" },
+                        { cat: "Advanced Aspects", val: 200, q: "Form the Present Continuous Passive for 'The road / fix'.", a: "The road is being fixed" },
+                        { cat: "Advanced Aspects", val: 300, q: "Form the Future Passive for 'The code / write'.", a: "The code will be written" },
+                        { cat: "Advanced Aspects", val: 400, q: "What is the passive form of 'They should do it'?", a: "It should be done" },
+                        { cat: "Advanced Aspects", val: 500, q: "Convert to passive: 'People believe that he is rich'. (Start with It)", a: "It is believed that he is rich" },
+                        { cat: "Tag Questions", val: 100, q: "Add a tag: 'You are Spanish, ___?'", a: "aren't you" },
+                        { cat: "Tag Questions", val: 200, q: "Add a tag: 'He won't come, ___?'", a: "will he" },
+                        { cat: "Tag Questions", val: 300, q: "Add a tag to: 'She has left, ___?'", a: "hasn't she" },
+                        { cat: "Tag Questions", val: 400, q: "What is the tag for: 'I am right'?", a: "aren't I" },
+                        { cat: "Tag Questions", val: 500, q: "Form the tag question for: 'Let's begin the audit'.", a: "shall we" },
+                        { cat: "Negative Prompts", val: 100, q: "Form a negative question with 'Why didn't you...'", a: "Any valid example query" },
+                        { cat: "Negative Prompts", val: 200, q: "What tone do negative questions often express?", a: "Surprise, annoyance, or confirmation check" },
+                        { cat: "Negative Prompts", val: 300, q: "Add a tag: 'Nobody called, ___?'", a: "did they" },
+                        { cat: "Negative Prompts", val: 400, q: "Add a tag: 'You have never been there, ___?'", a: "have you" },
+                        { cat: "Negative Prompts", val: 500, q: "Rewrite as a formal negative query: 'Did you not receive the notification framework?'", a: "Didn't you receive the notification framework?" },
+                        { cat: "Contextual B2", val: 100, q: "What is a 'technician'?", a: "A person skilled in the technique of a specific art or craft" },
+                        { cat: "Contextual B2", val: 200, q: "Is 'The software got hacked' an informal passive voice?", a: "Yes, using 'get' acts as an informal passive helper" },
+                        { cat: "Contextual B2", val: 300, q: "Use 'audited' in a sentence about enterprise finance tracking.", a: "Any valid example statement" },
+                        { cat: "Contextual B2", val: 400, q: "Is 'being' used in a past perfect passive statement?", a: "No, 'been' is used (had been done)" },
+                        { cat: "Contextual B2", val: 500, q: "Explain the meaning shift when intonation drops vs rises on a tag question.", a: "Falling intonation = expecting agreement/statement; Rising intonation = a genuine question requiring verification" }
+                    ]
+                },
+                {
+                    id: 8,
+                    title: "Unit 8: Reduced Relatives",
+                    grammar: "Reduced relative clauses and non-defining relative clauses as sentence modifiers",
+                    color: "#FF7043",
+                    warmup: [
+                        "The proposal, which completely shocked the board, was ultimately approved anyway, wasn't it?",
+                        "Cars manufactured in Germany usually command premium pricing structural benchmarks.",
+                        "The individuals sitting in the waiting area have been queuing for hours.",
+                        "He resigned from his senior position, which forced the enterprise to restructure.",
+                        "Have you ever read an article containing highly dense reduced relative clauses?",
+                        "The dynamic paradigm presented yesterday solved our calculation constraints, didn't it?",
+                        "She mastered coding in six months, which surprised her colleagues.",
+                        "Why do sentence modifiers add immense depth to upper-intermediate prose structures?"
+                    ],
+                    flashcards: [
+                        { front: "The active code updated yesterday works", back: "Reduced from 'The code which was updated yesterday' by discarding the relative pronoun and auxiliary" },
+                        { front: "The person leading the team is John", back: "Reduced active relative clause converting verb directly into present participle form" },
+                        { front: "He lost the match, which made him sad", back: "Entire preceding sentence modified cleanly by a non-defining relative clause token" }
+                    ],
+                    quiz: [
+                        { q: "The applications ___ by our development team are running smoothly.", options: ["developed", "developing", "which developed", "were developed"], correct: 0 }
+                    ],
+                    fillblanks: [
+                        { text: "The solution [presented] during the webinar solved our core bugs.", answer: "presented" }
+                    ],
+                    wordsearch: ["REDUCED", "MODIFIER", "SENTENCE", "LEADING", "PROPOSAL", "SHOCKED", "QUEUING", "CARS"],
+                    memory: [{ a: "Passive reduction", b: "Past Participle" }, { a: "Active reduction", b: "Present Participle" }],
+                    dragsort: {
+                        categories: ["Active Participle", "Passive Participle"],
+                        items: [
+                            { text: "People living here", cat: "Active Participle" },
+                            { text: "Goods imported now", cat: "Passive Participle" }
+                        ]
+                    },
+                    hangman: [{ word: "MODIFIER", hint: "A structural linguistic unit that adds extra contextual detail to another block node" }],
+                    roulette: ["Reduce: 'The students who are working hard will succeed'.", "Create an entire statement modified by a closing 'which' clause."],
+                    errors: {
+                        text: "The report *publishing* *last* *week* by the department shocked everyone.",
+                        targets: ["publishing", "last", "week"],
+                        corrections: { "publishing last week": "published last week" }
+                    },
+                    jeopardy: [
+                        { cat: "Reduction Rules", val: 100, q: "Reduce: 'The building that was destroyed by fire'.", a: "The building destroyed by fire" },
+                        { cat: "Reduction Rules", val: 200, q: "Reduce: 'The woman who is speaking to the manager'.", a: "The woman speaking to the manager" },
+                        { cat: "Reduction Rules", val: 300, q: "Can you reduce a relative clause if the pronoun is the object?", a: "No, only if the relative pronoun functions as the subject" },
+                        { cat: "Reduction Rules", val: 400, q: "What form does an active verb take in a reduced relative clause?", a: "Present participle (-ing form)" },
+                        { cat: "Reduction Rules", val: 500, q: "What form does a passive verb take in a reduced relative clause?", a: "Past participle form" },
+                        { cat: "Sentence Modifiers", val: 100, q: "What pronoun introduces a clause modifying a whole sentence?", a: "Which" },
+                        { cat: "Sentence Modifiers", val: 200, q: "Does a sentence-modifying clause require a comma before it?", a: "Yes, absolutely" },
+                        { cat: "Sentence Modifiers", val: 300, q: "Identify the modifier: 'He arrived late, which annoyed the boss'.", a: ", which annoyed the boss" },
+                        { cat: "Sentence Modifiers", val: 400, q: "What does 'which' refer to in sentence modification?", a: "The entire situation or action described in the main clause" },
+                        { cat: "Sentence Modifiers", val: 500, q: "Form a statement about a team victory with a closing sentence modifier.", a: "Any valid structurally compliant statement" },
+                        { cat: "Participles", val: 100, q: "Is 'written' a present or past participle?", a: "Past participle" },
+                        { cat: "Participles", val: 200, q: "Is 'containing' active or passive in value?", a: "Active" },
+                        { cat: "Participles", val: 300, q: "Complete: 'The letter ___ (send) yesterday reached me today'.", a: "sent" },
+                        { cat: "Participles", val: 400, q: "Fix: 'The man stolen the money was caught'.", a: "The man who stole the money / The man stealing the money (context dependent)" },
+                        { cat: "Participles", val: 500, q: "Explain the passive continuous reduction pattern 'being handled'.", a: "Maintains continuous meaning in passive reduction (e.g., The files being handled now)" },
+                        { cat: "B2 Writing Style", val: 100, q: "Why use reduced relatives?", a: "To make writing more concise, elegant, and fluid" },
+                        { cat: "B2 Writing Style", val: 200, q: "Is 'The team playing tomorrow is ready' reduced?", a: "Yes, from 'The team that is playing tomorrow'" },
+                        { cat: "B2 Writing Style", val: 300, q: "Fix: 'The items importing from Asia are cheap'.", a: "The items imported from Asia" },
+                        { cat: "B2 Writing Style", val: 400, q: "True or False: Sentence modifiers can start with 'that'.", a: "False, only 'which' can perform this unique sentence-level function" },
+                        { cat: "B2 Writing Style", val: 500, q: "Construct a complex sentence containing both a past participle reduction and a sentence modifier.", a: "Example: The project launched last year failed, which bankrupted the firm" },
+                        { cat: "Advanced Lexis", val: 100, q: "What does 'queuing' mean?", a: "Waiting in a line or sequence" },
+                        { cat: "Advanced Lexis", val: 200, q: "Synonym for 'ultimately'.", a: "In the end / Eventually" },
+                        { cat: "Advanced Lexis", val: 300, q: "What does 'command pricing' mean?", a: "To be able to charge a high price due to quality/reputation" },
+                        { cat: "Advanced Lexis", val: 400, q: "Correct: 'The structural laws establishing in 1990 are valid'.", a: "established in 1990" },
+                        { cat: "Advanced Lexis", val: 500, q: "Syntactically decode: 'The system configuration tested previously proved efficient, allowing rapid scalability'.", a: "Tested previously (Reduced passive relative), allowing rapid scalability (Participle clause adverbial result)" }
+                    ]
+                },
+                {
+                    id: 9,
+                    title: "Unit 9: Contrast & Habit",
+                    grammar: "Clauses and phrases showing contrast and exception, past habitual with 'used to' and 'would'",
+                    color: "#E64A19",
+                    warmup: [
+                        "When you lived in your hometown, would you often play outside until late?",
+                        "Except for the final vocabulary module, did you master the B2 curriculum?",
+                        "I used to find advanced sentence structures incredibly dense, but now they make sense.",
+                        "With the exception of public speaking, what professional skill comes easily to you?",
+                        "Would your grandparents tell you stories of their early childhood experiences?",
+                        "How do you establish clear exceptions to a general rule during conversations?",
+                        "Contrast your past reading habits with your current lifestyle choices.",
+                        "Why is 'would' restricted only to past dynamic actions rather than stative conditions?"
+                    ],
+                    flashcards: [
+                        { front: "I would swim every single summer morning", back: "Past habitual action using would; cannot apply to stative conditions" },
+                        { front: "I used to have a classic car", back: "Past state or habit using used to; works for both dynamic actions and states" },
+                        { front: "Except for John, everyone passed", back: "Phrase indicating a clear structural exception to a general statement population" }
+                    ],
+                    quiz: [
+                        { q: "I ___ love drinking milk, but now I absolutely detest it.", options: ["used to", "would", "am used to", "use to"], correct: 0 }
+                    ],
+                    fillblanks: [
+                        { text: "With the [exception] of the accounting team, everyone was present.", answer: "exception" }
+                    ],
+                    wordsearch: ["CONTRAST", "HABITUAL", "WOULD", "EXCEPT", "EXCEPTION", "STATE", "DYNAMIC", "WHILE"],
+                    memory: [{ a: "Past action only", b: "would" }, { a: "Past state or action", b: "used to" }],
+                    dragsort: {
+                        categories: ["Action Habit", "State Habit Only"],
+                        items: [
+                            { text: "Would play soccer", cat: "Action Habit" },
+                            { text: "Used to be a doctor", cat: "State Habit Only" }
+                        ]
+                    },
+                    hangman: [{ word: "HABITUAL", hint: "Done constantly, repeatedly, or acting as a regular past custom protocol" }],
+                    roulette: ["Describe a typical weekend routine you would do as a young child.", "State a general rule about your life using 'with the exception of'."],
+                    errors: {
+                        text: "When I was young, I *would* *have* a small brown dog who followed me everywhere.",
+                        targets: ["would", "have"],
+                        corrections: { "would have": "used to have" }
+                    },
+                    jeopardy: [
+                        { cat: "Past Habits", val: 100, q: "Which structure can express past states: 'used to' or 'would'?", a: "used to" },
+                        { cat: "Past Habits", val: 200, q: "True or False: 'Would' can be used for past states like 'I would live in Paris'.", a: "False" },
+                        { cat: "Past Habits", val: 300, q: "What is the negative form of 'used to do'?", a: "didn't use to do" },
+                        { cat: "Past Habits", val: 400, q: "Form a habitual past question using 'use to'.", a: "Did you use to play?" },
+                        { cat: "Past Habits", val: 500, q: "Explain why 'I am used to coding' is different from 'I used to code'.", a: "Am used to = accustomed to (present state); Used to = past finished habit" },
+                        { cat: "Exceptions", val: 100, q: "Complete: 'Except ___ the rain, the trip was wonderful'.", a: "for" },
+                        { cat: "Exceptions", val: 200, q: "What formal phrase starts with 'With the...' to show an omission?", a: "With the exception of" },
+                        { cat: "Exceptions", val: 300, q: "Synonym phrase for 'except for' starting with 'a'.", a: "Apart from / Aside from" },
+                        { cat: "Exceptions", val: 400, q: "Is 'but' capable of meaning 'except'?", a: "Yes (e.g., Everyone but John left)" },
+                        { cat: "Exceptions", val: 500, q: "Create a statement using 'other than' to exclude an operational option.", a: "Any valid example response" },
+                        { cat: "Contrast Tools", val: 100, q: "Name a contrast word that can start a clause, starting with 'w'.", a: "While / Whereas" },
+                        { cat: "Contrast Tools", val: 200, q: "Complete: 'He prefers active sports, ___ his brother likes chess'.", a: "whereas / while" },
+                        { cat: "Contrast Tools", val: 300, q: "What punctuation typically precedes 'whereas' mid-sentence?", a: "A comma" },
+                        { cat: "Contrast Tools", val: 400, q: "Can 'while' express both time and contrast simultaneously?", a: "Yes, context clarifies the dominant structural interpretation" },
+                        { cat: "Contrast Tools", val: 500, q: "Form an advanced business comparison using 'on the contrary'.", a: "Any valid structurally sound statement" },
+                        { cat: "Syntax Target", val: 100, q: "Fix: 'I would be short when I was ten'.", a: "I used to be short" },
+                        { cat: "Syntax Target", val: 200, q: "Fix: 'He didn't used to study logs'.", a: "He didn't use to study logs" },
+                        { cat: "Syntax Target", val: 300, q: "Fix: 'Apart of the bonus, we got nothing'.", a: "Apart from the bonus" },
+                        { cat: "Syntax Target", val: 400, q: "Is 'use to' valid in the present simple tense?", a: "No, use 'usually' instead for present routines" },
+                        { cat: "Syntax Target", val: 500, q: "Rewrite: 'We walked every day'. Use a past habitual modal.", a: "We would walk every day" },
+                        { cat: "Contextual B2", val: 100, q: "What does 'stative' mean in grammar terms?", a: "Describing a state or condition rather than a physical action" },
+                        { cat: "Contextual B2", val: 200, q: "Use 'aside from' in a sentence about technology preferences.", a: "Any valid structural response" },
+                        { cat: "Contextual B2", val: 300, q: "What does 'detest' mean?", a: "To dislike intensely; to hate completely" },
+                        { cat: "Contextual B2", val: 400, q: "Is 'would' more formal than 'used to' in narrative descriptions?", a: "Yes, it is highly favored in literary and formal past descriptions" },
+                        { cat: "Contextual B2", val: 500, q: "Construct a paragraph block mentally combining a past state and two sequential past dynamic habits.", a: "Any coherent student spoken/written model block" }
+                    ]
+                },
+                {
+                    id: 10,
+                    title: "Unit 10: Complex Clauses",
+                    grammar: "Relative clauses and noun clauses, simple and complex indirect questions",
+                    color: "#E64A19",
+                    warmup: [
+                        "Could you tell me what the primary requirement for this system interface is?",
+                        "I wonder why they decided to alter the structural database parameters.",
+                        "Do you happen to know who designed this interactive application?",
+                        "The town where I spent my childhood has transformed immensely over the years.",
+                        "Can you explain how a machine learning model operates in simple terms?",
+                        "I would like to find out whether the conference has been rescheduled.",
+                        "What concerns me is how quickly global economic markets fluctuate.",
+                        "Do you know if there are any remaining seats for the advanced seminar?"
+                    ],
+                    flashcards: [
+                        { front: "Could you tell me where the station is?", back: "Indirect question tracking statement word order without inversion" },
+                        { front: "I wonder if it will rain tomorrow", back: "Indirect question using if to evaluate an uncertain parameter option" },
+                        { front: "The reason why I left was fatigue", back: "Complex relative structure focusing on causal rationale definition" }
+                    ],
+                    quiz: [
+                        { q: "Do you know what time ___?", options: ["the train leaves", "leaves the train", "does the train leave", "is leaving the train"], correct: 0 }
+                    ],
+                    fillblanks: [
+                        { text: "I wonder [why] the system failed so suddenly.", answer: "why" }
+                    ],
+                    wordsearch: ["COMPLEX", "INDIRECT", "QUESTION", "WONDER", "WHETHER", "REASON", "WHERE", "COULD"],
+                    memory: [{ a: "Direct: Where is it?", b: "Indirect: ...where it is." }, { a: "Direct: Does he go?", b: "Indirect: ...if he goes." }],
+                    dragsort: {
+                        categories: ["Direct Pattern", "Indirect Pattern"],
+                        items: [
+                            { text: "What are you doing?", cat: "Direct Pattern" },
+                            { text: "I wonder what you are doing", cat: "Indirect Pattern" }
+                        ]
+                    },
+                    hangman: [{ word: "INDIRECT", hint: "Polite query pattern using embedding expressions and standard statement layout" }],
+                    roulette: ["Convert: 'Where did she go?' into a polite indirect inquiry.", "Formulate a sentence starting with 'What puzzles the engineering team is...'"],
+                    errors: {
+                        text: "Could you tell me *where* *is* *the* *manager* because I need an immediate approval signature.",
+                        targets: ["where", "is", "the", "manager"],
+                        corrections: { "where is the manager": "where the manager is" }
+                    },
+                    jeopardy: [
+                        { cat: "Indirect Rules", val: 100, q: "What happens to word inversion in an indirect question?", a: "It is removed; the sentence follows standard subject+verb statement order" },
+                        { cat: "Indirect Rules", val: 200, q: "Do we use auxiliary 'do/does/did' in embedded indirect clauses?", a: "No, they are discarded completely" },
+                        { cat: "Indirect Rules", val: 300, q: "Politely introduce a question starting with 'Could you...'", a: "Could you tell me... / Could you explain..." },
+                        { cat: "Indirect Rules", val: 400, q: "Convert: 'Why did he quit?' (Start with 'I wonder')", a: "I wonder why he quit" },
+                        { cat: "Indirect Rules", val: 500, q: "Convert: 'Does she speak English?' (Start with 'Do you know')", a: "Do you know if/whether she speaks English" },
+                        { cat: "Complex Relative", val: 100, q: "What relative word matches 'the reason'?", a: "why" },
+                        { cat: "Complex Relative", val: 200, q: "What relative word matches 'the place'?", a: "where" },
+                        { cat: "Complex Relative", val: 300, q: "What relative word matches 'the time'?", a: "when" },
+                        { cat: "Complex Relative", val: 400, q: "Combine: 'That is the factory'. 'My dad works there'. (Use where)", a: "That is the factory where my dad works" },
+                        { cat: "Complex Relative", val: 500, q: "Explain the structure of an adjective clause modifying a noun phrase.", a: "Noun + relative pronoun + modifying verb statement clause" },
+                        { cat: "Embedding", val: 100, q: "Complete: 'Do you happen to ___ where she is?'", a: "know" },
+                        { cat: "Embedding", val: 200, q: "Complete: 'I'd like to find ___ if the deal is active'.", a: "out" },
+                        { cat: "Embedding", val: 300, q: "Is 'I ask myself why...' a valid indirect thought framework?", a: "Yes, highly expressive of curiosity" },
+                        { cat: "Embedding", val: 400, q: "Fix: 'Tell me where did you buy that token'.", a: "Tell me where you bought that token" },
+                        { cat: "Embedding", val: 500, q: "Construct a double-embedded indirect question sentence.", a: "Example: Do you know who can tell me what the answer is?" },
+                        { cat: "Syntax Logic", val: 100, q: "Fix: 'Do you know who is he?'", a: "Do you know who he is?" },
+                        { cat: "Syntax Logic", val: 200, q: "Fix: 'I wonder what time does the flight land'.", a: "I wonder what time the flight lands" },
+                        { cat: "Syntax Logic", val: 300, q: "Fix: 'The day where we met was sunny'.", a: "The day when we met" },
+                        { cat: "Syntax Logic", val: 400, q: "True or False: Indirect questions always end with a question mark.", a: "False, only if the introductory phrase is a question itself" },
+                        { cat: "Syntax Logic", val: 500, q: "Analyze the main noun clause in: 'What you choose determines your fate'.", a: "'What you choose' operates as the complete primary sentence subject" },
+                        { cat: "Polite Lexis", val: 100, q: "What does 'fluctuate' mean?", a: "To rise and fall irregularly in number or amount" },
+                        { cat: "Polite Lexis", val: 200, q: "Synonym for 'inquire'.", a: "Ask / Question / Investigate" },
+                        { cat: "Polite Lexis", val: 300, q: "What does 'happen to know' imply?", a: "Asking gently if someone has accidental or casual knowledge of a fact" },
+                        { cat: "Polite Lexis", val: 400, q: "Use 'whether' to offer two extreme options.", a: "Any valid whether... or not structure" },
+                        { cat: "Polite Lexis", val: 500, q: "Why are indirect questions heavily preferred in professional B2 emails?", a: "To establish a tone of respect, politeness, and diplomatic distance" }
+                    ]
+                },
+                {
+                    id: 11,
+                    title: "Unit 11: Conditionals & Wishes",
+                    grammar: "Present unreal conditional with unless/only if/even if, wishes and regrets",
+                    color: "#E64A19",
+                    warmup: [
+                        "If you had the opportunity to completely restart your career, would you take it?",
+                        "I wish I had invested in digital assets ten years ago; do you have any regrets?",
+                        "Unless you study consistently, you won't pass the advanced examination, will you?",
+                        "Even if they offered you a massive promotion, would you reject the relocation?",
+                        "What do you wish you could alter about your current daily environment?",
+                        "Only if you possess an official validation key can you access the secure vault.",
+                        "Do you ever regret choices made during stressful emergency scenarios?",
+                        "How do conditional qualifiers like 'even if' change the logical scope of a sentence?"
+                    ],
+                    flashcards: [
+                        { front: "I wish I were taller", back: "Present wish using past subjunctive to denote an unreal desired state" },
+                        { front: "I wouldn't go even if they paid me", back: "Conditional assertion showing an outcome independent of extreme circumstances" },
+                        { front: "Only if you study will you pass", back: "Inverted condition sequence forcing a strict qualification parameter" }
+                    ],
+                    quiz: [
+                        { q: "If I ___ you, I would consult the structural engineering team immediately.", options: ["were", "am", "had been", "would be"], correct: 0 }
+                    ],
+                    fillblanks: [
+                        { text: "I wish I [had] attended the global convention last summer.", answer: "had" }
+                    ],
+                    wordsearch: ["UNREAL", "WISH", "REGRET", "UNLESS", "CONDITION", "SUBJUNCTIVE", "WOULD", "COULD"],
+                    memory: [{ a: "Past regret", b: "wish + past perfect" }, { a: "Present wish", b: "wish + past simple" }],
+                    dragsort: {
+                        categories: ["Present Unreal", "Past Regret Structure"],
+                        items: [
+                            { text: "If I won, I'd travel", cat: "Present Unreal" },
+                            { text: "I wish I had spoken", cat: "Past Regret Structure" }
+                        ]
+                    },
+                    hangman: [{ word: "SUBJUNCTIVE", hint: "Grammar mood tracking completely imaginary, hypothetical, or counterfactual states" }],
+                    roulette: ["State an intense present wish about an impossible superpower.", "Formulate a sentence using 'only if' regarding language mastery constraints."],
+                    errors: {
+                        text: "I wish I *didn't* *lose* *my* *wallet* last weekend, but unfortunately I did.",
+                        targets: ["didn't", "lose", "my", "wallet"],
+                        corrections: { "didn't lose my wallet": "hadn't lost my wallet" }
+                    },
+                    jeopardy: [
+                        { cat: "Unreal Present", val: 100, q: "What tense follows 'If' in a second/unreal conditional?", a: "Past Simple" },
+                        { cat: "Unreal Present", val: 200, q: "What form of 'be' is traditionally preferred for all subjects in Second Conditional?", a: "were" },
+                        { cat: "Unreal Present", val: 300, q: "Complete: 'If I had a million dollars, I ___ buy a yacht'.", a: "would / could / might" },
+                        { cat: "Unreal Present", val: 400, q: "What does 'Even if it rained, I would go' mean?", a: "The rain won't change my decision to go" },
+                        { cat: "Unreal Present", val: 500, q: "Form a second conditional statement using 'unless'.", a: "Any valid target structure" },
+                        { cat: "Wishes & Regrets", val: 100, q: "What tense follows 'wish' to express a present impossible desire?", a: "Past Simple / Subjunctive" },
+                        { cat: "Wishes & Regrets", val: 200, q: "What tense follows 'wish' to express a past unfulfilled regret?", a: "Past Perfect" },
+                        { cat: "Wishes & Regrets", val: 300, q: "Express regret for: 'I didn't study'. I wish...", a: "I wish I had studied" },
+                        { cat: "Wishes & Regrets", val: 400, q: "What phrase matching 'wish' starts with 'If only'?", a: "If only" },
+                        { cat: "Wishes & Regrets", val: 500, q: "When do we use 'wish + would'?", a: "To complain about an annoying habit or desire for a situation to change" },
+                        { cat: "Only If Inversion", val: 100, q: "What syntactic phenomenon happens to the main clause after an initial 'Only if' phrase?", a: "Subject-auxiliary inversion occurs" },
+                        { cat: "Only If Inversion", val: 200, q: "Invert this: 'Only if you pay, you can enter'.", a: "Only if you pay can you enter" },
+                        { cat: "Only If Inversion", val: 300, q: "Complete: 'Only if she runs will she ___ (win)'.", a: "win (base form)" },
+                        { cat: "Only If Inversion", val: 400, q: "Fix: 'Only if I study I will pass'.", a: "Only if I study will I pass" },
+                        { cat: "Only If Inversion", val: 500, q: "Create a complete conditional statement showcasing 'Only if' inversion regarding data safety.", a: "Any valid compliant architecture example" },
+                        { cat: "Advanced Mix", val: 100, q: "Can 'might' replace 'would' in unreal outcomes?", a: "Yes, to show a less certain hypothetical outcome" },
+                        { cat: "Advanced Mix", val: 200, q: "Is 'I wish I was' acceptable in informal conversation?", a: "Yes, but 'were' is standard in B2 examinations" },
+                        { cat: "Advanced Mix", val: 300, q: "Fix: 'If I would have time, I would call you'.", a: "If I had time" },
+                        { cat: "Advanced Mix", val: 400, q: "What feeling does 'If only' express compared to 'wish'?", a: "Usually stronger, more dramatic emotional regret or longing" },
+                        { cat: "Advanced Mix", val: 500, q: "Convert to a conditional: 'Without your advice, I would have failed'.", a: "If it hadn't been for your advice / If I hadn't had your advice, I would have failed" },
+                        { cat: "B2 Vocab Scope", val: 100, q: "What is a 'regret'?", a: "A feeling of sadness or disappointment over a past action or commitment" },
+                        { cat: "B2 Vocab Scope", val: 200, q: "Use 'rejection' in a sentence featuring an unreal conditional.", a: "Any valid structure" },
+                        { cat: "B2 Vocab Scope", val: 300, q: "What does 'counterfactual' mean?", a: "Expressing what has not happened or is not the case" },
+                        { cat: "B2 Vocab Scope", val: 400, q: "Complete: 'I wish they ___ stop making that terrible noise'.", a: "would" },
+                        { cat: "B2 Vocab Scope", val: 500, q: "Explain the logical operational matrix of 'unless' within a safety workflow context.", a: "Acts as a hard gate: unless a specific criteria parameter is fulfilled, the default negative outcome happens automatically" }
+                    ]
+                },
+                {
+                    id: 12,
+                    title: "Unit 12: Future Perfect & Mixed",
+                    grammar: "Future perfect, future perfect continuous, mixed conditionals",
+                    color: "#E64A19",
+                    warmup: [
+                        "By this exact time next calendar year, will you have graduated from the academy?",
+                        "If you had checked the dashboard mapping yesterday, you wouldn't be confused now, would you?",
+                        "How long will you have been configuring systems by midnight tonight?",
+                        "If she had accepted the initial offer, she would be living in Europe today.",
+                        "What major landmarks will humanity have established by the dawn of the next century?",
+                        "If you hadn't chosen to study English, how would your current career track be altered?",
+                        "By next month, I will have been tracking development milestones for half a decade.",
+                        "Why do mixed conditionals connect past events with present operational realities?"
+                    ],
+                    flashcards: [
+                        { front: "By next year, I will have finished my degree", back: "Future perfect simple indicating an action completed before a future benchmark point" },
+                        { front: "I will have been working here for ten years", back: "Future perfect continuous highlighting future action duration up to a specific point" },
+                        { front: "If I had won, I would be rich now", back: "Mixed conditional connecting a past hypothetical cause with a present ongoing effect status" }
+                    ],
+                    quiz: [
+                        { q: "By next December, we ___ completed the entire advanced enterprise curriculum suite.", options: ["will have", "will be", "have been", "had"], correct: 0 }
+                    ],
+                    fillblanks: [
+                        { text: "If he had trained harder, he would [be] champion today.", answer: "be" }
+                    ],
+                    wordsearch: ["FUTURE", "PERFECT", "MIXED", "GRADUATED", "DECEMBER", "BEFORE", "CONTINUOUS", "WOULD"],
+                    memory: [{ a: "Past cause, present effect", b: "Mixed Conditional" }, { a: "Action done by future point", b: "Future Perfect" }],
+                    dragsort: {
+                        categories: ["Future Perfect Simple", "Mixed Clause"],
+                        items: [
+                            { text: "Will have completed", cat: "Future Perfect Simple" },
+                            { text: "If I had studied, I'd know", cat: "Mixed Clause" }
+                        ]
+                    },
+                    hangman: [{ word: "GRADUATED", hint: "Successfully completed an entire educational track receiving an official credential degree" }],
+                    roulette: ["Project your career achievements: what will you have done by 2030?", "Formulate a mixed conditional statement tracking a past mistake and its current outcome effect."],
+                    errors: {
+                        text: "By tomorrow night, I *will* *be* *written* the entire code block structural repository.",
+                        targets: ["will", "be", "written"],
+                        corrections: { "will be written": "will have written" }
+                    },
+                    jeopardy: [
+                        { cat: "Future Perfect", val: 100, q: "What is the precise structural layout for the Future Perfect Simple?", a: "Will have + past participle" },
+                        { cat: "Future Perfect", val: 200, q: "What time expression frequently introduces future perfect limits?", a: "By... / By the time..." },
+                        { cat: "Future Perfect", val: 300, q: "Complete: 'By midnight, she ___ (sleep) for eight hours straight'.", a: "will have slept" },
+                        { cat: "Future Perfect", val: 400, q: "What is the negative form of 'will have done'?", a: "will not have done / won't have done" },
+                        { cat: "Future Perfect", val: 500, q: "Form a future perfect question checking software deployment status.", a: "Will they have deployed the software by tomorrow?" },
+                        { cat: "Future Continuous", val: 100, q: "Form the Future Perfect Continuous for 'I / work / for a month'.", a: "I will have been working for a month" },
+                        { cat: "Future Continuous", val: 200, q: "What unique aspect does the continuous future perfect focus on?", a: "The ongoing duration of an event up to a specific future point" },
+                        { cat: "Future Continuous", val: 300, q: "Complete: 'In 2027, I will have been ___ (live) here for a decade'.", a: "living" },
+                        { cat: "Future Continuous", val: 400, q: "Fix: 'By noon, he will has been writing code for hours'.", a: "will have been writing" },
+                        { cat: "Future Continuous", val: 500, q: "Differentiate Future Perfect Simple vs Future Perfect Continuous.", a: "Simple focuses on completion/result; Continuous focuses on duration up to a future moment" },
+                        { cat: "Mixed Conditions", val: 100, q: "What does a mixed conditional combine?", a: "Different time periods within the cause and effect clauses (usually past and present)" },
+                        { cat: "Mixed Conditions", val: 200, q: "Identify the time frames: 'If I had studied yesterday, I would know the key today'.", a: "If clause = Past; Main clause = Present" },
+                        { cat: "Mixed Conditions", val: 300, q: "Complete: 'If she had married him then, she ___ (be) happy now'.", a: "would be" },
+                        { cat: "Mixed Conditions", val: 400, q: "Form a mixed conditional with a permanent present cause and a past effect.", a: "Example: If I weren't so lazy, I would have cleaned the room yesterday" },
+                        { cat: "Mixed Conditions", val: 500, q: "Fix: 'If I would have passed the test, I would be a manager today'.", a: "If I had passed the test" },
+                        { cat: "Syntax Matrix", val: 100, q: "Fix: 'By next week, they will finished'.", a: "will have finished" },
+                        { cat: "Syntax Matrix", val: 200, q: "Fix: 'If you bought the asset, you'd be rich now'. (Assume it happened years ago)", a: "If you had bought the asset" },
+                        { cat: "Syntax Matrix", val: 300, q: "Can 'shall' replace 'will' in future perfect simple forms formally?", a: "Yes, for first-person subjects (I/We) in ultra-formal syntax grids" },
+                        { cat: "Syntax Matrix", val: 400, q: "Identify the tense: 'Will you have been monitoring logs?'", a: "Future Perfect Continuous interrogative form" },
+                        { cat: "Syntax Matrix", val: 500, q: "Syntactically map: 'Had I known the formula, I will have checked it'. Correct the mistake.", a: "I would have checked it (or change into mixed condition context: I would know it now)" },
+                        { cat: "B2 Final Vision", val: 100, q: "What does 'milestone' mean?", a: "An important stage or event in the development of something" },
+                        { cat: "B2 Final Vision", val: 200, q: "Use 'projection' in a statement regarding future targets.", a: "Any valid descriptive statement" },
+                        { cat: "B2 Final Vision", val: 300, q: "What does 'decade' stand for?", a: "A complete period block of ten consecutive years" },
+                        { cat: "B2 Final Vision", val: 400, q: "Formulate a sentence combining 'by the time' and a future completion metric.", a: "Any valid future perfect framework" },
+                        { cat: "B2 Final Vision", val: 500, q: "Summarize the cognitive benefit of using the entire suite of advanced tenses in communicative contexts.", a: "Allows complete precision, temporal nuance, and professional conversational parity with native standards" }
+                    ]
+                }
+            ]
+        };
+
+        // GLOBAL APPLICATION SYSTEM STATE MANAGER
+        const STATE = {
+            currentModule: null,
+            currentGameId: null,
+            progress: JSON.parse(localStorage.getItem('englishB2_progress')) || {},
+            jeopardyScores: [0, 0, 0, 0], // Teams Red, Blue, Green, Yellow
+            jeopardySet: 0
+        };
+
+        const UI = {
+            init() {
+                this.renderModulesSelectorGrid();
+                this.bindGlobalActions();
+                this.applySavedTheme();
+            },
+
+            renderModulesSelectorGrid() {
+                const container = document.getElementById('units-list');
+                container.innerHTML = '';
+                DATA.modules.forEach(m => {
+                    const card = document.createElement('div');
+                    card.className = 'card-unit';
+                    card.style.borderLeftColor = m.color;
+                    card.innerHTML = `
+                        <h3 style="color:${m.color};">${m.title}</h3>
+                        <p><strong>Focus:</strong> ${m.grammar}</p>
+                        <button class="btn btn-accent" style="margin:0; width:auto; font-size:0.85rem; padding:6px 12px; min-height:36px; background:${m.color}; color:#fff;">Launch Unit Workspace</button>
+                    `;
+                    card.addEventListener('click', () => this.openDashboardWorkspace(m));
+                    container.appendChild(card);
+                });
+            },
+
+            bindGlobalActions() {
+                document.getElementById('theme-toggle').addEventListener('click', () => {
+                    const currentTheme = document.documentElement.getAttribute('data-theme');
+                    const targetTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    document.documentElement.setAttribute('data-theme', targetTheme);
+                    localStorage.setItem('englishB2_theme', targetTheme);
+                });
+
+                document.getElementById('dash-back-btn').addEventListener('click', () => {
+                    this.toggleScreen('screen-units');
+                });
+
+                document.getElementById('game-back-btn').addEventListener('click', () => {
+                    this.toggleScreen('screen-dashboard');
+                });
+
+                const buttons = document.querySelectorAll('#games-hub-buttons .btn');
+                buttons.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const gameId = parseInt(e.currentTarget.getAttribute('data-game'));
+                        this.launchGameArea(gameId);
+                    });
+                });
+            },
+
+            applySavedTheme() {
+                const theme = localStorage.getItem('englishB2_theme') || 'light';
+                document.documentElement.setAttribute('data-theme', theme);
+            },
+
+            toggleScreen(screenId) {
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                document.getElementById(screenId).classList.add('active');
+                window.scrollTo(0, 0);
+            },
+
+            openDashboardWorkspace(mod) {
+                STATE.currentModule = mod;
+                document.getElementById('dash-title').innerText = mod.title;
+                document.getElementById('dash-grammar').innerText = `Grammar Pillar: ${mod.grammar}`;
+
+                const container = document.getElementById('warmup-prompts-container');
+                container.innerHTML = '';
+                mod.warmup.forEach((q, idx) => {
+                    const row = document.createElement('div');
+                    row.style.cssText = 'padding:12px; border-bottom:1px solid rgba(230,81,0,0.1); font-size:0.95rem; line-height:1.5; display:flex; gap:10px; align-items:flex-start;';
+                    row.innerHTML = `<span><strong>${idx + 1}.</strong></span> <span style="cursor:pointer;" class="speakable-prompt">🔊 ${q}</span>`;
+                    
+                    row.querySelector('.speakable-prompt').addEventListener('click', () => {
+                        this.speakTextOffline(q);
+                    });
+                    
+                    container.appendChild(row);
+                });
+
+                this.toggleScreen('screen-dashboard');
+            },
+
+            speakTextOffline(text) {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'en-US';
+                    utterance.rate = 0.9;
+                    window.speechSynthesis.speak(utterance);
+                } else {
+                    alert("Speech synthesis not supported natively offline.");
+                }
+            },
+
+            launchGameArea(gameId) {
+                STATE.currentGameId = gameId;
+                const zone = document.getElementById('game-container-zone');
+                zone.innerHTML = '';
+
+                switch(gameId) {
+                    case 1: GamesEngine.playFlashcards(zone); break;
+                    case 2: GamesEngine.playQuiz(zone); break;
+                    case 3: GamesEngine.playFillBlanks(zone); break;
+                    case 4: GamesEngine.playWordSearch(zone); break;
+                    case 5: GamesEngine.playMemory(zone); break;
+                    case 6: GamesEngine.playDragSort(zone); break;
+                    case 7: GamesEngine.playHangman(zone); break;
+                    case 8: GamesEngine.playRoulette(zone); break;
+                    case 9: GamesEngine.playFindErrors(zone); break;
+                    case 10: GamesEngine.playJeopardy(zone); break;
+                }
+                this.toggleScreen('screen-game');
+            }
+        };
+
+        // ADVANCED STRATEGIC CORE GAMES ENGINE 
+        const GamesEngine = {
+
+            playFlashcards(target) {
+                const cards = STATE.currentModule.flashcards;
+                let idx = 0;
+
+                const view = document.createElement('div');
+                view.innerHTML = `
+                    <h2>🃏 Flashcards Mode</h2>
+                    <p class="instruction-text">Tap the card to flip between structural concepts and breakdown explanations.</p>
+                    <div class="flashcard-wrapper">
+                        <div class="flashcard" id="fc-card-obj">
+                            <div class="card-face card-front"><h3 id="fc-f-txt" style="font-size:1.3rem;"></h3><span style="font-size:0.75rem; margin-top:25px; opacity:0.7;">[Click To Flip]</span></div>
+                            <div class="card-face card-back"><p id="fc-b-txt" style="font-size:1.1rem; font-weight:600;"></p><span style="font-size:0.75rem; margin-top:25px; opacity:0.7;">[Click To See Structure]</span></div>
+                        </div>
+                    </div>
+                    <button class="btn btn-accent" id="fc-next-trigger">Next Flashcard ➡️</button>
+                `;
+                target.appendChild(view);
+
+                const cardObj = document.getElementById('fc-card-obj');
+                cardObj.addEventListener('click', () => cardObj.classList.toggle('flipped'));
+
+                const refreshFC = () => {
+                    cardObj.classList.remove('flipped');
+                    setTimeout(() => {
+                        document.getElementById('fc-f-txt').innerText = cards[idx].front;
+                        document.getElementById('fc-b-txt').innerText = cards[idx].back;
+                    }, 150);
+                };
+
+                document.getElementById('fc-next-trigger').addEventListener('click', () => {
+                    idx++;
+                    if(idx < cards.length) {
+                        refreshFC();
+                    } else {
+                        view.innerHTML = `<h2 style="text-align:center; color:var(--color-success);">🎉 Module Stack Finished!</h2><p style="text-align:center; margin:15px 0;">Excellent performance review cycle completed.</p>`;
+                    }
+                });
+
+                refreshFC();
+            },
+
+            playQuiz(target) {
+                const questions = STATE.currentModule.quiz;
+                let idx = 0;
+                let score = 0;
+
+                const view = document.createElement('div');
+                view.innerHTML = `
+                    <h2>⚡ Quiz Evaluation Mode</h2>
+                    <p class="instruction-text">Analyze syntax rules and choose the single structurally accurate option block.</p>
+                    <div class="progress-bar-container"><div class="progress-bar" id="qz-pb"></div></div>
+                    <h3 id="qz-prompt-string" style="margin:20px 0; min-height:50px;"></h3>
+                    <div id="qz-choices-stack"></div>
+                    <div id="qz-alert-box" class="feedback-message"></div>
+                `;
+                target.appendChild(view);
+
+                const renderQ = () => {
+                    document.getElementById('qz-alert-box').style.display = 'none';
+                    document.getElementById('qz-pb').style.width = `${((idx) / questions.length) * 100}%`;
+
+                    const currentQ = questions[idx];
+                    document.getElementById('qz-prompt-string').innerText = `${idx + 1}. ${currentQ.q}`;
+
+                    const stack = document.getElementById('qz-choices-stack');
+                    stack.innerHTML = '';
+
+                    currentQ.options.forEach((opt, oIdx) => {
+                        const optBtn = document.createElement('button');
+                        optBtn.className = 'quiz-option';
+                        optBtn.innerText = opt;
+                        optBtn.addEventListener('click', () => verifySelection(oIdx, optBtn));
+                        stack.appendChild(optBtn);
+                    });
+                };
+
+                const verifySelection = (chosenIdx, btn) => {
+                    const correct = questions[idx].correct;
+                    const options = document.querySelectorAll('.quiz-option');
+                    options.forEach(b => b.disabled = true);
+
+                    const alertBox = document.getElementById('qz-alert-box');
+                    alertBox.style.display = 'block';
+
+                    if(chosenIdx === correct) {
+                        btn.classList.add('correct');
+                        alertBox.innerText = "Correct! Outstanding syntax recognition.";
+                        alertBox.style.cssText = "background: rgba(46,125,50,0.15); color: var(--color-success); display:block;";
+                        score++;
+                    } else {
+                        btn.classList.add('incorrect');
+                        alertBox.innerText = "Incorrect! Study the structural definition constraints.";
+                        alertBox.style.cssText = "background: rgba(216,67,21,0.15); color: var(--color-danger); display:block;";
+                        options[correct].classList.add('correct');
+                    }
+
+                    setTimeout(() => {
+                        idx++;
+                        if(idx < questions.length) renderQ();
+                        else {
+                            view.innerHTML = `
+                                <h2 style="text-align:center;">Quiz Finished</h2>
+                                <p style="text-align:center; font-size:1.6rem; margin:20px 0; font-weight:bold;">Score: ${score} / ${questions.length}</p>
+                            `;
+                        }
+                    }, 2000);
+                };
+
+                renderQ();
+            },
+
+            playFillBlanks(target) {
+                const sentences = STATE.currentModule.fillblanks;
+                let idx = 0;
+
+                const view = document.createElement('div');
+                view.innerHTML = `
+                    <h2>✏️ Fill in the Blanks</h2>
+                    <p class="instruction-text">Type down the precise missing grammar term key to establish contextual validation alignment.</p>
+                    <h3 id="fb-string" style="margin:30px 0; line-height:1.6;"></h3>
+                    <div style="display:flex; gap:12px;">
+                        <input type="text" id="fb-user-input" style="flex:1; padding:12px; font-size:1rem; border-radius:10px; border:2px solid var(--color-primary); background:var(--bg-card); color:var(--text-main);" placeholder="Write string missing here...">
+                        <button class="btn btn-accent" id="fb-check-btn" style="margin:0; width:auto;">Check</button>
+                    </div>
+                    <div id="fb-msg" class="feedback-message"></div>
+                `;
+                target.appendChild(view);
+
+                const setupBlank = () => {
+                    document.getElementById('fb-msg').style.display = 'none';
+                    document.getElementById('fb-user-input').value = '';
+                    const exercise = sentences[idx];
+                    document.getElementById('fb-string').innerText = exercise.text.replace(/\[.*?\]/g, "_______");
+                };
+
+                document.getElementById('fb-check-btn').addEventListener('click', () => {
+                    const input = document.getElementById('fb-user-input').value.trim().toLowerCase();
+                    const correct = sentences[idx].answer.toLowerCase();
+                    const msg = document.getElementById('fb-msg');
+                    msg.style.display = 'block';
+
+                    if(input === correct) {
+                        msg.innerText = "Correct! Flawless term application.";
+                        msg.style.cssText = "background: rgba(46,125,50,0.15); color: var(--color-success); display:block;";
+                        setTimeout(() => {
+                            idx++;
+                            if(idx < sentences.length) setupBlank();
+                            else view.innerHTML = `<h2 style="text-align:center; color:var(--color-success);">🎉 Finished!</h2><p style="text-align:center;">All contextual validations resolved successfully.</p>`;
+                        }, 1500);
+                    } else {
+                        msg.innerText = "Incorrect! Analyze the word context constraints carefully.";
+                        msg.style.cssText = "background: rgba(216,67,21,0.15); color: var(--color-danger); display:block;";
+                    }
+                });
+
+                setupBlank();
+            },
+
+            playWordSearch(target) {
+                const words = STATE.currentModule.wordsearch;
+                const size = 10;
+                let grid = Array(size).fill(null).map(() => Array(size).fill(''));
+                let selected = [];
+                let found = [];
+
+                const view = document.createElement('div');
+                view.innerHTML = `
+                    <h2>🔍 Advanced Word Search</h2>
+                    <p class="instruction-text">Click individual cell matrix keys to isolate the expected list targets vocabulary keys.</p>
+                    <div style="margin-bottom:12px; font-weight:bold;">Targets: <span id="ws-keys-pool" style="color:var(--color-primary);"></span></div>
+                    <div class="wordsearch-grid" id="ws-matrix"></div>
+                    <button class="btn btn-accent" id="ws-evaluate-trigger">Submit Combination</button>
+                `;
+                target.appendChild(view);
+
+                // Horizontal placement algorithm mapping strategy
+                words.forEach(w => {
+                    let placed = false;
+                    while(!placed) {
+                        let r = Math.floor(Math.random() * size);
+                        let c = Math.floor(Math.random() * (size - w.length));
+                        let clean = true;
+                        for(let i=0; i<w.length; i++) { if(grid[r][c+i] !== '') clean = false; }
+                        if(clean) {
+                            for(let i=0; i<w.length; i++) grid[r][c+i] = w[i];
+                            placed = true;
+                        }
+                    }
+                });
+
+                const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                for(let r=0; r<size; r++) {
+                    for(let c=0; c<size; c++) { if(grid[r][c] === '') grid[r][c] = letters[Math.floor(Math.random() * 26)]; }
+                }
+
+                const printGrid = () => {
+                    const mEl = document.getElementById('ws-matrix');
+                    mEl.innerHTML = '';
+                    document.getElementById('ws-keys-pool').innerText = words.filter(item => !found.includes(item)).join(", ");
+
+                    for(let r=0; r<size; r++) {
+                        for(let c=0; c<size; c++) {
+                            const cell = document.createElement('div');
+                            cell.className = 'ws-cell';
+                            cell.innerText = grid[r][c];
+                            cell.setAttribute('data-coord', `${r}-${c}`);
+                            cell.addEventListener('click', () => {
+                                cell.classList.toggle('selected');
+                                toggleSelection(`${r}-${c}`);
+                            });
+                            mEl.appendChild(cell);
+                        }
+                    }
+                };
+
+                const toggleSelection = (coord) => {
+                    const index = selected.indexOf(coord);
+                    if(index > -1) selected.splice(index, 1);
+                    else selected.push(coord);
+                };
+
+                document.getElementById('ws-evaluate-trigger').addEventListener('click', () => {
+                    let collectedStr = selected.map(coord => {
+                        const [r, c] = coord.split("-").map(Number);
+                        return grid[r][c];
+                    }).join("");
+
+                    let reversedStr = collectedStr.split("").reverse().join("");
+                    let match = words.find(w => (w === collectedStr || w === reversedStr) && !found.includes(w));
+
+                    if(match) {
+                        found.push(match);
+                        selected.forEach(coord => {
+                            const node = document.querySelector(`[data-coord="${coord}"]`);
+                            if(node) { node.classList.remove('selected'); node.classList.add('found'); }
+                        });
+                        selected = [];
+                        if(found.length === words.length) alert("Victory! Entire matrix grid parameters fully extracted.");
+                        else document.getElementById('ws-keys-pool').innerText = words.filter(item => !found.includes(item)).join(", ");
+                    } else {
+                        alert("Selection does not correspond to an undetected targets term list component.");
+                    }
+                });
+
+                printGrid();
+            },
+
+            playMemory(target) {
+                const pairs = STATE.currentModule.memory;
+                let deck = [];
+                pairs.forEach((p, idx) => {
+                    deck.push({ text: p.a, matchId: idx });
+                    deck.push({ text: p.b, matchId: idx });
+                });
+                deck.sort(() => Math.random() - 0.5);
+
+                const view = document.createElement('div');
+                view.innerHTML = `
+                    <h2>🧠 Memory Matrix Synchronizer</h2>
+                    <p class="instruction-text">Reveal hidden entities pairwise to bridge relational grammar links.</p>
+                    <div class="memory-grid" id="mm-board"></div>
+                `;
+                target.appendChild(view);
+
+                let flipped = [];
+                let lock = false;
+                const board = document.getElementById('mm-board');
+
+                deck.forEach((card, dIdx) => {
+                    const node = document.createElement('div');
+                    node.className = 'memory-card';
+                    node.innerText = card.text;
+                    node.setAttribute('data-idx', dIdx);
+                    node.addEventListener('click', () => {
+                        if(lock || node.classList.contains('flipped') || node.classList.contains('matched')) return;
+                        node.classList.add('flipped');
+                        flipped.push({ data: card, element: node });
+
+                        if(flipped.length === 2) {
+                            lock = true;
+                            if(flipped[0].data.matchId === flipped[1].data.matchId) {
+                                flipped[0].element.classList.add('matched');
+                                flipped[1].element.classList.add('matched');
+                                flipped = [];
+                                lock = false;
+                            } else {
+                                setTimeout(() => {
+                                    flipped[0].element.classList.remove('flipped');
+                                    flipped[1].element.classList.remove('flipped');
+                                    flipped = [];
+                                    lock = false;
+                                }, 1200);
+                            }
+                        }
+                    });
+                    board.appendChild(node);
+                });
+            },
+
+            playDragSort(target) {
+                const config = STATE.currentModule.dragsort;
+                const view = document.createElement('div');
+                view.innerHTML = `
+                    <h2>📦 Drag & Sort Architecture</h2>
+                    <p class="instruction-text">Map each grammatical segment card to its correct taxonomy box folder destination.</p>
+                    <div id="ds-stack-area" style="display:flex; flex-direction:column; gap:10px; margin:20px 0;"></div>
+                    <button class="btn btn-accent" id="ds-evaluate-btn">Verify Category Sorting</button>
+                `;
+                target.appendChild(view);
+
+                const stack = document.getElementById('ds-stack-area');
+                config.items.forEach((item, index) => {
+                    const row = document.createElement('div');
+                    row.className = 'quiz-option';
+                    row.style.cssText = 'display:flex; align-items:center; justify-content:space-between; cursor:default;';
+                    let selectOptions = config.categories.map(cat => `<option value="${cat}">${cat}</option>`).join("");
+                    row.innerHTML = `
+                        <span style="font-weight:600;">"${item.text}"</span>
+                        <select id="ds-sel-${index}" style="padding:8px; border-radius:6px; background:var(--bg-primary); color:var(--text-main); font-weight:bold; border:1px solid var(--color-primary);">
+                            ${selectOptions}
+                        </select>
+                    `;
+                    stack.appendChild(row);
+                });
+
+                document.getElementById('ds-evaluate-btn').addEventListener('click', () => {
+                    let correctCount = 0;
+                    config.items.forEach((item, idx) => {
+                        if(document.getElementById(`ds-sel-${idx}`).value === item.cat) correctCount++;
+                    });
+                    alert(`Evaluation complete: ${correctCount} out of ${config.items.length} segments aligned correctly.`);
+                });
+            },
+
+            playHangman(target) {
+                const pool = STATE.currentModule.hangman;
+                const session = pool[Math.floor(Math.random() * pool.length)];
+                let lettersPicked = [];
+                let lives = 6;
+
+                const view = document.createElement('div');
+                view.innerHTML = `
+                    <h2>💀 Digital Hangman Module</h2>
+                    <p class="instruction-text">Deduce target lexical strings before exhausting systemic life tolerances.</p>
+                    <p style="font-weight:bold; color:var(--color-primary); margin-bottom:8px;">HINT CLAUSE: "${session.hint}"</p>
+                    <p style="font-size:1rem; font-weight:bold; margin-bottom:12px;">Remaining Lifelines: <span id="hm-life-span" style="color:var(--color-danger);">${lives}</span> 🩸</p>
+                    <div class="word-display" id="hm-crypt-display"></div>
+                    <div class="keyboard-grid" id="hm-onscreen-keyboard"></div>
+                `;
+                target.appendChild(view);
+
+                const updateCrypt = () => {
+                    let displayStr = "";
+                    let complete = true;
+                    for(let char of session.word) {
+                        if(lettersPicked.includes(char)) displayStr += char + " ";
+                        else { displayStr += "_ "; complete = false; }
+                    }
+                    document.getElementById('hm-crypt-display').innerText = displayStr.trim();
+                    if(complete) endSession(true);
+                    else if(lives <= 0) endSession(false);
+                };
+
+                const endSession = (win) => {
+                    document.getElementById('hm-onscreen-keyboard').innerHTML = win ? 
+                        `<h3 style="grid-column: span 7; text-align:center; color:var(--color-success);">Victory! Word resolved perfectly.</h3>` :
+                        `<h3 style="grid-column: span 7; text-align:center; color:var(--color-danger);">Failed! Target sequence was: ${session.word}</h3>`;
+                };
+
+                const abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+                const kb = document.getElementById('hm-onscreen-keyboard');
+                abc.forEach(l => {
+                    const btn = document.createElement('button');
+                    btn.className = 'key-btn';
+                    btn.innerText = l;
+                    btn.addEventListener('click', () => {
+                        btn.disabled = true;
+                        lettersPicked.push(l);
+                        if(!session.word.includes(l)) {
+                            lives--;
+                            document.getElementById('hm-life-span').innerText = lives;
+                        }
+                        updateCrypt();
+                    });
+                    kb.appendChild(btn);
+                });
+
+                updateCrypt();
+            },
+
+            playRoulette(target) {
+                const prompts = STATE.currentModule.roulette;
+                const view = document.createElement('div');
+                view.innerHTML = `
+                    <h2>🎡 Wheel of Questions</h2>
+                    <p class="instruction-text">Spin the active radial wheel to select an existential conversation prompt statement.</p>
+                    <div class="roulette-container">
+                        <div class="wheel-pointer"></div>
+                        <div class="wheel" id="ui-wheel-object"></div>
+                    </div>
+                    <button class="btn btn-accent" id="wheel-spin-trigger">Spin Radial Wheel</button>
+                    <h3 id="wheel-output-panel" style="text-align:center; min-height:45px; margin-top:20px; color:var(--color-primary); padding:10px; line-height:1.4;"></h3>
+                `;
+                target.appendChild(view);
+
+                let spinning = false;
+                document.getElementById('wheel-spin-trigger').addEventListener('click', () => {
+                    if(spinning) return;
+                    spinning = true;
+                    document.getElementById('wheel-output-panel').innerText = "";
+                    const deg = Math.floor(Math.random() * 360) + 1440;
+                    const wheel = document.getElementById('ui-wheel-object');
+                    wheel.style.transform = `rotate(${deg}deg)`;
+
+                    setTimeout(() => {
+                        spinning = false;
+                        const pick = prompts[Math.floor(Math.random() * prompts.length)];
+                        document.getElementById('wheel-output-panel').innerText = `🎯 Selected Prompt: "${pick}"`;
+                        wheel.style.transition = 'none';
+                        wheel.style.transform = `rotate(${deg % 360}deg)`;
+                        setTimeout(() => { wheel.style.transition = 'transform 3s cubic-bezier(0.1, 0.8, 0.1, 1)'; }, 50);
+                    }, 3050);
+                });
+            },
+
+            // ADVANCED B2 EXTRAS MODULES:
+            playFindErrors(target) {
+                const errorConfig = STATE.currentModule.errors;
+                let textRaw = errorConfig.text;
+                let foundErrors = 0;
+                let totalToFind = errorConfig.targets.length;
+
+                const view = document.createElement('div');
+                view.innerHTML = `
+                    <h2>🔎 Find Grammatical Errors</h2>
+                    <p class="instruction-text">Analyze the paragraph block below. Click on individual wrong vocabulary or syntax structures to fix them inline.</p>
+                    <div style="margin-bottom:10px; font-weight:bold;">Progress Tracker: <span id="err-score-span">0</span> / ${totalToFind} Errors Rectified</div>
+                    <div class="error-text-container" id="err-text-hub"></div>
+                `;
+                target.appendChild(view);
+
+                const containerHub = document.getElementById('err-text-hub');
+                // Tokenize words based on structural markers safely
+                let tokens = textRaw.split(" ");
+                tokens.forEach(tok => {
+                    if(tok.startsWith("*") && tok.endsWith("*")) {
+                        let cleanWord = tok.replace(/\*/g, "");
+                        const span = document.createElement('span');
+                        span.className = "err-word";
+                        span.innerText = cleanWord + " ";
+                        span.addEventListener('click', () => {
+                            if(span.classList.contains('corrected')) return;
+                            span.classList.add('corrected');
+                            foundErrors++;
+                            document.getElementById('err-score-span').innerText = foundErrors;
+                            if(foundErrors === totalToFind) {
+                                alert("Fantastic proofreading! The entire text matrix repository aligns with strict B2 syntax guidelines.");
+                            }
+                        });
+                        containerHub.appendChild(span);
+                    } else {
+                        const plainTextNode = document.createTextNode(tok + " ");
+                        containerHub.appendChild(plainTextNode);
+                    }
+                });
+            },
+
+            playJeopardy(target) {
+                const dataSet = STATE.currentModule.jeopardy;
+                
+                // Group dataset into categories dynamically
+                let categories = {};
+                dataSet.forEach(item => {
+                    if(!categories[item.cat]) categories[item.cat] = [];
+                    categories[item.cat].push(item);
+                });
+
+                const view = document.createElement('div');
+                view.innerHTML = `
+                    <h2>🏆 Interactive Jeopardy Tournament</h2>
+                    <p class="instruction-text">Select values across knowledge tracks. Manage multi-team score configurations manually via control panels.</p>
+                    <div class="jeopardy-grid" id="jp-board-grid"></div>
+                    
+                    <div class="scoreboard">
+                        <div class="score-box team-0">🔴 Team A: $<span id="jp-s-0">0</span><br><button class="btn btn-accent" style="min-height:30px; height:30px; padding:2px; font-size:0.8rem; margin:4px 0 0 0;" onclick="adjustJpScore(0, 100)">+100</button> <button class="btn btn-outline" style="min-height:30px; height:30px; padding:2px; font-size:0.8rem; color:#fff; border-color:#fff; margin:4px 0 0 0;" onclick="adjustJpScore(0, -100)">-100</button></div>
+                        <div class="score-box team-1">🔵 Team B: $<span id="jp-s-1">0</span><br><button class="btn btn-accent" style="min-height:30px; height:30px; padding:2px; font-size:0.8rem; margin:4px 0 0 0;" onclick="adjustJpScore(1, 100)">+100</button> <button class="btn btn-outline" style="min-height:30px; height:30px; padding:2px; font-size:0.8rem; color:#fff; border-color:#fff; margin:4px 0 0 0;" onclick="adjustJpScore(1, -100)">-100</button></div>
+                        <div class="score-box team-2">🟢 Team C: $<span id="jp-s-2">0</span><br><button class="btn btn-accent" style="min-height:30px; height:30px; padding:2px; font-size:0.8rem; margin:4px 0 0 0;" onclick="adjustJpScore(2, 100)">+100</button> <button class="btn btn-outline" style="min-height:30px; height:30px; padding:2px; font-size:0.8rem; color:#fff; border-color:#fff; margin:4px 0 0 0;" onclick="adjustJpScore(2, -100)">-100</button></div>
+                        <div class="score-box team-3">🟡 Team D: $<span id="jp-s-3">0</span><br><button class="btn btn-accent" style="min-height:30px; height:30px; padding:2px; font-size:0.8rem; margin:4px 0 0 0;" onclick="adjustJpScore(3, 100)">+100</button> <button class="btn btn-outline" style="min-height:30px; height:30px; padding:2px; font-size:0.8rem; color:var(--text-main); border-color:var(--text-main); margin:4px 0 0 0;" onclick="adjustJpScore(3, -100)">-100</button></div>
+                    </div>
+
+                    <div id="jp-modal-overlay" style="display:none; margin-top:20px; padding:20px; background:var(--bg-primary); border:3px solid var(--color-primary); border-radius:12px;">
+                        <h4 id="jp-modal-cat-val" style="color:var(--color-primary);"></h4>
+                        <p id="jp-modal-q-prompt" style="font-size:1.2rem; margin:15px 0; font-weight:bold;"></p>
+                        <button class="btn btn-accent" id="jp-modal-reveal-trigger">Reveal System Answer</button>
+                        <p id="jp-modal-a-reveal" style="display:none; margin-top:15px; font-style:italic; color:var(--color-success); font-size:1.1rem;"></p>
+                    </div>
+                `;
+                target.appendChild(view);
+
+                // Update displays locally
+                window.adjustJpScore = (teamIdx, value) => {
+                    STATE.jeopardyScores[teamIdx] += value;
+                    document.getElementById(`jp-s-${teamIdx}`).innerText = STATE.jeopardyScores[teamIdx];
+                };
+
+                const gridBoard = document.getElementById('jp-board-grid');
+                let catNames = Object.keys(categories);
+
+                // Print headers row cleanly
+                catNames.forEach(cat => {
+                    const head = document.createElement('div');
+                    head.className = "jeopardy-cat";
+                    head.innerText = cat;
+                    gridBoard.appendChild(head);
+                });
+
+                // Render 5 grid tiers rows sequentially (100 down to 500 values)
+                for(let tierIndex = 0; tierIndex < 5; tierIndex++) {
+                    catNames.forEach(cat => {
+                        const cellData = categories[cat][tierIndex];
+                        const cellNode = document.createElement('div');
+                        cellNode.className = "jeopardy-cell";
+                        cellNode.innerText = `$${cellData.val}`;
+                        cellNode.addEventListener('click', () => {
+                            if(cellNode.classList.contains('played')) return;
+                            cellNode.classList.add('played');
+                            
+                            // Pop configuration options panel modal
+                            const overlay = document.getElementById('jp-modal-overlay');
+                            overlay.style.display = "block";
+                            document.getElementById('jp-modal-cat-val').innerText = `${cellData.cat} — $${cellData.val}`;
+                            document.getElementById('jp-modal-q-prompt').innerText = cellData.q;
+                            
+                            const revealNode = document.getElementById('jp-modal-a-reveal');
+                            revealNode.style.display = "none";
+                            revealNode.innerText = `Expected Resolution Key: ${cellData.a}`;
+                        });
+                        gridBoard.appendChild(cellNode);
+                    });
+                }
+
+                document.getElementById('jp-modal-reveal-trigger').addEventListener('click', () => {
+                    document.getElementById('jp-modal-a-reveal').style.display = "block";
+                });
+            }
+        };
+
+        // SETUP INITIALIZATION CORE LOGIC ON WINDOW LOAD
+        document.addEventListener('DOMContentLoaded', () => UI.init());
+
+        // HARD CODED RUNTIME COMPLIANCE VALIDATOR HOOK
+        setInterval(() => {
+            const signature = document.getElementById('firma-seguridad');
+            const appWorkspace = document.getElementById('app');
+            const failureOverlay = document.getElementById('acceso-denegado');
+            if (!signature || signature.textContent.trim() !== 'Creado por Tony Salas & German Peña' ||
+                getComputedStyle(signature).display === 'none' ||
+                getComputedStyle(signature).opacity === '0' ||
+                getComputedStyle(signature).visibility === 'hidden') {
+                if (appWorkspace) appWorkspace.style.display = 'none';
+                if (!failureOverlay) {
+                    const blockDiv = document.createElement('div');
+                    blockDiv.id = 'acceso-denegado';
+                    blockDiv.style.cssText = 'position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:99999;';
+                    blockDiv.innerHTML = '<p style="color:red;font-size:2rem;text-align:center;padding:2rem;">⚠️ ACCESO DENEGADO ⚠️<br><span style="font-size:1rem;">El código de seguridad y la firma han sido alterados. CREA TU VERGA TU, CARA E MONDA.</span></p>';
+                    document.body.appendChild(blockDiv);
+                }
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

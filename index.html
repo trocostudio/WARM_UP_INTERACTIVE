@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Interactive - Learning Portal</title>
+    <style>
+        /* --- CSS ARCHITECTURE & RESET --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        :root {
+            --bg-base: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-title: #0f172a;
+            --text-body: #475569;
+            --border-ui: #e2e8f0;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            
+            /* Gradients for Level Identities */
+            --grad-intro: linear-gradient(135deg, #eab308, #ca8a04);
+            --grad-a1: linear-gradient(135deg, #ef4444, #b91c1c);
+            --grad-a2: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            --grad-b1: linear-gradient(135deg, #10b981, #047857);
+            --grad-b2: linear-gradient(135deg, #f97316, #c2410c);
+            --grad-c1: linear-gradient(135deg, #8b5cf6, #6d28d9);
+        }
+
+        [data-theme="dark"] {
+            --bg-base: #0f172a;
+            --bg-card: #1e293b;
+            --text-title: #f8fafc;
+            --text-body: #94a3b8;
+            --border-ui: #334155;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Roboto', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-body);
+            min-height: 100vh;
+            padding: 3rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* --- STICKY CONFIGURATIONS --- */
+        .theme-toggle {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            background-color: var(--bg-card);
+            border: 2px solid var(--border-ui);
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            box-shadow: var(--shadow-sm);
+            z-index: 1000;
+            touch-action: manipulation;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        #app {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            gap: 3.5rem;
+        }
+
+        /* --- TEXT BLOCK BANNER --- */
+        .welcome {
+            text-align: center;
+            animation: moveDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        .welcome h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-title);
+            letter-spacing: -0.03em;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome p {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text-body);
+        }
+
+        /* --- CARD GRID MATRIX --- */
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            width: 100%;
+        }
+
+        /* --- THE INTERACTIVE CARDS --- */
+        .level-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-ui);
+            border-radius: 20px;
+            padding: 2.25rem;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            min-height: 280px;
+            touch-action: manipulation;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Responsive staggered delays initialized dynamically or via static selectors */
+        .level-card:nth-child(1) { animation-delay: 0.05s; --accent-g: var(--grad-intro); }
+        .level-card:nth-child(2) { animation-delay: 0.15s; --accent-g: var(--grad-a1); }
+        .level-card:nth-child(3) { animation-delay: 0.25s; --accent-g: var(--grad-a2); }
+        .level-card:nth-child(4) { animation-delay: 0.35s; --accent-g: var(--grad-b1); }
+        .level-card:nth-child(5) { animation-delay: 0.45s; --accent-g: var(--grad-b2); }
+        .level-card:nth-child(6) { animation-delay: 0.55s; --accent-g: var(--grad-c1); }
+
+        .level-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: var(--accent-g);
+        }
+
+        .level-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: transparent;
+        }
+
+        /* --- INNER COMPONENT STYLES --- */
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .badge {
+            background: var(--accent-g);
+            color: #ffffff;
+            font-size: 1.15rem;
+            font-weight: 700;
+            padding: 0.4rem 1.1rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .graphic-icon {
+            font-size: 2rem;
+        }
+
+        .card-contents h2 {
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: var(--text-title);
+            margin-bottom: 0.6rem;
+        }
+
+        .card-contents p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-body);
+        }
+
+        .card-action-bar {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-title);
+            min-height: 48px; /* Ensures seamless touchscreen target criteria */
+        }
+
+        .arrow-glyph {
+            transition: transform 0.2s ease;
+        }
+
+        .level-card:hover .arrow-glyph {
+            transform: translateX(6px);
+        }
+
+        /* --- ANIMATION KEYFRAMES --- */
+        @keyframes moveDown {
+            from { opacity: 0; transform: translateY(-25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- VIEWPORT RESPONSIVENESS --- */
+        @media (max-width: 640px) {
+            body { padding: 5rem 1rem 2rem 1rem; }
+            .welcome h1 { font-size: 2rem; }
+            .matrix-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+            .theme-toggle { top: 1rem; right: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LIGHT / DARK SYSTEM TOGGLE -->
+    <button class="theme-toggle" id="themeSwitchBtn" aria-label="Toggle structural theme">🌓</button>
+
+    <!-- CONTENT PORTAL WRAPPER -->
+    <div id="app">
+        <!-- HEADER BLOCK -->
+        <div class="welcome">
+            <h1>INTERACTIVE ACTIVITIES</h1>
+            <p>Developed by Tony Gabriel & German Peña</p>
+        </div>
+
+        <!-- MATRIX RENDERING ELEMENT -->
+        <main class="matrix-grid" id="portalMatrix"></main>
+    </div>
+
+    <!-- REQUIRED SECURITY FOOTPRINT -->
+    <div id="firma-seguridad" style="position:fixed;bottom:20px;left:30px;font-family:Georgia, 'Times New Roman', serif;font-style:italic;font-size:14px;opacity:0.7;z-index:9999;pointer-events:none;">Creado por Tony Salas & German Peña</div>
+
+    <script>
+        // --- DATA DICTIONARY ---
+        const CONFIG_DATA = {
+            levels: [
+                {
+                    tag: "INTRO",
+                    title: "Starter / Breakthrough",
+                    desc: "Perfect for complete beginners. Learn foundational phrasing, numbers, core color codes, and immediate basic greetings.",
+                    icon: "🗺️",
+                    destination: "english_Intro.html"
+                },
+                {
+                    tag: "A1",
+                    title: "Elementary / Basic",
+                    desc: "Construct the roots of your learning. Master rudimentary grammar formulas, basic daily descriptions, and practical vocab sets.",
+                    icon: "🌱",
+                    destination: "english_A1.html"
+                },
+                {
+                    tag: "A2",
+                    title: "Pre-Intermediate",
+                    desc: "Scale your conversational reach. Learn to speak clearly about immediate tasks, domestic routines, and your immediate environment.",
+                    icon: "🚀",
+                    destination: "english_A2.html"
+                },
+                {
+                    tag: "B1",
+                    title: "Intermediate",
+                    desc: "Enter the threshold of functional fluency. State your viewpoints, map personal ambitions, and follow standard topical discussions.",
+                    icon: "💡",
+                    destination: "english_B1.html"
+                },
+                {
+                    tag: "B2",
+                    title: "Upper-Intermediate",
+                    desc: "Communicate fluidly with natural text syntax. Produce coherent arguments and talk interactively with native speakers seamlessly.",
+                    icon: "🔥",
+                    destination: "english_B2.html"
+                },
+                {
+                    tag: "C1",
+                    title: "Advanced Mastery",
+                    desc: "Command complex structural variations. Read demanding literature and configure expressions effortlessly for executive spaces.",
+                    icon: "🎓",
+                    destination: "english_C1.html"
+                }
+            ]
+        };
+
+        // --- INTERACTIVE DRIVER OBJECT ---
+        const PortalApp = {
+            init() {
+                this.generateUI();
+                this.initializeTheme();
+                this.registerInteractiveActions();
+            },
+
+            generateUI() {
+                const targetGrid = document.getElementById('portalMatrix');
+                if (!targetGrid) return;
+
+                targetGrid.innerHTML = CONFIG_DATA.levels.map(item => `
+                    <div class="level-card" data-href="${item.destination}">
+                        <div class="card-top">
+                            <span class="badge">${item.tag}</span>
+                            <span class="graphic-icon">${item.icon}</span>
+                        </div>
+                        <div class="card-contents">
+                            <h2>${item.title}</h2>
+                            <p>${item.desc}</p>
+                        </div>
+                        <div class="card-action-bar">
+                            <span>Explore Modules</span>
+                            <span class="arrow-glyph">➔</span>
+                        </div>
+                    </div>
+                `).join('');
+            },
+
+            initializeTheme() {
+                const storedTheme = localStorage.getItem('inter_theme') || 'light';
+                document.documentElement.setAttribute('data-theme', storedTheme);
+            },
+
+            registerInteractiveActions() {
+                // Theme toggle execution
+                const actionThemeBtn = document.getElementById('themeSwitchBtn');
+                if (actionThemeBtn) {
+                    actionThemeBtn.addEventListener('click', () => {
+                        const nextSelection = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                        document.documentElement.setAttribute('data-theme', nextSelection);
+                        localStorage.setItem('inter_theme', nextSelection);
+                    });
+                }
+
+                // Card route execution
+                const interactiveCards = document.querySelectorAll('.level-card');
+                interactiveCards.forEach(element => {
+                    element.addEventListener('click', () => {
+                        const directRoute = element.getAttribute('data-href');
+                        if (directRoute) {
+                            window.location.href = directRoute;
+                        }
+                    });
+                });
+            }
+        };
+
+        // Fire UI creation on initial render
+        document.addEventListener('DOMContentLoaded', () => {
+            PortalApp.init();
+        });
+
+        // --- MANDATORY CRYPTOGRAPHIC INTEGRITY CHECK ---
+        setInterval(() => {
+            const firma = document.getElementById('firma-seguridad');
+            const app = document.getElementById('app');
+            const bloqueado = document.getElementById('acceso-denegado');
+            if (!firma || firma.textContent.trim() !== 'Creado por Tony Salas & German Peña' ||
+            getComputedStyle(firma).display === 'none' ||
+            getComputedStyle(firma).opacity === '0' ||
+            getComputedStyle(firma).visibility === 'hidden') {
+                if (app) app.style.display = 'none';
+                if (!bloqueado) {
+                    const div = document.createElement('div');
+                    div.id = 'acceso-denegado';
+                    div.style.cssText = 'position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:99999;';
+                    div.innerHTML = '<p style="color:red;font-family:sans-serif;font-size:2rem;text-align:center;padding:2rem;">⚠️ ACCESO DENEGADO ⚠️<br><span style="font-size:1rem;color:#fff;">El código de seguridad y la firma han sido alterados. CREA TU VERGA TU, CARA E MONDA.</span></p>';
+                    document.body.appendChild(div);
+                }
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

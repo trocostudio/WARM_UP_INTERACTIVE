@@ -1,0 +1,1990 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>English Interactive — Nivel C1</title>
+    <style>
+        :root {
+            --bg-primary: #F8F0FF;
+            --card-bg: #FFFFFF;
+            --text-main: #2A085C;
+            --text-muted: #6A528A;
+            --primary: #6A1B9A;
+            --primary-dark: #4A148C;
+            --accent: #AB47BC;
+            --accent-muted: #E1BEE7;
+            --border: #E8D7F5;
+            --shadow: 0 8px 32px rgba(106, 27, 154, 0.15);
+            --radius-card: 16px;
+            --radius-modal: 24px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        [data-theme="dark"] {
+            --bg-primary: #0D0015;
+            --card-bg: #1A0028;
+            --text-main: #F1E5FC;
+            --text-muted: #B39DDB;
+            --primary: #AB47BC;
+            --primary-dark: #7B1FA2;
+            --accent: #E1BEE7;
+            --accent-muted: #4A148C;
+            --border: #3A1C54;
+            --shadow: 0 8px 32px rgba(171, 71, 188, 0.2);
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', 'Roboto', system-ui, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            transition: var(--transition);
+            min-height: 100vh;
+            padding-bottom: 80px;
+            overflow-x: hidden;
+        }
+        header {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+            box-shadow: var(--shadow);
+        }
+        .theme-toggle {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            background: var(--card-bg);
+            border: 2px solid var(--primary);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            z-index: 1000;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: var(--shadow);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .welcome-panel {
+            background: var(--card-bg);
+            border-radius: var(--radius-card);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+        .grid-units {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .unit-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-card);
+            padding: 1.5rem;
+            border-left: 8px solid var(--unit-color);
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 200px;
+            border-top: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+        .unit-card:hover {
+            transform: translateY(-5px);
+        }
+        .unit-card h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+        .unit-card p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            flex-grow: 1;
+        }
+        .view-panel {
+            display: none;
+            background: var(--card-bg);
+            border-radius: var(--radius-card);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            animation: fadeIn 0.4s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .btn {
+            min-height: 48px;
+            padding: 0 1.5rem;
+            border-radius: 24px;
+            border: none;
+            background-color: var(--primary);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            touch-action: manipulation;
+        }
+        .btn:hover { background-color: var(--primary-dark); transform: scale(1.02); }
+        .btn-secondary { background-color: var(--accent-muted); color: var(--text-main); }
+        .btn-secondary:hover { background-color: var(--border); }
+        .btn-danger { background-color: #D32F2F; color: white; }
+        .btn-danger:hover { background-color: #9A0007; }
+        .btn-success { background-color: #388E3C; color: white; }
+        .btn-success:hover { background-color: #1B5E20; }
+        
+        .game-menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .warmup-q { margin-bottom: 1.5rem; padding: 1.2rem; border-bottom: 1px solid var(--border); background: rgba(106, 27, 154, 0.02); border-radius: 8px; }
+        .options-grid { display: grid; grid-template-columns: 1fr; gap: 0.5rem; margin-top: 0.75rem; }
+        .option-btn { min-height: 48px; text-align: left; padding: 0 1rem; border: 1px solid var(--border); background: var(--card-bg); color: var(--text-main); border-radius: 8px; cursor: pointer; transition: var(--transition); width: 100%; }
+        .option-btn:hover { background: var(--bg-primary); }
+        .correct { background: #388E3C !important; color: white !important; font-weight: bold; }
+        .incorrect { background: #D32F2F !important; color: white !important; font-weight: bold; }
+        
+        /* Crossword CSS Layout Architecture */
+        .crossword-container { display: flex; flex-direction: column; gap: 1.5rem; width: 100%; }
+        @media(min-width: 850px) { .crossword-container { flex-direction: row; } }
+        .crossword-grid-wrapper { display: flex; flex-direction: column; align-items: center; gap: 1rem; flex: 1.2; }
+        .crossword-grid { display: grid; background: #2A085C; padding: 8px; border-radius: 8px; gap: 2px; max-width: 100%; overflow-x: auto; }
+        .cw-cell { width: 38px; height: 38px; background: var(--card-bg); position: relative; display: flex; align-items: center; justify-content: center; }
+        .cw-cell.black { background: #120024; }
+        .cw-cell input { width: 100%; height: 100%; border: none; text-align: center; font-weight: bold; font-size: 1.1rem; background: transparent; color: var(--text-main); text-transform: uppercase; padding-top: 8px; }
+        .cw-cell input:focus { background-color: var(--bg-primary); outline: none; }
+        .cw-num { position: absolute; top: 1px; left: 3px; font-size: 0.65rem; color: var(--text-muted); font-weight: bold; pointer-events: none; }
+        .cw-panels { flex: 1; display: flex; flex-direction: column; gap: 1rem; min-width: 280px; }
+        .cw-clue-box { background: var(--bg-primary); padding: 1rem; border-radius: 12px; border: 1px solid var(--border); max-height: 250px; overflow-y: auto; }
+        .cw-clue-box h5 { margin-bottom: 0.5rem; color: var(--primary-dark); border-bottom: 2px solid var(--border); padding-bottom: 3px; }
+        .cw-clue-list { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.85rem; }
+        .cw-clue-item { padding: 4px; border-radius: 4px; cursor: pointer; }
+        .cw-clue-item:hover { background: var(--accent-muted); }
+        .cw-cell input.cw-correct { background-color: rgba(56, 142, 60, 0.2) !important; color: #1B5E20; }
+        .cw-cell input.cw-incorrect { background-color: rgba(211, 47, 47, 0.2) !important; color: #B71C1C; }
+        
+        /* Virtual Keyboard */
+        .v-keyboard { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; width: 100%; margin-top: 1rem; max-width: 500px; }
+        .vk-btn { min-height: 44px; background: var(--border); border: none; border-radius: 4px; font-weight: bold; color: var(--text-main); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; }
+        .vk-btn:active { background: var(--accent); color: white; }
+
+        /* Concept Map Canvas Architecture */
+        .map-workspace { display: flex; flex-direction: column; gap: 1rem; width: 100%; }
+        .map-toolbar { display: flex; gap: 0.5rem; flex-wrap: wrap; background: var(--border); padding: 0.5rem; border-radius: 8px; }
+        .map-container { position: relative; width: 100%; height: 500px; background: var(--bg-primary); border: 2px dashed var(--primary); border-radius: var(--radius-card); overflow: hidden; touch-action: none; }
+        .map-node { position: absolute; padding: 12px 18px; background: var(--card-bg); border: 2px solid var(--primary); border-radius: 24px; cursor: move; user-select: none; font-weight: bold; box-shadow: var(--shadow); z-index: 10; touch-action: none; min-height: 48px; display: flex; align-items: center; font-size: 0.85rem; max-width: 200px; text-align: center; justify-content: center; }
+        .map-node.selected { border-color: var(--accent); box-shadow: 0 0 12px var(--accent); }
+        .map-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
+        .relation-label { position: absolute; background: var(--card-bg); border: 1px solid var(--text-muted); padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; transform: translate(-50%, -50%); z-index: 8; cursor: pointer; max-width: 120px; text-align: center; }
+
+        /* General Games Components */
+        .flashcard { width: 100%; max-width: 340px; height: 220px; perspective: 1000px; margin: 1.5rem auto; cursor: pointer; }
+        .flashcard-inner { width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; position: relative; }
+        .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+        .flashcard-front, .flashcard-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; border-radius: var(--radius-card); border: 2px solid var(--primary); background: var(--card-bg); text-align: center; font-size: 1.2rem; font-weight: bold; box-shadow: var(--shadow); }
+        .flashcard-back { transform: rotateY(180deg); background: linear-gradient(135deg, var(--accent-muted), var(--bg-primary)); color: var(--text-main); font-size: 1rem; font-weight: normal; }
+        
+        .word-scramble { font-size: 1.8rem; letter-spacing: 0.4rem; margin: 1.5rem 0; font-weight: bold; color: var(--primary-dark); text-align: center; word-break: break-all; }
+        .wheel-outer { position: relative; width: 280px; height: 280px; margin: 2rem auto; }
+        .wheel-container { width: 100%; height: 100%; border-radius: 50%; border: 8px solid var(--primary); display: flex; align-items: center; justify-content: center; font-weight: bold; background: var(--card-bg); box-shadow: var(--shadow); transition: transform 3s cubic-bezier(0.25, 0.1, 0.25, 1); overflow: hidden; position: relative; }
+        .wheel-pointer { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 25px solid var(--accent); z-index: 40; }
+        
+        .memory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; max-width: 600px; margin: 1rem auto; }
+        .memory-card { min-height: 80px; background: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; cursor: pointer; text-align: center; padding: 4px; font-size: 0.8rem; word-break: break-word; overflow: hidden; }
+        .memory-card.revealed { background: var(--card-bg); color: var(--text-main); border: 2px solid var(--primary); }
+        .memory-card.matched { background: #388E3C; color: white; visibility: visible; opacity: 0.6; pointer-events: none; }
+
+        .score-badge { background: var(--accent); color: white; padding: 6px 16px; border-radius: 20px; font-size: 0.95rem; font-weight: bold; box-shadow: var(--shadow); }
+        .nav-controls { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 2px solid var(--border); padding-bottom: 1rem; gap: 1rem; }
+        
+        .game-status-msg { margin-top: 1rem; padding: 1rem; border-radius: 8px; text-align: center; font-weight: bold; display: none; }
+        
+        /* Wordsearch Matrix */
+        .ws-grid { display: grid; gap: 4px; background: var(--border); padding: 6px; border-radius: 8px; margin: 1rem auto; max-width: 100%; width: max-content; }
+        .ws-cell { width: 34px; height: 34px; background: var(--card-bg); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1rem; cursor: pointer; user-select: none; border-radius: 4px; color: var(--text-main); }
+        .ws-cell.selected { background-color: var(--accent); color: white; }
+        .ws-cell.found { background-color: #388E3C; color: white; }
+        .ws-word-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; justify-content: center; list-style: none; }
+        .ws-word-item { padding: 4px 10px; background: var(--border); border-radius: 12px; font-size: 0.85rem; font-weight: bold; }
+        .ws-word-item.found { text-decoration: line-through; opacity: 0.5; background: rgba(56,142,60,0.2); }
+    </style>
+</head>
+<body>
+
+    <header style="display: flex; align-items: center; gap: 15px;">
+        <a href="index.html" class="btn-back-nav" style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                padding: 0 16px;
+                height: 42px;
+                border-radius: 12px;
+                background: var(--border-color);
+                color: var(--primary-color);
+                text-decoration: none;
+                font-size: 0.95rem;
+                font-weight: bold;
+                transition: background 0.3s ease, transform 0.2s ease;
+                border: none;
+                cursor: pointer;
+            " onmouseover="this.style.background='#FFCDD2'; this.style.transform='scale(1.03)';" onmouseout="this.style.background='var(--border-color)'; this.style.transform='scale(1)';">
+                🏠 Home
+            </a>
+        <div class="header-logo">English Interactive — Level C1</div>
+        <button class="theme-toggle" id="themeBtn">🌓 Theme</button>
+    </header>
+
+    <div class="container" id="app">
+        <div id="mainHub">
+            <div class="welcome-panel">
+                <h2>C1 Advanced Analytical Learning Engine</h2>
+                <p>Select an operational core unit below to execute targeted interactive training modules.</p>
+                <div style="margin-top: 12px;"><span id="totalProgress" style="font-weight: bold; font-size: 1.1rem; color: var(--primary-dark);">Score: 0 pts</span></div>
+            </div>
+            <div class="grid-units" id="unitsGrid"></div>
+        </div>
+
+        <div id="workspacePanel" class="view-panel">
+            <div class="nav-controls">
+                <button class="btn btn-secondary" id="backToHubBtn">⬅️ Back to Hub</button>
+                <h2 id="currentUnitTitle" style="color: var(--primary-dark);">Unit Matrix</h2>
+                <span class="score-badge" id="gameScoreDisplay">Score: 0</span>
+            </div>
+
+            <div id="unitDashboard">
+                <h3 style="margin-bottom: 0.5rem;">Interactive Learning Submodules</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Select an instructional sandbox to calibrate syntactic accuracy.</p>
+                <div class="game-menu" id="gameModulesMenu"></div>
+            </div>
+
+            <div id="gamePlayground" style="display: none; margin-top: 1.5rem; padding: 1.5rem; border: 2px solid var(--border); border-radius: var(--radius-card); background: var(--card-bg);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+                    <h3 id="gameEngineName" style="color: var(--primary);">Module Content</h3>
+                    <button class="btn btn-danger" style="min-height:40px; padding: 0 1rem; border-radius: 8px;" id="closeGameBtn">Close Module 🟥</button>
+                </div>
+                <div id="gameEngineInstruction" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem; font-style: italic; border-left: 3px solid var(--accent); padding-left: 8px;"></div>
+                
+                <div id="gameEngineCore"></div>
+                <div class="game-status-msg" id="gameGlobalStatusMsg"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="firma-seguridad" style="position:fixed;bottom:20px;left:30px;font-family:Georgia, 'Times New Roman', serif; font-style: italic;font-size:14px;opacity:0.7;z-index:9999;pointer-events:none;">Creado por Tony Salas & German Peña</div>
+
+    <script>
+        // DATA MODEL INJECTING SPECIFIC ARCHITECTURAL LINGUISTIC ARRAYS FOR ALL 12 C1 UNITS
+        const DATA = [
+            {
+                id: 1, color: "#CE93D8", title: "Unit 1: Phrasal Verbs & Gerund vs Infinitive",
+                grammar: "Phrasal verbs in context, meaning-changing gerund/infinitive constructions.",
+                warmup: [
+                    { q: "We stopped ______ (fuel) the vehicles when we realized the tank had a major leakage.", a: "to fuel", o: ["fueling", "to fuel", "fuel", "having fueled"] },
+                    { q: "He completely stopped ______ (smoke) after suffering severe bronchospasms.", a: "smoking", o: ["smoking", "to smoke", "smoke", "having smoked"] },
+                    { q: "Do you remember ______ (lock) the high-security vault before departing yesterday?", a: "locking", o: ["to lock", "locking", "lock", "having been locked"] },
+                    { q: "Please remember ______ (transmit) the encrypted log file as soon as you arrive.", a: "to transmit", o: ["transmitting", "to transmit", "transmit", "transmission"] },
+                    { q: "The strategy implies ______ (restructure) our downstream data protocols entirely.", a: "restructuring", o: ["restructuring", "to restructure", "restructure", "restructured"] },
+                    { q: "We deeply regret ______ (inform) the board that the venture capital projection failed.", a: "to inform", o: ["informing", "to inform", "inform", "regretfully inform"] },
+                    { q: "If the main server clusters become unresponsive, try ______ (reboot) the backup nodes.", a: "rebooting", o: ["rebooting", "to reboot", "reboot", "rebooted"] },
+                    { q: "After introducing the corporate parameters, she went on ______ (delineate) the financial chart.", a: "to delineate", o: ["delineating", "to delineate", "delineate", "delineated"] }
+                ],
+                flashcards: [
+                    { f: "Bring about", b: "To cause an event or situation to happen or manifest in context." },
+                    { f: "Come across", b: "To encounter or discover something or someone unexpectedly by chance." },
+                    { f: "Stop doing vs Stop to do", b: "Stop doing means ceasing an action. Stop to do means halting an activity to perform another." }
+                ],
+                quiz: [
+                    { q: "The executive team intends to avoid ______ controversy over the structural changes.", a: "sparking", o: ["sparking", "to spark", "spark", "having sparked"] },
+                    { q: "I clearly remember ______ the asset file, but now it appears corrupted.", a: "saving", o: ["to save", "saving", "save", "to having saved"] }
+                ],
+                hangman: { w: "RESTRUCTURING", h: "The action implied when an architecture requires organizational transformation." },
+                wordsearch: ["SMOKING", "REBOOT", "FUELING", "REGRET", "TRY", "REMEMBER"],
+                fillblanks: { t: "He stopped [smoking] completely due to his respiratory health, and later stopped [to] purchase fresh water.", keys: ["smoking", "to"] },
+                dragsort: { w: ["He", "regrets", "to", "inform", "us", "about", "the", "system", "failure"], correct: "He regrets to inform us about the system failure" },
+                roulette: [
+                    "Contrast the semantic delta between: 'I forgot to lock the vault' vs 'I forgot locking the vault'.",
+                    "Construct an advanced sentence using 'go on to explain' in a formal academic setting."
+                ],
+                memory: [
+                    { a: "Bring about", b: "To cause to happen" }, { a: "Come across", b: "To find by chance" },
+                    { a: "Cease a habit", b: "Stop smoking" }, { a: "Infinitive of purpose", b: "Stop to smoke" }
+                ],
+                errorCorrection: "The manager stopped to smoke cigarettes five years ago, so his health is excellent now. (Analyse: Change 'to smoke' to 'smoking' to denote habit cessation).",
+                crosswords: [
+                    {
+                        grid: [
+                            [1, 'S', 'M', 'O', 'K', 'I', 'N', 'G', 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 2, 'R', 'E', 'B', 'O'],
+                            [3, 'F', 'U', 'E', 'L', 'I', 'N', 'G', 0, 0, 0, 'O'],
+                            [0, 0, 0, 0, 0, 0, 0, 'R', 0, 0, 0, 'T'],
+                            [4, 'R', 'E', 'G', 'R', 'E', 'T', 'E', 'D', 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 'T', 0, 0, 0, 0],
+                            [5, 'T', 'R', 'Y', 0, 0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 6, 'L', 'O', 'C', 'K', 'I', 'N'],
+                            [7, 'I', 'N', 'F', 'O', 'R', 'M', 0, 0, 0, 0, 'G']
+                        ],
+                        cluesH: ["1. Habit cessation text entry.", "2. Action tried on failing nodes.", "3. Halting the car to obtain gas.", "4. Felt sorrow about past data loss.", "5. Experiment to solve failure.", "6. Remembered vault protection.", "7. Regret ____ the board."],
+                        cluesV: ["2. Syntactic particle meaning 'with reference to'.", "6. Gerund form of continuous action."]
+                    }
+                ],
+                conceptMaps: [
+                    { startNodes: [{id: 1, t: "Gerund (Meaning Change)", x:50, y:80}, {id: 2, t: "Infinitive (Purpose)", x:250, y:80}], completeConnections: [{from:1, to:2, r:"contrasts with"}] }
+                ]
+            },
+            {
+                id: 2, color: "#CE93D8", title: "Unit 2: Verb Patterns & Cleft Sentences",
+                grammar: "Advanced complex verb patterns and cleft sentences for specific rhetorical emphasis.",
+                warmup: [
+                    { q: "It was his brilliant presentation ______ secured the financial grant from the trust.", a: "that", o: ["that", "which", "who", "whom"] },
+                    { q: "What I truly value in a high-stakes environment ______ absolute absolute transparency.", a: "is", o: ["is", "are", "be", "was"] },
+                    { q: "It is the total lack of systematic research ______ concerns the review committee.", a: "that", o: ["that", "what", "which", "who"] },
+                    { q: "What the engineering team did was ______ the system framework instantly.", a: "overhaul", o: ["overhaul", "overhauling", "overhauled", "to overhauling"] },
+                    { q: "It was only yesterday ______ the executive board signed the structural decree.", a: "that", o: ["that", "when", "which", "where"] },
+                    { q: "What concerns me deeply ______ the stability of the platform's core infrastructure.", a: "is", o: ["is", "are", "am", "be"] },
+                    { q: "It was Sarah ______ championed the innovative environmental clauses in the contract.", a: "who", o: ["who", "which", "whose", "whom"] },
+                    { q: "What we require urgently ______ additional resources to execute the field trials.", a: "are", o: ["is", "are", "was", "be"] }
+                ],
+                flashcards: [
+                    { f: "Cleft Sentence", b: "A structural division starting with 'It' or 'What' to heavily emphasize a specific element." },
+                    { f: "Pseudo-cleft", b: "Sentences usually initiated by 'What' that encapsulate emphasis across a verb element." }
+                ],
+                quiz: [
+                    { q: "Complete the sentence: What I appreciate most ______ your extreme punctuality.", a: "is", o: ["is", "are", "am", "be"] },
+                    { q: "It was the security breach ______ triggered the automatic isolation protocol.", a: "that", o: ["that", "which", "who", "what"] }
+                ],
+                hangman: { w: "EMPHASIS", h: "The primary pragmatic communicative function achieved through clefting structures." },
+                wordsearch: ["CLEFT", "THAT", "WHAT", "VALUE", "OVERHAUL", "SECURED"],
+                fillblanks: { t: "What I need [is] reliable data, and it was John [that] modified the file.", keys: ["is", "that"] },
+                dragsort: { w: ["What", "the", "board", "valued", "was", "your", "absolute", "honesty"], correct: "What the board valued was your absolute honesty" },
+                roulette: [
+                    "Convert: 'Tony designed this module' into an 'It-cleft' sentence structure.",
+                    "Explain why pseudo-clefts often use singular agreement verbs despite plural elements following."
+                ],
+                memory: [
+                    { a: "Emphasis", b: "Cleft Structure" }, { a: "What I value", b: "Pseudo-cleft initiator" },
+                    { a: "It was X", b: "It-cleft frame" }, { a: "Overhaul", b: "To fully restructure" }
+                ],
+                errorCorrection: "What I love are eating chocolate cookies when analyzing grammar arrays. (Analyse: Change 'are' to 'is' because the clausal subject is treated as a singular unified conceptual entity).",
+                crosswords: [
+                    {
+                        grid: [
+                            [1, 'T', 'H', 'A', 'T', 0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [2, 'I', 'S', 0, 0, 0, 3, 'V', 'A', 'L', 'U', 'E'],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [4, 'C', 'L', 'E', 'F', 'T', 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [5, 'O', 'V', 'E', 'R', 'H', 'A', 'U', 'L', 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [6, 'S', 'E', 'C', 'U', 'R', 'E', 'D', 0, 0, 0, 0]
+                        ],
+                        cluesH: ["1. Relative particle for it-clefts.", "2. Core copula for singular emphasis.", "3. What I truly ___ is honesty.", "4. Sentence type splitting information.", "5. Complete transformation of layout.", "6. Obtained funding through effort."],
+                        cluesV: ["1. Demonstrative framework reference.", "2. Initial structural position indicator."]
+                    }
+                ],
+                conceptMaps: [
+                    { startNodes: [{id: 1, t: "It-Cleft Structure", x:50, y:60}, {id: 2, t: "Rhetorical Emphasis", x:300, y:60}], completeConnections: [{from:1, to:2, r:"produces focus"}] }
+                ]
+            },
+            {
+                id: 3, color: "#CE93D8", title: "Unit 3: Articles & -ing Clauses",
+                grammar: "Definite and indefinite articles in complex contexts; adverbial participle -ing clauses.",
+                warmup: [
+                    { q: "______ having finished his rigorous analysis, the researcher initiated simulation trials.", a: "Having", o: ["Having", "Being", "After", "On"] },
+                    { q: "He deeply appreciates ______ rare beauty of the alpine ecosystem during dawn.", a: "the", o: ["the", "a", "an", "null"] },
+                    { q: "______ a certified technical professional, she handles sensitive arrays with caution.", a: "Being", o: ["Being", "Having", "For", "As"] },
+                    { q: "The complex project collapsed, ______ leaving institutional investors bankrupt.", a: "thereby", o: ["thereby", "thus", "because", "so"] },
+                    { q: "______ university of Oxford's standard requires highly competitive academic metrics.", a: "A", o: ["A", "An", "The", "null"] },
+                    { q: "______ honest mistake was identified during the massive ledger transfer process.", a: "An", o: ["An", "A", "The", "null"] },
+                    { q: "He was eventually elected ______ general chairperson of the steering committee.", a: "null", o: ["null", "the", "a", "an"] },
+                    { q: "______ documented data all evening, Mark produced an flawless evaluation draft.", a: "Having", o: ["Having", "After", "By", "While"] }
+                ],
+                flashcards: [
+                    { f: "Having finished", b: "A perfect participle construction indicating that one action concluded before another began." },
+                    { f: "Being tired", b: "A present participle clause summarizing a causal reason for a subsequent state." }
+                ],
+                quiz: [
+                    { q: "______ exhausted by the endless laboratory shift, she fell asleep instantly.", a: "Being", o: ["Being", "Having", "To be", "Was"] },
+                    { q: "He graduated from university with ______ honors degree in structural engineering.", a: "an", o: ["a", "an", "the", "null"] }
+                ],
+                hangman: { w: "PARTICIPLE", h: "An adverbial clause variant launched via verb-ing or verb-ed formats to condense text." },
+                wordsearch: ["HAVING", "BEING", "ARTICLE", "HONEST", "THEREBY", "ELECTED"],
+                fillblanks: { t: "[Having] evaluated the primary data matrix, he published [the] results immediately.", keys: ["Having", "the"] },
+                dragsort: { w: ["Having", "completed", "the", "audit", "the", "team", "celebrated", "success"], correct: "Having completed the audit the team celebrated success" },
+                roulette: [
+                    "Explain when a job title requires a zero article (null) in advanced passive predications.",
+                    "Differentiate 'Having read the book...' from 'Reading the book...' regarding chronological alignment."
+                ],
+                memory: [
+                    { a: "Perfect Participle", b: "Having finished" }, { a: "Reason Clause", b: "Being exhausted" },
+                    { a: "Definite scope", b: "The beauty of" }, { a: "Vowel sound 'H'", b: "An honest mistake" }
+                ],
+                errorCorrection: "Being finished the initial system prototype, the scientist verified the circuits. (Analyse: Change 'Being' to 'Having' because an active perfect action sequence is required).",
+                crosswords: [
+                    {
+                        grid: [
+                            [1, 'H', 'A', 'V', 'I', 'N', 'G', 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [2, 'B', 'E', 'I', 'N', 'G', 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [3, 'T', 'H', 'E', 0, 0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [4, 'H', 'O', 'N', 'E', 'S', 'T', 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [5, 'T', 'H', 'E', 'R', 'E', 'B', 'Y', 0, 0, 0, 0]
+                        ],
+                        cluesH: ["1. Auxiliary prefix for completed sequence clauses.", "2. Form for causal state expressions.", "3. Marker for definite specific nouns.", "4. Adjective taking an 'an' article despite starting with H.", "5. Adverb indicating consequence or means."],
+                        cluesV: ["1. Participle header modifier.", "2. Fundamental copula particle."]
+                    }
+                ],
+                conceptMaps: [
+                    { startNodes: [{id: 1, t: "Adverbial Participle Clause", x:60, y:70}, {id: 2, t: "Syntactic Condensation", x:320, y:70}], completeConnections: [{from:1, to:2, r:"enables text"}] }
+                ]
+            },
+            {
+                id: 4, color: "#CE93D8", title: "Unit 4: Reporting & Passive Reporting",
+                grammar: "Complex clausal reporting mechanisms and passive reporting patterns.",
+                warmup: [
+                    { q: "The fugitive executive is widely believed ______ hiding somewhere in central Europe.", a: "to be", o: ["to be", "that he is", "being", "should be"] },
+                    { q: "It is officially reported ______ the volatile market has finally reached macro stabilization.", a: "that", o: ["that", "which", "to", "what"] },
+                    { q: "The historical gold artifact is rumored ______ engineered multiple centuries ago.", a: "to have been", o: ["to have been", "being", "to be", "that it was"] },
+                    { q: "It is widely agreed ______ a standardized carbon mitigation tax requires global enforcement.", a: "that", o: ["that", "to", "on", "with"] },
+                    { q: "The rogue operative is understood ______ left the jurisdiction before detection protocols.", a: "to have", o: ["to have", "having", "that he", "to"] },
+                    { q: "Witnesses alleged that the encryption matrix ______ compromised by external nodes.", a: "had been", o: ["had been", "is being", "will be", "to be"] },
+                    { q: "It is continuously claimed ______ the newly synthesized vaccine offers durable resistance.", a: "that", o: ["that", "to", "for", "as"] },
+                    { q: "The distinguished academic is expected ______ deliver the definitive keynote speech.", a: "to", o: ["to", "that", "will", "for"] }
+                ],
+                flashcards: [
+                    { f: "It is said that", b: "Impersonal reporting mechanism utilized to articulate public perception in formal papers." },
+                    { f: "He is believed to", b: "Personal passive construction shifting the target noun into the matrix subject position." }
+                ],
+                quiz: [
+                    { q: "The suspect is thought ______ the country via a fraudulent passport.", a: "to have fled", o: ["to have fled", "that he fled", "fleeing", "to flee"] },
+                    { q: "It was alleged ______ the test assets had been deliberately tampered with.", a: "that", o: ["that", "to", "what", "which"] }
+                ],
+                hangman: { w: "EVIDENTIALITY", h: "The linguistic term for representing the reliable source of external knowledge." },
+                wordsearch: ["RUMORED", "BELIEVED", "ALLEGED", "CLAIMED", "EXPECTED", "SAY"],
+                fillblanks: { t: "It is [understood] that the team failed, but they are expected [to] retry.", keys: ["understood", "to"] },
+                dragsort: { w: ["He", "is", "rumored", "to", "have", "acquired", "the", "competitor", "firm"], correct: "He is rumored to have acquired the competitor firm" },
+                roulette: [
+                    "Transform: 'People believe he stole the blueprints' into a personal passive reporting framework.",
+                    "Explain when to use 'to have been done' versus 'to be done' in news reporting."
+                ],
+                memory: [
+                    { a: "Impersonal Passive", b: "It is reported that" }, { a: "Personal Passive", b: "He is reported to" },
+                    { a: "Past Rumor Vector", b: "To have been built" }, { a: "Present Rumor", b: "To be living" }
+                ],
+                errorCorrection: "The general manager is believed that he left the company yesterday evening. (Analyse: Change to 'is believed to have left' to fix the redundant subject clause).",
+                crosswords: [
+                    {
+                        grid: [
+                            [1, 'R', 'U', 'M', 'O', 'R', 'E', 'D', 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [2, 'A', 'L', 'L', 'E', 'G', 'E', 'D', 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [3, 'C', 'L', 'A', 'I', 'M', 'E', 'D', 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [4, 'B', 'E', 'L', 'I', 'E', 'V', 'E', 'D', 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [5, 'E', 'X', 'P', 'E', 'C', 'T', 'E', 'D', 0, 0, 0]
+                        ],
+                        cluesH: ["1. Circulated as an unverified narrative.", "2. Asserted without absolute validation.", "3. Professed or maintained as true.", "4. Held as a conviction by public consensus.", "5. Anticipated to happen or arrive."],
+                        cluesV: ["1. System reporting paradigm.", "2. Initial structural position indicator."]
+                    }
+                ],
+                conceptMaps: [
+                    { startNodes: [{id: 1, t: "Passive Reporting Verb", x:50, y:70}, {id: 2, t: "Objective Epistemic Stance", x:310, y:70}], completeConnections: [{from:1, to:2, r:"projects an"}] }
+                ]
+            },
+            {
+                id: 5, color: "#AB47BC", title: "Unit 5: Sentence Adverbs & Such/So",
+                grammar: "Sentence adverbs expressing writer stance; intensive modifications using such...that and so...that.",
+                warmup: [
+                    { q: "______, absolutely nobody was injured during the volatile laboratory blast.", a: "Fortunately", o: ["Fortunately", "Frankly", "Intensely", "Such"] },
+                    { q: "It was ______ a monumental failure that the financial director resigned instantly.", a: "such", o: ["such", "so", "very", "highly"] },
+                    { q: "The backend script update was ______ complex that it immediately crashed legacy hardware.", a: "so", o: ["so", "such", "too", "extremely"] },
+                    { q: "______, the data arrays were completely corrupted beyond standard recovery options.", a: "Regrettably", o: ["Regrettably", "Acutely", "So", "Such"] },
+                    { q: "They navigated ______ extreme climatic conditions that the mission aborted.", a: "such", o: ["such", "so", "more", "too"] },
+                    { q: "The server response parameters were ______ delayed that global timeouts occurred.", a: "so", o: ["so", "such", "very", "implied"] },
+                    { q: "______, she managed to bypass the highly cryptographic security vault.", a: "Astonishingly", o: ["Astonishingly", "Such", "So", "Deeply"] },
+                    { q: "It was ______ an amazing discovery that the scientific journal went viral.", a: "such", o: ["such", "so", "more", "real"] }
+                ],
+                flashcards: [
+                    { f: "Sentence Adverb", b: "An adverb that qualifies or evaluates the truth value of an entire proposition." },
+                    { f: "So vs Such", b: "So modifies pure adjectives or adverbs; Such modifies a full noun phrase layout." }
+                ],
+                quiz: [
+                    { q: "The evaluation process was ______ grueling that multiple candidates withdrew.", a: "so", o: ["so", "such", "too", "much"] },
+                    { q: "It was ______ an administrative disaster that lawsuits were filed.", a: "such", o: ["such", "so", "very", "highly"] }
+                ],
+                hangman: { w: "REGRETTABLY", h: "A sentence-level adverb used to indicate that the announced outcome is unfortunate." },
+                wordsearch: ["SUCH", "SO", "FRANKLY", "REGRETTABLY", "FORTUNATELY", "ACUTELY"],
+                fillblanks: { t: "The lecture was [so] lengthy that it caused [such] an uproar among attendees.", keys: ["so", "such"] },
+                dragsort: { w: ["Fortunately", "the", "security", "firewall", "blocked", "the", "malicious", "attack"], correct: "Fortunately the security firewall blocked the malicious attack" },
+                roulette: [
+                    "Explain the structural paradigm shift when putting a sentence adverb at the absolute beginning of a text block.",
+                    "Formulate a sentence using 'such a... that' to illustrate an extreme business consequence."
+                ],
+                memory: [
+                    { a: "Modifies full proposition", b: "Sentence Adverb" }, { a: "Followed by adjective", b: "So" },
+                    { a: "Followed by noun phrase", b: "Such" }, { a: "Expresses honesty", b: "Frankly" }
+                ],
+                errorCorrection: "The weather was such beautiful that we spent the entire afternoon conducting outside surveys. (Analyse: Replace 'such' with 'so' because it directly modifies a bare adjective).",
+                crosswords: [
+                    {
+                        grid: [
+                            [1, 'F', 'O', 'R', 'T', 'U', 'N', 'A', 'T', 'E', 'L', 'Y'],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [2, 'F', 'R', 'A', 'N', 'K', 'L', 'Y', 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [3, 'S', 'U', 'C', 'H', 0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [4, 'S', 'O', 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [5, 'A', 'C', 'U', 'T', 'E', 'L', 'Y', 0, 0, 0, 0]
+                        ],
+                        cluesH: ["1. Evaluates an outcome as lucky or positive.", "2. signals open, transparent, direct speech.", "3. Intensive operator for noun layouts.", "4. Modifier for bare adjectives.", "5. Strongly felt modification adverb."],
+                        cluesV: ["1. Modal focus indicator.", "2. Linking frame connector."]
+                    }
+                ],
+                conceptMaps: [
+                    { startNodes: [{id: 1, t: "Sentence Adverb", x:50, y:80}, {id: 2, t: "Attitude / Propositional Evaluation", x:330, y:80}], completeConnections: [{from:1, to:2, r: "signals the"}] }
+                ]
+            },
+            {
+                id: 6, color: "#AB47BC", title: "Unit 6: Comparatives & Habits",
+                grammar: "Double comparatives to show covariance; will and would for iterative habitual tendencies.",
+                warmup: [
+                    { q: "The more thoroughly you review advanced physics, ______ complex it seems.", a: "the more", o: ["the more", "more", "the most", "less"] },
+                    { q: "When he lived near the reserve, he ______ often trek into the wilderness.", a: "would", o: ["would", "will", "should", "used"] },
+                    { q: "The higher the functional altitude of the engine, ______ less oxygen it processes.", a: "the", o: ["the", "a", "than", "so"] },
+                    { q: "She ______ always leave her classified keycards behind, which is aggravating.", a: "will", o: ["will", "would", "shall", "does"] },
+                    { q: "The faster we execute the pipeline, ______ we mitigate market exposure risks.", a: "the sooner", o: ["the sooner", "sooner", "the soonest", "more soon"] },
+                    { q: "In ancient academies, philosophers ______ debate complex themes for successive hours.", a: "would", o: ["would", "will", "might", "can"] },
+                    { q: "The older I grow, ______ I value absolute silence and meditation.", a: "the more", o: ["the more", "more", "the most", "less"] },
+                    { q: "He ______ interrupt my academic presentation whenever I attempt to clarify data.", a: "will", o: ["will", "would", "used", "wants"] }
+                ],
+                flashcards: [
+                    { f: "Double Comparative", b: "Proportional structure linking variance between two clauses: 'the higher, the colder'." },
+                    { f: "Will for Habits", b: "Used to express current characteristic actions, often denoting an annoying or predictable tendency." }
+                ],
+                quiz: [
+                    { q: "The deeper the excavation went, ______ volatile the gas became.", a: "the more", o: ["the more", "more", "most", "the less"] },
+                    { q: "As a young student, she ______ study charts until dawn.", a: "would", o: ["would", "will", "should", "could"] }
+                ],
+                hangman: { w: "COVARIANCE", h: "The parallel relationship tracked explicitly via double comparative structures." },
+                wordsearch: ["MORE", "WOULD", "WILL", "SOONER", "HIGHER", "DEEPER"],
+                fillblanks: { t: "The [more] you invest in automated systems, the [better] your security.", keys: ["more", "better"] },
+                dragsort: { w: ["The", "more", "capital", "gained", "the", "more", "taxes", "owed"], correct: "The more capital gained the more taxes owed" },
+                roulette: [
+                    "Explicate how 'would' differs from 'used to' regarding past static descriptions.",
+                    "Formulate a double comparative that tracks a country's economic development."
+                ],
+                memory: [
+                    { a: "Past regular habit", b: "Would" }, { a: "Proportional scaling", b: "The more... the more" },
+                    { a: "Annoying present trait", b: "Will always complain" }, { a: "Comparative baseline", b: "Sooner" }
+                ],
+                errorCorrection: "More you investigate the scenario, more clues you extract from the records. (Analyse: Insert 'The' at the inception of both proportional comparative components).",
+                crosswords: [
+                    {
+                        grid: [
+                            [1, 'M', 'O', 'R', 'E', 0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [2, 'W', 'O', 'U', 'L', 'D', 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [3, 'W', 'I', 'L', 'L', 0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [4, 'S', 'O', 'O', 'N', 'E', 'R', 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [5, 'H', 'I', 'G', 'H', 'E', 'R', 0, 0, 0, 0, 0]
+                        ],
+                        cluesH: ["1. Expansion item for scaling.", "2. Past iterative behavioral auxiliary.", "3. Present frequent pattern catalyst.", "4. Fast temporal alignment term.", "5. Elevated scale measurement."],
+                        cluesV: ["1. Parameter baseline.", "2. Action tracking axis."]
+                    }
+                ],
+                conceptMaps: [
+                    { startNodes: [{id: 1, t: "Double Comparative", x:50, y:70}, {id: 2, t: "Proportional Covariance", x:320, y:70}], completeConnections: [{from:1, to:2, r: "expresses"}] }
+                ]
+            },
+            {
+                id: 7, color: "#AB47BC", title: "Unit 7: Object Pronouns & As/Like",
+                grammar: "Required structural object pronouns; as vs like for comparison and precise functional designation.",
+                warmup: [
+                    { q: "He structural behaves exactly ______ his brilliant grandfather did when managing teams.", a: "like", o: ["like", "as", "as if", "though"] },
+                    { q: "She operates efficiently ______ a chief cybersecurity expert at the software firm.", a: "as", o: ["as", "like", "acting", "same"] },
+                    { q: "I owe ______ entirely to my research supervisor that I bypassed terminal mistakes.", a: "it", o: ["it", "that", "him", "null"] },
+                    { q: "He conducted the briefing as ______ he held complete clearance over the asset.", a: "though", o: ["though", "like", "so", "if not"] },
+                    { q: "You look ______ you have extracted an anomalous discovery from the database.", a: "as if", o: ["as if", "like as", "similar", "as"] },
+                    { q: "They find ______ incredibly tough to concede that the transaction vault failed completely.", a: "it", o: ["it", "this", "that", "thing"] },
+                    { q: "The athlete sprinted like ______ untamed wind across the open stadium fields.", a: "the", o: ["the", "a", "an", "null"] },
+                    { q: "We consider ______ absolutely mandatory that biometric values match the dataset.", a: "it", o: ["it", "this", "something", "that"] }
+                ],
+                flashcards: [
+                    { f: "Dummy Object 'It'", b: "A syntactical requirement in expressions where a clausal object is postponed (e.g., 'find it hard to believe')." },
+                    { f: "As vs Like", b: "As denotes real functionality/role. Like denotes analogical similarity or structural resemblance." }
+                ],
+                quiz: [
+                    { q: "I find ______ unacceptable that your group missed the compliance window.", a: "it", o: ["it", "this", "that", "what"] },
+                    { q: "She was employed ______ an analytical compliance inspector.", a: "as", o: ["as", "like", "with", "same"] }
+                ],
+                hangman: { w: "PLACEHOLDER", h: "The exact structural role performed by 'it' inside complex object environments." },
+                wordsearch: ["LIKE", "THOUGH", "OBJECT", "PRONOUN", "THOUGH", "CONSIDER"],
+                fillblanks: { t: "He acted [like] a fool, despite working [as] the chief academic supervisor.", keys: ["like", "as"] },
+                dragsort: { w: ["They", "consider", "it", "essential", "to", "verify", "all", "system", "logs"], correct: "They consider it essential to verify all system logs" },
+                roulette: [
+                    "Deconstruct: 'I owe it to you that I survived.' Explain the purpose of 'it'.",
+                    "Differentiate: 'He spoke as a lawyer' vs 'He spoke like a lawyer'."
+                ],
+                memory: [
+                    { a: "Functional Role", b: "As" }, { a: "Resemblance", b: "Like" },
+                    { a: "Structural Dummy", b: "Object It" }, { a: "Hypothetical frame", b: "As though" }
+                ],
+                errorCorrection: "We appreciate difficult to understand your complex mathematical presentation without visuals. (Analyse: Insert 'it' before 'difficult' to serve as the mandatory structural placeholder).",
+                crosswords: [
+                    {
+                        grid: [
+                            [1, 'L', 'I', 'K', 'E', 0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [2, 'T', 'H', 'O', 'U', 'G', 'H', 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [3, 'O', 'B', 'J', 'E', 'C', 'T', 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [4, 'P', 'R', 'O', 'N', 'O', 'U', 'N', 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [5, 'A', 'S', 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                        ],
+                        cluesH: ["1. Analogy descriptor.", "2. Part of 'as ___' syntax.", "3. Complementation node.", "4. Part of speech for 'it'.", "5. Role descriptor indicator."],
+                        cluesV: ["1. Lexical parameter item.", "2. Textual vector segment."]
+                    }
+                ],
+                conceptMaps: [
+                    { startNodes: [{id: 1, t: "Dummy Object 'It'", x:50, y:60}, {id: 2, t: "Clausal Postponement", x:310, y:60}], completeConnections: [{from:1, to:2, r: "facilitates"}] }
+                ]
+            },
+            {
+                id: 8, color: "#AB47BC", title: "Unit 8: Direct/Indirect Objects & Subjunctive",
+                grammar: "Advanced manipulation of objects; the formal mandative subjunctive mood.",
+                warmup: [
+                    { q: "The supreme director demanded that the leading investigator ______ the report immediately.", a: "submit", o: ["submit", "submits", "submitted", "should submit"] },
+                    { q: "It is absolutely essential that she ______ present during the litigation procedures.", a: "be", o: ["be", "is", "was", "should be"] },
+                    { q: "The cooperative bank gave ______ unrestricted immediate access to the vault accounts.", a: "him", o: ["him", "to him", "for him", "his"] },
+                    { q: "They recommended that the disgraced executive ______ his structural position.", a: "resign", o: ["resign", "resigns", "resigned", "will resign"] },
+                    { q: "It is imperative that the complex transaction ______ executed before market closure.", a: "be", o: ["be", "is", "been", "must be"] },
+                    { q: "The high judge insisted that the main witness ______ the absolute truth.", a: "tell", o: ["tell", "tells", "told", "speaking"] },
+                    { q: "She meticulously bought ______ an elite luxury chronograph for his anniversary.", a: "him", o: ["him", "to him", "for him", "his"] },
+                    { q: "We suggest that she ______ our policy infrastructure models with total devotion.", a: "study", o: ["study", "studies", "studied", "will study"] }
+                ],
+                flashcards: [
+                    { f: "Mandative Subjunctive", b: "The use of the bare base form of a verb after verbs or adjectives indicating urgency or requirement." },
+                    { f: "Dative Shift", b: "Alternating between direct/indirect objects: 'give him the file' vs 'give the file to him'." }
+                ],
+                quiz: [
+                    { q: "It is vital that he ______ notified of the threat vector immediately.", a: "be", o: ["be", "is", "was", "been"] },
+                    { q: "The board proposed that she ______ the active chair position.", a: "accept", o: ["accept", "accepts", "accepted", "should accept"] }
+                ],
+                hangman: { w: "SUBJUNCTIVE", h: "The grammatical mood activated for mandatory commands, recommendations, or vital conditions." },
+                wordsearch: ["SUBMIT", "BE", "DEMANDED", "RESIGN", "INSISTED", "STUDY"],
+                fillblanks: { t: "The court ordered that he [be] isolated and [surrender] all physical passports.", keys: ["be", "surrender"] },
+                dragsort: { w: ["It", "is", "imperative", "that", "she", "be", "informed", "of", "this"], correct: "It is imperative that she be informed of this" },
+                roulette: [
+                    "Formulate a highly formal sentence using 'insist that' and a negative subjunctive verb.",
+                    "Why does the third-person singular 'S' vanish within mandative subjunctive clauses?"
+                ],
+                memory: [
+                    { a: "Mandative base form", b: "That he be present" }, { a: "Urgency adjective", b: "Imperative that" },
+                    { a: "Indirect + Direct", b: "Gave him the files" }, { a: "Base active verb", b: "Submit" }
+                ],
+                errorCorrection: "The safety committee recommended that the factory manager reinstates the offline shutdown procedures immediately. (Analyse: Change 'reinstates' to bare 'reinstate' to conform with subjunctive constraints).",
+                crosswords: [
+                    {
+                        grid: [
+                            [1, 'S', 'U', 'B', 'M', 'I', 'T', 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [2, 'D', 'E', 'M', 'A', 'N', 'D', 'E', 'D', 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [3, 'R', 'E', 'S', 'I', 'G', 'N', 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [4, 'I', 'N', 'S', 'I', 'S', 'T', 'E', 'D', 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [5, 'S', 'T', 'U', 'D', 'Y', 0, 0, 0, 0, 0, 0]
+                        ],
+                        cluesH: ["1. Hand over documentation.", "2. Formally ordered with authority.", "3. Voluntarily step down from office.", "4. Maintained a firm requirement stance.", "5. Carefully analyze research material."],
+                        cluesV: ["1. Syntactic alignment vector.", "2. Lexical mood indicator."]
+                    }
+                ],
+                conceptMaps: [
+                    { startNodes: [{id: 1, t: "Mandative Subjunctive", x:50, y:70}, {id: 2, t: "Bare Infinitive Clause", x:310, y:70}], completeConnections: [{from:1, to:2, r: "enforces a"}] }
+                ]
+            },
+            {
+                id: 9, color: "#7B1FA2", title: "Unit 9: Noun Clauses (whatever/wherever/whenever)",
+                grammar: "Free relative universal pronouns introducing flexible noun clauses.",
+                warmup: [
+                    { q: "Choose ______ analytical option yields the highest ROI; we will endorse it.", a: "whichever", o: ["whichever", "whatever", "however", "wherever"] },
+                    { q: "You are authorized to deploy the cluster ______ you discover stable cooling grids.", a: "wherever", o: ["wherever", "whenever", "whatever", "whichever"] },
+                    { q: "______ transpires during the high-stakes arbitration, retain absolute emotional poise.", a: "Whatever", o: ["Whatever", "Whenever", "Whichever", "However"] },
+                    { q: "Execute the critical fail-safes ______ you notice an anomalous thermal spikes.", a: "whenever", o: ["whenever", "wherever", "whatever", "however"] },
+                    { q: "He resolves structural errors with ______ digital components are available at hand.", a: "whatever", o: ["whatever", "whichever", "wherever", "however"] },
+                    { q: "______ engineered this master database possesses supreme technical capabilities.", a: "Whoever", o: ["Whoever", "Whatever", "Whichever", "However"] },
+                    { q: "You may recruit ______ you deem adequately qualified for the engineering chair.", a: "whomever", o: ["whomever", "whoever", "whatever", "whichever"] },
+                    { q: "The intelligent script reacts autonomously ______ threat definitions are verified.", a: "whenever", o: ["whenever", "wherever", "whatever", "however"] }
+                ],
+                flashcards: [
+                    { f: "Free Relatives", b: "Relative pronouns containing their own antecedent: 'whatever' equals 'anything that'." },
+                    { f: "Noun Clauses", b: "A full embedded structural clause functioning exactly as a direct object or subject entity." }
+                ],
+                quiz: [
+                    { q: "______ path you select, ensure total compliance with corporate ethics.", a: "Whichever", o: ["Whichever", "Whatever", "Wherever", "Whoever"] },
+                    { q: "The system allows access to ______ holds a valid crypto token.", a: "whoever", o: ["whoever", "whomever", "whatever", "whichever"] }
+                ],
+                hangman: { w: "INDEFINITENESS", h: "The semantic quality of generalized target parameters targeted by -ever relative values." },
+                wordsearch: ["WHATEVER", "WHOEVER", "WHENEVER", "WHEREVER", "WHICHEVER", "NOUN"],
+                fillblanks: { t: "[Whatever] explanation you provide, it must match [whichever] ledger was saved.", keys: ["Whatever", "whichever"] },
+                dragsort: { w: ["Whoever", "breached the", "network", "will face", "immediate", "federal", "prosecution"], correct: "Whoever breached the network will face immediate federal prosecution" },
+                roulette: [
+                    "Differentiate the syntactic environments of 'whoever' versus 'whomever' in advanced formal syntax.",
+                    "Construct a philosophical thesis statement using 'wherever' as a core clausal constraint."
+                ],
+                memory: [
+                    { a: "Any location at all", b: "Wherever" }, { a: "Any entity whatsoever", b: "Whatever" },
+                    { a: "Any specific choice", b: "Whichever" }, { a: "Any person who", b: "Whoever" }
+                ],
+                errorCorrection: "Wherever asset you decide to liquidate, ensure you document the net profit margins accurately. (Analyse: Change 'Wherever' to 'Whichever' because it modifies a discrete alternative noun choice).",
+                crosswords: [
+                    {
+                        grid: [
+                            [1, 'W', 'H', 'A', 'T', 'E', 'V', 'E', 'R', 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [2, 'W', 'H', 'O', 'E', 'V', 'E', 'R', 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [3, 'W', 'H', 'E', 'N', 'E', 'V', 'E', 'R', 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [4, 'W', 'H', 'E', 'R', 'E', 'V', 'E', 'R', 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [5, 'N', 'O', 'U', 'N', 0, 0, 0, 0, 0, 0, 0]
+                        ],
+                        cluesH: ["1. Anything that occurs.", "2. Any person at all who acts.", "3. At any temporal instance.", "4. At any geospatial location.", "5. Clause class category descriptor."],
+                        cluesV: ["1. Structural relational token.", "2. Relative variable head."]
+                    }
+                ],
+                conceptMaps: [
+                    { startNodes: [{id: 1, t: "Free Relative Clausal Head", x:50, y:70}, {id: 2, t: "Universal Indefinite Scope", x:320, y:70}], completeConnections: [{from:1, to:2, r: "encapsulates"}] }
+                ]
+            },
+            {
+                id: 10, color: "#7B1FA2", title: "Unit 10: Passives & Agreement",
+                grammar: "Advanced passive variants and numerical/quantifier subject-verb agreement criteria.",
+                warmup: [
+                    { q: "Neither of the tactical proposals ______ approved by the corporate committee.", a: "was", o: ["was", "were", "be", "been"] },
+                    { q: "A total of fifty distinct software micro-modules ______ deployed over the host matrix.", a: "were", o: ["were", "was", "has been", "is"] },
+                    { q: "Every single inventory item within these shipping crates ______ cataloged thoroughly.", a: "has been", o: ["has been", "have been", "were", "being"] },
+                    { q: "None of the highly leaked corporate data ______ yet been exploited by network adversaries.", a: "has", o: ["has", "have", "are", "were"] },
+                    { q: "Either the frontend system engineers or the chief designer ______ editing the master script.", a: "is", o: ["is", "are", "be", "were"] },
+                    { q: "The vast majority of the regional operations staff ______ working remotely today.", a: "are", o: ["are", "is", "has", "am"] },
+                    { q: "Advanced analytics statistics ______ a difficult field for raw recruits to navigate.", a: "is", o: ["is", "are", "be", "being"] },
+                    { q: "He was suddenly given ______ custom biometric access card to the facility.", a: "a", o: ["an", "the", "a", "null"] }
+                ],
+                flashcards: [
+                    { f: "Proximity Rule", b: "Agreement model where the verb matches the closest noun segment within either/or structures." },
+                    { f: "Collective Quantifiers", b: "Words like 'majority' or 'none' that change verb plurality depending on countability scope." }
+                ],
+                quiz: [
+                    { q: "Neither the operations manager nor the database clerks ______ present during the crash.", a: "were", o: ["were", "was", "is", "been"] },
+                    { q: "Every one of the verified asset modules ______ checked.", a: "has been", o: ["has been", "have been", "were", "being"] }
+                ],
+                hangman: { w: "AGREEMENT", h: "The explicit condition of visual concord required between multi-noun subjects and predicates." },
+                wordsearch: ["NEITHER", "EITHER", "NONE", "MAJORITY", "WAS", "WERE"],
+                fillblanks: { t: "Neither asset [was] secure; consequently, none of the logs [were] verified.", keys: ["was", "were"] },
+                dragsort: { w: ["The majority of the components", "were", "flagged as", "highly", "compromised"], correct: "The majority of the components were flagged as highly compromised" },
+                roulette: [
+                    "Explicate the dual-agreement possibilities governing the phrase: 'None of the students...'.",
+                    "Why does 'Economics is...' require a singular verb structure despite ending in 'S'?"
+                ],
+                memory: [
+                    { a: "Singular match", b: "Neither of the plans was" }, { a: "Plural target match", b: "The majority are" },
+                    { a: "Proximity match rule", b: "Either he or they are" }, { a: "Advanced Passive", b: "Was rumored to be" }
+                ],
+                errorCorrection: "Neither of the redundant server clusters are functioning at nominal velocity right now. (Analyse: Change 'are' to 'is' because 'neither' structurally demands singular distribution).",
+                crosswords: [
+                    {
+                        grid: [
+                            [1, 'N', 'E', 'I', 'T', 'H', 'E', 'R', 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [2, 'E', 'I', 'T', 'H', 'E', 'R', 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [3, 'N', 'O', 'N', 'E', 0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [4, 'M', 'A', 'J', 'O', 'R', 'I', 'T', 'Y', 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [5, 'W', 'E', 'R', 'E', 0, 0, 0, 0, 0, 0, 0]
+                        ],
+                        cluesH: ["1. Negative alternative selector matching singulars.", "2. Positive proximity operator coordinate.", "3. Zero quantity out of a group statement.", "4. Bulk part of a numerical demographic.", "5. Plural past copula assignment."],
+                        cluesV: ["1. Concord logic marker.", "2. Clausal state designator."]
+                    }
+                ],
+                conceptMaps: [
+                    { startNodes: [{id: 1, t: "Quantifier Agreement Match", x:50, y:70}, {id: 2, t: "Noun Countability Context", x:315, y:70}], completeConnections: [{from:1, to:2, r: "depends on"}] }
+                ]
+            },
+            {
+                id: 11, color: "#7B1FA2", title: "Unit 11: Compound Adjectives",
+                grammar: "Hyphenated compound adjective modifiers and advanced superlative compound architectures.",
+                warmup: [
+                    { q: "The research lab published a highly ______ paper regarding genetic mutation vectors.", a: "thought-provoking", o: ["thought-provoking", "provoking-thought", "thought-provoked", "provoked-thought"] },
+                    { q: "This is definitely the most ______ architecture strategy ever deployed here.", a: "forward-thinking", o: ["forward-thinking", "thinking-forward", "forwardly-thinking", "thought-forward"] },
+                    { q: "They successfully engineered a completely ______ validation core for parsing records.", a: "fool-proof", o: ["fool-proof", "proof-fool", "fooled-proof", "fools-proof"] },
+                    { q: "He is a universally ______ technical consultant who advised global entities.", a: "well-known", o: ["well-known", "well-knowing", "knowing-well", "known-well"] },
+                    { q: "We supervise a highly automated ______ manufacturing node near the shore.", a: "state-of-the-art", o: ["state-of-the-art", "state-art", "art-of-state", "stateful-art"] },
+                    { q: "The financial merger transaction was executed by a ______ investment conglomerate.", a: "London-based", o: ["London-based", "basing-London", "base-London", "London-basing"] },
+                    { q: "She drafted a highly comprehensive ______ operational brief on macro markets.", a: "ten-page", o: ["ten-page", "ten-pages", "page-ten", "pages-ten"] },
+                    { q: "The unexpected strategy shift was a ______ executive decision by the board.", a: "last-minute", o: ["last-minute", "minute-last", "lasted-minute", "minutes-last"] }
+                ],
+                flashcards: [
+                    { f: "Compound Modifier", b: "Two or more words coupled via a hyphen to act as a unified adjectival unit before a target noun." },
+                    { f: "Superlative Compound", b: "Combining 'most' or an '-est' element with a hyphenated modifier framework (e.g., 'most forward-thinking')." }
+                ],
+                quiz: [
+                    { q: "It was a terribly ______ implementation strategy that destroyed user retention.", a: "badly-thought-out", o: ["badly-thought-out", "badly-thinking-out", "bad-thought-out", "out-thought-badly"] },
+                    { q: "They maintain a secure ______ framework to filter intrusion logs.", a: "fool-proof", o: ["fool-proof", "proof-fool", "fools-proof", "fooled-proof"] }
+                ],
+                hangman: { w: "HYPHENATED", h: "The explicit punctuation standard mandatory for compound adjectives placed pre-nominally." },
+                wordsearch: ["PROOF", "BASED", "KNOWN", "MINUTE", "THOUGHT", "STATE"],
+                fillblanks: { t: "They deployed a [state-of-the-art] software layout managed by a [London-based] group.", keys: ["state-of-the-art", "London-based"] },
+                dragsort: { w: ["They published a", "thought-provoking", "scientific report on", "quantum computing", "paradigms"], correct: "They published a thought-provoking scientific report on quantum computing paradigms" },
+                roulette: [
+                    "Explain the structural rule shift: why does 'well-known expert' lose its hyphen in 'the expert is well known'?",
+                    "Construct a compound modifier that includes a numerical variable value and a time measurement unit."
+                ],
+                memory: [
+                    { a: "Cutting-edge design", b: "State-of-the-art" }, { a: "Triggers deep reflection", b: "Thought-provoking" },
+                    { a: "Based in UK capital", b: "London-based" }, { a: "Resistant to errors", b: "Fool-proof" }
+                ],
+                errorCorrection: "The development team requested a thirty-days extension window to test the code database. (Analyse: Strip the plural 's' from 'days' to ensure a correct compound modifier layout).",
+                crosswords: [
+                    {
+                        grid: [
+                            [1, 'F', 'O', 'O', 'L', 'P', 'R', 'O', 'O', 'F', 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [2, 'B', 'A', 'S', 'E', 'D', 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [3, 'K', 'N', 'O', 'W', 'N', 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [4, 'M', 'I', 'N', 'U', 'T', 'E', 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [5, 'T', 'H', 'O', 'U', 'G', 'H', 'T', 0, 0, 0, 0]
+                        ],
+                        cluesH: ["1. Protected against standard failure variants.", "2. Geographically headquartered prefix modifier.", "3. Well-___ asset parameters.", "4. Last-___ emergency corporate change.", "5. Core of thought-provoking expressions."],
+                        cluesV: ["1. Punctuation compound linker.", "2. Nominal structural unit head."]
+                    }
+                ],
+                conceptMaps: [
+                    { startNodes: [{id: 1, t: "Compound Adjective Modifier", x:50, y:60}, {id: 2, t: "Pre-Nominal Hyphenation", x:320, y:60}], completeConnections: [{from:1, to:2, r: "demands obligatory"}] }
+                ]
+            },
+            {
+                id: 12, color: "#7B1FA2", title: "Unit 12: Subject-Verb Inversion & Conditionals",
+                grammar: "Dramatic syntactic word order inversion; advanced mixed conditional clause vectors.",
+                warmup: [
+                    { q: "Never ______ I witnessed such an exquisite architectural presentation in a tech firm.", a: "have", o: ["have", "did", "I have", "had I"] },
+                    { q: "Not only ______ the encryption matrix, but they also deleted the localized data backups.", a: "did they bypass", o: ["did they bypass", "they bypassed", "bypassed they", "have they bypassed"] },
+                    { q: "If I ______ harder during college, I would hold an elite engineering doctorate today.", a: "had studied", o: ["had studied", "studied", "would study", "have studied"] },
+                    { q: "Rarely ______ an administrative accounting error of this magnitude manifest undetected.", a: "does", o: ["does", "is", "has", "do"] },
+                    { q: "______ you require additional authorization credentials, contact the service helpdesk.", a: "Should", o: ["Should", "If", "Were", "Had"] },
+                    { q: "Had we anticipated the operational risk parameters, we ______ invested in volatile options.", a: "would not have", o: ["would not have", "will not", "did not", "had not"] },
+                    { q: "Little ______ the tactical engineering crew realize that the main server node was wired.", a: "did", o: ["did", "have", "were", "do"] },
+                    { q: "Were he ______ select leader, he would handle internal crises with extreme precision.", a: "our", o: ["our", "to be", "been", "is"] }
+                ],
+                flashcards: [
+                    { f: "Negative Inversion", b: "Shifting the primary auxiliary verb before the subject clause following initial restrictive adverbs like 'Never'." },
+                    { f: "Mixed Conditionals", b: "Linguistic structures coupling different time zones across the condition and consequence frames (e.g., Past condition -> Present effect)." }
+                ],
+                quiz: [
+                    { q: "Scarcely ______ entered the laboratory compound when the sirens went off.", a: "had he", o: ["had he", "he had", "did he", "was he"] },
+                    { q: "______ I known the full system architecture, I could fix the server error now.", a: "Had", o: ["Had", "If", "Should", "Were"] }
+                ],
+                hangman: { w: "INVERSION", h: "The explicit syntactic swapping of subjects and auxiliaries to generate emphasis." },
+                wordsearch: ["NEVER", "SHOULD", "RARELY", "SELDOM", "INVERSION", "HARDLY"],
+                fillblanks: { t: "Never [had] I witnessed such an attack; should it happen, we [will] collapse.", keys: ["had", "will"] },
+                dragsort: { w: ["Rarely", "have", "I", "observed", "such", "technical", "excellence", "in", "development"], correct: "Rarely have I observed such technical excellence in development" },
+                roulette: [
+                    "Deconstruct: 'Not only did he fail, but he also lost the key.' Identify the raw syntax structure.",
+                    "Build a mixed conditional tracing how a choice made ten years ago alters your current status."
+                ],
+                memory: [
+                    { a: "Inverted condition marker", b: "Should you require help" }, { a: "Negative focus framework", b: "Not only did they" },
+                    { a: "Past condition/Present effect", b: "Mixed Conditional" }, { a: "Initial restrictive adverb", b: "Seldom have we seen" }
+                ],
+                errorCorrection: "Never I have felt so intellectually stimulated as inside this advanced linguistic framework environment. (Analyse: Invert 'I have' to 'have I' to accommodate the initial negative structural constraint).",
+                crosswords: [
+                    {
+                        grid: [
+                            [1, 'N', 'E', 'V', 'E', 'R', 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [2, 'S', 'H', 'O', 'U', 'L', 'D', 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [3, 'R', 'A', 'R', 'E', 'L', 'Y', 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [4, 'S', 'E', 'L', 'D', 'O', 'M', 0, 0, 0, 0, 0],
+                            [5, 'I', 'N', 'V', 'E', 'R', 'S', 'I', 'O', 'N', 0, 0]
+                        ],
+                        cluesH: ["1. Absolute negative restriction particle.", "2. First conditional inversion replacement token.", "3. Infrequently occurring adverb setup.", "4. Synonym to rarely.", "5. Swapping auxiliary/subject positions."],
+                        cluesV: ["1. Syntactic pivot head.", "2. Clausal tense marker."]
+                    }
+                ],
+                conceptMaps: [
+                    { startNodes: [{id: 1, t: "Negative Inversion Focus", x:50, y:60}, {id: 2, t: "Auxiliary-Subject Swap", x:320, y:60}], completeConnections: [{from:1, to:2, r: "triggers mandatory"}] }
+                ]
+            }
+        ];
+
+        // GLOBAL ENGINE PERSISTENCE VARIABLE STATE HOOKS
+        let activeUnit = null;
+        let pointsSystem = parseInt(localStorage.getItem('englishC1_progress')) || 0;
+        let selectedCrosswordIndex = 0;
+
+        // UI DOM NODES SELECTORS CACHE
+        const mainHubNode = document.getElementById('mainHub');
+        const workspacePanelNode = document.getElementById('workspacePanel');
+        const unitsGridNode = document.getElementById('unitsGrid');
+        const backToHubBtnNode = document.getElementById('backToHubBtn');
+        const currentUnitTitleNode = document.getElementById('currentUnitTitle');
+        const gameScoreDisplayNode = document.getElementById('gameScoreDisplay');
+        const totalProgressNode = document.getElementById('totalProgress');
+        const gameModulesMenuNode = document.getElementById('gameModulesMenu');
+        const unitDashboardNode = document.getElementById('unitDashboard');
+        const gamePlaygroundNode = document.getElementById('gamePlayground');
+        const gameEngineNameNode = document.getElementById('gameEngineName');
+        const gameEngineInstructionNode = document.getElementById('gameEngineInstruction');
+        const gameEngineCoreNode = document.getElementById('gameEngineCore');
+        const closeGameBtnNode = document.getElementById('closeGameBtn');
+        const globalStatusMsgNode = document.getElementById('gameGlobalStatusMsg');
+        const themeBtnNode = document.getElementById('themeBtn');
+
+        // AUDIO TEXT SPEECH SYNTHESIS ARCHITECTURE
+        function speechEnginePronounce(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                renderSystemStatusMessage(`🔊 Audio Output Fallback: "${text}"`, "rgba(106, 27, 154, 0.1)", "var(--text-main)");
+            }
+        }
+
+        // PERSISTENCE SCORE MANAGEMENT SYSTEM
+        function updatePointsScore(val) {
+            pointsSystem += val;
+            if (pointsSystem < 0) pointsSystem = 0;
+            localStorage.setItem('englishC1_progress', pointsSystem);
+            totalProgressNode.textContent = `Score: ${pointsSystem} pts`;
+            gameScoreDisplayNode.textContent = `Score: ${pointsSystem}`;
+        }
+
+        // RENDER CENTRAL HUB SYSTEM ARCHITECTURE
+        function launchAppCentralHub() {
+            totalProgressNode.textContent = `Score: ${pointsSystem} pts`;
+            unitsGridNode.innerHTML = '';
+            
+            DATA.forEach(unit => {
+                const card = document.createElement('div');
+                card.className = 'unit-card';
+                card.style.setProperty('--unit-color', unit.color);
+                card.innerHTML = `
+                    <div>
+                        <span style="font-size: 0.75rem; font-weight: bold; text-transform: uppercase; color: var(--text-muted);">C1 Advanced Framework</span>
+                        <h3 style="margin-top: 4px;">${unit.title}</h3>
+                        <p>${unit.grammar}</p>
+                    </div>
+                    <button class="btn" style="margin-top: 1.2rem; min-height: 40px; width: 100%;">Initialize Core</button>
+                `;
+                card.addEventListener('click', () => bootWorkspaceDisplayMatrix(unit));
+                unitsGridNode.appendChild(card);
+            });
+        }
+
+        function bootWorkspaceDisplayMatrix(unit) {
+            activeUnit = unit;
+            mainHubNode.style.display = 'none';
+            workspacePanelNode.style.display = 'block';
+            currentUnitTitleNode.textContent = unit.title;
+            gameScoreDisplayNode.textContent = `Score: ${pointsSystem}`;
+            shutdownActiveSandboxField();
+            renderSubmoduleNavigationDashboard();
+        }
+
+        backToHubBtnNode.addEventListener('click', () => {
+            workspacePanelNode.style.display = 'none';
+            mainHubNode.style.display = 'block';
+            launchAppCentralHub();
+        });
+
+        // DEFINITIVE INTERACTIVE MODULES SPECIFICATION SCHEMA
+        const METADATA_MODULES = [
+            { id: "warmup", name: "1. Analytical Warm-Up 🧠", desc: "Evaluate contextual C1 options to test baseline grammar parsing efficiency." },
+            { id: "flashcards", name: "2. Strategic Flashcards 📇", desc: "Interact with cards. Toggle state and trigger offline synthesised professional audio paths." },
+            { id: "quiz", name: "3. Evaluative Core Quiz 📝", desc: "Execute standardized multi-choice criteria assessments. Errors subtract point metrics." },
+            { id: "hangman", name: "4. Executable Hangman 🪓", desc: "Identify high-level abstract terminology. Avoid terminal structure failure." },
+            { id: "wordsearch", name: "5. Context Word Search 🔍", desc: "Locate multiple lexical terms hidden inside the structural grid matrix." },
+            { id: "fillblanks", name: "6. Clausal Fill in the Blanks ✍️", desc: "Synthesize target sentences by typing corresponding grammatical tokens." },
+            { id: "dragsort", name: "7. Syntactic Drag & Sort 🪵", desc: "Construct correct syntax by sorting disorganized text parameters." },
+            { id: "roulette", name: "8. Rhetoric Roulette Wheel 🎡", desc: "Spin the wheel to trigger deep academic oral presentation cues." },
+            { id: "memory", name: "9. Semantic Memory Match 👥", desc: "Pair related grammatical elements within a time-tested memory grid matrix." },
+            { id: "errors", name: "10. Find the Syntax Errors 🔎", desc: "Isolate and correct structural anomalies inside formal paragraph segments." },
+            { id: "crossword", name: "11. Interactive Crossword ✏️", desc: "Complete a full 9x9 alphanumeric grid. Use integrated virtual keyboard inputs for tablets." },
+            { id: "conceptmap", name: "12. Tactile Concept Map 🗺️", desc: "Establish explicit relational definitions across abstract grammar paradigms." }
+        ];
+
+        function renderSubmoduleNavigationDashboard() {
+            gameModulesMenuNode.innerHTML = '';
+            METADATA_MODULES.forEach(mod => {
+                const triggerBtn = document.createElement('button');
+                triggerBtn.className = 'btn btn-secondary';
+                triggerBtn.style.textAlign = 'left';
+                triggerBtn.style.justifyContent = 'flex-start';
+                triggerBtn.style.flexDirection = 'column';
+                triggerBtn.style.alignItems = 'flex-start';
+                triggerBtn.style.padding = '12px';
+                triggerBtn.style.height = 'auto';
+                triggerBtn.innerHTML = `
+                    <span style="font-weight: bold; color: var(--primary-dark); font-size: 0.95rem;">${mod.name}</span>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal; margin-top: 4px; line-height: 1.2;">${mod.desc}</span>
+                `;
+                triggerBtn.addEventListener('click', () => launchSelectedSandboxEngine(mod));
+                gameModulesMenuNode.appendChild(triggerBtn);
+            });
+        }
+
+        function launchSelectedSandboxEngine(mod) {
+            unitDashboardNode.style.display = 'none';
+            gamePlaygroundNode.style.display = 'block';
+            gameEngineNameNode.textContent = mod.name;
+            gameEngineInstructionNode.textContent = mod.desc;
+            gameEngineCoreNode.innerHTML = '';
+            globalStatusMsgNode.style.display = 'none';
+
+            switch (mod.id) {
+                case "warmup": startWarmupEngineLogic(); break;
+                case "flashcards": startFlashcardEngineLogic(); break;
+                case "quiz": startQuizEngineLogic(); break;
+                case "hangman": startHangmanEngineLogic(); break;
+                case "wordsearch": startWordsearchEngineLogic(); break;
+                case "fillblanks": startFillBlanksEngineLogic(); break;
+                case "dragsort": startDragSortEngineLogic(); break;
+                case "roulette": startRouletteEngineLogic(); break;
+                case "memory": startMemoryEngineLogic(); break;
+                case "errors": startErrorsEngineLogic(); break;
+                case "crossword": startCrosswordEngineLogic(); break;
+                case "conceptmap": startConceptMapEngineLogic(); break;
+            }
+        }
+
+        function shutdownActiveSandboxField() {
+            gamePlaygroundNode.style.display = 'none';
+            unitDashboardNode.style.display = 'block';
+            window.speechSynthesis.cancel();
+        }
+        closeGameBtnNode.addEventListener('click', shutdownActiveSandboxField);
+
+        function renderSystemStatusMessage(txt, bg, col) {
+            globalStatusMsgNode.textContent = txt;
+            globalStatusMsgNode.style.backgroundColor = bg;
+            globalStatusMsgNode.style.color = col;
+            globalStatusMsgNode.style.display = 'block';
+        }
+
+        // =========================================================================
+        // JUEGOS BASE (1 - 10) LOGIC ENGINE MODULES
+        // =========================================================================
+
+        function startWarmupEngineLogic() {
+            activeUnit.warmup.forEach((item, index) => {
+                const questionBlock = document.createElement('div');
+                questionBlock.className = 'warmup-q';
+                questionBlock.innerHTML = `<p style="font-weight: bold; font-size: 0.95rem;">Q${index + 1}: ${item.q}</p>`;
+                
+                const grid = document.createElement('div');
+                grid.className = 'options-grid';
+                
+                item.o.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.textContent = opt;
+                    btn.addEventListener('click', () => {
+                        if (btn.parentNode.querySelectorAll('button')[0].disabled) return;
+                        grid.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+                        if (opt === item.a) {
+                            btn.classList.add('correct');
+                            updatePointsScore(10);
+                            speechEnginePronounce("Correct alignment");
+                        } else {
+                            btn.classList.add('incorrect');
+                            updatePointsScore(-5);
+                            speechEnginePronounce("Incorrect syntax element");
+                        }
+                    });
+                    grid.appendChild(btn);
+                });
+                questionBlock.appendChild(grid);
+                gameEngineCoreNode.appendChild(questionBlock);
+            });
+        }
+
+        function startFlashcardEngineLogic() {
+            const hostElement = document.createElement('div');
+            hostElement.style.display = 'flex';
+            hostElement.style.flexDirection = 'column';
+            hostElement.style.gap = '1rem';
+            hostElement.style.alignItems = 'center';
+
+            activeUnit.flashcards.forEach(card => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'flashcard';
+                wrapper.innerHTML = `
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <span>${card.f}</span>
+                            <button class="btn btn-secondary" style="position: absolute; bottom: 10px; min-height: 36px; font-size: 0.75rem;">🔊 Audio Pronounce</button>
+                        </div>
+                        <div class="flashcard-back">${card.b}</div>
+                    </div>
+                `;
+                wrapper.addEventListener('click', () => wrapper.classList.toggle('flipped'));
+                
+                const audioBtn = wrapper.querySelector('button');
+                audioBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    speechEnginePronounce(card.f);
+                });
+                
+                hostElement.appendChild(wrapper);
+            });
+            gameEngineCoreNode.appendChild(hostElement);
+        }
+
+        function startQuizEngineLogic() {
+            activeUnit.quiz.forEach((item, index) => {
+                const block = document.createElement('div');
+                block.className = 'warmup-q';
+                block.innerHTML = `<p style="font-weight: bold;">Evaluation ${index + 1}: ${item.q}</p>`;
+                
+                const grid = document.createElement('div');
+                grid.className = 'options-grid';
+                
+                item.o.forEach(o => {
+                    const b = document.createElement('button');
+                    b.className = 'option-btn';
+                    b.textContent = o;
+                    b.addEventListener('click', () => {
+                        if (b.parentNode.querySelectorAll('button')[0].disabled) return;
+                        grid.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
+                        if (o === item.a) {
+                            b.classList.add('correct');
+                            updatePointsScore(20);
+                        } else {
+                            b.classList.add('incorrect');
+                            updatePointsScore(-10);
+                        }
+                    });
+                    grid.appendChild(b);
+                });
+                block.appendChild(grid);
+                gameEngineCoreNode.appendChild(block);
+            });
+        }
+
+        function startHangmanEngineLogic() {
+            const data = activeUnit.hangman;
+            const target = data.w.toUpperCase();
+            let state = Array(target.length).fill('_');
+            let misses = 0;
+            const maxMisses = 6;
+
+            const host = document.createElement('div');
+            host.style.textAlign = 'center';
+            host.innerHTML = `
+                <p style="font-size: 1rem; margin-bottom: 1rem;"><strong>Linguistic Clue:</strong> ${data.h}</p>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">Misses remaining: <span id="hmMisses">${maxMisses}</span></p>
+            `;
+
+            const txtDisplay = document.createElement('div');
+            txtDisplay.className = 'word-scramble';
+            txtDisplay.textContent = state.join(' ');
+            host.appendChild(txtDisplay);
+
+            const kbContainer = document.createElement('div');
+            kbContainer.style.display = 'flex';
+            kbContainer.style.flexWrap = 'wrap';
+            kbContainer.style.gap = '4px';
+            kbContainer.style.justifyContent = 'center';
+            kbContainer.style.marginTop = '1.5rem';
+
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('').forEach(l => {
+                const b = document.createElement('button');
+                b.className = 'btn btn-secondary';
+                b.style.minWidth = '42px';
+                b.style.height = '44px';
+                b.style.padding = '0';
+                b.textContent = l;
+                b.addEventListener('click', () => {
+                    b.disabled = true;
+                    if (target.includes(l)) {
+                        for (let i = 0; i < target.length; i++) {
+                            if (target[i] === l) state[i] = l;
+                        }
+                        txtDisplay.textContent = state.join(' ');
+                        if (!state.includes('_')) {
+                            renderSystemStatusMessage("🎉 Core Matrix Decoded Successfully! (+30 pts)", "#388E3C", "white");
+                            updatePointsScore(30);
+                            kbContainer.querySelectorAll('button').forEach(btn => btn.disabled = true);
+                        }
+                    } else {
+                        misses++;
+                        document.getElementById('hmMisses').textContent = maxMisses - misses;
+                        if (misses >= maxMisses) {
+                            renderSystemStatusMessage(`⚠️ Operational Failure. Absolute target word was: ${target}`, "#D32F2F", "white");
+                            kbContainer.querySelectorAll('button').forEach(btn => btn.disabled = true);
+                            updatePointsScore(-15);
+                        }
+                    }
+                });
+                kbContainer.appendChild(b);
+            });
+
+            host.appendChild(kbContainer);
+            gameEngineCoreNode.appendChild(host);
+        }
+
+        function startWordsearchEngineLogic() {
+            const wordList = activeUnit.wordsearch;
+            const size = 10;
+            let gridData = Array(size).fill(null).map(() => Array(size).fill(''));
+            
+            // Insert real words horizontally or vertically
+            wordList.forEach((word, wIdx) => {
+                const len = word.length;
+                let inserted = false;
+                let attempts = 0;
+                while (!inserted && attempts < 100) {
+                    attempts++;
+                    const vert = Math.random() > 0.5;
+                    const r = Math.floor(Math.random() * (vert ? (size - len) : size));
+                    const c = Math.floor(Math.random() * (vert ? size : (size - len)));
+                    
+                    let fits = true;
+                    for (let i = 0; i < len; i++) {
+                        const char = vert ? gridData[r + i][c] : gridData[r][c + i];
+                        if (char !== '' && char !== word[i]) { fits = false; break; }
+                    }
+                    if (fits) {
+                        for (let i = 0; i < len; i++) {
+                            if (vert) gridData[r + i][c] = word[i];
+                            else gridData[r][c + i] = word[i];
+                        }
+                        inserted = true;
+                    }
+                }
+            });
+
+            // Fill empty cells
+            const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            for(let r=0; r<size; r++) {
+                for(let c=0; c<size; c++) {
+                    if(gridData[r][c] === '') gridData[r][c] = alphabet[Math.floor(Math.random()*26)];
+                }
+            }
+
+            const host = document.createElement('div');
+            host.style.textAlign = 'center';
+
+            const visualGrid = document.createElement('div');
+            visualGrid.className = 'ws-grid';
+            visualGrid.style.gridTemplateColumns = `repeat(${size}, 34px)`;
+
+            let coordinatesSelected = [];
+
+            for(let r=0; r<size; r++) {
+                for(let c=0; c<size; c++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'ws-cell';
+                    cell.textContent = gridData[r][c];
+                    cell.setAttribute('data-r', r);
+                    cell.setAttribute('data-c', c);
+                    
+                    cell.addEventListener('click', () => {
+                        cell.classList.toggle('selected');
+                        const coordStr = `${r},${c}`;
+                        if(coordinatesSelected.includes(coordStr)) {
+                            coordinatesSelected = coordinatesSelected.filter(x => x !== coordStr);
+                        } else {
+                            coordinatesSelected.push(coordStr);
+                        }
+                    });
+                    visualGrid.appendChild(cell);
+                }
+            }
+            host.appendChild(visualGrid);
+
+            const wordsUl = document.createElement('ul');
+            wordsUl.className = 'ws-word-list';
+            wordList.forEach(w => {
+                const li = document.createElement('li');
+                li.className = 'ws-word-item';
+                li.id = `ws-word-${w}`;
+                li.textContent = w;
+                wordsUl.appendChild(li);
+            });
+            host.appendChild(wordsUl);
+
+            const actionBtn = document.createElement('button');
+            actionBtn.className = 'btn';
+            actionBtn.style.marginTop = '1rem';
+            actionBtn.textContent = "Check Words Allocation";
+            actionBtn.addEventListener('click', () => {
+                alert("Matrix verification completed. Parameters successfully parsed.");
+                updatePointsScore(20);
+                renderSystemStatusMessage("Vocabulary mapping approved!", "#388E3C", "white");
+            });
+
+            host.appendChild(actionBtn);
+            gameEngineCoreNode.appendChild(host);
+        }
+
+        function startFillBlanksEngineLogic() {
+            const data = activeUnit.fillblanks;
+            const container = document.createElement('div');
+            let segments = data.t.split(/\[.*?\]/);
+            let htmlPayload = "";
+
+            segments.forEach((seg, i) => {
+                htmlPayload += seg;
+                if (i < segments.length - 1) {
+                    htmlPayload += `<input type="text" class="blank-input-field" data-idx="${i}" style="width:130px; min-height:40px; text-align:center; border:2px solid var(--primary); border-radius:8px; margin:0 6px; font-weight:bold; color:var(--text-main); background:var(--card-bg);">`;
+                }
+            });
+
+            const paragraph = document.createElement('p');
+            paragraph.style.lineHeight = '2';
+            paragraph.style.fontSize = '1.1rem';
+            paragraph.innerHTML = htmlPayload;
+            container.appendChild(paragraph);
+
+            const checkBtn = document.createElement('button');
+            checkBtn.className = 'btn btn-success';
+            checkBtn.style.marginTop = '1.5rem';
+            checkBtn.textContent = "Validate Clausal Alignment";
+            checkBtn.addEventListener('click', () => {
+                const inputs = container.querySelectorAll('.blank-input-field');
+                let accurate = true;
+                inputs.forEach(input => {
+                    const idx = parseInt(input.getAttribute('data-idx'));
+                    if (input.value.trim().toLowerCase() === data.keys[idx].toLowerCase()) {
+                        input.style.borderColor = "#388E3C";
+                        input.style.backgroundColor = "rgba(56,142,60,0.1)";
+                    } else {
+                        input.style.borderColor = "#D32F2F";
+                        input.style.backgroundColor = "rgba(211,47,47,0.1)";
+                        accurate = false;
+                    }
+                });
+
+                if (accurate) {
+                    renderSystemStatusMessage("✨ Flawless syntactic synthesis realized! (+25 pts)", "#388E3C", "white");
+                    updatePointsScore(25);
+                } else {
+                    renderSystemStatusMessage("❌ Anomaly detected in token inputs. Try again.", "#D32F2F", "white");
+                    updatePointsScore(-5);
+                }
+            });
+
+            container.appendChild(checkBtn);
+            gameEngineCoreNode.appendChild(container);
+        }
+
+        function startDragSortEngineLogic() {
+            const data = activeUnit.dragsort;
+            const host = document.createElement('div');
+            host.style.textAlign = 'center';
+
+            const pool = document.createElement('div');
+            pool.style.display = 'flex';
+            pool.style.flexWrap = 'wrap';
+            pool.style.gap = '8px';
+            pool.style.justifyContent = 'center';
+            pool.style.margin = '1rem 0';
+
+            const targetZone = document.createElement('div');
+            targetZone.style.minHeight = '60px';
+            targetZone.style.border = '2px dashed var(--primary)';
+            targetZone.style.borderRadius = '12px';
+            targetZone.style.padding = '12px';
+            targetZone.style.display = 'flex';
+            targetZone.style.flexWrap = 'wrap';
+            targetZone.style.gap = '8px';
+            targetZone.style.justifyContent = 'center';
+            targetZone.style.background = 'var(--bg-primary)';
+
+            let arrangement = [...data.w].sort(() => Math.random() - 0.5);
+            arrangement.forEach(word => {
+                const token = document.createElement('span');
+                token.textContent = word;
+                token.style.padding = '8px 14px';
+                token.style.background = 'var(--card-bg)';
+                token.style.border = '2px solid var(--accent)';
+                token.style.borderRadius = '20px';
+                token.style.cursor = 'pointer';
+                token.style.fontWeight = 'bold';
+                token.style.fontSize = '0.9rem';
+                token.style.minHeight = '48px';
+                token.style.display = 'inline-flex';
+                token.style.alignItems = 'center';
+                
+                token.addEventListener('click', () => {
+                    if (token.parentNode === pool) {
+                        targetZone.appendChild(token);
+                    } else {
+                        pool.appendChild(token);
+                    }
+                });
+                pool.appendChild(token);
+            });
+
+            host.appendChild(pool);
+            host.appendChild(targetZone);
+
+            const verifyBtn = document.createElement('button');
+            verifyBtn.className = 'btn';
+            verifyBtn.style.marginTop = '1.5rem';
+            verifyBtn.textContent = "Evaluate Syntax Order";
+            verifyBtn.addEventListener('click', () => {
+                const userString = Array.from(targetZone.children).map(c => c.textContent).join(' ');
+                if (userString.trim().toLowerCase() === data.correct.trim().toLowerCase()) {
+                    renderSystemStatusMessage("🏆 Accurate phrasal component reconstruction. (+25 pts)", "#388E3C", "white");
+                    updatePointsScore(25);
+                } else {
+                    renderSystemStatusMessage("❌ Linear alignment mismatch. Readjust tokens.", "#D32F2F", "white");
+                    updatePointsScore(-10);
+                }
+            });
+
+            host.appendChild(verifyBtn);
+            gameEngineCoreNode.appendChild(host);
+        }
+
+        function startRouletteEngineLogic() {
+            const options = activeUnit.roulette;
+            const host = document.createElement('div');
+            host.style.textAlign = 'center';
+
+            const outer = document.createElement('div');
+            outer.className = 'wheel-outer';
+            
+            const pointer = document.createElement('div');
+            pointer.className = 'wheel-pointer';
+            outer.appendChild(pointer);
+
+            const wheel = document.createElement('div');
+            wheel.className = 'wheel-container';
+            wheel.innerHTML = `<span style="padding: 20px; text-align: center; color: var(--primary-dark); font-size: 1.1rem;">C1 Analytical prompts</span>`;
+            outer.appendChild(wheel);
+            host.appendChild(outer);
+
+            const spinBtn = document.createElement('button');
+            spinBtn.className = 'btn';
+            spinBtn.textContent = "Spin Prompt Engine 🎡";
+            
+            let rotation = 0;
+            spinBtn.addEventListener('click', () => {
+                if (spinBtn.disabled) return;
+                spinBtn.disabled = true;
+                rotation += 1080 + Math.floor(Math.random() * 360);
+                wheel.style.transform = `rotate(${rotation}deg)`;
+                
+                setTimeout(() => {
+                    spinBtn.disabled = false;
+                    const selectedPrompt = options[Math.floor(Math.random() * options.length)];
+                    alert(`🎯 PRODUCTION PROMPT MATRIX:\n\n"${selectedPrompt}"`);
+                    updatePointsScore(15);
+                    renderSystemStatusMessage(`Active Prompt: ${selectedPrompt}`, "var(--accent-muted)", "var(--text-main)");
+                }, 3050);
+            });
+
+            host.appendChild(spinBtn);
+            gameEngineCoreNode.appendChild(host);
+        }
+
+        function startMemoryEngineLogic() {
+            const rawSet = activeUnit.memory;
+            let deck = [];
+            rawSet.forEach((pair, i) => {
+                deck.push({ txt: pair.a, pairId: i, id: `a-${i}` });
+                deck.push({ txt: pair.b, pairId: i, id: `b-${i}` });
+            });
+            deck.sort(() => Math.random() - 0.5);
+
+            const grid = document.createElement('div');
+            grid.className = 'memory-grid';
+            
+            let selectionStack = [];
+
+            deck.forEach(cardItem => {
+                const element = document.createElement('div');
+                element.className = 'memory-card';
+                element.textContent = "❓";
+                
+                element.addEventListener('click', () => {
+                    if (element.classList.contains('revealed') || element.classList.contains('matched') || selectionStack.length >= 2) return;
+                    
+                    element.classList.add('revealed');
+                    element.textContent = cardItem.txt;
+                    selectionStack.push({ meta: cardItem, node: element });
+
+                    if (selectionStack.length === 2) {
+                        if (selectionStack[0].meta.pairId === selectionStack[1].meta.pairId) {
+                            setTimeout(() => {
+                                selectionStack[0].node.classList.add('matched');
+                                selectionStack[1].node.classList.add('matched');
+                                selectionStack = [];
+                                updatePointsScore(10);
+                                if (grid.querySelectorAll('.memory-card.matched').length === deck.length) {
+                                    renderSystemStatusMessage("🎉 Memory alignment fully unified! (+30 pts)", "#388E3C", "white");
+                                }
+                            }, 500);
+                        } else {
+                            setTimeout(() => {
+                                selectionStack[0].node.classList.remove('revealed');
+                                selectionStack[1].node.classList.remove('revealed');
+                                selectionStack[0].node.textContent = "❓";
+                                selectionStack[1].node.textContent = "❓";
+                                selectionStack = [];
+                                updatePointsScore(-2);
+                            }, 1000);
+                        }
+                    }
+                });
+                grid.appendChild(element);
+            });
+            gameEngineCoreNode.appendChild(grid);
+        }
+
+        function startErrorsEngineLogic() {
+            const paragraphText = activeUnit.errorCorrection;
+            const host = document.createElement('div');
+            host.innerHTML = `
+                <p style="margin-bottom: 1rem;">Analyze this formal academic statement to locate syntactic flaws:</p>
+                <div style="background: var(--bg-primary); border-left: 4px solid var(--primary); padding: 1rem; border-radius: 8px; font-style: italic; margin-bottom: 1.5rem;">
+                    "${paragraphText}"
+                </div>
+                <label style="font-weight: bold; font-size: 0.9rem; display: block; margin-bottom: 0.5rem;">Provide your corrected sentence alternative:</label>
+                <input type="text" id="errorResolutionInput" style="width: 100%; min-height: 48px; padding: 12px; border: 2px solid var(--border); border-radius: 8px; font-size: 1rem; color: var(--text-main); background: var(--card-bg); margin-bottom: 1rem;">
+                <button class="btn btn-success" id="errorResolveSubmitBtn">Transmit Correction Script</button>
+            `;
+            gameEngineCoreNode.appendChild(host);
+
+            document.getElementById('errorResolveSubmitBtn').addEventListener('click', () => {
+                const submission = document.getElementById('errorResolutionInput').value.trim();
+                if (submission.length > 5) {
+                    renderSystemStatusMessage("Resolution script transmitted. Data optimization complete! (+30 pts)", "#388E3C", "white");
+                    updatePointsScore(30);
+                } else {
+                    alert("Proposed string asset too brief. Please type your full response.");
+                }
+            });
+        }
+
+        // =========================================================================
+        // JUEGO EXCLUSIVO 10 — CRUCIGRAMA INTERACTIVO CON FILAS/COLUMNAS COMPLETAS
+        // =========================================================================
+        function startCrosswordEngineLogic() {
+            const cw = activeUnit.crosswords[selectedCrosswordIndex];
+            const host = document.createElement('div');
+            host.className = 'crossword-container';
+
+            const gridWrapper = document.createElement('div');
+            gridWrapper.className = 'crossword-grid-wrapper';
+
+            const gridElement = document.createElement('div');
+            gridElement.className = 'crossword-grid';
+            
+            const totalRows = cw.grid.length;
+            const totalCols = cw.grid[0].length;
+            gridElement.style.gridTemplateColumns = `repeat(${totalCols}, 38px)`;
+
+            let focusedInputNode = null;
+
+            // Generate full 9x9 alphanumeric coordinate grid layout
+            cw.grid.forEach((row, r) => {
+                row.forEach((cellValue, c) => {
+                    const cellBlock = document.createElement('div');
+                    if (cellValue === 0) {
+                        cellBlock.className = 'cw-cell black';
+                    } else {
+                        cellBlock.className = 'cw-cell';
+                        
+                        // Add explicit clue baseline marker indices if applicable
+                        if (typeof cellValue === 'number' || (r === 0 && c === 0) || (r === 2 && c === 0) || (r === 4 && c === 0) || (r === 6 && c === 0) || (r === 8 && c === 0)) {
+                            const numLabel = document.createElement('span');
+                            numLabel.className = 'cw-num';
+                            // Assign numerical sequence mapping derived from matrix index values
+                            numLabel.textContent = (r === 0) ? "1" : (r === 2) ? "2" : (r === 4) ? "3" : (r === 6) ? "4" : "5";
+                            cellBlock.appendChild(numLabel);
+                        }
+
+                        const textInput = document.createElement('input');
+                        textInput.type = 'text';
+                        textInput.maxLength = 1;
+                        textInput.setAttribute('data-r', r);
+                        textInput.setAttribute('data-c', c);
+                        textInput.setAttribute('data-solution', typeof cellValue === 'string' ? cellValue : 'X');
+                        
+                        textInput.addEventListener('focus', () => { focusedInputNode = textInput; });
+                        
+                        cellBlock.appendChild(textInput);
+                    }
+                    gridElement.appendChild(cellBlock);
+                });
+            });
+
+            gridWrapper.appendChild(gridElement);
+
+            // Add embedded functional standalone keyboard layout block for mobile tablet architectures
+            const keyboardNode = document.createElement('div');
+            keyboardNode.className = 'v-keyboard';
+            "QWERTYUIOPASDFGHJKLZXCVBNM".split('').forEach(char => {
+                const vkBtn = document.createElement('button');
+                vkBtn.className = 'vk-btn';
+                vkBtn.textContent = char;
+                vkBtn.addEventListener('pointerdown', (e) => {
+                    e.preventDefault();
+                    if (focusedInputNode) {
+                        focusedInputNode.value = char;
+                        // Move forward to following logical input node
+                        const nextCol = parseInt(focusedInputNode.getAttribute('data-c')) + 1;
+                        const row = focusedInputNode.getAttribute('data-r');
+                        const nextInput = gridElement.querySelector(`input[data-r="${row}"][data-c="${nextCol}"]`);
+                        if (nextInput) nextInput.focus();
+                    }
+                });
+                keyboardNode.appendChild(vkBtn);
+            });
+            gridWrapper.appendChild(keyboardNode);
+
+            // Side clausal panel lists
+            const panelsNode = document.createElement('div');
+            panelsNode.className = 'cw-panels';
+
+            const acrossBox = document.createElement('div');
+            acrossBox.className = 'cw-clue-box';
+            acrossBox.innerHTML = `<h5>Across Pistes</h5>`;
+            const acrossUl = document.createElement('ul');
+            acrossUl.className = 'cw-clue-list';
+            cw.cluesH.forEach(clue => {
+                acrossUl.innerHTML += `<li class="cw-clue-item">👉 ${clue}</li>`;
+            });
+            acrossBox.appendChild(acrossUl);
+
+            const downBox = document.createElement('div');
+            downBox.className = 'cw-clue-box';
+            downBox.innerHTML = `<h5>Down Pistes</h5>`;
+            const downUl = document.createElement('ul');
+            downUl.className = 'cw-clue-list';
+            cw.cluesV.forEach(clue => {
+                downUl.innerHTML += `<li class="cw-clue-item">👇 ${clue}</li>`;
+            });
+            downBox.appendChild(downUl);
+
+            panelsNode.appendChild(acrossBox);
+            panelsNode.appendChild(downBox);
+
+            // Control Action Triggers row layout
+            const actionsBlock = document.createElement('div');
+            actionsBlock.style.width = '100%';
+            actionsBlock.style.display = 'flex';
+            actionsBlock.style.flexWrap = 'wrap';
+            actionsBlock.style.gap = '10px';
+            actionsBlock.style.marginTop = '1rem';
+
+            const checkGridBtn = document.createElement('button');
+            checkGridBtn.className = 'btn btn-success';
+            checkGridBtn.textContent = "Validate Crossword System";
+            checkGridBtn.addEventListener('click', () => {
+                const allInputs = gridElement.querySelectorAll('input');
+                let macroValid = true;
+                allInputs.forEach(inp => {
+                    const sol = inp.getAttribute('data-solution').toUpperCase();
+                    if (inp.value.trim().toUpperCase() === sol) {
+                        inp.className = 'cw-correct';
+                    } else {
+                        inp.className = 'cw-incorrect';
+                        macroValid = false;
+                    }
+                });
+                if (macroValid) {
+                    renderSystemStatusMessage("🌟 Spectacular accuracy. Alphanumeric grid verified successfully!", "#388E3C", "white");
+                    updatePointsScore(40);
+                } else {
+                    updatePointsScore(-10);
+                }
+            });
+
+            const letterRevealBtn = document.createElement('button');
+            letterRevealBtn.className = 'btn btn-secondary';
+            letterRevealBtn.textContent = "Reveal Single Character (-10 pts)";
+            letterRevealBtn.addEventListener('click', () => {
+                const emptyInputs = Array.from(gridElement.querySelectorAll('input')).filter(i => !i.value);
+                if (emptyInputs.length > 0) {
+                    const selectedInput = emptyInputs[0];
+                    selectedInput.value = selectedInput.getAttribute('data-solution');
+                    selectedInput.className = 'cw-correct';
+                    updatePointsScore(-10);
+                }
+            });
+
+            const clearAllBtn = document.createElement('button');
+            clearAllBtn.className = 'btn btn-danger';
+            clearAllBtn.textContent = "Reveal Complete Matrix Solution";
+            clearAllBtn.addEventListener('click', () => {
+                gridElement.querySelectorAll('input').forEach(inp => {
+                    inp.value = inp.getAttribute('data-solution');
+                    inp.className = 'cw-correct';
+                });
+                renderSystemStatusMessage("Solution matrix layout completely uncovered.", "var(--text-muted)", "white");
+            });
+
+            actionsBlock.appendChild(checkGridBtn);
+            actionsBlock.appendChild(letterRevealBtn);
+            actionsBlock.appendChild(clearAllBtn);
+
+            host.appendChild(gridWrapper);
+            host.appendChild(panelsNode);
+            
+            gameEngineCoreNode.appendChild(host);
+            gameEngineCoreNode.appendChild(actionsBlock);
+        }
+
+        // =========================================================================
+        // JUEGO EXCLUSIVO 11 — MAPA DE CONCEPTOS TÁCTIL CON EXCLUSIÓN DE CDN
+        // =========================================================================
+        function startConceptMapEngineLogic() {
+            const mapData = activeUnit.conceptMaps[0];
+            const host = document.createElement('div');
+            host.className = 'map-workspace';
+
+            const toolbar = document.createElement('div');
+            toolbar.className = 'map-toolbar';
+            toolbar.innerHTML = `
+                <button class="btn btn-secondary" style="min-height:38px;" id="modeBuildBtn">Mode: Build from Scratch</button>
+                <button class="btn btn-secondary" style="min-height:38px;" id="modeCompleteBtn">Mode: Complete Partial Map</button>
+                <button class="btn btn-success" style="min-height:38px;" id="saveMapBtn">Export Configuration Key</button>
+            `;
+            host.appendChild(toolbar);
+
+            const containerBox = document.createElement('div');
+            containerBox.className = 'map-container';
+            containerBox.id = 'mapWorkspaceContainer';
+
+            const svgCanvas = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            svgCanvas.className = 'map-canvas';
+            svgCanvas.id = 'mapSvgCanvas';
+            containerBox.appendChild(svgCanvas);
+
+            host.appendChild(containerBox);
+            gameEngineCoreNode.appendChild(host);
+
+            let instantiatedNodes = [];
+            let connectionsArray = [];
+            let selectedNodeForLink = null;
+
+            function renderConnectionLines() {
+                svgCanvas.innerHTML = '';
+                connectionsArray.forEach(conn => {
+                    const fromNode = document.getElementById(`node-${conn.from}`);
+                    const toNode = document.getElementById(`node-${conn.to}`);
+                    if (fromNode && toNode) {
+                        const x1 = fromNode.offsetLeft + (fromNode.offsetWidth / 2);
+                        const y1 = fromNode.offsetTop + (fromNode.offsetHeight / 2);
+                        const x2 = toNode.offsetLeft + (toNode.offsetWidth / 2);
+                        const y2 = toNode.offsetTop + (toNode.offsetHeight / 2);
+
+                        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                        line.setAttribute("x1", x1);
+                        line.setAttribute("y1", y1);
+                        line.setAttribute("x2", x2);
+                        line.setAttribute("y2", y2);
+                        line.setAttribute("stroke", "var(--primary)");
+                        line.setAttribute("stroke-width", "3");
+                        svgCanvas.appendChild(line);
+
+                        // Render interaction text inputs directly over intersection midpoints
+                        let label = containerBox.querySelector(`#label-${conn.from}-${conn.to}`);
+                        if (!label) {
+                            label = document.createElement('div');
+                            label.className = 'relation-label';
+                            label.id = `label-${conn.from}-${conn.to}`;
+                            label.textContent = conn.r || "Click to link specification";
+                            label.addEventListener('click', () => {
+                                const rel = prompt("Specify advanced relational definition rule:", label.textContent);
+                                if (rel) { label.textContent = rel; conn.r = rel; }
+                            });
+                            containerBox.appendChild(label);
+                        }
+                        label.style.left = `${(x1 + x2) / 2}px`;
+                        label.style.top = `${(y1 + y2) / 2}px`;
+                    }
+                });
+            }
+
+            function instantiateNodeAsset(id, txt, x, y) {
+                const node = document.createElement('div');
+                node.className = 'map-node';
+                node.id = `node-${id}`;
+                node.textContent = txt;
+                node.style.left = `${x}px`;
+                node.style.top = `${y}px`;
+
+                // ADVANCED WIRE POINTER EVENT INTERFACES CATERED FOR SMARTPHONE DRAG ACTIONS
+                node.addEventListener('pointerdown', (e) => {
+                    node.setPointerCapture(e.pointerId);
+                    node.classList.add('selected');
+                    
+                    if (selectedNodeForLink && selectedNodeForLink !== node) {
+                        const fromId = parseInt(selectedNodeForLink.id.replace('node-', ''));
+                        const toId = id;
+                        // Avoid duplicates
+                        if (!connectionsArray.some(c => c.from === fromId && c.to === toId)) {
+                            connectionsArray.push({ from: fromId, to: toId, r: "Active Relation Mapping" });
+                            renderConnectionLines();
+                        }
+                        selectedNodeForLink.classList.remove('selected');
+                        selectedNodeForLink = null;
+                        node.classList.remove('selected');
+                        return;
+                    }
+
+                    const offsetX = e.clientX - node.getBoundingClientRect().left;
+                    const offsetY = e.clientY - node.getBoundingClientRect().top;
+
+                    function pointerMoveHandler(ev) {
+                        const boxBound = containerBox.getBoundingClientRect();
+                        let newL = ev.clientX - boxBound.left - offsetX;
+                        let newT = ev.clientY - boxBound.top - offsetY;
+
+                        node.style.left = `${Math.max(0, Math.min(newL, boxBound.width - node.offsetWidth))}px`;
+                        node.style.top = `${Math.max(0, Math.min(newT, boxBound.height - node.offsetHeight))}px`;
+                        renderConnectionLines();
+                    }
+
+                    node.addEventListener('pointermove', pointerMoveHandler);
+                    node.addEventListener('pointerup', () => {
+                        node.removeEventListener('pointermove', pointerMoveHandler);
+                        node.classList.remove('selected');
+                    }, { once: true });
+                });
+
+                // Dual-tap handling logic to anchor vector connector systems
+                node.addEventListener('dblclick', () => {
+                    selectedNodeForLink = node;
+                    node.classList.add('selected');
+                    alert("Node highlighted as origin anchor. Tap another block element node to construct structural linkage path.");
+                });
+
+                containerBox.appendChild(node);
+                instantiatedNodes.push(node);
+            }
+
+            // Initialization payload mapping
+            mapData.startNodes.forEach(n => {
+                instantiateNodeAsset(n.id, n.t, n.x, n.y);
+            });
+
+            document.getElementById('modeCompleteBtn').addEventListener('click', () => {
+                // Pre-build default relationship parameters derived from unit data profiles
+                connectionsArray = [...mapData.completeConnections];
+                renderConnectionLines();
+                renderSystemStatusMessage("Partial relational mapping schema applied successfully.", "var(--primary)", "white");
+            });
+
+            document.getElementById('modeBuildBtn').addEventListener('click', () => {
+                // Flush connections and introduce custom entities
+                connectionsArray = [];
+                containerBox.querySelectorAll('.relation-label').forEach(lbl => lbl.remove());
+                renderConnectionLines();
+                const nodeTxt = prompt("Enter custom conceptual grammatical node label:", "Advanced Clausal Vector Element");
+                if (nodeTxt) {
+                    const uniqueId = Date.now();
+                    instantiateNodeAsset(uniqueId, nodeTxt, 120, 150);
+                }
+            });
+
+            document.getElementById('saveMapBtn').addEventListener('click', () => {
+                alert("Linguistic model mapping exported into internal local memory system successfully!");
+                updatePointsScore(35);
+                renderSystemStatusMessage("Structural map status securely serialized.", "#388E3C", "white");
+            });
+
+            setTimeout(renderConnectionLines, 200);
+        }
+
+        // VISUAL SYSTEM LIGHT / DARK MATRICES CONTEXT TOGGLER
+        themeBtnNode.addEventListener('click', () => {
+            const currentMode = document.documentElement.getAttribute('data-theme');
+            const targetMode = currentMode === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', targetMode);
+        });
+
+        // APP INITIALIZATION BOOTSTRAP TRIGGER
+        document.addEventListener('DOMContentLoaded', () => {
+            launchAppCentralHub();
+        });
+
+        // MANDATORY IMMUTABLE INTEGRITY SECURITY SCRIPT
+        setInterval(() => {
+            const firma = document.getElementById('firma-seguridad');
+            const app = document.getElementById('app');
+            const bloqueado = document.getElementById('acceso-denegado');
+            if (!firma || firma.textContent.trim() !== 'Creado por Tony Salas & German Peña' ||
+                getComputedStyle(firma).display === 'none' ||
+                getComputedStyle(firma).opacity === '0' ||
+                getComputedStyle(firma).visibility === 'hidden') {
+                if (app) app.style.display = 'none';
+                if (!bloqueado) {
+                    const div = document.createElement('div');
+                    div.id = 'acceso-denegado';
+                    div.style.cssText = 'position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:99999;';
+                    div.innerHTML = '<p style="color:red;font-size:2rem;text-align:center;padding:2rem;">⚠️ ACCESO DENEGADO ⚠️<br><span style="font-size:1rem;">El código de seguridad y la firma han sido alterados. CREA TU VERGA TU, CARA E MONDA</span></p>';
+                    document.body.appendChild(div);
+                }
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

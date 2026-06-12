@@ -1,0 +1,1817 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌟 INTRO - Absolute Beginner</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600;700&display=swap');
+
+        :root {
+            /* NUEVA PALETA DE COLORES: AMARILLO ACADEMIA */
+            --primary: #EAB308;          /* Amarillo principal (fuerte y visible) */
+            --primary-dark: #A16207;     /* Dorado oscuro para textos contrastantes */
+            --primary-light: #FEF08A;    /* Amarillo claro para fondos suaves */
+            --bg: #FEFCE8;               /* Fondo general crema/amarillo muy suave */
+            --surface: #FFFFFF;
+            --text: #1E293B;
+            --text-muted: #64748B;
+            --border: #FDE047;           /* Bordes amarillos definidos */
+            --success: #10B981;
+            --error: #EF4444;
+            --warning: #F59E0B;
+            --radius: 16px;
+            --shadow: 0 8px 32px rgba(234, 179, 8, 0.15);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="dark"] {
+            --bg: #1E1B4B;               /* Fondo oscuro con un toque de contraste azul/morado noche */
+            --surface: #312E81;
+            --text: #FEFCE8;             /* Texto claro amarillento para modo oscuro */
+            --text-muted: #94A3B8;
+            --border: #4338CA;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            padding-top: 80px;
+            min-height: 100vh;
+            transition: var(--transition);
+        }
+
+        /* Fixed Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .header-logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn-ui {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 48px;
+            transition: var(--transition);
+        }
+
+        .btn-ui:hover {
+            background: var(--primary);
+            color: #1E293B; /* Texto oscuro sobre fondo amarillo para legibilidad */
+            border-color: var(--primary);
+        }
+
+        /* Class Navigation Tabs */
+        .tabs-container {
+            max-width: 1200px;
+            margin: 1.5rem auto;
+            padding: 0 1rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tabs-wrapper {
+            display: flex;
+            gap: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.2rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            min-height: 48px;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: #1E293B;
+            border-color: var(--primary);
+        }
+
+        /* Main Workspace Panels */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto 100px auto;
+            padding: 0 1rem;
+        }
+
+        .class-panel {
+            display: none;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+        }
+
+        .class-panel.active {
+            display: grid;
+        }
+
+        @media (max-width: 768px) {
+            .class-panel {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Left Column: Warm-Up */
+        .column-warmup {
+            background: linear-gradient(135deg, #CA8A04, #EAB308); /* Gradiente dorado/amarillo */
+            color: #1E293B;
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            height: fit-content;
+        }
+
+        .column-warmup h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .warmup-box {
+            background: rgba(255, 255, 255, 0.4);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            font-size: 1.2rem;
+            font-weight: 600;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .btn-warmup {
+            background: #1E293B;
+            color: #FFFFFF;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            min-height: 48px;
+            transition: var(--transition);
+        }
+
+        .btn-warmup:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        /* Right Column: Practice Games Framework */
+        .column-practice {
+            background: linear-gradient(135deg, #EAB308, #FACC15);
+            color: #1E293B;
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .column-practice h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .game-selector {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+            background: rgba(0,0,0,0.08);
+            padding: 0.5rem;
+            border-radius: 12px;
+        }
+
+        .game-tab-btn {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: none;
+            color: #1E293B;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            min-height: 48px;
+            transition: var(--transition);
+        }
+
+        .game-tab-btn.active {
+            background: #1E293B;
+            color: #FFFFFF;
+        }
+
+        /* Individual Game Containers */
+        .game-content-panel {
+            background: var(--surface);
+            color: var(--text);
+            border-radius: 12px;
+            padding: 1.5rem;
+            min-height: 350px;
+            display: none;
+            position: relative;
+        }
+
+        .game-content-panel.active {
+            display: block;
+        }
+
+        .game-instruction {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            border-left: 3px solid var(--primary);
+            padding-left: 0.5rem;
+        }
+
+        /* FLASHCARDS UI */
+        .flashcard-wrapper {
+            perspective: 1000px;
+            width: 100%;
+            max-width: 400px;
+            margin: 2rem auto;
+            height: 220px;
+            cursor: pointer;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: var(--radius);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--border);
+        }
+
+        .card-front {
+            background: var(--surface);
+            color: var(--text);
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .card-back {
+            background: var(--bg);
+            color: var(--text);
+            transform: rotateY(180deg);
+            font-size: 1.05rem;
+        }
+
+        .card-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        /* QUIZ UI */
+        .quiz-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .quiz-question {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+        }
+
+        .option-btn {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: inherit;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            min-height: 48px;
+            transition: var(--transition);
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary);
+            background: var(--bg);
+        }
+
+        /* HANGMAN UI */
+        .hangman-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .hangman-word-display {
+            font-size: 2rem;
+            letter-spacing: 0.5rem;
+            font-weight: 700;
+            margin: 1rem 0;
+            min-height: 3rem;
+        }
+
+        .hangman-keyboard {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+            justify-content: center;
+            max-width: 450px;
+        }
+
+        .key-btn {
+            width: 36px;
+            height: 40px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .key-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* MEMORY GAME UI */
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .memory-card {
+            aspect-ratio: 1;
+            background: var(--primary);
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: transparent;
+            user-select: none;
+            border: 2px solid transparent;
+            transition: var(--transition);
+        }
+
+        .memory-card.revealed {
+            background: var(--surface);
+            border-color: var(--primary);
+            color: var(--text);
+        }
+
+        .memory-card.matched {
+            background: var(--bg);
+            border-color: var(--success);
+            color: var(--success);
+            opacity: 0.7;
+            cursor: default;
+        }
+
+        /* FILL IN THE BLANKS UI */
+        .fitb-sentence {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 2rem 0;
+            text-align: center;
+            line-height: 2;
+        }
+
+        .fitb-blank-placeholder {
+            display: inline-block;
+            border-bottom: 2px dashed var(--primary);
+            min-width: 100px;
+            padding: 0 0.5rem;
+            color: var(--primary-dark);
+        }
+
+        /* DRAG & SORT UI */
+        .drag-sort-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .drag-items-pool {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: var(--bg);
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            min-height: 60px;
+        }
+
+        .drag-item {
+            padding: 0.5rem 1rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: grab;
+            font-weight: 600;
+            user-select: none;
+        }
+
+        .drag-zones-wrapper {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .drop-zone {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            min-height: 150px;
+        }
+
+        .drop-zone h4 {
+            margin-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.25rem;
+            color: var(--primary-dark);
+        }
+
+        /* RULETA UI */
+        .roulette-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .wheel-wrapper {
+            position: relative;
+            width: 260px;
+            height: 260px;
+        }
+
+        .wheel-canvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: var(--shadow);
+            transform: rotate(0deg);
+            transition: transform 4s cubic-bezier(0.1, 0.8, 0.1, 1);
+        }
+
+        .wheel-pointer {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 25px solid var(--error);
+            z-index: 10;
+        }
+
+        /* SOPA DE LETRAS UI */
+        .wordsearch-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 2px;
+            max-width: 350px;
+            margin: 0 auto;
+            background: var(--border);
+            padding: 2px;
+            border-radius: 8px;
+        }
+
+        .ws-cell {
+            aspect-ratio: 1;
+            background: var(--surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .ws-cell.selected {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+        }
+
+        .ws-cell.found {
+            background: var(--success);
+            color: white;
+        }
+
+        .ws-word-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            justify-content: center;
+        }
+
+        .ws-word-item {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.5rem;
+            background: var(--bg);
+            border-radius: 4px;
+            text-decoration: none;
+        }
+
+        .ws-word-item.found {
+            text-decoration: line-through;
+            opacity: 0.5;
+            background: var(--success);
+            color: white;
+        }
+
+        /* Status & Validation Overlays */
+        .game-status-feedback {
+            margin-top: 1rem;
+            text-align: center;
+            font-weight: 700;
+            min-height: 1.5rem;
+        }
+
+        .system-action-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            border-top: 1px solid var(--border);
+            padding-top: 1rem;
+        }
+
+        /* Security Verification Elements */
+        #firma {
+            position: fixed;
+            bottom: 20px;
+            left: 30px;
+            z-index: 9999;
+            font-family: 'Dancing Script', cursive;
+            font-size: 18px;
+            color: #A16207;
+            pointer-events: none;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <a href="index.html" class="btn-back-nav" style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                padding: 0 16px;
+                height: 42px;
+                border-radius: 12px;
+                background: var(--border-color);
+                color: var(--primary-color);
+                text-decoration: none;
+                font-size: 0.95rem;
+                font-weight: bold;
+                transition: background 0.3s ease, transform 0.2s ease;
+                border: none;
+                cursor: pointer;
+            " onmouseover="this.style.background='#FFCDD2'; this.style.transform='scale(1.03)';" onmouseout="this.style.background='var(--border-color)'; this.style.transform='scale(1)';">
+                🏠 Home
+            </a>
+            <div class="header-logo">English Interactive — Level INTRO</div>
+        </div>
+    </header>
+
+    <div id="appContainer">
+        <nav class="tabs-container">
+            <div class="tabs-wrapper" id="classTabsWrapper"></div>
+        </nav>
+
+        <main class="main-container" id="mainWorkspace"></main>
+    </div>
+
+    <div id="firma">Creado por Tony Salas & German Peña</div>
+
+    <script>
+        // DATA DICTIONARIES FOR THE SYSTEM
+        const APPDATA = {
+            classes: [
+                {
+                    id: 1,
+                    title: "Class 1 - Introductions",
+                    desc: "Introduce yourself and others. Spell names.",
+                    warmup: [
+                        "What is your full name?", "How do you spell your first name?",
+                        "Can you introduce yourself in one sentence?", "What is your teacher's name? How do you spell it?",
+                        "Introduce the person sitting next to you.", "How do you say your name letter by letter?",
+                        "What does your name mean? Do you know?", "Spell your last name out loud."
+                    ],
+                    flashcards: [
+                        {f:"My name is ___.", b:"Use this to introduce yourself.\nExample: My name is Maria."},
+                        {f:"What is your name?", b:"Answer: My name is ___.\n/ I'm ___."},
+                        {f:"His name is ___.", b:"Use HIS for a boy/man.\nExample: His name is Carlos."},
+                        {f:"Her name is ___.", b:"Use HER for a girl/woman.\nExample: Her name is Sofia."},
+                        {f:"How do you spell ___?", b:"Answer letter by letter:\nM-A-R-I-A"},
+                        {f:"Nice to meet you.", b:"Response: Nice to meet you too! / Pleased to meet you."},
+                        {f:"This is my friend ___.", b:"Use this to introduce someone else. Point to them."},
+                        {f:"The alphabet: A B C D E F G", b:"H I J K L M N O P Q R S T U V W X Y Z"},
+                        {f:"Vowels in English:", b:"A - E - I - O - U"},
+                        {f:"I'd like to introduce ___.", b:"More formal way to introduce someone. Used in presentations."}
+                    ],
+                    quiz: [
+                        {q:"___ name is Carlos. He is my friend.", opts:["My","Her","His","Their"], a:2},
+                        {q:"'Nice to meet you.' The correct response is:", opts:["Thank you","Nice to meet you too","What?","Goodbye"], a:1},
+                        {q:"How do you SPELL 'cat'?", opts:["C-E-T","C-A-T","K-A-T","C-A-D"], a:1},
+                        {q:"___ name is Sofia. She is a student.", opts:["His","My","Their","Her"], a:3},
+                        {q:"'This is ___ friend Ana.' (my friend)", opts:["my","her","his","your"], a:0},
+                        {q:"Which is the correct introduction?", opts:["Name my is John","My name is John","Is my name John","John name my is"], a:1},
+                        {q:"What letter comes after M in the alphabet?", opts:["L","O","N","P"], a:2},
+                        {q:"How do you introduce someone else?", opts:["My name is...","This is my friend...","I am...","You are..."], a:1}
+                    ],
+                    hangman: [
+                        {word:"NAME", hint:"What people call you"}, {word:"SPELL", hint:"Say each letter one by one"},
+                        {word:"INTRODUCE", hint:"To tell others who you are"}, {word:"ALPHABET", hint:"A B C D E F G..."},
+                        {word:"LETTER", hint:"A, B, C are examples of this"}, {word:"FRIEND", hint:"Someone you know and like"},
+                        {word:"HELLO", hint:"A greeting word"}, {word:"VOWEL", hint:"A, E, I, O, U"},
+                        {word:"MEET", hint:"Nice to ___ you!"}, {word:"PERSON", hint:"A human being"}
+                    ],
+                    fitb: [
+                        {s:"___ name is Maria.", opts:["My","She","Am","Are"], a:0, blank:"___"},
+                        {s:"Nice to ___ you!", opts:["see","meet","call","say"], a:1, blank:"___"},
+                        {s:"This is ___ friend Tom.", opts:["a","my","am","I"], a:1, blank:"___"},
+                        {s:"How do you ___ your name?", opts:["say","spell","call","write"], a:1, blank:"___"},
+                        {s:"___ name is Carlos. (boy)", opts:["Her","My","His","Their"], a:2, blank:"___"}
+                    ],
+                    memory: [
+                        {a:"My name is", b:"Maria"}, {a:"His name is", b:"Carlos"},
+                        {a:"Her name is", b:"Sofia"}, {a:"Nice to", b:"meet you"},
+                        {a:"Vowels", b:"A E I O U"}, {a:"Friend", b:"Companion"}
+                    ],
+                    wordsearch: ["NAME", "SPELL", "LETTER", "HELLO"],
+                    dragsort: {
+                        cats: ["Greetings", "Identifiers"],
+                        items: [{t:"HELLO", c:0}, {t:"HI", c:0}, {t:"HIS", c:1}, {t:"HER", c:1}, {t:"MY", c:1}, {t:"BYE", c:0}]
+                    },
+                    roulette: ["Introduce yourself!", "Spell your last name", "Introduce your teacher", "Say the English vowels"]
+                },
+                {
+                    id: 2,
+                    title: "Class 2 - Greetings",
+                    desc: "Greet and make friends. Verb to be intro.",
+                    warmup: [
+                        "How do you greet someone in the morning?", "What do you say when you meet someone for the first time?",
+                        "How are you feeling today?", "What is a formal greeting in English?",
+                        "How do you say goodbye in English?", "Are you happy, sad, or tired today?",
+                        "How do you greet a friend vs. a teacher differently?", "What do you say at the end of the school day?"
+                    ],
+                    flashcards: [
+                        {f:"Good morning!", b:"Used from 6am to 12pm.\nResponse: Good morning!"},
+                        {f:"Good afternoon!", b:"Used from 12pm to 6pm.\nResponse: Good afternoon!"},
+                        {f:"Good evening!", b:"Used after 6pm.\nResponse: Good evening!"},
+                        {f:"How are you?", b:"Responses: I'm fine / great / okay / not bad, thank you!"},
+                        {f:"I am (I'm)", b:"Verb TO BE - first person singular.\nI'm happy. I'm a student."},
+                        {f:"You are (You're)", b:"Verb TO BE - second person.\nYou're my friend. You're great!"},
+                        {f:"He is / She is", b:"Verb TO BE - third person.\nHe's tall. She's nice."},
+                        {f:"Goodbye / Bye", b:"Ways to say farewell:\nGoodbye! / Bye! / See you later! / Take care!"},
+                        {f:"Nice to meet you vs Nice to see you", b:"Meet = first time. See = you know them already."},
+                        {f:"How are you? vs How do you do?", b:"How are you = casual.\nHow do you do = very formal (British)."}
+                    ],
+                    quiz: [
+                        {q:"You meet someone for the first time at 9am. You say:", opts:["Good evening","Good night","Good morning","Goodnight"], a:2},
+                        {q:"'How are you?' — The correct answer is:", opts:["I am fine, thank you","My name is Ana","She is good","They are okay"], a:0},
+                        {q:"___ are my best friend.", opts:["I","He","You","She"], a:2},
+                        {q:"She ___ a very good student.", opts:["am","are","is","be"], a:2},
+                        {q:"'See you later!' is a way to say:", opts:["Hello","Good morning","How are you","Goodbye"], a:3},
+                        {q:"I ___ happy today.", opts:["is","are","am","be"], a:2},
+                        {q:"'Nice to ___ you again!' (you know them)", opts:["meet","see","call","greet"], a:1},
+                        {q:"Which is a FORMAL greeting?", opts:["Hey!","Wassup?","Good morning, how do you do?","Yo!"], a:2}
+                    ],
+                    hangman: [
+                        {word:"GREET", hint:"What you do when you say hello"}, {word:"MORNING", hint:"Good ___ ! (before noon)"},
+                        {word:"EVENING", hint:"Good ___ ! (after 6pm)"}, {word:"FRIEND", hint:"Someone you like and trust"},
+                        {word:"HAPPY", hint:"A positive emotion — 😊"}, {word:"FORMAL", hint:"Professional, not casual"},
+                        {word:"GOODBYE", hint:"What you say when leaving"}, {word:"FEELING", hint:"How are you ___?"},
+                        {word:"STUDENT", hint:"A person who learns"}, {word:"TEACHER", hint:"A person who teaches"}
+                    ],
+                    fitb: [
+                        {s:"Good ___, how are you?", opts:["morning","night","sleep","dark"], a:0, blank:"___"},
+                        {s:"I ___ a student.", opts:["are","is","am","be"], a:2, blank:"___"},
+                        {s:"She ___ my English teacher.", opts:["am","are","is","were"], a:2, blank:"___"},
+                        {s:"Nice to ___ you again!", opts:["meet","see","call","find"], a:1, blank:"___"},
+                        {s:"___ you later!", opts:["Look","See","Find","Watch"], a:1, blank:"___"}
+                    ],
+                    memory: [
+                        {a:"Good morning", b:"6am-12pm"}, {a:"Good afternoon", b:"12pm-6pm"},
+                        {a:"I am", b:"I'm"}, {a:"She is", b:"She's"},
+                        {a:"How are you?", b:"I'm fine, thanks!"}, {a:"Goodbye", b:"See you later"}
+                    ],
+                    wordsearch: ["GREET", "HAPPY", "FORMAL", "TEACHER"],
+                    dragsort: {
+                        cats: ["Formal", "Informal"],
+                        items: [{t:"Good morning", c:0}, {t:"How do you do?", c:0}, {t:"Hey!", c:1}, {t:"What's up?", c:1}]
+                    },
+                    roulette: ["Say Good Morning!", "How are you today?", "Say Goodbye in 3 ways", "Introduce yourself formally"]
+                },
+                {
+                    id: 3,
+                    title: "Class 3 - Contact Info",
+                    desc: "Contact information. Numbers & Email symbols.",
+                    warmup: [
+                        "What is your phone number?", "How do you say your email address in English?",
+                        "What symbol is @ called in English?", "Can you say the numbers 1 to 20 in English?",
+                        "What is the difference between zero and oh in phone numbers?", "How do you ask someone for their phone number politely?",
+                        "What does 'dot com' mean in an email?", "Can you spell out a sample email address in English?"
+                    ],
+                    flashcards: [
+                        {f:"Numbers 1-10", b:"one, two, three, four, five, six, seven, eight, nine, ten"},
+                        {f:"Numbers 11-20", b:"eleven, twelve, thirteen, fourteen, fifteen, sixteen, seventeen, eighteen, nineteen, twenty"},
+                        {f:"@ symbol", b:"Called: 'at' sign.\nExample: maria@gmail.com = maria AT gmail DOT com"},
+                        {f:". (dot)", b:"Called: 'dot' in emails/websites.\nExample: .com / .org / .net"},
+                        {f:"_ (underscore)", b:"Called: 'underscore'.\nExample: maria_garcia@email.com"},
+                        {f:"- (hyphen/dash)", b:"Called: 'hyphen' or 'dash'.\nExample: maria-garcia@email.com"},
+                        {f:"What is your phone number?", b:"My phone number is 555-1234.\n(say each digit individually)"},
+                        {f:"What is your email address?", b:"My email is...\nExample: It's john DOT smith AT gmail DOT com"},
+                        {f:"Numbers: 30, 40, 50...", b:"thirty, forty, fifty, sixty, seventy, eighty, ninety, one hundred"},
+                        {f:"0 in phone numbers", b:"Say 'zero' or 'oh'.\nExample: 0-3-0 = oh-three-oh"}
+                    ],
+                    quiz: [
+                        {q:"How do you say '@' in an email address?", opts:["dot","at","hash","star"], a:1},
+                        {q:"How do you say '.' in 'gmail.com'?", opts:["comma","point","dot","dash"], a:2},
+                        {q:"What is 15 in words?", opts:["fifty","fiveteen","fifteen","fivteen"], a:2},
+                        {q:"'_' in an email is called:", opts:["dash","underscore","slash","dot"], a:1},
+                        {q:"How do you ask for someone's phone number?", opts:["Give me your number","What is your phone number?","Phone, please","Your number?"], a:1},
+                        {q:"What is 40 in words?", opts:["fourty","forty","forthy","fortey"], a:1},
+                        {q:"'john.smith@email.com' — you say:", opts:["john dot smith at email dot com","john point smith at email point com","john@smith dot email com","john-smith at email-com"], a:0},
+                        {q:"How do you say the number 0 in phone numbers?", opts:["nothing","null","zero or oh","empty"], a:2}
+                    ],
+                    hangman: [
+                        {word:"EMAIL", hint:"Electronic mail address"}, {word:"NUMBER", hint:"1, 2, 3, 4, 5..."},
+                        {word:"PHONE", hint:"You use this to call people"}, {word:"ADDRESS", hint:"Where you live or your email ___"},
+                        {word:"CONTACT", hint:"How to reach someone"}, {word:"SYMBOL", hint:"@ and . are examples of this"},
+                        {word:"TWENTY", hint:"The number 20"}, {word:"FIFTEEN", hint:"The number 15"},
+                        {word:"HUNDRED", hint:"The number 100"}, {word:"DIGIT", hint:"A single number: 0,1,2,3..."}
+                    ],
+                    fitb: [
+                        {s:"My email is maria ___ gmail.com", opts:["at","dot","in","on"], a:0, blank:"___"},
+                        {s:"His phone ___ is 555-1234.", opts:["name","number","address","email"], a:1, blank:"___"},
+                        {s:"The number 15 is ___.", opts:["fifty","fiveteen","fifteen","fivteen"], a:2, blank:"___"},
+                        {s:"'.' in an email is called a ___.", opts:["dash","comma","dot","slash"], a:2, blank:"___"},
+                        {s:"Can I have your ___ address?", opts:["phone","mail","email","home"], a:2, blank:"___"}
+                    ],
+                    memory: [
+                        {a:"@", b:"at sign"}, {a:".", b:"dot"},
+                        {a:"_", b:"underscore"}, {a:"-", b:"hyphen"},
+                        {a:"15", b:"fifteen"}, {a:"20", b:"twenty"}
+                    ],
+                    wordsearch: ["EMAIL", "PHONE", "DIGIT", "SYMBOL"],
+                    dragsort: {
+                        cats: ["Symbols", "Numbers"],
+                        items: [{t:"@", c:0}, {t:".", c:0}, {t:"TWENTY", c:1}, {t:"FIFTEEN", c:1}]
+                    },
+                    roulette: ["Say your phone number", "Spell out your email address", "Count from 10 to 20", "What is the name of '_'?"]
+                },
+                {
+                    id: 4,
+                    title: "Class 4 - Nationality",
+                    desc: "Nationality. Yes/No questions with be.",
+                    warmup: [
+                        "What is your nationality?", "Are you Colombian? Are you Mexican?",
+                        "What country are you from?", "Is your teacher American or British?",
+                        "Are there any international students in your class?", "What language do people speak in Brazil?",
+                        "Are you proud of your nationality? Why?", "What nationality is your favorite singer or athlete?"
+                    ],
+                    flashcards: [
+                        {f:"Are you ___?", b:"Yes, I am. / No, I'm not.\n(Yes/No question with BE)"},
+                        {f:"Is she ___?", b:"Yes, she is. / No, she isn't."},
+                        {f:"Are they ___?", b:"Yes, they are. / No, they aren't."},
+                        {f:"Colombia → Colombian", b:"Country → Nationality (add -n or -an)"},
+                        {f:"Mexico → Mexican", b:"Country → Nationality (drop o, add -an)"},
+                        {f:"Brazil → Brazilian", b:"Country → Nationality (add -ian)"},
+                        {f:"USA → American", b:"United States → American"},
+                        {f:"England → English", b:"Country → Nationality (irregular)"},
+                        {f:"France → French", b:"Country → Nationality (irregular)"},
+                        {f:"Where are you from?", b:"I'm from Colombia. / I'm Colombian.\n(two ways to answer)"}
+                    ],
+                    quiz: [
+                        {q:"___ you from Colombia?", opts:["Am","Is","Are","Be"], a:2},
+                        {q:"'Are you Mexican?' — Negative answer:", opts:["No, I not am","No, I isn't","No, I'm not","No, am not I"], a:2},
+                        {q:"She is from France. She is ___.", opts:["Frenchian","Frances","French","Francish"], a:2},
+                        {q:"They ___ from Brazil.", opts:["am","is","are","be"], a:2},
+                        {q:"'Is he American?' — Affirmative answer:", opts:["Yes, he is","Yes, he are","Yes, he am","Yes, is he"], a:0},
+                        {q:"Colombia → ___", opts:["Colombish","Colombiaan","Colombian","Colombic"], a:2},
+                        {q:"___ she from England?", opts:["Am","Are","Is","Be"], a:2},
+                        {q:"I ___ not from Mexico.", opts:["is","are","am","be"], a:2}
+                    ],
+                    hangman: [
+                        {word:"NATIONALITY", hint:"Colombian, American, French..."}, {word:"COUNTRY", hint:"Colombia, France, Japan..."},
+                        {word:"COLOMBIAN", hint:"From Colombia"}, {word:"MEXICAN", hint:"From Mexico"},
+                        {word:"AMERICAN", hint:"From the United States"}, {word:"ENGLISH", hint:"From England"},
+                        {word:"FRENCH", hint:"From France"}, {word:"PASSPORT", hint:"Document that shows your nationality"},
+                        {word:"LANGUAGE", hint:"Spanish, English, French..."}, {word:"CITIZEN", hint:"A person who belongs to a country"}
+                    ],
+                    fitb: [
+                        {s:"___ you from Brazil?", opts:["Am","Is","Are","Be"], a:2, blank:"___"},
+                        {s:"No, I'm ___. I'm Colombian.", opts:["not","no","don't","isn't"], a:0, blank:"___"},
+                        {s:"She is from France. She is ___.", opts:["Frances","French","Frenchie","Franch"], a:1, blank:"___"},
+                        {s:"___ he American?", opts:["Am","Are","Is","Be"], a:2, blank:"___"},
+                        {s:"I am from Mexico. I am ___.", opts:["Hexicano","Mexician","Mexican","Mexic"], a:2, blank:"___"}
+                    ],
+                    memory: [
+                        {a:"Colombia", b:"Colombian"}, {a:"Mexico", b:"Mexican"},
+                        {a:"Brazil", b:"Brazilian"}, {a:"France", b:"French"},
+                        {a:"England", b:"English"}, {a:"USA", b:"American"}
+                    ],
+                    wordsearch: ["COUNTRY", "FRENCH", "MEXICAN", "CITIZEN"],
+                    dragsort: {
+                        cats: ["Countries", "Nationalities"],
+                        items: [{t:"Colombia", c:0}, {t:"France", c:0}, {t:"Mexican", c:1}, {t:"American", c:1}, {t:"Brazil", c:0}, {t:"English", c:1}]
+                    },
+                    roulette: ["Where are you from?", "What language is spoken in Brazil?", "What is the nationality of England?", "Ask a Yes/No question with 'be'"]
+                },
+                {
+                    id: 5,
+                    title: "Class 5 - Objects",
+                    desc: "Identify objects. This/These, It/They, Plurals.",
+                    warmup: [
+                        "What objects can you see in this classroom right now?", "Point to something and say: This is a ___.",
+                        "What are these? (pointing to multiple objects)", "How do you make the word 'book' plural?",
+                        "What is the plural of 'person'?", "Point to one thing. Now point to many things.",
+                        "What objects do you carry in your backpack?", "How many chairs are in this room?"
+                    ],
+                    flashcards: [
+                        {f:"This is a ___.", b:"ONE object NEAR you.\nThis is a pen. This is a book."},
+                        {f:"These are ___.", b:"MULTIPLE objects NEAR you.\nThese are pencils. These are books."},
+                        {f:"It is a ___.", b:"Replace ONE object: It is a pen.\n(It = the object)"},
+                        {f:"They are ___.", b:"Replace MULTIPLE objects: They are pens.\n(They = the objects)"},
+                        {f:"Regular plurals: add -S", b:"book→books, pen→pens, desk→desks"},
+                        {f:"Plurals ending in -S, -SH, -CH, -X: add -ES", b:"bus→buses, brush→brushes, box→boxes"},
+                        {f:"Plurals ending in consonant+Y: change Y→IES", b:"city→cities, baby→babies, family→families"},
+                        {f:"Irregular plurals:", b:"person→people, child→children,\nman→men, woman→women, tooth→teeth"},
+                        {f:"What is this?", b:"It's a / an + singular noun.\nIt's a book. It's an eraser."},
+                        {f:"A vs An", b:"A + consonant sound: a book, a pen.\nAN + vowel sound: an apple, an eraser."}
+                    ],
+                    quiz: [
+                        {q:"___ is a book. (singular, near)", opts:["These","Those","This","They"], a:2},
+                        {q:"___ are my pencils. (plural, near)", opts:["This","That","It","These"], a:3},
+                        {q:"The plural of 'box' is:", opts:["boxs","boxes","boxies","box"], a:1},
+                        {q:"The plural of 'child' is:", opts:["childs","children","childes","kids"], a:1},
+                        {q:"'It ___ a ruler.' (to be)", opts:["am","are","is","be"], a:2},
+                        {q:"'___ an apple.' (a or an?)", opts:["a","an","the","some"], a:1},
+                        {q:"The plural of 'city' is:", opts:["citys","cityes","cities","citties"], a:2},
+                        {q:"They ___ chairs. (to be plural)", opts:["am","is","are","be"], a:2}
+                    ],
+                    hangman: [
+                        {word:"PLURAL", hint:"More than one: books, pens, chairs"}, {word:"OBJECT", hint:"A thing you can touch and see"},
+                        {word:"ERASER", hint:"Used to remove pencil marks"}, {word:"PENCIL", hint:"You write with this (not a pen)"},
+                        {word:"CHILDREN", hint:"Plural of child"}, {word:"NOTEBOOK", hint:"You write notes in this"},
+                        {word:"WINDOW", hint:"You look outside through this"}, {word:"BACKPACK", hint:"You carry your books in this"},
+                        {word:"PEOPLE", hint:"Plural of person"}, {word:"TEETH", hint:"Plural of tooth"}
+                    ],
+                    fitb: [
+                        {s:"___ is a book. (one, near)", opts:["These","This","They","Those"], a:1, blank:"___"},
+                        {s:"___ are pens. (many, near)", opts:["This","It","These","That"], a:2, blank:"___"},
+                        {s:"The plural of 'bus' is ___.", opts:["buss","bus","buses","busis"], a:2, blank:"___"},
+                        {s:"It is ___ apple.", opts:["a","an","the","some"], a:1, blank:"___"},
+                        {s:"The plural of 'woman' is ___.", opts:["womans","womens","woman","women"], a:3, blank:"___"}
+                    ],
+                    memory: [
+                        {a:"this", b:"one thing (near)"}, {a:"these", b:"many things (near)"},
+                        {a:"it", b:"replaces 1 thing"}, {a:"they", b:"replaces many"},
+                        {a:"box", b:"boxes"}, {a:"child", b:"children"}
+                    ],
+                    wordsearch: ["PLURAL", "OBJECT", "PENCIL", "WINDOW"],
+                    dragsort: {
+                        cats: ["Singular", "Regular Plural", "Irregular Plural"],
+                        items: [{t:"book", c:0}, {t:"boxes", c:1}, {t:"children", c:2}, {t:"pen", c:0}, {t:"cities", c:1}, {t:"men", c:2}]
+                    },
+                    roulette: ["What is the plural of person?", "Point to an object and use 'This'", "When do we use 'An'?", "Name 3 classroom items"]
+                },
+                {
+                    id: 6,
+                    title: "Class 6 - Positions",
+                    desc: "Position objects. Prepositions of place.",
+                    warmup: [
+                        "Where is your backpack right now?", "What is on top of the teacher's desk?",
+                        "Where do you sit in this classroom?", "What is behind you right now?",
+                        "Is there anything under your chair?", "Where is the door? Describe its position.",
+                        "What is between you and the window?", "Describe where your phone is right now."
+                    ],
+                    flashcards: [
+                        {f:"IN", b:"Inside a closed space.\nThe book is IN the bag."},
+                        {f:"ON", b:"On a surface.\nThe pen is ON the desk."},
+                        {f:"UNDER", b:"Below something.\nThe cat is UNDER the table."},
+                        {f:"OVER", b:"Above, covering.\nThe lamp is OVER the desk."},
+                        {f:"NEXT TO / BESIDE", b:"At the side of something.\nThe chair is NEXT TO the desk."},
+                        {f:"BETWEEN", b:"In the middle of two things.\nThe book is BETWEEN the pencils."},
+                        {f:"BEHIND", b:"At the back of something.\nThe board is BEHIND the teacher."},
+                        {f:"IN FRONT OF", b:"Facing something.\nThe students are IN FRONT OF the board."},
+                        {f:"NEAR / CLOSE TO", b:"Not far from something.\nThe door is NEAR the window."},
+                        {f:"The book is ___ the desk.", b:"ON — it's on a surface (flat, touching)"}
+                    ],
+                    quiz: [
+                        {q:"The cat is ___ the box. (inside)", opts:["on","in","over","next to"], a:1},
+                        {q:"The pen is ___ the desk. (touching the surface)", opts:["in","under","on","behind"], a:2},
+                        {q:"The chair is ___ the desk. (not far)", opts:["under","next to","in","over"], a:1},
+                        {q:"The dog is ___ the table. (below it)", opts:["on","in","under","over"], a:2},
+                        {q:"She is sitting ___ the teacher. (facing them)", opts:["behind","in front of","over","between"], a:1},
+                        {q:"The book is ___ the red pen and the blue pen.", opts:["next to","in","between","on"], a:2},
+                        {q:"The lamp is ___ the table. (above, covering)", opts:["in","under","over","between"], a:2},
+                        {q:"The board is ___ the teacher.", opts:["in front of","behind","over","next to"], a:1}
+                    ],
+                    hangman: [
+                        {word:"BETWEEN", hint:"The cat is ___ two chairs"}, {word:"BEHIND", hint:"The opposite of in front of"},
+                        {word:"UNDER", hint:"The dog is ___ the table"}, {word:"BESIDE", hint:"Another word for next to"},
+                        {word:"POSITION", hint:"Where something is located"}, {word:"SURFACE", hint:"ON is used for this"},
+                        {word:"LOCATION", hint:"Where something is"}, {word:"FRONT", hint:"In ___ of the class"},
+                        {word:"CORNER", hint:"Where two walls meet"}, {word:"ABOVE", hint:"Higher than something"}
+                    ],
+                    fitb: [
+                        {s:"The cat is ___ the box. (inside)", opts:["on","in","at","over"], a:1, blank:"___"},
+                        {s:"The book is ___ the table. (surface)", opts:["in","under","on","at"], a:2, blank:"___"},
+                        {s:"She is sitting ___ her friend.", opts:["in","over","next to","between"], a:2, blank:"___"},
+                        {s:"The dog is sleeping ___ the bed.", opts:["on","in","over","under"], a:3, blank:"___"},
+                        {s:"I sit ___ of the classroom.", opts:["behind","in front","next","between"], a:1, blank:"___"}
+                    ],
+                    memory: [
+                        {a:"IN", b:"inside space"}, {a:"ON", b:"surface tracking"},
+                        {a:"UNDER", b:"below object"}, {a:"NEXT TO", b:"at the side"},
+                        {a:"BETWEEN", b:"in the middle"}, {a:"BEHIND", b:"at the back"}
+                    ],
+                    wordsearch: ["UNDER", "BEHIND", "FRONT", "CORNER"],
+                    dragsort: {
+                        cats: ["Horizontal Relations", "Vertical Relations"],
+                        items: [{t:"NEXT TO", c:0}, {t:"BETWEEN", c:0}, {t:"ON", c:1}, {t:"UNDER", c:1}]
+                    },
+                    roulette: ["Where is your phone right now?", "Explain the difference between IN and ON", "What is behind you?", "Complete: My feet are ___ the floor."]
+                },
+                {
+                    id: 7,
+                    title: "Class 7 - People Info",
+                    desc: "General info about people. WH questions.",
+                    warmup: [
+                        "What does your best friend look like?", "How old is your English teacher?",
+                        "Who is the tallest person in your family?", "What does your mom/dad look like?",
+                        "Where is your school located?", "Who is your favorite person? What do they look like?",
+                        "How old are you? And your best friend?", "What does a typical student look like?"
+                    ],
+                    flashcards: [
+                        {f:"What does he/she look like?", b:"Describe appearance:\nHe is tall. She has long hair."},
+                        {f:"How old is ___?", b:"He/She is ___ years old.\nHow old are you? I'm 15."},
+                        {f:"Where is ___?", b:"She is at school / in Colombia /\nnext to the door."},
+                        {f:"Who is ___?", b:"She is my teacher. / He is my brother."},
+                        {f:"What + be + subject + like?", b:"What is she like? = personality\nWhat does she look like? = appearance"},
+                        {f:"Describing hair:", b:"long/short, straight/curly/wavy,\nblack/brown/blonde/red/white hair"},
+                        {f:"Describing height/build:", b:"tall/short/medium height,\nthin/slim/heavy/average build"},
+                        {f:"Adjective order:", b:"Opinion → Size → Age → Color → Noun\nA tall young woman. A short old man."},
+                        {f:"What is he like?", b:"Personality: He is kind, funny, serious,\nshy, outgoing, friendly, smart."},
+                        {f:"How old are you?", b:"I am ___ years old. / I'm ___.\nNever say: I have ___ years."}
+                    ],
+                    quiz: [
+                        {q:"'___ does she look like?' (appearance)", opts:["Who","What","Where","How"], a:1},
+                        {q:"'How ___ is your teacher?'", opts:["old","age","year","much"], a:0},
+                        {q:"She has ___ hair. (not long)", opts:["tall","short","big","thin"], a:1},
+                        {q:"'What is he like?' asks about his:", opts:["age","nationality","personality","appearance"], a:2},
+                        {q:"He is ___ — about 180cm.", opts:["short","small","tall","thin"], a:2},
+                        {q:"'___ is your brother?' 'He is in his room.'", opts:["What","Who","Where","How"], a:2},
+                        {q:"'___ is that woman?' 'She is my aunt.'", opts:["Where","What","Who","How"], a:2},
+                        {q:"Correct: How old ___?", opts:["have you","are you","you are","do you"], a:1}
+                    ],
+                    hangman: [
+                        {word:"APPEARANCE", hint:"What someone looks like"}, {word:"PERSONALITY", hint:"Kind, funny, shy, outgoing..."},
+                        {word:"TALL", hint:"The opposite of short (height)"}, {word:"BLONDE", hint:"A light yellow hair color"},
+                        {word:"CURLY", hint:"Hair that forms spirals"}, {word:"FRIENDLY", hint:"Nice and easy to talk to"},
+                        {word:"DESCRIBE", hint:"To say what someone looks like"}, {word:"MEDIUM", hint:"Not tall, not short — ___ height"},
+                        {word:"SERIOUS", hint:"Not funny — a ___ person"}, {word:"OUTGOING", hint:"Loves meeting people, sociable"}
+                    ],
+                    fitb: [
+                        {s:"What ___ she look like?", opts:["is","does","do","are"], a:1, blank:"___"},
+                        {s:"He is ___ years old.", opts:["have","has","is","with"], a:2, blank:"___"},
+                        {s:"She has long, ___ hair.", opts:["tall","curly","old","big"], a:1, blank:"___"},
+                        {s:"___ is your teacher? She's kind and funny.", opts:["What","Where","Who","How"], a:0, blank:"___"},
+                        {s:"He is ___ — about 175cm tall.", opts:["short","small","medium","thin"], a:2, blank:"___"}
+                    ],
+                    memory: [
+                        {a:"What look like?", b:"appearance"}, {a:"What is like?", b:"personality"},
+                        {a:"How old?", b:"age calculation"}, {a:"Where?", b:"location"},
+                        {a:"Who?", b:"person identity"}, {a:"tall", b:"short opposite"}
+                    ],
+                    wordsearch: ["TALL", "CURLY", "SERIOUS", "BLONDE"],
+                    dragsort: {
+                        cats: ["Appearance", "Personality"],
+                        items: [{t:"TALL", c:0}, {t:"CURLY", c:0}, {t:"FRIENDLY", c:1}, {t:"SERIOUS", c:1}]
+                    },
+                    roulette: ["Describe your hair", "How old are you?", "What is your best friend like?", "Ask someone their age"]
+                },
+                {
+                    id: 8,
+                    title: "Class 8 - Belongings",
+                    desc: "Belongings. Possessives.",
+                    warmup: [
+                        "Whose backpack is this?", "What are your favorite belongings?",
+                        "Is this pen yours or mine?", "What is in your pocket right now?",
+                        "Can you name 5 things that belong to you?", "Whose phone is on the desk?",
+                        "What is something that belongs to your school?", "Is this your notebook or your friend's notebook?"
+                    ],
+                    flashcards: [
+                        {f:"Possessive Adjectives", b:"my, your, his, her, its, our, their\nUsed BEFORE a noun: my book, her pen"},
+                        {f:"Possessive Pronouns", b:"mine, yours, his, hers, its, ours, theirs\nUsed ALONE: This book is mine."},
+                        {f:"Possessive Nouns", b:"Add 's to show ownership:\nMaria's book, the teacher's pen"},
+                        {f:"MY vs MINE", b:"MY + noun: my book.\nMINE alone: The book is mine."},
+                        {f:"YOUR vs YOURS", b:"YOUR + noun: your pen.\nYOURS alone: Is this pen yours?"},
+                        {f:"HIS (adjective AND pronoun)", b:"His book (adj) / The book is his (pron).\nHis stays the same!"},
+                        {f:"HER vs HERS", b:"HER + noun: her bag.\nHERS alone: That bag is hers."},
+                        {f:"Whose ___?", b:"Question to ask about ownership:\nWhose book is this? It's Maria's."},
+                        {f:"OUR vs OURS", b:"OUR + noun: our classroom.\nOURS alone: This classroom is ours."},
+                        {f:"THEIR vs THEIRS", b:"THEIR + noun: their books.\nTHEIRS alone: Those books are theirs."}
+                    ],
+                    quiz: [
+                        {q:"___ book is on the desk. (it belongs to me)", opts:["Mine","My","Me","I"], a:1},
+                        {q:"This pen is ___. (it belongs to her)", opts:["her","hers","she","herself"], a:1},
+                        {q:"Whose bag is this? It's ___. (Maria)", opts:["Maria","Marias","Maria's","of Maria"], a:2},
+                        {q:"___ is the red car? Tom's.", opts:["What","Who","Whose","Where"], a:2},
+                        {q:"These are ___ pencils. (they belong to us)", opts:["ours","we","our","us"], a:2},
+                        {q:"Is this your notebook? Yes, it's ___.", opts:["my","me","mine","I"], a:2},
+                        {q:"___ phone is new. (belongs to him)", opts:["Him","He","His","Her"], a:2},
+                        {q:"That book is not mine, it's ___. (belongs to them)", opts:["their","theirs","they","them"], a:1}
+                    ],
+                    hangman: [
+                        {word:"POSSESSIVE", hint:"Shows that something belongs to someone"}, {word:"BELONGING", hint:"Something that is yours"},
+                        {word:"WHOSE", hint:"Question word for ownership"}, {word:"THEIRS", hint:"Possessive pronoun for 'they'"},
+                        {word:"OWNERSHIP", hint:"The state of having something"}, {word:"PRONOUN", hint:"Mine, yours, his, hers..."},
+                        {word:"ADJECTIVE", hint:"My, your, his, her... (before noun)"}, {word:"NOTEBOOK", hint:"You take notes in this"},
+                        {word:"BACKPACK", hint:"You carry your things in this"}, {word:"YOURS", hint:"Possessive pronoun for 'you'"}
+                    ],
+                    fitb: [
+                        {s:"This is ___ book. (belongs to me)", opts:["mine","my","me","I"], a:1, blank:"___"},
+                        {s:"The blue pen is ___. (belongs to her)", opts:["her","hers","she","herself"], a:1, blank:"___"},
+                        {s:"___ bag is this? It's Carlos's.", opts:["What","Who","Whose","Where"], a:2, blank:"___"},
+                        {s:"These are ___ notebooks. (belong to us)", opts:["ours","we","our","us"], a:2, blank:"___"},
+                        {s:"That phone is not mine, it's ___. (belongs to them)", opts:["their","theirs","they","them"], a:1, blank:"___"}
+                    ],
+                    memory: [
+                        {a:"my", b:"mine"}, {a:"your", b:"yours"},
+                        {a:"his", b:"his (alone)"}, {a:"her", b:"hers"},
+                        {a:"our", b:"ours"}, {a:"their", b:"theirs"}
+                    ],
+                    wordsearch: ["WHOSE", "NOTEBOOK", "YOURS", "PRONOUN"],
+                    dragsort: {
+                        cats: ["Possessive Adjectives", "Possessive Pronouns"],
+                        items: [{t:"my", c:0}, {t:"your", c:0}, {t:"his", c:0}, {t:"mine", c:1}, {t:"yours", c:1}, {t:"hers", c:1}]
+                    },
+                    roulette: ["Whose phone is that?", "What is the pronoun for 'our'?", "Use 'mine' in a sentence", "Is this notebook yours?"]
+                }
+            ]
+        };
+
+        // UI & SYSTEM STATE CONTROLLER OBJECT
+        const AppCore = {
+            currentClassIndex: 0,
+            currentGameTab: 'flashcards',
+            
+            // Sub-game specific state trackers
+            states: {
+                flashcards: { idx: 0, flipped: false },
+                quiz: { idx: 0 },
+                hangman: { wordObj: null, guessed: [], mistakes: 0 },
+                fitb: { idx: 0 },
+                memory: { selected: [], matched: [] },
+                wordsearch: { selecting: false, selection: [], found: [] },
+                dragsort: { sorted: {} },
+                roulette: { angle: 0, rolling: false }
+            },
+
+            init() {
+                this.renderTabs();
+                this.switchClass(0);
+                this.bindGlobalEvents();
+            },
+
+            bindGlobalEvents() {
+                document.getElementById('themeToggleBtn').addEventListener('click', () => {
+                    const activeTheme = document.documentElement.getAttribute('data-theme');
+                    document.documentElement.setAttribute('data-theme', activeTheme === 'dark' ? 'light' : 'dark');
+                });
+            },
+
+            renderTabs() {
+                const wrapper = document.getElementById('classTabsWrapper');
+                wrapper.innerHTML = APPDATA.classes.map((c, idx) => `
+                    <button class="tab-btn ${idx === 0 ? 'active' : ''}" data-idx="${idx}">
+                        ${c.title}
+                    </button>
+                `).join('');
+
+                wrapper.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        wrapper.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        this.switchClass(parseInt(e.target.dataset.idx));
+                    });
+                });
+            },
+
+            switchClass(index) {
+                this.currentClassIndex = index;
+                const activeData = APPDATA.classes[index];
+                const workspace = document.getElementById('mainWorkspace');
+
+                workspace.innerHTML = `
+                    <div class="class-panel active">
+                        <!-- Left Panel: Warm-Up Framework -->
+                        <div class="column-warmup">
+                            <h2>🔥 Warm-Up</h2>
+                            <p style="font-size:0.85rem; opacity:0.9;">Instrucciones: Haz clic en el botón para generar preguntas de práctica aleatorias.</p>
+                            <div class="warmup-box" id="warmupQuestionField">Click Below to Start</div>
+                            <button class="btn-warmup" id="warmupGenBtn">🎲 New Question</button>
+                        </div>
+
+                        <!-- Right Panel: Practice Games Framework -->
+                        <div class="column-practice">
+                            <h2>🎮 Practice Games</h2>
+                            <div class="game-selector">
+                                <button class="game-tab-btn ${this.currentGameTab === 'flashcards'?'active':''}" data-game="flashcards">Flashcards</button>
+                                <button class="game-tab-btn ${this.currentGameTab === 'quiz'?'active':''}" data-game="quiz">Quiz</button>
+                                <button class="game-tab-btn ${this.currentGameTab === 'hangman'?'active':''}" data-game="hangman">Hangman</button>
+                                <button class="game-tab-btn ${this.currentGameTab === 'memory'?'active':''}" data-game="memory">Memory</button>
+                                <button class="game-tab-btn ${this.currentGameTab === 'fitb'?'active':''}" data-game="fitb">Fill Blanks</button>
+                                <button class="game-tab-btn ${this.currentGameTab === 'dragsort'?'active':''}" data-game="dragsort">Drag & Sort</button>
+                                <button class="game-tab-btn ${this.currentGameTab === 'roulette'?'active':''}" data-game="roulette">Roulette</button>
+                                <button class="game-tab-btn ${this.currentGameTab === 'wordsearch'?'active':''}" data-game="wordsearch">WordSearch</button>
+                            </div>
+
+                            <!-- Individual Sub-game Viewports -->
+                            <div class="game-content-panel ${this.currentGameTab === 'flashcards'?'active':''}" id="pane-flashcards"></div>
+                            <div class="game-content-panel ${this.currentGameTab === 'quiz'?'active':''}" id="pane-quiz"></div>
+                            <div class="game-content-panel ${this.currentGameTab === 'hangman'?'active':''}" id="pane-hangman"></div>
+                            <div class="game-content-panel ${this.currentGameTab === 'memory'?'active':''}" id="pane-memory"></div>
+                            <div class="game-content-panel ${this.currentGameTab === 'fitb'?'active':''}" id="pane-fitb"></div>
+                            <div class="game-content-panel ${this.currentGameTab === 'dragsort'?'active':''}" id="pane-dragsort"></div>
+                            <div class="game-content-panel ${this.currentGameTab === 'roulette'?'active':''}" id="pane-roulette"></div>
+                            <div class="game-content-panel ${this.currentGameTab === 'wordsearch'?'active':''}" id="pane-wordsearch"></div>
+                        </div>
+                    </div>
+                `;
+
+                // Set up handlers for interactive games tabs
+                workspace.querySelectorAll('.game-tab-btn').forEach(gBtn => {
+                    gBtn.addEventListener('click', (e) => {
+                        workspace.querySelectorAll('.game-tab-btn').forEach(b => b.classList.remove('active'));
+                        workspace.querySelectorAll('.game-content-panel').forEach(p => p.classList.remove('active'));
+                        
+                        this.currentGameTab = e.target.dataset.game;
+                        e.target.classList.add('active');
+                        document.getElementById(`pane-${this.currentGameTab}`).classList.add('active');
+                        this.initActiveGame();
+                    });
+                });
+
+                // Warm-Up question driver configuration
+                const warmupBtn = document.getElementById('warmupGenBtn');
+                warmupBtn.addEventListener('click', () => {
+                    const questions = APPDATA.classes[this.currentClassIndex].warmup;
+                    const randIdx = Math.floor(Math.random() * questions.length);
+                    document.getElementById('warmupQuestionField').textContent = questions[randIdx];
+                });
+                warmupBtn.click();
+
+                // Initialize default game
+                this.initActiveGame();
+            },
+
+            initActiveGame() {
+                // Route execution flow to appropriate game module wrapper
+                switch(this.currentGameTab) {
+                    case 'flashcards': this.engines.flashcards(); break;
+                    case 'quiz': this.engines.quiz(); break;
+                    case 'hangman': this.engines.hangman(); break;
+                    case 'memory': this.engines.memory(); break;
+                    case 'fitb': this.engines.fitb(); break;
+                    case 'dragsort': this.engines.dragsort(); break;
+                    case 'roulette': this.engines.roulette(); break;
+                    case 'wordsearch': this.engines.wordsearch(); break;
+                }
+            },
+
+            // CORE GAME ENGINES IMPLEMENTATION MODULE
+            engines: {
+                flashcards() {
+                    const data = APPDATA.classes[AppCore.currentClassIndex].flashcards;
+                    AppCore.states.flashcards.idx = 0;
+                    AppCore.states.flashcards.flipped = false;
+
+                    const renderCard = () => {
+                        const target = document.getElementById('pane-flashcards');
+                        const current = data[AppCore.states.flashcards.idx];
+                        target.innerHTML = `
+                            <div class="game-instruction">Instrucciones: Haz clic sobre la tarjeta para voltearla y ver la explicación.</div>
+                            <div class="flashcard-wrapper" id="fcWrapper">
+                                <div class="flashcard ${AppCore.states.flashcards.flipped?'flipped':''}" id="fcCard">
+                                    <div class="card-face card-front"><div>${current.f}</div></div>
+                                    <div class="card-face card-back" style="white-space: pre-line;"><div>${current.b}</div></div>
+                                </div>
+                            </div>
+                            <div class="card-controls">
+                                <button class="btn-ui" id="fcPrev">← Back</button>
+                                <span style="align-self:center; font-weight:600;">${AppCore.states.flashcards.idx + 1} / ${data.length}</span>
+                                <button class="btn-ui" id="fcNext">Next →</button>
+                            </div>
+                        `;
+
+                        document.getElementById('fcWrapper').addEventListener('click', () => {
+                            AppCore.states.flashcards.flipped = !AppCore.states.flashcards.flipped;
+                            document.getElementById('fcCard').classList.toggle('flipped');
+                        });
+
+                        document.getElementById('fcPrev').addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            if(AppCore.states.flashcards.idx > 0) {
+                                AppCore.states.flashcards.idx--;
+                                AppCore.states.flashcards.flipped = false;
+                                renderCard();
+                            }
+                        });
+
+                        document.getElementById('fcNext').addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            if(AppCore.states.flashcards.idx < data.length - 1) {
+                                AppCore.states.flashcards.idx++;
+                                AppCore.states.flashcards.flipped = false;
+                                renderCard();
+                            }
+                        });
+                    };
+                    renderCard();
+                },
+
+                quiz() {
+                    const data = APPDATA.classes[AppCore.currentClassIndex].quiz;
+                    AppCore.states.quiz.idx = 0;
+
+                    const renderQuizQuestion = () => {
+                        const target = document.getElementById('pane-quiz');
+                        if(AppCore.states.quiz.idx >= data.length) {
+                            target.innerHTML = `
+                                <div style="text-align:center; padding:2rem;">
+                                    <h3>¡Ganaste! 🎉</h3>
+                                    <p>Has completado el cuestionario de esta lección con éxito.</p>
+                                    <button class="btn-ui" style="margin-top:1rem;" id="quizRestart">Reiniciar</button>
+                                </div>
+                            `;
+                            document.getElementById('quizRestart').addEventListener('click', () => {
+                                AppCore.states.quiz.idx = 0;
+                                renderQuizQuestion();
+                            });
+                            return;
+                        }
+
+                        const current = data[AppCore.states.quiz.idx];
+                        target.innerHTML = `
+                            <div class="game-instruction">Instrucciones: Selecciona la respuesta correcta para completar la oración.</div>
+                            <div class="quiz-container">
+                                <div class="quiz-question">${current.q}</div>
+                                <div class="quiz-options">
+                                    ${current.opts.map((opt, i) => `<button class="option-btn" data-optidx="${i}">${opt}</button>`).join('')}
+                                </div>
+                                <div class="game-status-feedback" id="quizFeedback"></div>
+                            </div>
+                        `;
+
+                        target.querySelectorAll('.option-btn').forEach(btn => {
+                            btn.addEventListener('click', (e) => {
+                                const selected = parseInt(e.target.dataset.optidx);
+                                const fb = document.getElementById('quizFeedback');
+                                if(selected === current.a) {
+                                    fb.style.color = 'var(--success)';
+                                    fb.textContent = "¡Correcto!";
+                                    setTimeout(() => {
+                                        AppCore.states.quiz.idx++;
+                                        renderQuizQuestion();
+                                    }, 1000);
+                                } else {
+                                    fb.style.color = 'var(--error)';
+                                    fb.textContent = "¡Incorrecto! Inténtalo de nuevo.";
+                                }
+                            });
+                        });
+                    };
+                    renderQuizQuestion();
+                },
+
+                hangman() {
+                    const data = APPDATA.classes[AppCore.currentClassIndex].hangman;
+                    const rand = data[Math.floor(Math.random() * data.length)];
+                    AppCore.states.hangman.wordObj = rand;
+                    AppCore.states.hangman.guessed = [];
+                    AppCore.states.hangman.mistakes = 0;
+
+                    const renderHangmanState = () => {
+                        const target = document.getElementById('pane-hangman');
+                        const word = AppCore.states.hangman.wordObj.word;
+                        const hint = AppCore.states.hangman.wordObj.hint;
+
+                        let displayStr = "";
+                        let won = true;
+                        for(let letter of word) {
+                            if(AppCore.states.hangman.guessed.includes(letter)) {
+                                displayStr += letter + " ";
+                            } else {
+                                displayStr += "_ ";
+                                won = false;
+                            }
+                        }
+
+                        if(AppCore.states.hangman.mistakes >= 6) {
+                            target.innerHTML = `
+                                <div style="text-align:center; padding:1.5rem;">
+                                    <h3>¡Incorrecto! Oportunidades agotadas.</h3>
+                                    <p>La palabra era: <strong>${word}</strong></p>
+                                    <button class="btn-ui" style="margin-top:1rem;" id="hangmanReset">Intentar otra vez</button>
+                                </div>
+                            `;
+                            document.getElementById('hangmanReset').addEventListener('click', () => AppCore.engines.hangman());
+                            return;
+                        }
+
+                        if(won) {
+                            target.innerHTML = `
+                                <div style="text-align:center; padding:1.5rem;">
+                                    <h3>¡Ganaste! 🎉</h3>
+                                    <p>Descubriste la palabra: <strong>${word}</strong></p>
+                                    <button class="btn-ui" style="margin-top:1rem;" id="hangmanReset">Jugar otra vez</button>
+                                </div>
+                            `;
+                            document.getElementById('hangmanReset').addEventListener('click', () => AppCore.engines.hangman());
+                            return;
+                        }
+
+                        target.innerHTML = `
+                            <div class="game-instruction">Instrucciones: Adivina la palabra oculta seleccionando letras una por una.</div>
+                            <div class="hangman-box">
+                                <div style="font-weight:600; text-align:center;">Pista: ${hint}</div>
+                                <div class="hangman-word-display">${displayStr}</div>
+                                <div style="font-size:0.9rem; color:var(--error); font-weight:700;">Intentos Fallidos: ${AppCore.states.hangman.mistakes} / 6</div>
+                                <div class="hangman-keyboard" id="hkb"></div>
+                            </div>
+                        `;
+
+                        const kbb = document.getElementById('hkb');
+                        "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('').forEach(l => {
+                            const btn = document.createElement('button');
+                            btn.className = "key-btn";
+                            btn.textContent = l;
+                            if(AppCore.states.hangman.guessed.includes(l)) btn.disabled = true;
+                            btn.addEventListener('click', () => {
+                                AppCore.states.hangman.guessed.push(l);
+                                if(!word.includes(l)) {
+                                    AppCore.states.hangman.mistakes++;
+                                }
+                                renderHangmanState();
+                            });
+                            kbb.appendChild(btn);
+                        });
+                    };
+                    renderHangmanState();
+                },
+
+                memory() {
+                    const data = APPDATA.classes[AppCore.currentClassIndex].memory;
+                    let cards = [];
+                    data.forEach((pair, i) => {
+                        cards.push({text: pair.a, pairId: i, id: i + 'a'});
+                        cards.push({text: pair.b, pairId: i, id: i + 'b'});
+                    });
+                    // Perfect mathematical randomization engine
+                    cards.sort(() => Math.random() - 0.5);
+
+                    AppCore.states.memory.selected = [];
+                    AppCore.states.memory.matched = [];
+
+                    const renderGrid = () => {
+                        const target = document.getElementById('pane-memory');
+                        
+                        if(AppCore.states.memory.matched.length === data.length) {
+                            target.innerHTML = `
+                                <div style="text-align:center; padding:2rem;">
+                                    <h3>¡Ganaste! 🎉</h3>
+                                    <p>Encontraste todas las parejas correspondientes.</p>
+                                    <button class="btn-ui" style="margin-top:1rem;" id="memReset">Jugar otra vez</button>
+                                </div>
+                            `;
+                            document.getElementById('memReset').addEventListener('click', () => AppCore.engines.memory());
+                            return;
+                        }
+
+                        target.innerHTML = `
+                            <div class="game-instruction">Instrucciones: Voltea las tarjetas y encuentra el par correspondiente del vocabulario.</div>
+                            <div class="memory-grid">
+                                ${cards.map(c => {
+                                    let cls = "";
+                                    if(AppCore.states.memory.matched.includes(c.pairId)) cls = "matched";
+                                    else if(AppCore.states.memory.selected.some(s => s.id === c.id)) cls = "revealed";
+                                    return `<div class="memory-card ${cls}" data-cid="${c.id}">${c.text}</div>`;
+                                }).join('')}
+                            </div>
+                        `;
+
+                        target.querySelectorAll('.memory-card').forEach(cardEl => {
+                            cardEl.addEventListener('click', (e) => {
+                                const cid = e.target.dataset.cid;
+                                const clickedObj = cards.find(c => c.id === cid);
+                                
+                                if(AppCore.states.memory.matched.includes(clickedObj.pairId)) return;
+                                if(AppCore.states.memory.selected.some(s => s.id === cid)) return;
+                                if(AppCore.states.memory.selected.length >= 2) return;
+
+                                AppCore.states.memory.selected.push(clickedObj);
+                                e.target.classList.add('revealed');
+
+                                if(AppCore.states.memory.selected.length === 2) {
+                                    const [first, second] = AppCore.states.memory.selected;
+                                    if(first.pairId === second.pairId) {
+                                        AppCore.states.memory.matched.push(first.pairId);
+                                        AppCore.states.memory.selected = [];
+                                        setTimeout(renderGrid, 600);
+                                    } else {
+                                        setTimeout(() => {
+                                            AppCore.states.memory.selected = [];
+                                            renderGrid();
+                                        }, 1200);
+                                    }
+                                }
+                            });
+                        });
+                    };
+                    renderGrid();
+                },
+
+                fitb() {
+                    const data = APPDATA.classes[AppCore.currentClassIndex].fitb;
+                    AppCore.states.fitb.idx = 0;
+
+                    const renderFitbQuestion = () => {
+                        const target = document.getElementById('pane-fitb');
+                        if(AppCore.states.fitb.idx >= data.length) {
+                            target.innerHTML = `
+                                <div style="text-align:center; padding:2rem;">
+                                    <h3>¡Ganaste! 🎉</h3>
+                                    <p>Completaste correctamente todas las oraciones estructurales.</p>
+                                    <button class="btn-ui" style="margin-top:1rem;" id="fitbRestart">Reiniciar</button>
+                                </div>
+                            `;
+                            document.getElementById('fitbRestart').addEventListener('click', () => {
+                                AppCore.states.fitb.idx = 0;
+                                renderFitbQuestion();
+                            });
+                            return;
+                        }
+
+                        const current = data[AppCore.states.fitb.idx];
+                        target.innerHTML = `
+                            <div class="game-instruction">Instrucciones: Rellena el espacio en blanco con la opción gramatical correcta.</div>
+                            <div class="quiz-container">
+                                <div class="fitb-sentence">
+                                    ${current.s.replace(current.blank, `<span class="fitb-blank-placeholder" id="fitbBlankStr">${current.blank}</span>`)}
+                                </div>
+                                <div class="quiz-options">
+                                    ${current.opts.map((opt, i) => `<button class="option-btn" data-optidx="${i}">${opt}</button>`).join('')}
+                                </div>
+                                <div class="game-status-feedback" id="fitbFeedback"></div>
+                            </div>
+                        `;
+
+                        target.querySelectorAll('.option-btn').forEach(btn => {
+                            btn.addEventListener('click', (e) => {
+                                const selected = parseInt(e.target.dataset.optidx);
+                                const fb = document.getElementById('fitbFeedback');
+                                if(selected === current.a) {
+                                    fb.style.color = 'var(--success)';
+                                    fb.textContent = "¡Correcto!";
+                                    document.getElementById('fitbBlankStr').textContent = current.opts[selected];
+                                    setTimeout(() => {
+                                        AppCore.states.fitb.idx++;
+                                        renderFitbQuestion();
+                                    }, 1000);
+                                } else {
+                                    fb.style.color = 'var(--error)';
+                                    fb.textContent = "¡Incorrecto! Prueba otra opción.";
+                                }
+                            });
+                        });
+                    };
+                    renderFitbQuestion();
+                },
+
+                dragsort() {
+                    const data = APPDATA.classes[AppCore.currentClassIndex].dragsort;
+                    const target = document.getElementById('pane-dragsort');
+
+                    target.innerHTML = `
+                        <div class="game-instruction">Instrucciones: Arrastra los elementos del repositorio hacia su respectiva categoría correcta.</div>
+                        <div class="drag-sort-container">
+                            <div class="drag-items-pool" id="dsPool"></div>
+                            <div class="drag-zones-wrapper" id="dsZones"></div>
+                            <div class="game-status-feedback" id="dsFeedback"></div>
+                        </div>
+                    `;
+
+                    const pool = document.getElementById('dsPool');
+                    const zones = document.getElementById('dsZones');
+
+                    // Setup items
+                    data.items.forEach((item, idx) => {
+                        const itemEl = document.createElement('div');
+                        itemEl.className = "drag-item";
+                        itemEl.textContent = item.t;
+                        itemEl.draggable = true;
+                        itemEl.id = `ds-item-${idx}`;
+                        
+                        itemEl.addEventListener('dragstart', (e) => {
+                            e.dataTransfer.setData('text/plain', e.target.id);
+                        });
+
+                        pool.appendChild(itemEl);
+                    });
+
+                    // Setup target drop categories
+                    data.cats.forEach((cat, catIdx) => {
+                        const zoneEl = document.createElement('div');
+                        zoneEl.className = "drop-zone";
+                        zoneEl.dataset.catidx = catIdx;
+                        zoneEl.innerHTML = `<h4>${cat}</h4>`;
+
+                        zoneEl.addEventListener('dragover', (e) => e.preventDefault());
+                        zoneEl.addEventListener('drop', (e) => {
+                            e.preventDefault();
+                            const id = e.dataTransfer.getData('text/plain');
+                            const draggedEl = document.getElementById(id);
+                            const itemDataIdx = parseInt(id.replace('ds-item-', ''));
+                            const correctCatIdx = data.items[itemDataIdx].c;
+
+                            if(parseInt(zoneEl.dataset.catidx) === correctCatIdx) {
+                                zoneEl.appendChild(draggedEl);
+                                draggedEl.draggable = false;
+                                draggedEl.style.cursor = "default";
+                                document.getElementById('dsFeedback').style.color = "var(--success)";
+                                document.getElementById('dsFeedback').textContent = "¡Correcto!";
+                                
+                                // Win check validation
+                                if(pool.children.length === 0) {
+                                    document.getElementById('dsFeedback').textContent = "¡Ganaste! Todos los elementos ordenados.";
+                                }
+                            } else {
+                                document.getElementById('dsFeedback').style.color = "var(--error)";
+                                document.getElementById('dsFeedback').textContent = "¡Incorrecto! No pertenece a esta categoría.";
+                            }
+                        });
+
+                        zones.appendChild(zoneEl);
+                    });
+                },
+
+                roulette() {
+                    const data = APPDATA.classes[AppCore.currentClassIndex].roulette;
+                    const target = document.getElementById('pane-roulette');
+
+                    target.innerHTML = `
+                        <div class="game-instruction">Instrucciones: Gira la ruleta y responde el reto seleccionado aleatoriamente.</div>
+                        <div class="roulette-container">
+                            <div class="wheel-wrapper">
+                                <div class="wheel-pointer"></div>
+                                <canvas class="wheel-canvas" id="rwCanvas" width="260" height="260"></canvas>
+                            </div>
+                            <button class="btn-ui" id="rwSpinBtn">Girar Ruleta</button>
+                            <div class="game-status-feedback" id="rwTaskField" style="font-size:1.1rem; max-width:280px;"></div>
+                        </div>
+                    `;
+
+                    const canvas = document.getElementById('rwCanvas');
+                    const ctx = canvas.getContext('2d');
+                    // Paleta de colores cálidos para la ruleta
+                    const colors = ["#EAB308", "#A16207", "#CA8A04", "#FACC15"];
+
+                    const drawWheel = () => {
+                        const segments = data.length;
+                        const arc = (2 * Math.PI) / segments;
+                        for(let i=0; i<segments; i++) {
+                            ctx.fillStyle = colors[i % colors.length];
+                            ctx.beginPath();
+                            ctx.moveTo(130, 130);
+                            ctx.arc(130, 130, 130, i*arc, (i+1)*arc);
+                            ctx.fill();
+
+                            // Label mapping overlay
+                            ctx.save();
+                            ctx.fillStyle = (colors[i % colors.length] === "#A16207") ? "#ffffff" : "#1E293B";
+                            ctx.translate(130, 130);
+                            ctx.rotate(i*arc + arc/2);
+                            ctx.font = "bold 10px Poppins";
+                            ctx.fillText(data[i].substring(0, 15) + "...", 40, 5);
+                            ctx.restore();
+                        }
+                    };
+                    drawWheel();
+
+                    document.getElementById('rwSpinBtn').addEventListener('click', () => {
+                        if(AppCore.states.roulette.rolling) return;
+                        AppCore.states.roulette.rolling = true;
+                        document.getElementById('rwTaskField').textContent = "";
+
+                        const segments = data.length;
+                        const choice = Math.floor(Math.random() * segments);
+                        const degreesPerSegment = 360 / segments;
+                        
+                        // Calculate target rotation tracking metrics
+                        const baselineRotation = 1440; // 4 full loops target metrics minimum
+                        const segmentOffset = choice * degreesPerSegment;
+                        AppCore.states.roulette.angle += baselineRotation + (360 - segmentOffset);
+
+                        canvas.style.transform = `rotate(${AppCore.states.roulette.angle}deg)`;
+
+                        setTimeout(() => {
+                            AppCore.states.roulette.rolling = false;
+                            document.getElementById('rwTaskField').textContent = `🎯 ${data[choice]}`;
+                        }, 4000);
+                    });
+                },
+
+                wordsearch() {
+                    const words = APPDATA.classes[AppCore.currentClassIndex].wordsearch;
+                    const target = document.getElementById('pane-wordsearch');
+                    
+                    // Simple programmatic matrix simulation framework setup
+                    const matrixSize = 10;
+                    let letters = Array(matrixSize*matrixSize).fill('').map(() => "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.floor(Math.random()*26)]);
+                    
+                    AppCore.states.wordsearch.found = [];
+                    AppCore.states.wordsearch.selection = [];
+
+                    // Embed simple static coordinates configuration map mapping
+                    words.forEach((w, wordIdx) => {
+                        let offset = wordIdx * matrixSize + 1;
+                        for(let charIdx=0; charIdx<w.length; charIdx++) {
+                            if(offset + charIdx < letters.length) {
+                                letters[offset + charIdx] = w[charIdx];
+                            }
+                        }
+                    });
+
+                    target.innerHTML = `
+                        <div class="game-instruction">Instrucciones: Haz clic en las letras para seleccionar las palabras de la lista.</div>
+                        <div class="wordsearch-grid" id="wsGrid"></div>
+                        <div class="ws-word-list" id="wsWords"></div>
+                    `;
+
+                    const gridEl = document.getElementById('wsGrid');
+                    letters.forEach((l, idx) => {
+                        const cell = document.createElement('div');
+                        cell.className = "ws-cell";
+                        cell.textContent = l;
+                        cell.dataset.idx = idx;
+                        
+                        cell.addEventListener('click', () => {
+                            cell.classList.toggle('selected');
+                            const cIdx = parseInt(cell.dataset.idx);
+                            
+                            if(AppCore.states.wordsearch.selection.includes(cIdx)) {
+                                AppCore.states.wordsearch.selection = AppCore.states.wordsearch.selection.filter(x => x !== cIdx);
+                            } else {
+                                AppCore.states.wordsearch.selection.push(cIdx);
+                            }
+
+                            // Evaluate build sequence against dictionary variables
+                            let currentString = AppCore.states.wordsearch.selection.map(i => letters[i]).join('');
+                            words.forEach(word => {
+                                if(currentString === word && !AppCore.states.wordsearch.found.includes(word)) {
+                                    AppCore.states.wordsearch.found.push(word);
+                                    AppCore.states.wordsearch.selection.forEach(selIdx => {
+                                        gridEl.children[selIdx].className = "ws-cell found";
+                                    });
+                                    AppCore.states.wordsearch.selection = [];
+                                    updateWordListUI();
+                                }
+                            });
+                        });
+                        gridEl.appendChild(cell);
+                    });
+
+                    const updateWordListUI = () => {
+                        const listEl = document.getElementById('wsWords');
+                        listEl.innerHTML = words.map(w => `
+                            <span class="ws-word-item ${AppCore.states.wordsearch.found.includes(w)?'found':''}">${w}</span>
+                        `).join('');
+                    };
+                    updateWordListUI();
+                }
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => AppCore.init());
+
+        // MANDATORY CRYPTOGRAPHIC ANTI-TAMPER SECURITY LOOP
+        setInterval(() => {
+            const signatureElement = document.getElementById('firma');
+            const appWrapper = document.getElementById('appContainer');
+            if (!signatureElement || signatureElement.textContent.trim() !== 'Creado por Tony Salas & German Peña' || 
+                getComputedStyle(signatureElement).display === 'none' || 
+                getComputedStyle(signatureElement).opacity === '0' || 
+                getComputedStyle(signatureElement).visibility === 'hidden') {
+                
+                if (appWrapper) appWrapper.style.display = 'none';
+                
+                if (!document.getElementById('antiTamperScreen')) {
+                    const blockOverlay = document.createElement('div');
+                    blockOverlay.id = 'antiTamperScreen';
+                    blockOverlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:#000000;color:#FF0000;display:flex;align-items:center;justify-content:center;z-index:999999;font-family:sans-serif;font-weight:bold;font-size:24px;text-align:center;padding:20px;';
+                    blockOverlay.innerHTML = '⚠️ ACCESO DENEGADO ⚠️<br><span style="color:#FFF; font-size:16px;">El código de seguridad y la firma han sido alterados. CREA TU VERGA TU, CARA E MONDA.</span>';
+                    document.body.appendChild(blockOverlay);
+                }
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

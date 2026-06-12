@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>English Interactive — Nivel B1</title>
+    <style>
+        :root {
+            --bg-primary: #F1F8F1;
+            --bg-card: #FFFFFF;
+            --text-main: #1B5E20;
+            --text-muted: #4F7E51;
+            --color-primary: #2E7D32;
+            --color-accent: #66BB6A;
+            --color-danger: #D32F2F;
+            --color-success: #2E7D32;
+            --border-radius-card: 16px;
+            --border-radius-modal: 24px;
+            --shadow-main: 0 8px 32px rgba(46, 125, 50, 0.15);
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #071007;
+            --bg-card: #0F2010;
+            --text-main: #E8F5E9;
+            --text-muted: #A5D6A7;
+            --color-primary: #1B5E20;
+            --color-accent: #66BB6A;
+            --color-danger: #EF5350;
+            --color-success: #81C784;
+            --shadow-main: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Segoe UI', 'Roboto', system-ui, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            transition: var(--transition-smooth);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Fixed elements */
+        #theme-toggle {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 1000;
+            background: var(--bg-card);
+            border: 2px solid var(--color-primary);
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow-main);
+            touch-action: manipulation;
+        }
+
+        header {
+            background: var(--bg-card);
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow-main);
+            border-bottom: 3px solid var(--color-primary);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            color: var(--color-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        main {
+            flex: 1;
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Standard Buttons */
+        .btn {
+            min-height: 48px;
+            padding: 12px 24px;
+            border-radius: 12px;
+            border: none;
+            background-color: var(--color-primary);
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            touch-action: manipulation;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-accent {
+            background-color: var(--color-accent);
+            color: #000000;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--color-primary);
+            color: var(--text-main);
+        }
+
+        /* Unit Selector Screen */
+        .grid-units {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        @media(min-width: 600px) {
+            .grid-units { grid-template-columns: 1fr 1fr; }
+        }
+
+        .card-unit {
+            background: var(--bg-card);
+            border-radius: var(--border-radius-card);
+            padding: 20px;
+            box-shadow: var(--shadow-main);
+            border: 1px solid rgba(46, 125, 50, 0.1);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .card-unit:hover {
+            transform: translateY(-4px);
+            border-color: var(--color-accent);
+        }
+
+        .card-unit h3 {
+            margin-bottom: 8px;
+            color: var(--color-primary);
+        }
+
+        .card-unit p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        /* Dashboard Game Selector Grid */
+        .grid-games {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        @media(min-width: 600px) {
+            .grid-games { grid-template-columns: 1fr 1fr; }
+        }
+
+        /* Game containers common styling */
+        .game-box {
+            background: var(--bg-card);
+            border-radius: var(--border-radius-card);
+            padding: 20px;
+            box-shadow: var(--shadow-main);
+            margin-top: 15px;
+        }
+
+        .instruction-text {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        /* Flashcards Styling */
+        .flashcard-wrapper {
+            perspective: 1000px;
+            width: 100%;
+            height: 220px;
+            margin: 20px 0;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: var(--border-radius-card);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow-main);
+        }
+
+        .card-front {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .card-back {
+            background: var(--bg-card);
+            border: 3px solid var(--color-primary);
+            color: var(--text-main);
+            transform: rotateY(180deg);
+        }
+
+        /* Quiz Choices Layout */
+        .quiz-option {
+            background: var(--bg-card);
+            border: 2px solid var(--text-muted);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            font-size: 1rem;
+            color: var(--text-main);
+            transition: var(--transition-smooth);
+            min-height: 48px;
+        }
+
+        .quiz-option.correct {
+            background: var(--color-success);
+            color: white;
+            border-color: var(--color-success);
+        }
+
+        .quiz-option.incorrect {
+            background: var(--color-danger);
+            color: white;
+            border-color: var(--color-danger);
+        }
+
+        /* Word Games Common Elements */
+        .word-display {
+            font-size: 2rem;
+            letter-spacing: 0.5rem;
+            text-align: center;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .keyboard-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            margin-top: 15px;
+        }
+
+        .key-btn {
+            min-height: 44px;
+            background: var(--bg-card);
+            border: 1px solid var(--color-primary);
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--text-main);
+        }
+
+        .key-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* Word Search Matrix Grid */
+        .wordsearch-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 4px;
+            margin: 15px auto;
+            max-width: 360px;
+        }
+
+        .ws-cell {
+            aspect-ratio: 1;
+            background: var(--bg-card);
+            border: 1px solid var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            user-select: none;
+            border-radius: 4px;
+        }
+
+        .ws-cell.selected {
+            background: var(--color-accent);
+            color: black;
+        }
+
+        .ws-cell.found {
+            background: var(--color-success);
+            color: white;
+        }
+
+        /* Drag & Sort Layout */
+        .drag-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .drag-item {
+            padding: 12px;
+            background: var(--bg-card);
+            border: 2px dashed var(--color-primary);
+            border-radius: 8px;
+            cursor: grab;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            user-select: none;
+            min-height: 48px;
+        }
+
+        /* Roulette Spinning Object */
+        .roulette-container {
+            position: relative;
+            width: 260px;
+            height: 260px;
+            margin: 20px auto;
+        }
+
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 8px solid var(--color-primary);
+            position: relative;
+            overflow: hidden;
+            transition: transform 3s cubic-bezier(0.1, 0.8, 0.1, 1);
+            background: conic-gradient(
+                var(--color-primary) 0deg 45deg,
+                var(--color-accent) 45deg 90deg,
+                var(--color-primary) 90deg 135deg,
+                var(--color-accent) 135deg 180deg,
+                var(--color-primary) 180deg 225deg,
+                var(--color-accent) 225deg 270deg,
+                var(--color-primary) 270deg 315deg,
+                var(--color-accent) 315deg 360deg
+            );
+        }
+
+        .wheel-pointer {
+            position: absolute;
+            top: -10px;
+            left: calc(50% - 15px);
+            width: 30px;
+            height: 30px;
+            background: var(--color-danger);
+            clip-path: polygon(50% 100%, 0 0, 100% 0);
+            z-index: 10;
+        }
+
+        /* Memory Matrix Board */
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .memory-card {
+            aspect-ratio: 1;
+            background: var(--color-primary);
+            color: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-align: center;
+            padding: 4px;
+            border-radius: 8px;
+            cursor: pointer;
+            user-select: none;
+            word-break: break-word;
+        }
+
+        .memory-card.flipped {
+            background: var(--bg-card);
+            border: 2px solid var(--color-primary);
+            color: var(--text-main);
+        }
+
+        .memory-card.matched {
+            background: var(--color-success);
+            color: white;
+            visibility: visible;
+            opacity: 0.6;
+        }
+
+        /* Story Sorting Layout vertical block */
+        .story-block {
+            padding: 12px;
+            background: var(--bg-card);
+            border: 2px solid var(--color-primary);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: move;
+            touch-action: none;
+        }
+
+        .story-block.correct-pos {
+            border-color: var(--color-success);
+            background: rgba(46, 125, 50, 0.1);
+        }
+
+        .story-block.incorrect-pos {
+            border-color: var(--color-danger);
+            background: rgba(211, 47, 47, 0.1);
+        }
+
+        /* Feedback overlays & modules */
+        .feedback-message {
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 8px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--color-accent);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .app-footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <button id="theme-toggle" aria-label="Toggle structural theme">🌓</button>
+
+    <header>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <a href="index.html" class="btn-back-nav" style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                padding: 0 16px;
+                height: 42px;
+                border-radius: 12px;
+                background: var(--border-color);
+                color: var(--primary-color);
+                text-decoration: none;
+                font-size: 0.95rem;
+                font-weight: bold;
+                transition: background 0.3s ease, transform 0.2s ease;
+                border: none;
+                cursor: pointer;
+            " onmouseover="this.style.background='#FFCDD2'; this.style.transform='scale(1.03)';" onmouseout="this.style.background='var(--border-color)'; this.style.transform='scale(1)';">
+                🏠 Home
+            </a>
+            <div class="header-logo">English Interactive — Level B1</div>
+        </div>
+    </header>
+
+    <main id="app">
+        <div id="screen-units" class="screen active">
+            <h2 style="margin-bottom:10px; text-align:center;">Select Learning Module</h2>
+            <div class="grid-units" id="units-list"></div>
+        </div>
+
+        <div id="screen-dashboard" class="screen">
+            <button class="btn btn-outline" id="dash-back-btn">⬅️ Back to Modules</button>
+            <h2 id="dash-title" style="margin: 15px 0 5px 0; color: var(--color-primary);"></h2>
+            <p id="dash-grammar" style="font-size:0.95rem; margin-bottom:20px; color: var(--text-muted);"></p>
+            
+            <div class="grid-games">
+                <button class="btn" data-game="1">💬 Warm-Up Questions</button>
+                <button class="btn" data-game="2">🎴 Study Flashcards</button>
+                <button class="btn" data-game="3">🧠 Grammatical Quiz</button>
+                <button class="btn" data-game="4">🪓 Interactive Hangman</button>
+                <button class="btn" data-game="5">🔍 Word Search</button>
+                <button class="btn" data-game="6">📝 Fill in the Blanks</button>
+                <button class="btn" data-game="7">🗂️ Drag & Sort Categories</button>
+                <button class="btn" data-game="8">🎡 Wheel of Questions</button>
+                <button class="btn" data-game="9">📖 Reorder the Story</button>
+            </div>
+        </div>
+
+        <div id="screen-game" class="screen">
+            <button class="btn btn-outline" id="game-back-btn">📋 Return to Dashboard</button>
+            <div id="game-container-zone"></div>
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        English Interactive Platform &bull; Level B1 Module View
+    </footer>
+
+    <div id="firma-seguridad" style="position:fixed;bottom:20px;left:30px;font-family:Georgia, 'Times New Roman', serif;font-style:italic;font-size:14px;opacity:0.7;z-index:9999;pointer-events:none;">Creado por Tony Salas & German Peña</div>
+
+    <script>
+        // COMPREHENSIVE B1 LANGUAGE DATA STRUCTURE
+        const DATA = {
+            modules: [
+                {
+                    id: 1,
+                    title: "Units 1-2: Relative Clauses & Context",
+                    grammar: "Relative pronouns as subject/object, 'It' clauses + adverbial clauses with 'when', Gerund phrases as subjects/objects",
+                    warmup: [
+                        "Describe a person who has influenced your life.",
+                        "What's something that you can't live without?",
+                        "It's important to... — finish this sentence 3 ways.",
+                        "When do you feel most confident speaking English?",
+                        "Reading books is... — what do you think about it?",
+                        "Tell me about someone whose work you admire.",
+                        "It's strange when... — give a personal example.",
+                        "Learning a language involves... — what does it involve for you?"
+                    ],
+                    flashcards: [
+                        { front: "The teacher WHO helped me", back: "Relative pronoun as subject referring to a person" },
+                        { front: "The phone THAT I bought", back: "Relative pronoun as object referring to an object" },
+                        { front: "It is exciting WHEN you travel", back: "It clause + adverbial clause of time" },
+                        { front: "Learning English is fun", back: "Gerund phrase acting as the subject of the sentence" },
+                        { front: "I enjoy watching documentary movies", back: "Gerund phrase acting as the direct object" }
+                    ],
+                    quiz: [
+                        { q: "The woman _______ lives next door is an expert English linguist.", options: ["who", "which", "whose", "whom"], correct: 0 },
+                        { q: "I love the laptop _______ my father gave me for college.", options: ["who", "whose", "that", "when"], correct: 2 },
+                        { q: "It makes me anxious _______ I have to talk in public.", options: ["when", "which", "who", "where"], correct: 0 },
+                        { q: "_______ daily practice into your schedule is key to proficiency.", options: ["Integrate", "Integrating", "Integrated", "To integrated"], correct: 1 }
+                    ],
+                    hangman: [
+                        { word: "RELATIVE", hint: "Pronouns used to join structural sentences or clauses" },
+                        { word: "GERUND", hint: "Verb form ending in -ing acting as a noun phrase element" }
+                    ],
+                    wordsearch: ["WHO", "THAT", "WHEN", "GERUND", "WHICH", "OBJECT", "SUBJECT", "CLAUSE"],
+                    fillblanks: [
+                        { text: "The man [who] called you yesterday is my English teacher.", answer: "who" },
+                        { text: "I enjoy [studying] grammar rules at night.", answer: "studying" }
+                    ],
+                    dragsort: {
+                        categories: ["Subject Pronoun", "Object Gerund"],
+                        items: [
+                            { text: "Who lives here", cat: "Subject Pronoun" },
+                            { text: "That shines bright", cat: "Subject Pronoun" },
+                            { text: "Love reading books", cat: "Object Gerund" },
+                            { text: "Hate doing laundry", cat: "Object Gerund" }
+                        ]
+                    },
+                    roulette: [
+                        "Explain a personal rule that who applies to.",
+                        "Complete: It's natural when...",
+                        "Is speaking or writing harder?",
+                        "Describe an object that you cherish."
+                    ],
+                    story: [
+                        "Living abroad is a beautiful opportunity that alters your worldview.",
+                        "It is fascinating when you discover how other societies operate daily.",
+                        "Meeting modern individuals who speak diverse dialects expands your mind.",
+                        "Therefore, choosing to explore external nations remains highly recommended."
+                    ]
+                },
+                {
+                    id: 2,
+                    title: "Units 3-4: Comparisons & Customs",
+                    grammar: "Comparisons (adjectives/nouns/verbs/past participles), Requests with modals, If-clauses and gerunds, Indirect requests, Expectations (supposed to/custom to)",
+                    warmup: [
+                        "Is living in a big city better than a small town? Compare.",
+                        "What are people in Colombia supposed to do at a formal dinner?",
+                        "Could you please explain a cultural custom from your region?",
+                        "If learning English were easier, would you study more?",
+                        "Is working from home as productive as going to the office?",
+                        "What are students supposed to do that they often don't?",
+                        "Would you mind explaining what you're not supposed to do here?",
+                        "Is speaking English well more important than writing well?"
+                    ],
+                    flashcards: [
+                        { front: "As modern as ever", back: "Equality adjective comparison structure" },
+                        { front: "Supposed to tip", back: "Expressing social expectations or customary duties" },
+                        { front: "Would you mind helping", back: "Polite indirect request followed directly by a gerund" },
+                        { front: "More practice than before", back: "Noun based quantitative comparison pattern" }
+                    ],
+                    quiz: [
+                        { q: "This restaurant is not as _______ as the one we visited last weekend.", options: ["expensive", "expensiver", "most expensive", "expensively"], correct: 0 },
+                        { q: "Could you tell me where _______?", options: ["is the train station", "the train station is", "station is the train", "does the train station be"], correct: 1 },
+                        { q: "Would you mind _______ the window? It's freezing.", options: ["close", "to close", "closing", "closed"], correct: 2 },
+                        { q: "In this country, you are _______ to take off your shoes inside.", options: ["supposed", "customary", "supposing", "suppose"], correct: 0 }
+                    ],
+                    hangman: [
+                        { word: "EXPECTATION", hint: "What someone is supposed to do in a cultural environment" },
+                        { word: "COMPARISON", hint: "Evaluating characteristics between two elements or objects" }
+                    ],
+                    wordsearch: ["SUPPOSED", "MODAL", "MIND", "COULD", "BETTER", "CUSTOM", "THAN", "AS"],
+                    fillblanks: [
+                        { text: "Would you mind [turning] down the background sound?", answer: "turning" },
+                        { text: "We are supposed [to] arrive ten minutes before the event.", answer: "to" }
+                    ],
+                    dragsort: {
+                        categories: ["Direct Requests", "Indirect Forms"],
+                        items: [
+                            { text: "Open the door please", cat: "Direct Requests" },
+                            { text: "Can you help me now", cat: "Direct Requests" },
+                            { text: "Would you mind helping", cat: "Indirect Forms" },
+                            { text: "I wonder if you could", cat: "Indirect Forms" }
+                        ]
+                    },
+                    roulette: [
+                        "What are tourists supposed to do in your hometown?",
+                        "Compare your current job or school with a past one.",
+                        "Make an indirect request to borrow an expensive car.",
+                        "What is a custom you dislike?"
+                    ],
+                    story: [
+                        "Traveling across distinct countries demands adapting to novel traditions.",
+                        "For example, you are often supposed to leave tips for service workers.",
+                        "Would you mind researching local behaviors before packing your baggage?",
+                        "Doing this prevents experiencing severe cultural misunderstandings abroad."
+                    ]
+                },
+                {
+                    id: 3,
+                    title: "Units 5-6: Problems & Solutions",
+                    grammar: "Past continuous vs. simple past and past perfect, Noun phrases with relative clauses, Describing problems with past participles/nouns/need+gerund/keep+gerund",
+                    warmup: [
+                        "What were you doing when you realized you had a problem?",
+                        "Describe a broken thing using: it needs fixing / it keeps...",
+                        "When you arrived home yesterday, what had already happened?",
+                        "What problem do you keep having with technology?",
+                        "Was the situation getting worse before it got better? When?",
+                        "Describe something that needs repairing in your home.",
+                        "What had you already eaten when you decided to diet?",
+                        "What were people doing when the power went out?"
+                    ],
+                    flashcards: [
+                        { front: "The screen keeps flickering", back: "Keep + gerund indicating repetitive technical issue" },
+                        { front: "The car needs washing", back: "Need + gerund expressing necessary passive action" },
+                        { front: "I had already left when it rained", back: "Past perfect indicating action prior to another past event" },
+                        { front: "A device that links networks", back: "Noun phrase modified by an explanatory relative clause" }
+                    ],
+                    quiz: [
+                        { q: "When I arrived at the platform, the train _______ already departed.", options: ["has", "was", "had", "did"], correct: 2 },
+                        { q: "My laptop keeps _______ unexpectedly during video assignments.", options: ["crashing", "crash", "to crash", "crashed"], correct: 0 },
+                        { q: "The kitchen sink needs _______ as soon as possible.", options: ["fix", "fixing", "to fix", "fixed"], correct: 1 },
+                        { q: "I _______ my breakfast when the fire alarm started ringing.", options: ["ate", "was eating", "had eaten", "have eaten"], correct: 1 }
+                    ],
+                    hangman: [
+                        { word: "FLICKERING", hint: "A computer monitor screen that keeps blinking quickly" },
+                        { word: "PROBLEM", hint: "An issue requiring tactical resolution or troubleshooting" }
+                    ],
+                    wordsearch: ["CRASHING", "FIXING", "PERFECT", "BEFORE", "CONTINUOUS", "PROBLEM", "NEED", "KEEP"],
+                    fillblanks: [
+                        { text: "The tire is completely flat, it needs [replacing] immediately.", answer: "replacing" },
+                        { text: "They had already [finished] lunch when I reached the dining hall.", answer: "finished" }
+                    ],
+                    dragsort: {
+                        categories: ["Active Problem", "Required Action"],
+                        items: [
+                            { text: "It keeps leaking oil", cat: "Active Problem" },
+                            { text: "The system is crashing", cat: "Active Problem" },
+                            { text: "It needs repairing today", cat: "Required Action" },
+                            { text: "Needs adjusting carefully", cat: "Required Action" }
+                        ]
+                    },
+                    roulette: [
+                        "Describe a technological issue that keeps happening to you.",
+                        "What had you finished before you reached age eighteen?",
+                        "What were you wearing yesterday when you walked into class?",
+                        "Name three items inside an old house that need fixing."
+                    ],
+                    story: [
+                        "Yesterday morning, a severe plumbing crisis occurred inside our building.",
+                        "Water kept leaking through the ceiling while we were sleeping comfortably.",
+                        "Unfortunately, the head supervisor had already left the city for vacation.",
+                        "Consequently, the broken main valve needed immediate professional repairing.",
+                        "Thankfully, a local emergency plumber solved it before real damage occurred."
+                    ]
+                },
+                {
+                    id: 4,
+                    title: "Units 7-8: Passive & Preferences",
+                    grammar: "Passive in present continuous and perfect, Prepositions of cause, Infinitive clauses and phrases, Would rather / would prefer, By + gerund",
+                    warmup: [
+                        "Would you rather live in a hot or cold climate? Why?",
+                        "How can problems be solved by working together?",
+                        "What is currently being done about pollution in your city?",
+                        "Would you prefer to work alone or in a team?",
+                        "What has been discovered about health recently?",
+                        "How do you learn best — by listening or by doing?",
+                        "Would you rather have more money or more free time?",
+                        "What is being built near your house/school?"
+                    ],
+                    flashcards: [
+                        { front: "Is being constructed", back: "Present continuous passive voice pattern" },
+                        { front: "Has been verified", back: "Present perfect passive voice structure" },
+                        { front: "I've succeeded BY working hard", back: "By + gerund to show method or means of achievement" },
+                        { front: "I would rather stay home", back: "Would rather followed by a bare infinitive form" }
+                    ],
+                    quiz: [
+                        { q: "A new public transport line _______ built down the main avenue right now.", options: ["is", "is being", "has been", "was"], correct: 1 },
+                        { q: "Many innovative medical treatments _______ developed over this decade.", options: ["have been", "are being", "was", "had"], correct: 0 },
+                        { q: "I would rather _______ an independent business than operate inside an office.", options: ["manage", "to manage", "managing", "managed"], correct: 0 },
+                        { q: "You can improve your pronunciation fluency _______ listening to native streams.", options: ["for", "by", "with", "through"], correct: 1 }
+                    ],
+                    hangman: [
+                        { word: "PASSIVE", hint: "Grammatical voice focusing on the object receiving the direct action" },
+                        { word: "PREFERENCE", hint: "An expression indicating choices you would rather make" }
+                    ],
+                    wordsearch: ["PASSIVE", "RATHER", "PREFER", "BEING", "BEEN", "BY", "GERUND", "CAUSE"],
+                    fillblanks: [
+                        { text: "The ancient artifacts have [been] located by archeologists.", answer: "been" },
+                        { text: "I would prefer [to] study in a silent university library.", answer: "to" }
+                    ],
+                    dragsort: {
+                        categories: ["Continuous Passive", "Perfect Passive"],
+                        items: [
+                            { text: "The road is being paved", cat: "Continuous Passive" },
+                            { text: "Dinner is being cooked", cat: "Continuous Passive" },
+                            { text: "Laws have been approved", cat: "Perfect Passive" },
+                            { text: "The letter has been sent", cat: "Perfect Passive" }
+                        ]
+                    },
+                    roulette: [
+                        "What project has been finished in your neighborhood lately?",
+                        "Would you rather explore space or dive deep underwater?",
+                        "How can someone master English grammar rules by practicing?",
+                        "What critical world issues are being debated today?"
+                    ],
+                    story: [
+                        "Our global environmental landscape is being affected heavily by pollution.",
+                        "Many protective protocols have been passed by international regulators lately.",
+                        "Individuals prefer to take positive action by recycling household plastics.",
+                        "Most activists would rather demand structural changes than wait silently."
+                    ]
+                },
+                {
+                    id: 5,
+                    title: "Units 9-10: Getting Things Done & Time",
+                    grammar: "Get/have something done, Making suggestions (modals/gerunds/negative questions/infinitives), Time in the past (during/in/ago/for), Future prediction (will/future continuous/future perfect)",
+                    warmup: [
+                        "When did you last have your hair cut? Where?",
+                        "Why don't we take a break? How about going for a walk?",
+                        "What will you have finished by the end of this month?",
+                        "Three years ago, what was your life like?",
+                        "What will you be doing at this time tomorrow?",
+                        "How long ago did you start learning English?",
+                        "Should we get the classroom cleaned before the director comes?",
+                        "What will English learners have achieved in 5 years?"
+                    ],
+                    flashcards: [
+                        { front: "Have my car repaired", back: "Causative structure: arranging for someone else to do a service" },
+                        { front: "Why don't we leave?", back: "Suggestion using negative question pattern" },
+                        { front: "I will be studying", back: "Future continuous tense indicating continuous future action" },
+                        { front: "Will have graduated", back: "Future perfect indicating action completed before a future target" }
+                    ],
+                    quiz: [
+                        { q: "I need to have my wisdom teeth _______ by a professional surgeon.", options: ["extract", "extracting", "extracted", "to extract"], correct: 2 },
+                        { q: "How about _______ a quick coffee break before the next lecture?", options: ["take", "taking", "to take", "taken"], correct: 1 },
+                        { q: "By this exact time next year, I _______ from the academy program.", options: ["will graduate", "will be graduating", "will have graduated", "graduated"], correct: 2 },
+                        { q: "I resided in the state of Arizona _______ five years during my childhood.", options: ["during", "for", "since", "ago"], correct: 1 }
+                    ],
+                    hangman: [
+                        { word: "CAUSATIVE", hint: "Sentence structure indicating getting something done by another person" },
+                        { word: "PREDICTION", hint: "A statement forecasting what will occur down the line" }
+                    ],
+                    wordsearch: ["HAVE", "GET", "DONE", "ABOUT", "FUTURE", "DURING", "AGO", "FOR"],
+                    fillblanks: [
+                        { text: "Why don't we [gather] all the required study materials now?", answer: "gather" },
+                        { text: "By midnight, I will have [completed] my entire homework load.", answer: "completed" }
+                    ],
+                    dragsort: {
+                        categories: ["Future Continuous", "Future Perfect"],
+                        items: [
+                            { text: "I will be sleeping then", cat: "Future Continuous" },
+                            { text: "She will be traveling", cat: "Future Continuous" },
+                            { text: "They will have left", cat: "Future Perfect" },
+                            { text: "We will have eaten", cat: "Future Perfect" }
+                        ]
+                    },
+                    roulette: [
+                        "Where do you usually get your hair cut or styled?",
+                        "Suggest a fun weekend plan using: What about...?",
+                        "What will you be doing exactly at 9:00 PM tonight?",
+                        "What grand goals will you have achieved in five years?"
+                    ],
+                    story: [
+                        "Managing an expanding business operation requires outsourcing tedious work elements.",
+                        "Last week, the executive had her corporate office painted professionally.",
+                        "Next month, she will be organizing an international conference event.",
+                        "By December, her successful team will have finished three projects."
+                    ]
+                },
+                {
+                    id: 6,
+                    title: "Units 11-12: Time Clauses & Regrets",
+                    grammar: "Time clauses (before/after/once/the moment/as soon as), Expressing regret (should not have + past participle), Hypothetical situations (if + past perfect + would/could have)",
+                    warmup: [
+                        "As soon as you wake up, what do you do?",
+                        "Once you finish this course, what will you do?",
+                        "What should you have done differently in the last year?",
+                        "If you had studied harder as a child, how would your life be different?",
+                        "The moment you realized you loved English, what happened?",
+                        "What should your government have done that it didn't?",
+                        "Before you came to class today, what had you already done?",
+                        "If you had been born 50 years earlier, what would you have missed?"
+                    ],
+                    flashcards: [
+                        { front: "As soon as I arrive", back: "Time clause showing immediate sequential action" },
+                        { front: "I should have studied", back: "Expressing a past regret with should have + past participle" },
+                        { front: "If I had known earlier", back: "Third conditional condition structure (hypothetical past)" },
+                        { front: "Would have assisted you", back: "Third conditional consequence or result clause" }
+                    ],
+                    quiz: [
+                        { q: "_______ I receive the official exam grades, I will text you instantly.", options: ["As soon as", "Before to", "Until that", "While during"], correct: 0 },
+                        { q: "I feel terrible. I should not _______ that spicy street food last night.", options: ["eat", "ate", "have eaten", "eating"], correct: 2 },
+                        { q: "If you had attended the briefing, you _______ what the group project was.", options: ["would know", "would have known", "will know", "had known"], correct: 1 },
+                        { q: "The moment she entered the hall, everyone _______ cheering loudly.", options: ["starts", "started", "had started", "will start"], correct: 1 }
+                    ],
+                    hangman: [
+                        { word: "REGRET", hint: "A feeling of sadness or disappointment about a past mistake" },
+                        { word: "HYPOTHETICAL", hint: "Imagined or theoretical past scenarios that never happened" }
+                    ],
+                    wordsearch: ["SOON", "ONCE", "BEFORE", "REGRET", "SHOULD", "WOULD", "COULD", "MOMENT"],
+                    fillblanks: [
+                        { text: "I should have [listened] to the advisor's initial warnings.", answer: "listened" },
+                        { text: "If we had run faster, we could [have] caught the train.", answer: "have" }
+                    ],
+                    dragsort: {
+                        categories: ["Time Clause Connector", "Regret / Conditional"],
+                        items: [
+                            { text: "The moment that", cat: "Time Clause Connector" },
+                            { text: "As soon as possible", cat: "Time Clause Connector" },
+                            { text: "Should have done", cat: "Regret / Conditional" },
+                            { text: "If I had seen", cat: "Regret / Conditional" }
+                        ]
+                    },
+                    roulette: [
+                        "What is a minor past mistake you should not have made?",
+                        "What do you plan to do the moment class finishes?",
+                        "If you had won the lottery last year, what would you have bought?",
+                        "Where would you have gone if travel was free last month?"
+                    ],
+                    story: [
+                        "The brilliant student missed an important university scholarship deadline yesterday.",
+                        "As soon as he woke up, he realized his mistake instantly.",
+                        "He should have set multiple digital alarms the previous evening.",
+                        "If he had submitted the file, he would have won easily."
+                    ]
+                },
+                {
+                    id: 7,
+                    title: "Units 13-14: Purpose, Reason & Certainty",
+                    grammar: "Describing purpose (infinitive clauses with for/to), Giving reasons (because/since/due to/because of), Past modals for certainty (must/may/might/could have)",
+                    warmup: [
+                        "Why did you choose to study English? Give 3 reasons.",
+                        "She didn't come to class. She must have been sick. What else could have happened?",
+                        "What do people study English for in your country?",
+                        "Due to what reason is English important globally?",
+                        "He may have forgotten the homework. Give 3 alternatives.",
+                        "Since you're learning English, what opportunities are opening for you?",
+                        "What could have happened differently in your country's history?",
+                        "Because of technology, how has language learning changed?"
+                    ],
+                    flashcards: [
+                        { front: "To improve my business profile", back: "Infinitive clause expressing a specific purpose" },
+                        { front: "Due to heavy traffic delays", back: "Prepositional phrase giving a justification or reason" },
+                        { front: "They must have arrived by now", back: "Past modal expressing high logical certainty of an event" },
+                        { front: "Might have missed the signal", back: "Past modal expressing minor possibility or uncertainty" }
+                    ],
+                    quiz: [
+                        { q: "I signed up for this technical module _______ enhance my professional coding skills.", options: ["for to", "to", "because of", "for"], correct: 1 },
+                        { q: "The flight was unexpectedly canceled _______ a massive snowstorm over Chicago.", options: ["because", "since", "due to", "as"], correct: 2 },
+                        { q: "John's jacket is on his desk. He _______ have left the office building yet.", options: ["must not", "cannot", "might", "should"], correct: 1 },
+                        { q: "They didn't answer the door. They _______ have been sleeping inside.", options: ["might", "should", "for", "to"], correct: 0 }
+                    ],
+                    hangman: [
+                        { word: "CERTAINTY", hint: "The state of being completely confident about a logical conclusion" },
+                        { word: "PURPOSE", hint: "The fundamental reason for which something is done or created" }
+                    ],
+                    wordsearch: ["PURPOSE", "REASON", "SINCE", "BECAUSE", "MUST", "MIGHT", "COULD", "DUE"],
+                    fillblanks: [
+                        { text: "He must [have] forgotten his wallet because he can't pay.", answer: "have" },
+                        { text: "I came here [to] study corporate finance and administration.", answer: "to" }
+                    ],
+                    dragsort: {
+                        categories: ["High Certainty Past", "Weak Possibility Past"],
+                        items: [
+                            { text: "Must have won", cat: "High Certainty Past" },
+                            { text: "Cannot have left", cat: "High Certainty Past" },
+                            { text: "Might have slipped", cat: "Weak Possibility Past" },
+                            { text: "Could have stayed", cat: "Weak Possibility Past" }
+                        ]
+                    },
+                    roulette: [
+                        "Why are you learning English? State a primary purpose.",
+                        "Your friend looks incredibly happy today. Why must they be thrilled?",
+                        "Name a major event delayed due to unexpected climate issues.",
+                        "Where might your teacher have gone after class concluded?"
+                    ],
+                    story: [
+                        "The corporate team gathered early to resolve a sudden financial loss.",
+                        "The loss occurred primarily because of an unexpected market crash.",
+                        "The managers must have felt anxious regarding their quarterly goals.",
+                        "However, since they worked together, an ideal solution was discovered."
+                    ]
+                },
+                {
+                    id: 8,
+                    title: "Units 15-16: Advanced Mix B1",
+                    grammar: "Passive to describe process, Defining/non-defining relative clauses, Recommendations with passive modals, Tag questions, Accomplishments (simple past + present perfect), Goals (future perfect + Profiles)",
+                    warmup: [
+                        "Cheese is made by... — explain a food process.",
+                        "My best friend, who lives in Medellín, is... — tell me about them.",
+                        "English should be taught differently, shouldn't it?",
+                        "What have you accomplished this year that makes you proud?",
+                        "By next year, what will you have learned?",
+                        "Plastic should be banned, ought it to be? What do you think?",
+                        "You've improved a lot, haven't you? What helped most?",
+                        "I would like to have traveled more. What about you?"
+                    ],
+                    flashcards: [
+                        { front: "The coffee beans are roasted", back: "Passive voice structure utilized to explain an industrial process" },
+                        { front: "My sister, who loves art, painted this", back: "Non-defining relative clause adding extra non-essential details" },
+                        { front: "Action should be taken immediately", back: "Recommendation utilizing a passive modal format" },
+                        { front: "You're an expert, aren't you?", back: "Tag question structure used to confirm information" }
+                    ],
+                    quiz: [
+                        { q: "First, the raw plastic components _______ melted down into fluid forms.", options: ["is", "are", "have", "be"], correct: 1 },
+                        { q: "Our main director, _______ speaks three fluent languages, signed the contract.", options: ["who", "which", ", who ", "that"], correct: 2 },
+                        { q: "Strict community rules ought to _______ enforced by the local council.", options: ["be", "been", "being", "is"], correct: 0 },
+                        { q: "You have completed the entire intermediate language block, _______ you?", options: ["don't", "haven't", "didn't", "aren't"], correct: 1 }
+                    ],
+                    hangman: [
+                        { word: "PROCESS", hint: "A sequence of progressive steps taken to achieve a manufacturing result" },
+                        { word: "ACCOMPLISHMENT", hint: "An impressive achievement or goal reached successfully" }
+                    ],
+                    wordsearch: ["PROCESS", "PASSIVE", "OUGHT", "SHOULD", "TAG", "WHO", "HAVE", "TAKEN"],
+                    fillblanks: [
+                        { text: "The system should be [checked] for system bugs daily.", answer: "checked" },
+                        { text: "You live in Bogotá, [don't] you?", answer: "don't" }
+                    ],
+                    dragsort: {
+                        categories: ["Process Passive", "Tag Question"],
+                        items: [
+                            { text: "Grapes are harvested", cat: "Process Passive" },
+                            { text: "Liquid is heated", cat: "Process Passive" },
+                            { text: "Is it true, isn't it", cat: "Tag Question" },
+                            { text: "You left, didn't you", cat: "Tag Question" }
+                        ]
+                    },
+                    roulette: [
+                        "Explain briefly how a simple glass of orange juice is prepared.",
+                        "Describe a family member utilizing a non-defining relative clause.",
+                        "Global warming should be combated aggressively, shouldn't it?",
+                        "What massive milestones have you accomplished over the past two years?"
+                    ],
+                    story: [
+                        "High-quality chocolate is manufactured through an elaborate industrial sequence.",
+                        "First, organic cacao beans are collected and sun-dried thoroughly.",
+                        "Then, these dry beans are shipped to processing factories globally.",
+                        "This final product is thoroughly enjoyed by millions, isn't it?"
+                    ]
+                }
+            ]
+        };
+
+        // APPLICATION STATE ARCHITECTURE
+        const STATE = {
+            currentModule: null,
+            currentGameId: null,
+            progress: JSON.parse(localStorage.getItem('englishB1_progress')) || {},
+            gameSessionData: {}
+        };
+
+        // VIEW & ENGINE CONTROLLERS
+        const UI = {
+            init() {
+                this.renderModules();
+                this.setupGlobalEvents();
+                this.applyTheme();
+            },
+
+            renderModules() {
+                const container = document.getElementById('units-list');
+                container.innerHTML = '';
+                DATA.modules.forEach(m => {
+                    const card = document.createElement('div');
+                    card.className = 'card-unit';
+                    card.innerHTML = `
+                        <h3>${m.title}</h3>
+                        <p>${m.grammar}</p>
+                        <button class="btn btn-accent" style="margin:0; width:auto; font-size:0.85rem; padding:6px 12px; min-height:36px;">Enter Module</button>
+                    `;
+                    card.addEventListener('click', () => this.openModule(m));
+                    container.appendChild(card);
+                });
+            },
+
+            setupGlobalEvents() {
+                document.getElementById('theme-toggle').addEventListener('click', () => {
+                    const currentTheme = document.documentElement.getAttribute('data-theme');
+                    const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    document.documentElement.setAttribute('data-theme', nextTheme);
+                    localStorage.setItem('englishB1_theme', nextTheme);
+                });
+
+                document.getElementById('dash-back-btn').addEventListener('click', () => {
+                    this.switchScreen('screen-units');
+                });
+
+                document.getElementById('game-back-btn').addEventListener('click', () => {
+                    this.switchScreen('screen-dashboard');
+                });
+
+                // Dashboard game buttons
+                const gameButtons = document.querySelectorAll('.grid-games .btn');
+                gameButtons.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const gameId = parseInt(e.currentTarget.getAttribute('data-game'));
+                        this.launchGame(gameId);
+                    });
+                });
+            },
+
+            applyTheme() {
+                const savedTheme = localStorage.getItem('englishB1_theme') || 'light';
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            },
+
+            switchScreen(screenId) {
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                document.getElementById(screenId).classList.add('active');
+                window.scrollTo(0,0);
+            },
+
+            openModule(mod) {
+                STATE.currentModule = mod;
+                document.getElementById('dash-title').innerText = mod.title;
+                document.getElementById('dash-grammar').innerText = mod.grammar;
+                this.switchScreen('screen-dashboard');
+            },
+
+            launchGame(gameId) {
+                STATE.currentGameId = gameId;
+                const container = document.getElementById('game-container-zone');
+                container.innerHTML = ''; // Reset frame
+                
+                // Route dynamic instantiation
+                switch(gameId) {
+                    case 1: GamesEngine.initWarmup(container); break;
+                    case 2: GamesEngine.initFlashcards(container); break;
+                    case 3: GamesEngine.initQuiz(container); break;
+                    case 4: GamesEngine.initHangman(container); break;
+                    case 5: GamesEngine.initWordSearch(container); break;
+                    case 6: GamesEngine.initFillBlanks(container); break;
+                    case 7: GamesEngine.initDragSort(container); break;
+                    case 8: GamesEngine.initRoulette(container); break;
+                    case 9: GamesEngine.initStorySort(container); break;
+                }
+                this.switchScreen('screen-game');
+            }
+        };
+
+        // SEPARATE DYNAMIC GAME LOGIC SYSTEM
+        const GamesEngine = {
+            
+            // GAME 1: WARMUP QUESTIONS
+            initWarmup(target) {
+                const questions = STATE.currentModule.warmup;
+                let idx = 0;
+
+                const view = document.createElement('div');
+                view.className = 'game-box';
+                view.innerHTML = `
+                    <h2>💬 Warm-Up Questions</h2>
+                    <p class="instruction-text">Read the speech question aloud and construct a complete answer response.</p>
+                    <div class="progress-bar-container"><div class="progress-bar" id="wm-pb"></div></div>
+                    <div id="wm-question-card" class="btn btn-outline" style="min-height:120px; font-size:1.2rem; cursor:default; margin:20px 0; padding:20px; text-align:center; display:flex; align-items:center; justify-content:center;"></div>
+                    <div style="display:flex; gap:10px;">
+                        <button class="btn btn-accent" id="wm-audio-btn">🔊 Speak Question</button>
+                        <button class="btn" id="wm-next-btn">Next Item ➡️</button>
+                    </div>
+                `;
+                target.appendChild(view);
+
+                const updateQ = () => {
+                    document.getElementById('wm-question-card').innerText = questions[idx];
+                    document.getElementById('wm-pb').style.width = `${((idx + 1) / questions.length) * 100}%`;
+                };
+
+                document.getElementById('wm-audio-btn').addEventListener('click', () => {
+                    if('speechSynthesis' in window) {
+                        const utterance = new SpeechSynthesisUtterance(questions[idx]);
+                        utterance.lang = 'en-US';
+                        window.speechSynthesis.speak(utterance);
+                    } else {
+                        alert("Speech synthesis offline or unsupported on device.");
+                    }
+                });
+
+                document.getElementById('wm-next-btn').addEventListener('click', () => {
+                    idx++;
+                    if(idx < questions.length) {
+                        updateQ();
+                    } else {
+                        view.innerHTML = `<h2 style="text-align:center; color:var(--color-success);">🎉 Activity Completed!</h2><p style="text-align:center; margin:15px 0;">You have systematically responded to all speaking activities.</p>`;
+                    }
+                });
+
+                updateQ();
+            },
+
+            // GAME 2: STUDY FLASHCARDS
+            initFlashcards(target) {
+                const cards = STATE.currentModule.flashcards;
+                let idx = 0;
+
+                const view = document.createElement('div');
+                view.className = 'game-box';
+                view.innerHTML = `
+                    <h2>🎴 Study Flashcards</h2>
+                    <p class="instruction-text">Tap the card view window to flip between grammatical sample and standard rules breakdown.</p>
+                    <div class="flashcard-wrapper">
+                        <div class="flashcard" id="fc-element">
+                            <div class="card-face card-front"><h3 id="fc-front-text"></h3><span style="font-size:0.8rem; margin-top:20px; opacity:0.8;">[Tap to Flip]</span></div>
+                            <div class="card-face card-back"><h3 id="fc-back-text"></h3><span style="font-size:0.8rem; margin-top:20px; opacity:0.8;">[Tap to Return]</span></div>
+                        </div>
+                    </div>
+                    <button class="btn" id="fc-next-btn">Next Card ➡️</button>
+                `;
+                target.appendChild(view);
+
+                const cardEl = document.getElementById('fc-element');
+                cardEl.addEventListener('click', () => cardEl.classList.toggle('flipped'));
+
+                const updateFC = () => {
+                    cardEl.classList.remove('flipped');
+                    setTimeout(() => {
+                        document.getElementById('fc-front-text').innerText = cards[idx].front;
+                        document.getElementById('fc-back-text').innerText = cards[idx].back;
+                    }, 150);
+                };
+
+                document.getElementById('fc-next-btn').addEventListener('click', () => {
+                    idx++;
+                    if(idx < cards.length) {
+                        updateFC();
+                    } else {
+                        view.innerHTML = `<h2 style="text-align:center; color:var(--color-success);">🎉 Deck Mastered!</h2><p style="text-align:center; margin:15px 0;">All conceptual deck units reviewed successfully.</p>`;
+                    }
+                });
+
+                updateFC();
+            },
+
+            // GAME 3: GRAMMATICAL QUIZ
+            initQuiz(target) {
+                const questions = STATE.currentModule.quiz;
+                let idx = 0;
+                let score = 0;
+
+                const view = document.createElement('div');
+                view.className = 'game-box';
+                view.innerHTML = `
+                    <h2>🧠 Grammatical Quiz</h2>
+                    <p class="instruction-text">Select the single linguistically flawless option statement to populate the empty string.</p>
+                    <h3 id="qz-question" style="margin:20px 0; min-height:50px;"></h3>
+                    <div id="qz-options"></div>
+                    <div id="qz-feedback" class="feedback-message"></div>
+                `;
+                target.appendChild(view);
+
+                const loadQuestion = () => {
+                    document.getElementById('qz-feedback').style.display = 'none';
+                    const qItem = questions[idx];
+                    document.getElementById('qz-question').innerText = `${idx + 1}. ${qItem.q}`;
+                    
+                    const optContainer = document.getElementById('qz-options');
+                    optContainer.innerHTML = '';
+                    
+                    qItem.options.forEach((opt, oIdx) => {
+                        const btn = document.createElement('button');
+                        btn.className = 'quiz-option';
+                        btn.innerText = opt;
+                        btn.addEventListener('click', () => handleSelection(oIdx, btn));
+                        optContainer.appendChild(btn);
+                    });
+                };
+
+                const handleSelection = (selected, btn) => {
+                    const correctIdx = questions[idx].correct;
+                    const optionsButtons = document.querySelectorAll('.quiz-option');
+                    optionsButtons.forEach(b => b.disabled = true);
+
+                    const fb = document.getElementById('qz-feedback');
+                    fb.style.display = 'block';
+
+                    if(selected === correctIdx) {
+                        btn.classList.add('correct');
+                        fb.innerText = "¡Correcto! Outstanding selection.";
+                        fb.style.background = "rgba(46,125,50,0.2)";
+                        fb.style.color = "var(--color-success)";
+                        score++;
+                    } else {
+                        btn.classList.add('incorrect');
+                        optionsButtons[correctIdx].classList.add('correct');
+                        fb.innerText = "¡Incorrecto! Study the structural mechanics.";
+                        fb.style.background = "rgba(211,47,47,0.2)";
+                        fb.style.color = "var(--color-danger)";
+                    }
+
+                    setTimeout(() => {
+                        idx++;
+                        if(idx < questions.length) {
+                            loadQuestion();
+                        } else {
+                            view.innerHTML = `
+                                <h2 style="text-align:center;">Quiz Results</h2>
+                                <p style="text-align:center; font-size:1.5rem; margin:20px 0; font-weight:bold;">Score: ${score} / ${questions.length}</p>
+                                <p style="text-align:center; color: var(--text-muted);">Evaluation sequence finalized successfully.</p>
+                            `;
+                        }
+                    }, 2000);
+                };
+
+                loadQuestion();
+            },
+
+            // GAME 4: INTERACTIVE HANGMAN
+            initHangman(target) {
+                const pool = STATE.currentModule.hangman;
+                const session = pool[Math.floor(Math.random() * pool.length)];
+                let guessed = [];
+                let lives = 6;
+
+                const view = document.createElement('div');
+                view.className = 'game-box';
+                view.innerHTML = `
+                    <h2>🪓 Interactive Hangman</h2>
+                    <p class="instruction-text">Deduce the complete dynamic keyword sequence prior to exhausting structural lifelines.</p>
+                    <p style="font-weight:bold; color:var(--color-primary); margin-bottom:10px;">HINT: "${session.hint}"</p>
+                    <p style="font-size:1.1rem; font-weight:bold; margin-bottom:10px;">Remaining Lives: <span id="hm-lives" style="color:var(--color-danger);">${lives}</span> 🩸</p>
+                    <div class="word-display" id="hm-display"></div>
+                    <div class="keyboard-grid" id="hm-keys"></div>
+                `;
+                target.appendChild(view);
+
+                const updateDisplay = () => {
+                    let displayStr = "";
+                    let won = true;
+                    for(let char of session.word) {
+                        if(guessed.includes(char)) {
+                            displayStr += char + " ";
+                        } else {
+                            displayStr += "_ ";
+                            won = false;
+                        }
+                    }
+                    document.getElementById('hm-display').innerText = displayStr.trim();
+
+                    if(won) {
+                        endGame(true);
+                    } else if(lives <= 0) {
+                        endGame(false);
+                    }
+                };
+
+                const endGame = (isWin) => {
+                    document.getElementById('hm-keys').innerHTML = isWin ? 
+                        `<h3 style="grid-column: span 7; text-align:center; color:var(--color-success);">¡Ganaste! Flawless lexicon retrieval.</h3>` :
+                        `<h3 style="grid-column: span 7; text-align:center; color:var(--color-danger);">¡Incorrecto! Answer key was: ${session.word}</h3>`;
+                };
+
+                const abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+                const kb = document.getElementById('hm-keys');
+                abc.forEach(l => {
+                    const b = document.createElement('button');
+                    b.className = 'key-btn';
+                    b.innerText = l;
+                    b.addEventListener('click', () => {
+                        b.disabled = true;
+                        guessed.push(l);
+                        if(!session.word.includes(l)) {
+                            lives--;
+                            document.getElementById('hm-lives').innerText = lives;
+                        }
+                        updateDisplay();
+                    });
+                    kb.appendChild(b);
+                });
+
+                updateDisplay();
+            },
+
+            // GAME 5: WORD SEARCH MATRIX
+            initWordSearch(target) {
+                const words = STATE.currentModule.wordsearch;
+                const size = 8;
+                let grid = Array(size).fill(null).map(() => Array(size).fill(''));
+                let foundWords = [];
+                let selectedCells = [];
+
+                const view = document.createElement('div');
+                view.className = 'game-box';
+                view.innerHTML = `
+                    <h2>🔍 Word Search</h2>
+                    <p class="instruction-text">Locate and press individual cell elements to compose targeted structural keywords.</p>
+                    <div style="margin-bottom:10px; font-weight:bold;">Find: <span id="ws-targets" style="color:var(--color-primary);"></span></div>
+                    <div class="wordsearch-grid" id="ws-grid-element"></div>
+                    <button class="btn btn-accent" id="ws-check-btn" style="margin-top:10px;">Validate Selection</button>
+                `;
+                target.appendChild(view);
+
+                // Simple generation script
+                words.forEach(w => {
+                    let placed = false;
+                    while(!placed) {
+                        let row = Math.floor(Math.random() * size);
+                        let col = Math.floor(Math.random() * (size - w.length));
+                        let fits = true;
+                        for(let i=0; i<w.length; i++) {
+                            if(grid[row][col+i] !== '') fits = false;
+                        }
+                        if(fits) {
+                            for(let i=0; i<w.length; i++) grid[row][col+i] = w[i];
+                            placed = true;
+                        }
+                    }
+                });
+
+                const abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                for(let r=0; r<size; r++) {
+                    for(let c=0; c<size; c++) {
+                        if(grid[r][c] === '') grid[r][c] = abc[Math.floor(Math.random()*26)];
+                    }
+                }
+
+                const renderGrid = () => {
+                    const gEl = document.getElementById('ws-grid-element');
+                    gEl.innerHTML = '';
+                    document.getElementById('ws-targets').innerText = words.filter(w => !foundWords.includes(w)).join(", ");
+
+                    for(let r=0; r<size; r++) {
+                        for(let c=0; c<size; c++) {
+                            const cell = document.createElement('div');
+                            cell.className = 'ws-cell';
+                            cell.innerText = grid[r][c];
+                            cell.setAttribute('data-rc', `${r}-${c}`);
+                            
+                            cell.addEventListener('click', () => {
+                                cell.classList.toggle('selected');
+                                updateSelectionList(`${r}-${c}`);
+                            });
+                            gEl.appendChild(cell);
+                        }
+                    }
+                };
+
+                const updateSelectionList = (rc) => {
+                    const idx = selectedCells.indexOf(rc);
+                    if(idx > -1) selectedCells.splice(idx, 1);
+                    else selectedCells.push(rc);
+                };
+
+                document.getElementById('ws-check-btn').addEventListener('click', () => {
+                    let builtString = selectedCells.map(rc => {
+                        const [r, c] = rc.split("-").map(Number);
+                        return grid[r][c];
+                    }).join("");
+
+                    let reversedStr = builtString.split("").reverse().join("");
+
+                    let matchingWord = words.find(w => w === builtString || w === reversedStr);
+
+                    if(matchingWord && !foundWords.includes(matchingWord)) {
+                        foundWords.push(matchingWord);
+                        selectedCells.forEach(rc => {
+                            const targetCell = document.querySelector(`[data-rc="${rc}"]`);
+                            if(targetCell) {
+                                targetCell.classList.remove('selected');
+                                targetCell.classList.add('found');
+                            }
+                        });
+                        selectedCells = [];
+                        if(foundWords.length === words.length) {
+                            alert("¡Ganaste! Full programmatic terminal puzzle discovery.");
+                        } else {
+                            document.getElementById('ws-targets').innerText = words.filter(w => !foundWords.includes(w)).join(", ");
+                        }
+                    } else {
+                        alert("No valid undetected vocabulary matches selected sequence parameters.");
+                    }
+                });
+
+                renderGrid();
+            },
+
+            // GAME 6: FILL IN THE BLANKS
+            initFillBlanks(target) {
+                const exercises = STATE.currentModule.fillblanks;
+                let idx = 0;
+
+                const view = document.createElement('div');
+                view.className = 'game-box';
+                view.innerHTML = `
+                    <h2>📝 Fill in the Blanks</h2>
+                    <p class="instruction-text">Synthesize sentences accurately by specifying the optimal isolated matching keyword.</p>
+                    <div style="margin:25px 0;">
+                        <h3 id="fb-sentence-string" style="line-height:2rem;"></h3>
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <input type="text" id="fb-input" style="flex:1; padding:12px; font-size:1rem; border-radius:8px; border:2px solid var(--color-primary);" placeholder="Type answer keys...">
+                        <button class="btn btn-accent" id="fb-verify" style="margin:0; width:auto;">Verify</button>
+                    </div>
+                    <div id="fb-message" class="feedback-message"></div>
+                `;
+                target.appendChild(view);
+
+                const loadFB = () => {
+                    document.getElementById('fb-message').style.display = 'none';
+                    document.getElementById('fb-input').value = '';
+                    const rawText = exercises[idx].text;
+                    document.getElementById('fb-sentence-string').innerText = rawText.replace(/\[.*?\]/g, "_______");
+                };
+
+                document.getElementById('fb-verify').addEventListener('click', () => {
+                    const userVal = document.getElementById('fb-input').value.trim().toLowerCase();
+                    const correctVal = exercises[idx].answer.toLowerCase();
+                    const fbm = document.getElementById('fb-message');
+                    fbm.style.display = 'block';
+
+                    if(userVal === correctVal) {
+                        fbm.innerText = "¡Correcto! Syntactic target achieved perfectly.";
+                        fbm.style.background = "rgba(46,125,50,0.2)";
+                        fbm.style.color = "var(--color-success)";
+                        
+                        setTimeout(() => {
+                            idx++;
+                            if(idx < exercises.length) loadFB();
+                            else view.innerHTML = `<h2 style="text-align:center; color:var(--color-success);">🎉 Activity Finalized!</h2>`;
+                        }, 2000);
+                    } else {
+                        fbm.innerText = "¡Incorrecto! Revise the target structure syntax rules.";
+                        fbm.style.background = "rgba(211,47,47,0.2)";
+                        fbm.style.color = "var(--color-danger)";
+                    }
+                });
+
+                loadFB();
+            },
+
+            // GAME 7: DRAG & SORT CATEGORIES (Using fallback inputs for reliable smartphone execution)
+            initDragSort(target) {
+                const config = STATE.currentModule.dragsort;
+
+                const view = document.createElement('div');
+                view.className = 'game-box';
+                view.innerHTML = `
+                    <h2>🗂️ Drag & Sort Categories</h2>
+                    <p class="instruction-text">Map each grammatical snippet phrase to its appropriate structural designation criteria taxonomy.</p>
+                    <div id="ds-container" class="drag-container"></div>
+                    <button class="btn btn-accent" id="ds-submit-btn" style="margin-top:15px;">Evaluate Mapping</button>
+                `;
+                target.appendChild(view);
+
+                const container = document.getElementById('ds-container');
+                config.items.forEach((item, index) => {
+                    const row = document.createElement('div');
+                    row.className = 'drag-item';
+                    
+                    let selectorOptions = config.categories.map(c => `<option value="${c}">${c}</option>`).join("");
+                    
+                    row.innerHTML = `
+                        <span style="flex:1;">"${item.text}"</span>
+                        <select id="ds-sel-${index}" style="padding:8px; border-radius:6px; background:var(--bg-primary); color:var(--text-main); font-weight:bold;">
+                            ${selectorOptions}
+                        </select>
+                    `;
+                    container.appendChild(row);
+                });
+
+                document.getElementById('ds-submit-btn').addEventListener('click', () => {
+                    let total = config.items.length;
+                    let validCount = 0;
+
+                    config.items.forEach((item, index) => {
+                        const chosen = document.getElementById(`ds-sel-${index}`).value;
+                        if(chosen === item.cat) validCount++;
+                    });
+
+                    alert(`Evaluation completed: ${validCount} / ${total} alignments match targeted criteria.`);
+                });
+            },
+
+            // GAME 8: WHEEL OF QUESTIONS
+            initRoulette(target) {
+                const questions = STATE.currentModule.roulette;
+
+                const view = document.createElement('div');
+                view.className = 'game-box';
+                view.innerHTML = `
+                    <h2>🎡 Wheel of Questions</h2>
+                    <p class="instruction-text">Initiate rotation mechanics to claim a structural situational prompt challenge scenario.</p>
+                    <div class="roulette-container">
+                        <div class="wheel-pointer"></div>
+                        <div class="wheel" id="roulette-wheel-obj"></div>
+                    </div>
+                    <button class="btn btn-accent" id="spin-trigger-btn">Spin Wheel</button>
+                    <h3 id="roulette-out-card" style="text-align:center; min-height:40px; margin-top:20px; color:var(--color-primary);"></h3>
+                `;
+                target.appendChild(view);
+
+                let spinning = false;
+                document.getElementById('spin-trigger-btn').addEventListener('click', () => {
+                    if(spinning) return;
+                    spinning = true;
+                    document.getElementById('roulette-out-card').innerText = "";
+
+                    const randomDegrees = Math.floor(Math.random() * 360) + 1440; // min 4 complete rotations
+                    const wheel = document.getElementById('roulette-wheel-obj');
+                    wheel.style.transform = `rotate(${randomDegrees}deg)`;
+
+                    setTimeout(() => {
+                        spinning = false;
+                        const finalChoice = questions[Math.floor(Math.random() * questions.length)];
+                        document.getElementById('roulette-out-card').innerText = `🎯 prompt challenge: "${finalChoice}"`;
+                        wheel.style.transition = 'none';
+                        wheel.style.transform = `rotate(${randomDegrees % 360}deg)`;
+                        setTimeout(() => { wheel.style.transition = 'transform 3s cubic-bezier(0.1, 0.8, 0.1, 1)'; }, 50);
+                    }, 3050);
+                });
+            },
+
+            // GAME 9: REORDER THE STORY (Vertical arrangement mapping via manual sequence modifiers)
+            initStorySort(target) {
+                const originalBlocks = STATE.currentModule.story;
+                // Generate deep copied structure with positions
+                let workingArray = originalBlocks.map((text, idx) => ({ text, originalIdx: idx }));
+                
+                // Shuffle system implementation
+                for (let i = workingArray.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [workingArray[i], workingArray[j]] = [workingArray[j], workingArray[i]];
+                }
+
+                const view = document.createElement('div');
+                view.className = 'game-box';
+                view.innerHTML = `
+                    <h2>📖 Reorder the Story</h2>
+                    <p class="instruction-text">Organize structural component entries into a coherent flowing narrative paragraph sequence manually.</p>
+                    <div id="story-blocks-container"></div>
+                    <button class="btn btn-accent" id="story-validate-btn" style="margin-top:15px;">Confirm Sequence Alignment</button>
+                `;
+                target.appendChild(view);
+
+                const renderBlocks = () => {
+                    const container = document.getElementById('story-blocks-container');
+                    container.innerHTML = '';
+                    workingArray.forEach((item, index) => {
+                        const el = document.createElement('div');
+                        el.className = 'story-block';
+                        el.innerHTML = `
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <div style="display:flex; flex-direction:column; gap:4px;">
+                                    <button class="btn-move-up" style="cursor:pointer; background:none; border:none; color:var(--text-main);" data-idx="${index}">🔼</button>
+                                    <button class="btn-move-down" style="cursor:pointer; background:none; border:none; color:var(--text-main);" data-idx="${index}">🔽</button>
+                                </div>
+                                <p style="font-size:0.95rem; flex:1;">${item.text}</p>
+                            </div>
+                        `;
+                        container.appendChild(el);
+                    });
+
+                    // Add actions to virtual control triggers safely
+                    document.querySelectorAll('.btn-move-up').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            let currentIdx = parseInt(btn.getAttribute('data-idx'));
+                            if(currentIdx > 0) {
+                                [workingArray[currentIdx], workingArray[currentIdx - 1]] = [workingArray[currentIdx - 1], workingArray[currentIdx]];
+                                renderBlocks();
+                            }
+                        });
+                    });
+
+                    document.querySelectorAll('.btn-move-down').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            let currentIdx = parseInt(btn.getAttribute('data-idx'));
+                            if(currentIdx < workingArray.length - 1) {
+                                [workingArray[currentIdx], workingArray[currentIdx + 1]] = [workingArray[currentIdx + 1], workingArray[currentIdx]];
+                                renderBlocks();
+                            }
+                        });
+                    });
+                };
+
+                document.getElementById('story-validate-btn').addEventListener('click', () => {
+                    const blockElements = document.querySelectorAll('.story-block');
+                    let mistakeFound = false;
+
+                    workingArray.forEach((item, idx) => {
+                        blockElements[idx].classList.remove('correct-pos', 'incorrect-pos');
+                        if(item.originalIdx === idx) {
+                            blockElements[idx].classList.add('correct-pos');
+                        } else {
+                            blockElements[idx].classList.add('incorrect-pos');
+                            mistakeFound = true;
+                        }
+                    });
+
+                    if(!mistakeFound) {
+                        alert("¡Ganaste! The contextual paragraph exhibits absolute flawless chronology.");
+                    } else {
+                        alert("Discrepancies identified. Analyze contextual markers and reposition structural components.");
+                    }
+                });
+
+                renderBlocks();
+            }
+        };
+
+        // RUN UI PARSER BOOTSTRAP
+        document.addEventListener('DOMContentLoaded', () => UI.init());
+
+        // MANDATORY RUNTIME SECURITY INTERVAL COMPLIANCE VERIFICATION CHECK
+        setInterval(() => {
+            const firma = document.getElementById('firma-seguridad');
+            const app = document.getElementById('app');
+            const bloqueado = document.getElementById('acceso-denegated');
+            if (!firma || firma.textContent.trim() !== 'Creado por Tony Salas & German Peña' ||
+                getComputedStyle(firma).display === 'none' ||
+                getComputedStyle(firma).opacity === '0' ||
+                getComputedStyle(firma).visibility === 'hidden') {
+                if (app) app.style.display = 'none';
+                if (!bloqueado) {
+                    const div = document.createElement('div');
+                    div.id = 'acceso-denegated';
+                    div.style.cssText = 'position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:99999;';
+                    div.innerHTML = '<p style="color:red;font-size:2rem;text-align:center;padding:2rem;">⚠️ ACCESO DENEGADO ⚠️<br><span style="font-size:1rem;">El código de seguridad y la firma han sido alterados. CREA TU VERGA TU, CARA E MONDA.</span></p>';
+                    document.body.appendChild(div);
+                }
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

@@ -228,11 +228,11 @@
             .theme-toggle { top: 1rem; right: 1rem; }
         }
 
-        /* --- PERSONAJES DE FONDO CONFIGURADOS MÁS GRANDES --- */
+        /* --- CONFIGURACIÓN DE LOS PERSONAJES (RESPONSIVOS) --- */
         .personaje {
             position: fixed;
             bottom: 0;
-            width: 400px; /* Tamaño aumentado de 180px a 280px */
+            width: 400px; /* Tamaño grande para pantallas de PC */
             height: auto;
             z-index: 10;
             pointer-events: none;
@@ -247,11 +247,17 @@
             right: 1rem;
         }
 
-        /* Como ahora son más grandes, aumentamos el límite de pantalla para ocultarlos */
-        /* Si la pantalla es menor a 1500px de ancho, se ocultan para no tapar las tarjetas */
-        @media (max-width: 1500px) {
+        /* Ajuste automático para pantallas móviles y tablets */
+        @media (max-width: 1300px) {
             .personaje {
-                display: none;
+                width: 120px; /* Reducimos el tamaño en móviles para que no estorben */
+                opacity: 0.6;  /* Un poco de transparencia para integrarse mejor de fondo */
+            }
+            .personaje-izq {
+                left: 0.5rem;
+            }
+            .personaje-der {
+                right: 0.5rem;
             }
         }
     </style>

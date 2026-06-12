@@ -227,26 +227,51 @@
             .matrix-grid { grid-template-columns: 1fr; gap: 1.5rem; }
             .theme-toggle { top: 1rem; right: 1rem; }
         }
+
+        /* --- PERSONAJES DE FONDO CONFIGURADOS MÁS GRANDES --- */
+        .personaje {
+            position: fixed;
+            bottom: 0;
+            width: 400px; /* Tamaño aumentado de 180px a 280px */
+            height: auto;
+            z-index: 10;
+            pointer-events: none;
+            animation: moveDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        .personaje-izq {
+            left: 1rem;
+        }
+
+        .personaje-der {
+            right: 1rem;
+        }
+
+        /* Como ahora son más grandes, aumentamos el límite de pantalla para ocultarlos */
+        /* Si la pantalla es menor a 1500px de ancho, se ocultan para no tapar las tarjetas */
+        @media (max-width: 1500px) {
+            .personaje {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <!-- LIGHT / DARK SYSTEM TOGGLE -->
     <button class="theme-toggle" id="themeSwitchBtn" aria-label="Toggle structural theme">🌓</button>
 
-    <!-- CONTENT PORTAL WRAPPER -->
+    <img src="1.png" alt="Personaje Izquierda" class="personaje personaje-izq">
+    <img src="2.png" alt="Personaje Derecha" class="personaje personaje-der">
+
     <div id="app">
-        <!-- HEADER BLOCK -->
         <div class="welcome">
             <h1>INTERACTIVE ACTIVITIES</h1>
             <p>Developed by Tony Gabriel & German Peña</p>
         </div>
 
-        <!-- MATRIX RENDERING ELEMENT -->
         <main class="matrix-grid" id="portalMatrix"></main>
     </div>
 
-    <!-- REQUIRED SECURITY FOOTPRINT -->
     <div id="firma-seguridad" style="position:fixed;bottom:20px;left:30px;font-family:Georgia, 'Times New Roman', serif;font-style:italic;font-size:14px;opacity:0.7;z-index:9999;pointer-events:none;">Creado por Tony Salas & German Peña</div>
 
     <script>

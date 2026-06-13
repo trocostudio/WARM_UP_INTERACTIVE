@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,29 +8,22 @@
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600;700&display=swap');
 
         :root {
-            /* NUEVA PALETA DE COLORES: AMARILLO ACADEMIA */
-            --primary: #EAB308;          /* Amarillo principal (fuerte y visible) */
-            --primary-dark: #A16207;     /* Dorado oscuro para textos contrastantes */
-            --primary-light: #FEF08A;    /* Amarillo claro para fondos suaves */
-            --bg: #FEFCE8;               /* Fondo general crema/amarillo muy suave */
-            --surface: #FFFFFF;
-            --text: #1E293B;
-            --text-muted: #64748B;
-            --border: #FDE047;           /* Bordes amarillos definidos */
-            --success: #10B981;
-            --error: #EF4444;
-            --warning: #F59E0B;
-            --radius: 16px;
-            --shadow: 0 8px 32px rgba(234, 179, 8, 0.15);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        [data-theme="dark"] {
-            --bg: #1E1B4B;               /* Fondo oscuro con un toque de contraste azul/morado noche */
-            --surface: #312E81;
-            --text: #FEFCE8;             /* Texto claro amarillento para modo oscuro */
-            --text-muted: #94A3B8;
-            --border: #4338CA;
+            /* PALETA SLATE PREMIUM UNIFICADA CON DETALLES RED/ROSE */
+            --bg: #0f172a;                /* Slate 900 exacto */
+            --surface: #1e293b;           /* Slate 800 para contenedores */
+            --text: #f8fafc;              /* Slate 50 para texto principal */
+            --text-muted: #94a3b8;        /* Slate 400 para textos secundarios */
+            --border: rgba(51, 65, 85, 0.6); /* Slate 700 con opacidad suave */
+            --primary: #ef4444;           /* Rojo acento original del portal */
+            --primary-light: rgba(239, 68, 68, 0.15);
+            --primary-dark: #b91c1c;
+            
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            --radius: 24px;               /* Ajustado a 24px para mantener consistencia con los paneles redondeados */
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+            --transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         * {
@@ -43,7 +36,7 @@
             font-family: 'Poppins', sans-serif;
             background-color: var(--bg);
             color: var(--text);
-            padding-top: 80px;
+            padding-top: 90px;
             min-height: 100vh;
             transition: var(--transition);
         }
@@ -55,7 +48,7 @@
             left: 0;
             right: 0;
             height: 70px;
-            background: var(--surface);
+            background: rgba(30, 41, 59, 0.9);
             border-bottom: 1px solid var(--border);
             backdrop-filter: blur(10px);
             display: flex;
@@ -67,9 +60,11 @@
         }
 
         .header-logo {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--primary-dark);
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .header-actions {
@@ -80,7 +75,7 @@
 
         .btn-ui {
             padding: 0.5rem 1rem;
-            border-radius: 8px;
+            border-radius: 12px;
             border: 1px solid var(--border);
             background: var(--surface);
             color: var(--text);
@@ -96,7 +91,7 @@
 
         .btn-ui:hover {
             background: var(--primary);
-            color: #1E293B; /* Texto oscuro sobre fondo amarillo para legibilidad */
+            color: #ffffff;
             border-color: var(--primary);
         }
 
@@ -119,18 +114,23 @@
         .tab-btn {
             padding: 0.75rem 1.2rem;
             background: var(--surface);
-            border: 1px solid var(--border);
-            color: var(--text);
-            border-radius: var(--radius);
-            font-weight: 600;
+            border: 2px solid var(--border);
+            color: var(--text-muted);
+            border-radius: 16px;
+            font-weight: 700;
             cursor: pointer;
             transition: var(--transition);
             min-height: 48px;
         }
 
+        .tab-btn:hover {
+            border-color: rgba(239, 68, 68, 0.4);
+            color: var(--text);
+        }
+
         .tab-btn.active {
-            background: var(--primary);
-            color: #1E293B;
+            background: var(--surface);
+            color: var(--primary);
             border-color: var(--primary);
         }
 
@@ -159,10 +159,11 @@
 
         /* Left Column: Warm-Up */
         .column-warmup {
-            background: linear-gradient(135deg, #CA8A04, #EAB308); /* Gradiente dorado/amarillo */
-            color: #1E293B;
+            background: var(--surface);
+            color: var(--text);
             border-radius: var(--radius);
             padding: 2rem;
+            border: 2px solid var(--border);
             box-shadow: var(--shadow);
             display: flex;
             flex-direction: column;
@@ -172,16 +173,19 @@
 
         .column-warmup h2 {
             font-size: 1.5rem;
-            font-weight: 700;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: -0.025em;
         }
 
         .warmup-box {
-            background: rgba(255, 255, 255, 0.4);
+            background: var(--bg);
             padding: 1.5rem;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            font-size: 1.2rem;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            font-size: 1.1rem;
             font-weight: 600;
+            color: #cbd5e1;
             min-height: 100px;
             display: flex;
             align-items: center;
@@ -190,35 +194,39 @@
         }
 
         .btn-warmup {
-            background: #1E293B;
+            background: var(--primary);
             color: #FFFFFF;
             border: none;
             padding: 0.75rem 1.5rem;
-            border-radius: 8px;
+            border-radius: 16px;
             font-weight: 700;
             cursor: pointer;
             min-height: 48px;
+            border-b: 4px solid var(--primary-dark);
             transition: var(--transition);
         }
 
-        .btn-warmup:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        .btn-warmup:active {
+            transform: translateY(4px);
+            filter: brightness(0.9);
         }
 
         /* Right Column: Practice Games Framework */
         .column-practice {
-            background: linear-gradient(135deg, #EAB308, #FACC15);
-            color: #1E293B;
+            background: var(--surface);
+            color: var(--text);
             border-radius: var(--radius);
             padding: 2rem;
+            border: 2px solid var(--border);
             box-shadow: var(--shadow);
         }
 
         .column-practice h2 {
             font-size: 1.5rem;
-            font-weight: 700;
+            font-weight: 900;
+            color: #ffffff;
             margin-bottom: 1.5rem;
+            letter-spacing: -0.025em;
         }
 
         .game-selector {
@@ -226,37 +234,44 @@
             gap: 0.5rem;
             flex-wrap: wrap;
             margin-bottom: 2rem;
-            background: rgba(0,0,0,0.08);
+            background: var(--bg);
             padding: 0.5rem;
-            border-radius: 12px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
         }
 
         .game-tab-btn {
             padding: 0.5rem 1rem;
             background: transparent;
             border: none;
-            color: #1E293B;
-            border-radius: 8px;
-            font-weight: 600;
+            color: var(--text-muted);
+            border-radius: 12px;
+            font-weight: 700;
             cursor: pointer;
             min-height: 48px;
             transition: var(--transition);
         }
 
+        .game-tab-btn:hover {
+            color: var(--text);
+        }
+
         .game-tab-btn.active {
-            background: #1E293B;
-            color: #FFFFFF;
+            background: var(--surface);
+            color: var(--primary);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
         /* Individual Game Containers */
         .game-content-panel {
-            background: var(--surface);
+            background: var(--bg);
             color: var(--text);
-            border-radius: 12px;
+            border-radius: 16px;
             padding: 1.5rem;
             min-height: 350px;
             display: none;
             position: relative;
+            border: 1px solid var(--border);
         }
 
         .game-content-panel.active {
@@ -269,6 +284,7 @@
             margin-bottom: 1rem;
             border-left: 3px solid var(--primary);
             padding-left: 0.5rem;
+            font-weight: 600;
         }
 
         /* FLASHCARDS UI */
@@ -298,7 +314,7 @@
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
-            border-radius: var(--radius);
+            border-radius: 20px;
             padding: 2rem;
             display: flex;
             flex-direction: column;
@@ -311,16 +327,18 @@
 
         .card-front {
             background: var(--surface);
-            color: var(--text);
+            color: #ffffff;
             font-size: 1.3rem;
             font-weight: 700;
         }
 
         .card-back {
-            background: var(--bg);
-            color: var(--text);
+            background: var(--surface);
+            color: var(--primary);
+            border-color: var(--primary);
             transform: rotateY(180deg);
             font-size: 1.05rem;
+            font-weight: 700;
         }
 
         .card-controls {
@@ -341,6 +359,7 @@
             font-weight: 700;
             margin-bottom: 1.5rem;
             text-align: center;
+            color: #ffffff;
         }
 
         .quiz-options {
@@ -354,7 +373,7 @@
             padding: 0.75rem 1rem;
             background: var(--surface);
             border: 2px solid var(--border);
-            border-radius: 8px;
+            border-radius: 12px;
             color: var(--text);
             font-family: inherit;
             font-weight: 600;
@@ -366,7 +385,7 @@
 
         .option-btn:hover {
             border-color: var(--primary);
-            background: var(--bg);
+            background: rgba(30, 41, 59, 0.5);
         }
 
         /* HANGMAN UI */
@@ -383,6 +402,7 @@
             font-weight: 700;
             margin: 1rem 0;
             min-height: 3rem;
+            color: #ffffff;
         }
 
         .hangman-keyboard {
@@ -399,13 +419,19 @@
             border: 1px solid var(--border);
             background: var(--surface);
             color: var(--text);
-            border-radius: 4px;
+            border-radius: 6px;
             font-weight: 600;
             cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .key-btn:hover:not(:disabled) {
+            border-color: var(--primary);
+            color: var(--primary);
         }
 
         .key-btn:disabled {
-            opacity: 0.4;
+            opacity: 0.2;
             cursor: not-allowed;
         }
 
@@ -420,8 +446,8 @@
 
         .memory-card {
             aspect-ratio: 1;
-            background: var(--primary);
-            border-radius: 8px;
+            background: var(--surface);
+            border-radius: 12px;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -429,21 +455,21 @@
             text-align: center;
             padding: 0.25rem;
             font-size: 0.75rem;
-            font-weight: 600;
+            font-weight: 700;
             color: transparent;
             user-select: none;
-            border: 2px solid transparent;
+            border: 2px solid var(--border);
             transition: var(--transition);
         }
 
         .memory-card.revealed {
             background: var(--surface);
             border-color: var(--primary);
-            color: var(--text);
+            color: var(--primary);
         }
 
         .memory-card.matched {
-            background: var(--bg);
+            background: rgba(16, 185, 129, 0.1);
             border-color: var(--success);
             color: var(--success);
             opacity: 0.7;
@@ -457,6 +483,7 @@
             margin: 2rem 0;
             text-align: center;
             line-height: 2;
+            color: #ffffff;
         }
 
         .fitb-blank-placeholder {
@@ -464,7 +491,7 @@
             border-bottom: 2px dashed var(--primary);
             min-width: 100px;
             padding: 0 0.5rem;
-            color: var(--primary-dark);
+            color: var(--primary);
         }
 
         /* DRAG & SORT UI */
@@ -479,20 +506,21 @@
             flex-wrap: wrap;
             gap: 0.5rem;
             padding: 1rem;
-            background: var(--bg);
+            background: var(--surface);
             border: 2px dashed var(--border);
-            border-radius: 8px;
+            border-radius: 12px;
             min-height: 60px;
         }
 
         .drag-item {
             padding: 0.5rem 1rem;
-            background: var(--surface);
+            background: var(--bg);
             border: 1px solid var(--border);
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: grab;
             font-weight: 600;
             user-select: none;
+            color: #ffffff;
         }
 
         .drag-zones-wrapper {
@@ -504,7 +532,7 @@
         .drop-zone {
             background: var(--surface);
             border: 2px solid var(--border);
-            border-radius: 8px;
+            border-radius: 12px;
             padding: 1rem;
             min-height: 150px;
         }
@@ -513,7 +541,8 @@
             margin-bottom: 0.5rem;
             border-bottom: 2px solid var(--border);
             padding-bottom: 0.25rem;
-            color: var(--primary-dark);
+            color: var(--primary);
+            font-weight: 700;
         }
 
         /* RULETA UI */
@@ -561,7 +590,8 @@
             margin: 0 auto;
             background: var(--border);
             padding: 2px;
-            border-radius: 8px;
+            border-radius: 12px;
+            overflow: hidden;
         }
 
         .ws-cell {
@@ -574,11 +604,12 @@
             font-size: 0.9rem;
             cursor: pointer;
             user-select: none;
+            color: #ffffff;
         }
 
         .ws-cell.selected {
-            background: var(--primary-light);
-            color: var(--primary-dark);
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--primary);
         }
 
         .ws-cell.found {
@@ -596,9 +627,12 @@
 
         .ws-word-item {
             font-size: 0.8rem;
+            font-weight: 600;
             padding: 0.25rem 0.5rem;
-            background: var(--bg);
-            border-radius: 4px;
+            background: var(--surface);
+            border-radius: 6px;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
             text-decoration: none;
         }
 
@@ -606,6 +640,7 @@
             text-decoration: line-through;
             opacity: 0.5;
             background: var(--success);
+            border-color: var(--success);
             color: white;
         }
 
@@ -634,7 +669,7 @@
             z-index: 9999;
             font-family: 'Dancing Script', cursive;
             font-size: 18px;
-            color: #A16207;
+            color: #475569; /* Slate oscuro para la marca de agua discreta */
             pointer-events: none;
             user-select: none;
         }
@@ -652,16 +687,16 @@
                 padding: 0 16px;
                 height: 42px;
                 border-radius: 12px;
-                background: var(--border-color);
-                color: var(--primary-color);
+                background: var(--surface);
+                color: var(--text-muted);
                 text-decoration: none;
                 font-size: 0.95rem;
                 font-weight: bold;
-                transition: background 0.3s ease, transform 0.2s ease;
-                border: none;
+                transition: var(--transition);
+                border: 2px solid var(--border);
                 cursor: pointer;
-            " onmouseover="this.style.background='#FFCDD2'; this.style.transform='scale(1.03)';" onmouseout="this.style.background='var(--border-color)'; this.style.transform='scale(1)';">
-                🏠 Home
+            " onmouseover="this.style.borderColor='var(--primary)'; this.style.color='#ffffff'; this.style.transform='scale(1.03)';" onmouseout="this.style.borderColor='var(--border)'; this.style.color='var(--text-muted)'; this.style.transform='scale(1)';">
+                🏡 Home
             </a>
             <div class="header-logo">English Interactive — Level INTRO</div>
         </div>
@@ -676,7 +711,7 @@
     </div>
 
     <div id="firma">Creado por Tony Salas & German Peña</div>
-
+</body>
     <script>
         // DATA DICTIONARIES FOR THE SYSTEM
         const APPDATA = {

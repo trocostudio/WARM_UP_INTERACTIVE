@@ -8,15 +8,17 @@
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600;700&display=swap');
 
         :root {
-            /* PALETA SLATE PREMIUM UNIFICADA CON DETALLES RED/ROSE */
+            /* PALETA SLATE PREMIUM UNIFICADA CON DETALLES EN AMARILLO MOSTAZA */
             --bg: #0f172a;                /* Slate 900 exacto */
             --surface: #1e293b;           /* Slate 800 para contenedores */
             --text: #f8fafc;              /* Slate 50 para texto principal */
             --text-muted: #94a3b8;        /* Slate 400 para textos secundarios */
             --border: rgba(51, 65, 85, 0.6); /* Slate 700 con opacidad suave */
-            --primary: #ef4444;           /* Rojo acento original del portal */
-            --primary-light: rgba(239, 68, 68, 0.15);
-            --primary-dark: #b91c1c;
+            
+            /* ACENTOS: CAMBIADOS DE ROJO A AMARILLO MOSTAZA */
+            --primary: #d97706;           /* Amarillo Mostaza / Amber 600 */
+            --primary-light: rgba(217, 119, 6, 0.15);
+            --primary-dark: #b45309;      /* Mostaza oscuro para bordes inferiores/sombras */
             
             --success: #10b981;
             --error: #ef4444;
@@ -124,7 +126,7 @@
         }
 
         .tab-btn:hover {
-            border-color: rgba(239, 68, 68, 0.4);
+            border-color: rgba(217, 119, 6, 0.4); /* Resalte amarillo mostaza en hover */
             color: var(--text);
         }
 
@@ -202,7 +204,7 @@
             font-weight: 700;
             cursor: pointer;
             min-height: 48px;
-            border-b: 4px solid var(--primary-dark);
+            border-bottom: 4px solid var(--primary-dark);
             transition: var(--transition);
         }
 
@@ -577,7 +579,7 @@
             height: 0;
             border-left: 15px solid transparent;
             border-right: 15px solid transparent;
-            border-top: 25px solid var(--error);
+            border-top: 25px solid var(--primary); /* Cambiado de error a color mostaza de consistencia */
             z-index: 10;
         }
 
@@ -608,7 +610,7 @@
         }
 
         .ws-cell.selected {
-            background: rgba(239, 68, 68, 0.2);
+            background: rgba(217, 119, 6, 0.2);
             color: var(--primary);
         }
 
@@ -669,7 +671,7 @@
             z-index: 9999;
             font-family: 'Dancing Script', cursive;
             font-size: 18px;
-            color: #475569; /* Slate oscuro para la marca de agua discreta */
+            color: #475569; /* Slate discreto para la marca de agua */
             pointer-events: none;
             user-select: none;
         }

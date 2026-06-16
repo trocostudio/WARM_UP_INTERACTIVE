@@ -333,249 +333,342 @@
         /* =====================================================================
            📦 MASTER DATA OBJECT: UNITS 1 TO 16 (PEDAGOGICAL DATA COMPLETE)
            ===================================================================== */
-        const DATA = {
-            "u1-2": {
-                badge: "Units 1-2",
-                title: "Welcome & Personal Information",
-                prompts: [
-                    "What is your full name and how do you spell your last name?",
-                    "Where are you from originally and what is your nationality?",
-                    "What is your phone number and email address?",
-                    "How old are you and when is your birthday?"
-                ],
-                vocabulary: [
-                    { word: "Hello", translation: "Hola" },
-                    { word: "Surname", translation: "Apellido" },
-                    { word: "Address", translation: "Dirección" },
-                    { word: "Country", translation: "País" },
-                    { word: "Occupation", translation: "Ocupación" },
-                    { word: "Single", translation: "Soltero/a" },
-                    { word: "Married", translation: "Casado/a" },
-                    { word: "Welcome", translation: "Bienvenido" }
-                ],
-                grammar: {
-                    rules: "Verb To Be: I am, You are, He/She/It is, We/They are. Used for names, nationalities, professions, and age.",
-                    examples: ["I am a student.", "She is from Spain.", "They are not married."]
-                },
-                quiz: [
-                    { q: "What ___ your name?", a: ["is", "am", "are", "be"], c: "is" },
-                    { q: "Where ___ you from?", a: ["are", "is", "am", "do"], c: "are" },
-                    { q: "I ___ 25 years old.", a: ["am", "have", "is", "has"], c: "am" },
-                    { q: "___ she married?", a: ["Is", "Are", "Am", "Does"], c: "Is" }
-                ]
-            },
-            "u3-4": {
-                badge: "Units 3-4",
-                title: "Family, Friends & Everyday Objects",
-                prompts: [
-                    "Do you have any brothers or sisters? Tell me about them.",
-                    "Describe your best friend. What is their name and job?",
-                    "What objects do you carry in your bag or backpack every day?",
-                    "Who is your favorite family member and why?"
-                ],
-                vocabulary: [
-                    { word: "Brother", translation: "Hermano" },
-                    { word: "Daughter", translation: "Hija" },
-                    { word: "Parents", translation: "Padres" },
-                    { word: "Wallet", translation: "Billetera" },
-                    { word: "Keys", translation: "Llaves" },
-                    { word: "Laptop", translation: "Computadora portátil" },
-                    { word: "Friend", translation: "Amigo/a" },
-                    { word: "Watch", translation: "Reloj de pulsera" }
-                ],
-                grammar: {
-                    rules: "Possessive adjectives (my, your, his, her, its, our, their) and possessive 's for family relationships and belongings.",
-                    examples: ["This is my brother's car.", "Her parents are very nice.", "Our house is small."]
-                },
-                quiz: [
-                    { q: "This is my ___ laptop. (The laptop belonging to my sister)", a: ["sister's", "sisters", "sister", "sisters'"], c: "sister's" },
-                    { q: "They live with ___ grandparents.", a: ["their", "them", "they", "theirs"], c: "their" },
-                    { q: "He has two ___.", a: ["children", "childs", "childes", "childrens"], c: "children" },
-                    { q: "Where are my ___? I cannot open the door.", a: ["keys", "wallet", "watch", "pen"], c: "keys" }
-                ]
-            },
-            "u5-6": {
-                badge: "Units 5-6",
-                title: "Daily Routines, Habits & Free Time",
-                prompts: [
-                    "What time do you usually wake up and go to bed on weekdays?",
-                    "Describe your typical morning routine before school or work.",
-                    "What hobbies or activities do you enjoy doing on weekends?",
-                    "How often do you exercise or watch TV during the week?"
-                ],
-                vocabulary: [
-                    { word: "Wake up", translation: "Despertarse" },
-                    { word: "Breakfast", translation: "Desayuno" },
-                    { word: "Shower", translation: "Ducha" },
-                    { word: "Always", translation: "Siempre" },
-                    { word: "Sometimes", translation: "A veces" },
-                    { word: "Never", translation: "Nunca" },
-                    { word: "Exercise", translation: "Hacer ejercicio" },
-                    { word: "Weekends", translation: "Fines de semana" }
-                ],
-                grammar: {
-                    rules: "Present Simple for habits and routines. Use -s/-es for third person singular (He, She, It). Adverbs of frequency go before the main verb.",
-                    examples: ["She walks to work every day.", "I always drink coffee in the morning.", "He doesn't like sports."]
-                },
-                quiz: [
-                    { q: "She ___ to the gym on Mondays.", a: ["goes", "go", "going", "gone"], c: "goes" },
-                    { q: "I ___ watch horror movies. I hate them.", a: ["never", "always", "sometimes", "usually"], c: "never" },
-                    { q: "What time ___ you have lunch?", a: ["do", "does", "is", "are"], c: "do" },
-                    { q: "He ___ drink tea; he prefers hot chocolate.", a: ["doesn't", "don't", "isn't", "not"], c: "doesn't" }
-                ]
-            },
-            "u7-8": {
-                badge: "Units 7-8",
-                title: "Our Home, Neighborhood & Places",
-                prompts: [
-                    "Describe your house or apartment. How many rooms does it have?",
-                    "What is your favorite room in your home and why?",
-                    "Is there a supermarket, bank, or park near your house?",
-                    "What can tourists visit or see in your town or neighborhood?"
-                ],
-                vocabulary: [
-                    { word: "Kitchen", translation: "Cocina" },
-                    { word: "Bedroom", translation: "Dormitorio" },
-                    { word: "Living room", translation: "Sala de estar" },
-                    { word: "Park", translation: "Parque" },
-                    { word: "Supermarket", translation: "Supermercado" },
-                    { word: "Behind", translation: "Detrás de" },
-                    { word: "Next to", translation: "Al lado de" },
-                    { word: "Between", translation: "Entre (dos cosas)" }
-                ],
-                grammar: {
-                    rules: "There is (singular) / There are (plural) for existence. Prepositions of place (in, on, under, next to, behind, in front of) to show locations.",
-                    examples: ["There is a big sofa in the living room.", "There are three bedrooms upstairs.", "The pharmacy is next to the bank."]
-                },
-                quiz: [
-                    { q: "___ a bank near here?", a: ["Is there", "There is", "Are there", "There are"], c: "Is there" },
-                    { q: "There ___ four chairs around the dining table.", a: ["are", "is", "am", "be"], c: "are" },
-                    { q: "The keys are ___ the kitchen table.", a: ["on", "in", "underneath", "between"], c: "on" },
-                    { q: "The library is ___ the hospital and the school.", a: ["between", "next to", "behind", "in front of"], c: "between" }
-                ]
-            },
-            "u9-10": {
-                badge: "Units 9-10",
-                title: "Food, Drinks, Shopping & Dining Out",
-                prompts: [
-                    "What is your favorite meal of the day and what do you eat?",
-                    "What food items do you need to buy next time you shop?",
-                    "Do you prefer eating at home or going out to restaurants?",
-                    "Talk about a traditional dish from your country. What is in it?"
-                ],
-                vocabulary: [
-                    { word: "Vegetables", translation: "Verduras" },
-                    { word: "Chicken", translation: "Pollo" },
-                    { word: "Fruit", translation: "Fruta" },
-                    { word: "Rice", translation: "Arroz" },
-                    { word: "Cheese", translation: "Queso" },
-                    { word: "Water", translation: "Agua" },
-                    { word: "Delicious", translation: "Delicioso" },
-                    { word: "Restaurant", translation: "Restaurante" }
-                ],
-                grammar: {
-                    rules: "Countable and Uncountable nouns. Use 'some' in positive sentences and 'any' in negative sentences or questions. Much/Many expressions.",
-                    examples: ["I have some apples.", "Is there any milk left?", "We don't need much sugar."]
-                },
-                quiz: [
-                    { q: "Would you like ___ water?", a: ["some", "any", "a", "many"], c: "some" },
-                    { q: "I don't have ___ tomatoes to make the salad.", a: ["any", "some", "much", "an"], c: "any" },
-                    { q: "How ___ eggs do we need for the cake?", a: ["many", "much", "some", "any"], c: "many" },
-                    { q: "We need to buy some ___ at the market.", a: ["rice", "rices", "banana", "potato"], c: "rice" }
-                ]
-            },
-            "u11-12": {
-                badge: "Units 11-12",
-                title: "Abilities, Talents & Current Actions",
-                prompts: [
-                    "What sports or musical instruments can you play well?",
-                    "Can you speak more than two languages? Which ones?",
-                    "What are you doing right now at this exact moment?",
-                    "Look out the window. What are people doing outside?"
-                ],
-                vocabulary: [
-                    { word: "Speak", translation: "Hablar" },
-                    { word: "Swim", translation: "Nadar" },
-                    { word: "Cook", translation: "Cocinar" },
-                    { word: "Drive", translation: "Conducir" },
-                    { word: "Reading", translation: "Leyendo" },
-                    { word: "Studying", translation: "Estudiando" },
-                    { word: "Working", translation: "Trabajando" },
-                    { word: "Running", translation: "Corriendo" }
-                ],
-                grammar: {
-                    rules: "Modal verb 'can' for ability (same for all subjects, followed by base verb). Present Continuous (am/is/are + verb-ing) for actions happening now.",
-                    examples: ["I can swim fast, but I can't fly.", "What are you studying right now?", "They are watching a movie."]
-                },
-                quiz: [
-                    { q: "She can ___ delicious Italian pizzas.", a: ["cook", "cooks", "cooking", "cooked"], c: "cook" },
-                    { q: "Listen! The baby ___ right now.", a: ["is crying", "cries", "crying", "cry"], c: "is crying" },
-                    { q: "What ___ you doing at the moment?", a: ["are", "is", "am", "do"], c: "are" },
-                    { q: "I ___ drive a bus. I don't have a commercial license.", a: ["can't", "can", "am not", "don't"], c: "can't" }
-                ]
-            },
-            "u13-14": {
-                badge: "Units 13-14",
-                title: "Past Experiences, Memories & Life Events",
-                prompts: [
-                    "Where were you born and where did you grow up?",
-                    "What did you do last weekend? Tell me about your activities.",
-                    "Think about your last vacation. Where did you go and stay?",
-                    "When was the last time you celebrated a birthday or party?"
-                ],
-                vocabulary: [
-                    { word: "Was / Were", translation: "Era / Estaba / Fue" },
-                    { word: "Yesterday", translation: "Ayer" },
-                    { word: "Last night", translation: "Anoche" },
-                    { word: "Travel", translation: "Viajar" },
-                    { word: "Bought", translation: "Compró / Compré" },
-                    { word: "Went", translation: "Fue / Fui" },
-                    { word: "Vacation", translation: "Vacaciones" },
-                    { word: "Born", translation: "Nacido" }
-                ],
-                grammar: {
-                    rules: "Past Simple of Verb To Be (was/were) and regular/irregular verbs. Used for finished actions in a specific past time frame.",
-                    examples: ["We were happy yesterday.", "I visited my uncle last week.", "They went to New York in 2022."]
-                },
-                quiz: [
-                    { q: "Where ___ you yesterday morning?", a: ["were", "was", "did", "are"], c: "were" },
-                    { q: "She ___ a new dress two days ago.", a: ["bought", "buyed", "buys", "buy"], c: "bought" },
-                    { q: "They ___ not watch the soccer game last night.", a: ["did", "do", "were", "was"], c: "did" },
-                    { q: "I ___ to the beach last summer.", a: ["went", "go", "was gone", "gone"], c: "went" }
-                ]
-            },
-            "u15-16": {
-                badge: "Units 15-16",
-                title: "Future Plans, Ambitions & Weather",
-                prompts: [
-                    "What are your plans for tomorrow evening?",
-                    "Where are you going to travel on your next vacation?",
-                    "What is the weather like today in your city?",
-                    "What are your long-term study or career goals?"
-                ],
-                vocabulary: [
-                    { word: "Tomorrow", translation: "Mañana (día)" },
-                    { word: "Next year", translation: "El próximo año" },
-                    { word: "Sunny", translation: "Soleado" },
-                    { word: "Raining", translation: "Lloviendo" },
-                    { word: "Cold", translation: "Frío" },
-                    { word: "Travel", translation: "Viajar" },
-                    { word: "Intention", translation: "Intención" },
-                    { word: "Plan", translation: "Plan" }
-                ],
-                grammar: {
-                    rules: "Future plans using 'be going to + verb' to express clear intentions or safe predictions based on evidence.",
-                    examples: ["I am going to study tonight.", "It is going to rain look at those black clouds.", "They are going to move soon."]
-                },
-                quiz: [
-                    { q: "We are ___ buy a new house next year.", a: ["going to", "go to", "will to", "going"], c: "going to" },
-                    { q: "Look at the dark clouds! It is going to ___.", a: ["rain", "rains", "raining", "rained"], c: "rain" },
-                    { q: "___ you going to visit your family tomorrow?", a: ["Are", "Is", "Am", "Do"], c: "Are" },
-                    { q: "I am going to ___ English in London next semester.", a: ["study", "studies", "studying", "studied"], c: "study" }
-                ]
-            }
-        };
+        const courseDatabase = {
+    "u1-2": {
+        badge: "Units 1-2",
+        title: "Personal Info, Occupations & Greetings",
+        details: "Grammar: Wh-questions + statements with be (What/Where/Who/How), Yes/No questions + short answers with be, Subject pronouns + Possessive adjectives | Vocab: Occupations & Nationalities",
+        
+        // BANCO EXTENSO DE PROMPTS DE WARM-UP (Conversación guiada)
+        prompts: [
+            "What is your full name and where are you from originally?",
+            "Are you a full-time student, or do you have a part-time job? Describe it.",
+            "Think of your best friend. What is his or her occupation? Where is he/she right now?",
+            "Introduce the classmate sitting next to you. Use subject pronouns (he/she) and possessive adjectives (his/her).",
+            "Is English easy or difficult for you? Answer using a complete short answer with 'be' (e.g., Yes, it is / No, it isn't).",
+            "Name five different occupations you can see in a typical hospital or school.",
+            "How do you spell your last name? Practice with a partner.",
+            "Imagine you are a famous celebrity. Who are you, where are you from, and what is your job?",
+            "Are your parents from the same city as you? Answer using a short answer with 'be'.",
+            "What is your email address and what is your phone number? Practice reading the numbers and symbols aloud."
+        ],
 
+        // VOCABULARIO EXTENSO (Para Flashcards, Word Search, Hangman, Word Wheel, Category Sort)
+        vocabulary: [
+            "accountant", "architect", "cashier", "chef", "doctor", "engineer", "flight attendant",
+            "lawyer", "manager", "nurse", "pilot", "receptionist", "salesperson", "scientist",
+            "secretary", "student", "teacher", "veterinarian", "waiter", "waitress", "actor",
+            "actress", "musician", "artist", "police officer", "firefighter", "driver", "builder",
+            "American", "Brazilian", "Canadian", "Chinese", "French", "German", "Italian",
+            "Japanese", "Mexican", "Spanish", "British", "Colombian", "Peruvian", "Argentinian",
+            "classroom", "notebook", "textbook", "dictionary", "alphabet", "number", "address"
+        ],
+
+        // REGLAS GRAMATICALES MAPEADAS (Para Fill Blanks, Find Errors, Reorder Steps, Flashcards de conceptos)
+        grammarRules: [
+            "Subject Pronouns: I, you, he, she, it, we, they.",
+            "Possessive Adjectives: my, your, his, her, its, our, their.",
+            "Statements with Be: I am, you are, he/she/it is, we are, they are.",
+            "Wh-Questions with Be: What (things), Where (places), Who (people), How (conditions/descriptions).",
+            "Yes/No Questions with Be: Invert the verb and subject (e.g., 'Are you a teacher?').",
+            "Short Answers Affirmative: Yes, I am. / Yes, he is. / Yes, they are. (Never use contractions here!)",
+            "Short Answers Negative: No, I'm not. / No, he's not (or he isn't). / No, they're not (or they aren't)."
+        ],
+
+        // BANCO MASIVO DE PREGUNTAS EN FORMATO JSON (Para Quiz, Tic-Tac-Toe, Jeopardy, Find Errors)
+        quizQuestions: [
+            { q: "Where _______ your teacher from?", options: ["am", "is", "are"], answer: "is" },
+            { q: "Choose the correct possessive adjective: 'He is a doctor. _______ name is Robert.'", options: ["His", "Her", "Your"], answer: "His" },
+            { q: "Are you and your friends from Madrid? No, _______ aren't.", options: ["we", "they", "you"], answer: "we" },
+            { q: "_______ is that man over there? - Oh, he is the new marketing manager.", options: ["What", "Where", "Who"], answer: "Who" },
+            { q: "Is she an architect? - Yes, _______.", options: ["she's", "she is", "is she"], answer: "she is" },
+            { q: "They work in a restaurant. They are _______.", options: ["cashiers", "chefs", "nurses"], answer: "chefs" },
+            { q: "What is _______ email address, Sarah?", options: ["your", "you", "his"], answer: "your" },
+            { q: "How _______ you spell your last name?", options: ["are", "is", "do"], answer: "do" },
+            { q: "Identify the mistake: 'She am a very good mechanical engineer.'", options: ["She", "am", "engineer"], answer: "am" },
+            { q: "We are from Kyoto. We are _______.", options: ["Chinese", "Japanese", "Korean"], answer: "Japanese" },
+            { q: "_______ is your phone number? - It's 555-1234.", options: ["What", "Who", "Where"], answer: "What" },
+            { q: "Are they flight attendants? - No, they _______.", options: ["aren't", "not are", "am not"], answer: "aren't" },
+            { q: "This is my dog. _______ name is Max.", options: ["His", "Its", "Our"], answer: "Its" },
+            { q: "Who are those people? - _______ are my new classmates.", options: ["They", "We", "He"], answer: "They" },
+            { q: "Mr. and Mrs. Smith are lawyers. _______ office is downtown.", options: ["Our", "Their", "Your"], answer: "Their" },
+            { q: "Excuse me, _______ you the new receptionist?", options: ["is", "am", "are"], answer: "are" },
+            { q: "_______ is Tokyo? - It's in Japan.", options: ["What", "Where", "How"], answer: "Where" },
+            { q: "How _______ your parents today? - They are doing great, thanks!", options: ["is", "am", "are"], answer: "are" },
+            { q: "I work in a school. I am a _______.", options: ["teacher", "waiter", "lawyer"], answer: "teacher" },
+            { q: "Select the correct negative contraction for 'We are not':", options: ["We aren't", "We am not", "We isn't"], answer: "We aren't" }
+        ]
+    },
+    "u3-4": { 
+        badge: "Units 3-4", 
+        title: "Daily Routines, Shopping & Entertainment", 
+        details: "Grammar: Demonstratives (this/that/these/those) + one/ones, Comparisons with adjectives, How much / Which, Yes/No questions with do, Object pronouns, Modal would + to + verb, Time expressions | Vocab: Clothes, Materials, Daily Activities & Entertainment",
+        
+        // BANCO EXTENSO DE PROMPTS DE WARM-UP (Conversación guiada)
+        prompts: [
+            "What time do you usually get up in the morning, and what is your first daily activity?",
+            "Look at your classmates' outfits. Describe what someone is wearing today using a color and a clothing item.",
+            "Imagine you are in a clothing store. How do you ask the clerk for the price of a jacket and a pair of shoes?",
+            "Do you prefer casual clothes like jeans and T-shirts, or formal clothes like suits and dresses? Why?",
+            "What kind of entertainment do you like? Do you prefer going to the movies, concerts, or watching series at home?",
+            "Invite a classmate to go to a rock concert this Saturday night using the structure: 'Would you like to...?'",
+            "Ask a partner what time they eat breakfast, lunch, and dinner. Use prepositions like 'at', 'around', or 'early'.",
+            "Compare two things you own (e.g., your smartphone and your computer). Which one is bigger, newer, or more expensive?",
+            "Do you study English in the morning, in the afternoon, or at night? Answer using complete sentences with 'do/don't'.",
+            "Think of your favorite movie or book. Why do you like it? Answer using an object pronoun (me, him, her, it, them)."
+        ],
+
+        // VOCABULARIO EXTENSO (Para Flashcards, Word Search, Hangman, Word Wheel, Category Sort)
+        vocabulary: [
+            "jacket", "sweater", "t-shirt", "jeans", "pants", "skirt", "dress", "suit", "shirt",
+            "shoes", "boots", "sneakers", "socks", "hat", "cap", "gloves", "scarf", "tie",
+            "cotton", "leather", "wool", "silk", "plastic", "gold", "silver", "expensive", "cheap",
+            "concert", "movie", "play", "party", "museum", "festival", "restaurant", "cafeteria",
+            "get up", "take a shower", "eat breakfast", "go to work", "study", "watch tv", "sleep",
+            "this", "that", "these", "those", "one", "ones", "large", "medium", "small", "boring"
+        ],
+
+        // REGLAS GRAMATICALES MAPEADAS (Para Fill Blanks, Find Errors, Reorder Steps, Flashcards de conceptos)
+        grammarRules: [
+            "Demonstratives (Singular/Near): Use 'this' for a single object close to you.",
+            "Demonstratives (Plural/Near): Use 'these' for multiple objects close to you.",
+            "Demonstratives (Singular/Far): Use 'that' for a single object far from you.",
+            "Demonstratives (Plural/Far): Use 'those' for multiple objects far from you.",
+            "Pronouns 'one/ones': Use 'one' to avoid repeating a singular noun, and 'ones' for a plural noun (e.g., 'The blue one').",
+            "Adjective Comparison (Short): Add '-er' to short adjectives (e.g., cheap -> cheaper, big -> bigger).",
+            "Adjective Comparison (Long): Use 'more' before long adjectives (e.g., expensive -> more expensive).",
+            "Yes/No Questions with Do: Use 'Do' for I/you/we/they and 'Does' for he/she/it before the subject.",
+            "Object Pronouns: Placed after verbs or prepositions. Me, you, him, her, it, us, them (e.g., 'I love them').",
+            "Modal Would for Invitations: Structure 'Would you like to + verb' (e.g., 'Would you like to go out?').",
+            "Time Expressions: Use 'at' for specific times (at 8:00), 'in' for parts of the day (in the morning), 'on' for days (on Monday)."
+        ],
+
+        // BANCO MASIVO DE PREGUNTAS EN FORMATO JSON (Para Quiz, Tic-Tac-Toe, Jeopardy, Find Errors)
+        quizQuestions: [
+            { q: "How much is _______ leather jacket over there on the hanger?", options: ["this", "that", "these"], answer: "that" },
+            { q: "I don't like the green socks. I prefer the white _______.", options: ["one", "ones", "it"], answer: "ones" },
+            { q: "This silk dress is _______ than the cotton one.", options: ["more expensive", "expensiver", "most expensive"], answer: "more expensive" },
+            { q: "Which shirt do you want? - I want the blue _______.", options: ["one", "ones", "them"], answer: "one" },
+            { q: "_______ your sister work in a downtown office?", options: ["Do", "Is", "Does"], answer: "Does" },
+            { q: "What kind of movies do you like? - I really love _______.", options: ["they", "them", "their"], answer: "them" },
+            { q: "Would you like _______ to a pop concert tonight?", options: ["go", "going", "to go"], answer: "to go" },
+            { q: "We usually have English class _______ the morning.", options: ["at", "in", "on"], answer: "in" },
+            { q: "Our exam is _______ Friday at 9:00 a.m.", options: ["on", "at", "in"], answer: "on" },
+            { q: "Identify the mistake: 'Those shoes are more cheaper than my boots.'", options: ["Those", "more cheaper", "than"], answer: "more cheaper" },
+            { q: "_______ much are these gold earrings?", options: ["What", "How", "Which"], answer: "How" },
+            { q: "Which jacket do you like better? - The _______ one.", options: ["wool", "wools", "woolen"], answer: "wool" },
+            { q: "Do you like this t-shirt? - Yes, I like _______ a lot.", options: ["him", "it", "her"], answer: "it" },
+            { q: "_______ you want to see a movie with us tonight?", options: ["Do", "Does", "Are"], answer: "Do" },
+            { q: "This smartphone is _______ than that old phone.", options: ["small", "smaller", "more small"], answer: "smaller" },
+            { q: "My father wakes up early, usually _______ around 5:30 a.m.", options: ["at", "on", "in"], answer: "at" },
+            { q: "I love this book. Please give it to _______.", options: ["I", "me", "my"], answer: "me" },
+            { q: "Does your brother like sports? - No, he _______.", options: ["don't", "doesn't", "isn't"], answer: "doesn't" },
+            { q: "Look at _______ birds high up in that distant tree!", options: ["these", "this", "those"], answer: "those" },
+            { q: "Would your friends like to visit the museum? - Yes, they _______.", options: ["will", "do", "would"], answer: "would" }
+        ]
+    },
+    "u5-6": { 
+        badge: "Units 5-6", 
+        title: "Family, Sports, Hobbies & Lifestyles", 
+        details: "Grammar: Present Continuous (statements, questions & short answers), Quantifiers (all, most, some, a few), Adverbs of frequency, Questions with How often / How long / How well / How good | Vocab: Family members, Sports & Exercise activities",
+        
+        // BANCO EXTENSO DE PROMPTS DE WARM-UP (Conversación guiada)
+        prompts: [
+            "What sport or exercise activity are you doing these days to stay healthy?",
+            "Think of your family members. Tell a partner what two of them are doing right now.",
+            "How often do you go to the gym, play soccer, or go running? Answer using a frequency adverb.",
+            "How well do you play video games or cook? Rate your skill level using words like 'very well', 'pretty well', or 'not very well'.",
+            "How long do you usually spend on social media or watching TV every single day?",
+            "Are you working or studying hard right now? Answer with a correct short answer in the Present Continuous.",
+            "Are most of your classmates from this city? Answer using a quantifier like 'all', 'most', or 'a few'.",
+            "What is your absolute favorite sport to watch on TV? How good are you at playing it in real life?",
+            "Imagine you are planning a family reunion. Who is coming and what activities are you preparing for them?",
+            "Ask your partner: 'What are you wearing today?' and 'What is the teacher doing right now?'"
+        ],
+
+        // VOCABULARIO EXTENSO (Para Flashcards, Word Search, Hangman, Word Wheel, Category Sort)
+        vocabulary: [
+            "soccer", "basketball", "tennis", "volleyball", "baseball", "swimming", "running",
+            "cycling", "gymnastics", "karate", "yoga", "fitness", "exercise", "workout", "athlete",
+            "always", "usually", "often", "sometimes", "hardly ever", "never", "frequently",
+            "father", "mother", "brother", "sister", "grandfather", "grandmother", "uncle", "aunt",
+            "cousin", "nephew", "niece", "parents", "relatives", "husband", "wife", "child", "children",
+            "all", "most", "some", "few", "excellent", "good", "average", "terrible", "habits"
+        ],
+
+        // REGLAS GRAMATICALES MAPEADAS (Para Fill Blanks, Find Errors, Reorder Steps, Flashcards de conceptos)
+        grammarRules: [
+            "Present Continuous Use: Use for actions happening right now, at this exact moment (e.g., 'I am studying').",
+            "Present Continuous Structure: Subject + verb Be (am/is/are) + Main Verb ending in -ing.",
+            "Present Continuous Yes/No Questions: Move 'be' to the front (e.g., 'Are you listening?').",
+            "Quantifiers Scale: All (100%) -> Nearly all -> Most -> Some -> A few -> No one (0%).",
+            "Quantifiers Placement: Place quantifiers directly before the plural noun (e.g., 'Most students study hard').",
+            "Adverbs of Frequency Position: Place them BEFORE the main verb (e.g., 'I always exercise'), but AFTER the verb Be ('I am always late').",
+            "How often Questions: Used to ask about the frequency of an action (e.g., 'How often do you swim? - Twice a week').",
+            "How long Questions: Used to ask about duration of time (e.g., 'How long do you spend? - Two hours').",
+            "How well Questions: Used to ask about performance or skill in an activity (e.g., 'How well do you speak English?').",
+            "How good Questions: Used with 'at' to ask about general ability (e.g., 'How good are you at basketball?')."
+        ],
+
+        // BANCO MASIVO DE PREGUNTAS EN FORMATO JSON (Para Quiz, Tic-Tac-Toe, Jeopardy, Find Errors)
+        quizQuestions: [
+            { q: "Listen! My sister _______ the piano in her bedroom right now.", options: ["plays", "is playing", "are playing"], answer: "is playing" },
+            { q: "How _______ do you play soccer? - About twice a week on weekends.", options: ["often", "long", "well"], answer: "often" },
+            { q: "I _______ go to the gym on Sundays because it is closed.", options: ["always", "sometimes", "never"], answer: "never" },
+            { q: "_______ of my friends are married. Nearly all of them, except for Robert.", options: ["Most", "A few", "No one"], answer: "Most" },
+            { q: "Are your parents watching a movie? - Yes, they _______.", options: ["do", "are watching", "are"], answer: "are" },
+            { q: "How well do you play tennis? - Not _______ well, I am a beginner.", options: ["very", "good", "much"], answer: "very" },
+            { q: "My brother is really good _______ playing chess.", options: ["at", "in", "on"], answer: "at" },
+            { q: "How _______ time do you spend working out every day? - One hour.", options: ["often", "long", "much"], answer: "much" },
+            { q: "Identify the mistake: 'We are watch an exciting soccer match at the stadium.'", options: ["are", "watch", "exciting"], answer: "watch" },
+            { q: "Where _______ your cousins living these days?", options: ["is", "am", "are"], answer: "are" },
+            { q: "I am a vegetarian. I _______ eat meat or chicken.", options: ["usually", "sometimes", "never"], answer: "never" },
+            { q: "In our country, _______ people love soccer. It's the absolute number one sport.", options: ["nearly all", "a few", "no one"], answer: "nearly all" },
+            { q: "What is your uncle doing? - He _______ breakfast right now.", options: ["cooks", "is cooking", "cooking"], answer: "is cooking" },
+            { q: "My grandmother _______ arrives early to family dinners. She hates being late.", options: ["always", "hardly ever", "never"], answer: "always" },
+            { q: "How good are you at cooking? - I am _______ at it. My food is terrible.", options: ["great", "pretty good", "not very good"], answer: "not very good" },
+            { q: "Are you and Mary studying together? - No, we _______.", options: ["don't", "aren't", "not are"], answer: "aren't" },
+            { q: "My aunt is a professional athlete. She exercises _______ every day.", options: ["almost always", "never", "hardly ever"], answer: "almost always" },
+            { q: "_______ people in my class speak three languages. Only two students!", options: ["Most", "All", "A few"], answer: "A few" },
+            { q: "How long is your daily commute? - It takes _______ 45 minutes.", options: ["around", "at", "on"], answer: "around" },
+            { q: "Identify the mistake: 'My father is always late for his basketball matches.'", options: ["is always", "for his", "No mistake, it's correct!"], answer: "No mistake, it's correct!" }
+        ]
+    }, 
+    "u7-8": { 
+        badge: "Units 7-8", 
+        title: "Vacations, Cities, Neighborhoods & Food", 
+        details: "Grammar: Simple Past with Be (was/were), Simple Past regular & irregular verbs, There is / There are (present & past), Count vs. Noncount nouns + quantifiers (some, any, a lot of), Prepositions of place | Vocab: Vacations, Town places & Food ingredients",
+        
+        // BANCO EXTENSO DE PROMPTS DE WARM-UP (Conversación guiada)
+        prompts: [
+            "Where did you go on your last vacation? Tell a partner three activities you did there.",
+            "Where were you yesterday at 8:00 p.m.? Answer using complete sentences with 'was' or 'were'.",
+            "Describe your neighborhood. What places are there? (e.g., 'There is a big supermarket, there are two parks...').",
+            "What did you eat for breakfast this morning? Did you cook it yourself or buy it?",
+            "Think of your favorite city in the world. Why was it special? What did you see there?",
+            "Imagine you are preparing a pizza. Name three count ingredients and two noncount ingredients you need.",
+            "How do you get to the nearest bus stop or subway station from your current classroom? Use prepositions of place.",
+            "Were you a good student in elementary school? Answer using a short answer with 'was/were'.",
+            "Think of a bad trip or vacation experience. What went wrong? Use at least three past tense verbs.",
+            "Is there any milk, sugar, or coffee left in your kitchen right now? Answer using 'there is/are' + 'some/any'."
+        ],
+
+        // VOCABULARIO EXTENSO (Para Flashcards, Word Search, Hangman, Word Wheel, Category Sort)
+        vocabulary: [
+            "vacation", "trip", "hotel", "beach", "museum", "souvenir", "travel", "relax", "flight",
+            "was", "were", "went", "bought", "ate", "drank", "saw", "came", "had", "made", "took",
+            "supermarket", "restaurant", "pharmacy", "bank", "park", "bookstore", "hospital", "station",
+            "neighborhood", "avenue", "street", "corner", "across", "between", "behind", "next to",
+            "apple", "banana", "tomato", "onion", "milk", "cheese", "bread", "sugar", "salt", "rice",
+            "meat", "chicken", "vegetables", "fruit", "water", "coffee", "juice", "delicious", "boring"
+        ],
+
+        // REGLAS GRAMATICALES MAPEADAS (Para Fill Blanks, Find Errors, Reorder Steps, Flashcards de conceptos)
+        grammarRules: [
+            "Simple Past with Be (Singular): Use 'was' for I, he, she, it (e.g., 'I was at home').",
+            "Simple Past with Be (Plural): Use 'were' for you, we, they (e.g., 'They were happy').",
+            "Simple Past Regular Verbs: Add '-ed' or '-d' to base form verbs (e.g., talk -> talked, live -> lived).",
+            "Simple Past Irregular Verbs: These change entirely and do not follow regular rules (e.g., go -> went, buy -> bought).",
+            "Simple Past Negatives: Use 'did not' or 'didn't' + base form of the verb (e.g., 'I didn't go').",
+            "There is / There are: Use 'There is' for singular items and 'There are' for plural items in the present.",
+            "There was / There were: Use 'There was' for singular and 'There were' for plural items in the past.",
+            "Count vs. Noncount Nouns: Count nouns can be counted individually (apples, tables); noncount nouns cannot (water, money).",
+            "Quantifiers 'Some' and 'Any': Use 'some' in affirmative sentences and 'any' in negative sentences or questions.",
+            "Prepositions of Place: Use 'next to', 'across from', 'between', 'on the corner of' to describe locations."
+        ],
+
+        // BANCO MASIVO DE PREGUNTAS EN FORMATO JSON (Para Quiz, Tic-Tac-Toe, Jeopardy, Find Errors)
+        quizQuestions: [
+            { q: "Where _______ you yesterday afternoon at 3:00 p.m.?", options: ["was", "were", "did"], answer: "were" },
+            { q: "Last summer, my family and I _______ to Cancun for our vacation.", options: ["go", "goed", "went"], answer: "went" },
+            { q: "I didn't _______ any souvenirs at the market because they were too expensive.", options: ["buy", "bought", "buys"], answer: "buy" },
+            { q: "_______ there a good Italian restaurant in your old neighborhood?", options: ["Was", "Were", "Did"], answer: "Was" },
+            { q: "We need to buy _______ apples and some milk at the grocery store.", options: ["any", "some", "much"], answer: "some" },
+            { q: "Is there _______ sugar left in the jar? I want to make coffee.", options: ["some", "any", "many"], answer: "any" },
+            { q: "The modern pharmacy is right _______ the bookstore and the national bank.", options: ["between", "next to", "across"], answer: "between" },
+            { q: "Identify the mistake: 'She didn't liked the food at the hotel last night.'", options: ["didn't", "liked", "at the"], answer: "liked" },
+            { q: "How _______ money did you spend on your flight tickets?", options: ["many", "much", "some"], answer: "much" },
+            { q: "There _______ ten police officers at the station this morning.", options: ["was", "were", "is"], answer: "were" },
+            { q: "My grandmother _______ delicious chocolate cookies for my birthday last week.", options: ["make", "maked", "made"], answer: "made" },
+            { q: "The main supermarket is located on the _______ of Main Street and First Avenue.", options: ["corner", "across", "between"], answer: "corner" },
+            { q: "Excuse me, are there _______ vegetarian options on your menu?", options: ["some", "any", "much"], answer: "any" },
+            { q: "We _______ a wonderful movie at the cinema last Saturday night.", options: ["see", "saw", "seen"], answer: "saw" },
+            { q: "I love bread, but I don't eat _______ of it these days.", options: ["many", "a lot", "any"], answer: "a lot" },
+            { q: "Identify the mistake: 'They was very tired after the long flight from Tokyo.'", options: ["was", "tired", "after"], answer: "was" },
+            { q: "There isn't _______ fresh water in that plastic bottle.", options: ["any", "some", "many"], answer: "any" },
+            { q: "Did you study for the English exam? - Yes, I _______.", options: ["did", "studied", "was"], answer: "did" },
+            { q: "The public library is located directly _______ from the main park.", options: ["next", "across", "between"], answer: "across" },
+            { q: "Yesterday, Robert _______ up early, ate breakfast, and walked to his office.", options: ["wake", "waked", "woke"], answer: "woke" }
+        ]
+    },
+    "u9-10": { 
+        badge: "Units 9-10", 
+        title: "Life Events, Geography, Weather & Future Plans", 
+        details: "Grammar: Simple Past Wh-questions, Born in/on, Superlative adjectives, Questions with How + adjective (high/deep/long/old), Future with Be going to (plans & intentions) | Vocab: Life events, Natural features, Weather & Travel",
+        
+        // BANCO EXTENSO DE PROMPTS DE WARM-UP (Conversación guiada)
+        prompts: [
+            "Where and when were you born? Answer using complete sentences with 'born in' or 'born on'.",
+            "What did you do last weekend? Tell a partner about your activities using at least three past tense verbs.",
+            "What is the most beautiful place or city you have ever visited? Describe it using superlative adjectives.",
+            "What are you going to do this coming weekend? Share your plans using the 'be going to' structure.",
+            "Are you going to travel anywhere during the next vacation period? Where are you going to go?",
+            "Think of a famous person from history. When was he or she born and what did they do?",
+            "Describe the weather in your city today. Do you prefer hot, sunny days or cold, rainy days?",
+            "Name three famous geographical features in your country (e.g., the longest river, the highest mountain).",
+            "How old is your oldest relative? Ask a classmate about their family using 'How old...?'",
+            "Imagine you win a million dollars. What is the very first thing you are going to buy?"
+        ],
+
+        // VOCABULARIO EXTENSO (Para Flashcards, Word Search, Hangman, Word Wheel, Category Sort)
+        vocabulary: [
+            "born", "grow up", "graduate", "major", "move", "marry", "retire", "die", "biography",
+            "mountain", "river", "lake", "ocean", "desert", "island", "beach", "volcano", "forest",
+            "highest", "longest", "biggest", "deepest", "oldest", "hottest", "coldest", "most beautiful",
+            "sunny", "rainy", "cloudy", "windy", "snowy", "hot", "cold", "warm", "weather", "forecast",
+            "travel", "vacation", "trip", "flight", "hotel", "luggage", "tomorrow", "tonight", "next week"
+        ],
+
+        // REGLAS GRAMATICALES MAPEADAS (Para Fill Blanks, Find Errors, Reorder Steps, Flashcards de conceptos)
+        grammarRules: [
+            "Simple Past Wh-Questions: Structure is Wh-word + did + subject + verb in base form (e.g., 'Where did you go?').",
+            "Born in vs. Born on: Use 'born in' for places and years (in 1995, in Colombia) and 'born on' for specific dates (on May 5th).",
+            "Superlative Adjectives (Short): Add 'the' + '-est' to short adjectives (e.g., big -> the biggest, high -> the highest).",
+            "Superlative Adjectives (Long): Use 'the most' before long adjectives (e.g., the most beautiful, the most expensive).",
+            "Irregular Superlatives: Good becomes 'the best', bad becomes 'the worst', and far becomes 'the farthest'.",
+            "Questions with How + Adjective: Used to ask about measurements (e.g., 'How high is Mt. Everest?', 'How long is the river?').",
+            "Future with Be Going To (Affirmative): Subject + Be (am/is/are) + going to + verb in base form (e.g., 'I am going to study').",
+            "Future with Be Going To (Negative): Add 'not' after the verb Be (e.g., 'She is not going to travel').",
+            "Future with Be Going To (Questions): Invert the verb Be and the subject (e.g., 'Are you going to watch a movie?').",
+            "Future Time Expressions: Used with going to, such as 'tomorrow', 'next month', 'tonight', 'next weekend'."
+        ],
+
+        // BANCO MASIVO DE PREGUNTAS EN FORMATO JSON (Para Quiz, Tic-Tac-Toe, Jeopardy, Find Errors)
+        quizQuestions: [
+            { q: "Where _______ you grow up when you were a child?", options: ["did", "were", "was"], answer: "did" },
+            { q: "My grandfather was born _______ October 24th, 1950.", options: ["in", "on", "at"], answer: "on" },
+            { q: "Mount Everest is _______ mountain in the entire world.", options: ["the highest", "the most high", "higher than"], answer: "the highest" },
+            { q: "What _______ you going to do tomorrow night after class?", options: ["do", "are", "will"], answer: "are" },
+            { q: "Alexander Fleming was born _______ Scotland and discovered penicillin.", options: ["in", "on", "at"], answer: "in" },
+            { q: "The Nile is _______ river in Africa.", options: ["the longer", "the longest", "the most long"], answer: "the longest" },
+            { q: "How _______ is Lake Baikal in Russia? - It is about 1,642 meters deep.", options: ["deep", "long", "high"], answer: "deep" },
+            { q: "Identify the mistake: 'Next Saturday, my friends are going to visiting a historical museum.'", options: ["are going", "to visiting", "historical"], answer: "to visiting" },
+            { q: "We are _______ to buy a new car next month because our old one broke down.", options: ["go", "going", "goes"], answer: "going" },
+            { q: "That was _______ movie I have ever seen. It was completely boring!", options: ["the worst", "the badest", "worse than"], answer: "the worst" },
+            { q: "Why _______ you move to this city last year? - Because of my new job.", options: ["did", "were", "was"], answer: "did" },
+            { q: "Is it going to _______ tomorrow morning? Take an umbrella just in case.", options: ["rain", "raining", "rains"], answer: "rain" },
+            { q: "Amazon River is _______ than the Mississippi River.", options: ["the biggest", "bigger", "biggest"], answer: "bigger" },
+            { q: "How _______ is that ancient castle? - It is almost 500 years old.", options: ["old", "high", "long"], answer: "old" },
+            { q: "My sister _______ going to graduate from university next semester.", options: ["am", "is", "are"], answer: "is" },
+            { q: "Identify the mistake: 'Who did you saw at the cafeteria yesterday morning?'", options: ["did", "you", "saw"], answer: "saw" },
+            { q: "I think Tokyo is one of _______ cities in the world to visit.", options: ["the most exciting", "the excitingest", "more exciting"], answer: "the most exciting" },
+            { q: "Are they going to stay at a luxury hotel? - No, they _______.", options: ["don't", "aren't", "won't"], answer: "aren't" },
+            { q: "How _______ is the Amazon River? - It flows for over 6,400 kilometers.", options: ["long", "high", "deep"], answer: "long" },
+            { q: "My parents _______ born in the 1970s.", options: ["were", "was", "did"], answer: "were" }
+        ]
+    }
+};
+       
         /* =====================================================================
            ⚙️ ACTIONS DE NAVEGACIÓN Y CONFIGURACIÓN INICIAL DEL PORTAL
            ===================================================================== */

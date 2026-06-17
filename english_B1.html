@@ -1099,7 +1099,7 @@ function buildQuizEngine(stage, quizData) {
     render();
 }
 
-// 3. ENGINE: FILL BLANKS
+// 3. ENGINE: FILL BLANKS (Modificado para Input de Texto)
 function buildFillBlanksEngine(stage, quizData) {
     if (!quizData || quizData.length === 0) {
         stage.innerHTML = `<div class="text-center text-slate-400">No data available.</div>`;
@@ -1109,46 +1109,51 @@ function buildFillBlanksEngine(stage, quizData) {
 
     function render() {
         const item = quizData[index];
-        const blankSentence = item.q.includes("___") ? item.q.replace("___", "_______") : item.q;
+        // Reemplazamos los "___" por un campo de entrada
+        const parts = item.q.split("___");
+        const sentenceHtml = parts.join(`<input type="text" id="blank-input" class="bg-transparent border-b-2 border-indigo-400 text-indigo-300 focus:outline-none focus:border-indigo-200 text-center w-32 px-2" placeholder="...">`);
+
         stage.innerHTML = `
             <div class="w-full max-w-2xl flex flex-col gap-6">
                 <div class="bg-slate-800 border border-slate-700 p-8 rounded-xl text-center">
-                    <p class="text-2xl text-white font-bold tracking-wide">${blankSentence}</p>
+                    <p class="text-2xl text-white font-bold tracking-wide leading-relaxed">${sentenceHtml}</p>
                 </div>
-                <div class="blanks-options grid grid-cols-2 gap-4">
-                    ${item.a.map(opt => `
-                        <button data-opt="${opt}" class="bg-slate-700 hover:bg-slate-600 text-white font-bold p-5 rounded-xl border border-slate-600 text-lg transition-all">${opt}</button>
-                    `).join('')}
+                
+                <div id="blank-action" class="flex flex-col gap-4">
+                    <button id="check-btn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold p-4 rounded-xl text-lg transition-all">CHECK ANSWER</button>
                 </div>
+
                 <div id="blank-nav" class="hidden">
-                    <button id="blank-next-btn" class="w-full bg-indigo-600 text-white p-4 rounded-xl font-bold text-lg hover:bg-indigo-500">NEXT QUESTION</button>
+                    <button id="blank-next-btn" class="w-full bg-slate-700 hover:bg-slate-600 text-white p-4 rounded-xl font-bold text-lg">NEXT QUESTION</button>
                 </div>
             </div>
         `;
 
-        const buttons = stage.querySelectorAll('.blanks-options button');
-        buttons.forEach(btn => {
-            btn.onclick = () => {
-                buttons.forEach(b => b.disabled = true);
-                const selected = btn.getAttribute('data-opt');
+        const input = stage.querySelector('#blank-input');
+        const checkBtn = stage.querySelector('#check-btn');
+        const nav = stage.querySelector('#blank-nav');
 
-                if (selected === item.c) {
-                    btn.className = "bg-emerald-600 text-white font-bold p-5 rounded-xl text-lg border border-emerald-400";
-                } else {
-                    btn.className = "bg-rose-600 text-white font-bold p-5 rounded-xl text-lg border border-rose-400";
-                    buttons.forEach(b => {
-                        if (b.getAttribute('data-opt') === item.c) b.className = "bg-emerald-600 text-white font-bold p-5 rounded-xl text-lg border border-emerald-400";
-                    });
-                }
+        checkBtn.onclick = () => {
+            const userAnswer = input.value.trim().toLowerCase();
+            const correctAnswer = item.c.toLowerCase();
+            
+            input.disabled = true;
+            checkBtn.classList.add('hidden');
+            nav.classList.remove('hidden');
 
-                stage.querySelector('#blank-nav').classList.remove('hidden');
-                stage.querySelector('#blank-next-btn').onclick = () => {
-                    index++;
-                    if (index < quizData.length) render();
-                    else stage.innerHTML = `<div class="text-center text-2xl font-black text-indigo-500 py-8"><i class="fa-solid fa-trophy text-6xl block mb-4 text-amber-400 animate-pulse"></i>PERFECT JOB!</div>`;
-                };
-            };
-        });
+            if (userAnswer === correctAnswer) {
+                input.className = "bg-transparent border-b-2 border-emerald-500 text-emerald-400 focus:outline-none text-center w-32 px-2 font-bold";
+            } else {
+                input.className = "bg-transparent border-b-2 border-rose-500 text-rose-400 focus:outline-none text-center w-32 px-2 font-bold";
+                input.value = item.c; // Muestra la correcta
+            }
+        };
+
+        stage.querySelector('#blank-next-btn').onclick = () => {
+            index++;
+            if (index < quizData.length) render();
+            else stage.innerHTML = `<div class="text-center text-2xl font-black text-indigo-500 py-8"><i class="fa-solid fa-trophy text-6xl block mb-4 text-amber-400 animate-pulse"></i>PERFECT JOB!</div>`;
+        };
     }
     render();
 }

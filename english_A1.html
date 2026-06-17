@@ -338,242 +338,966 @@
                 badge: "Units 1-2",
                 title: "Welcome & Personal Information",
                 prompts: [
-                    "What is your full name and how do you spell your last name?",
-                    "Where are you from originally and what is your nationality?",
-                    "What is your phone number and email address?",
-                    "How old are you and when is your birthday?"
+                    "What is your full name and where are you from originally?",
+                    "Are you a full-time student, or do you have a part-time job? Describe it.",
+                    "Think of your best friend. What is his or her occupation? Where is he/she right now?",
+                    "Introduce the classmate sitting next to you. Use subject pronouns (he/she) and possessive adjectives (his/her).",
+                    "Is English easy or difficult for you? Answer using a complete short answer with 'be' (e.g., Yes, it is / No, it isn't).",
+                    "Name five different occupations you can see in a typical hospital or school.",
+                    "How do you spell your last name? Practice with a partner.",
+                    "Imagine you are a famous celebrity. Who are you, where are you from, and what is your job?",
+                    "Are your parents from the same city as you? Answer using a short answer with 'be'.",
+                    "What is your email address and what is your phone number? Practice reading the numbers and symbols aloud."
                 ],
                 vocabulary: [
-                    { word: "Hello", translation: "Hola" },
-                    { word: "Surname", translation: "Apellido" },
-                    { word: "Address", translation: "Dirección" },
-                    { word: "Country", translation: "País" },
-                    { word: "Occupation", translation: "Ocupación" },
-                    { word: "Single", translation: "Soltero/a" },
-                    { word: "Married", translation: "Casado/a" },
-                    { word: "Welcome", translation: "Bienvenido" }
-                ],
-                grammar: {
-                    rules: "Verb To Be: I am, You are, He/She/It is, We/They are. Used for names, nationalities, professions, and age.",
-                    examples: ["I am a student.", "She is from Spain.", "They are not married."]
-                },
+    // Vocabulario original
+    { word: "Hello", translation: "The first thing you say when you see someone or answer the phone." },
+    { word: "Surname", translation: "Your family name, the one you share with your parents." },
+    { word: "Address", translation: "The specific numbers and words that show where you live." },
+    { word: "Country", translation: "Mexico, Canada, and Japan are examples of this." },
+    { word: "Occupation", translation: "Another word for your job or profession." },
+    { word: "Single", translation: "Your marital status if you are not married or in a relationship." },
+    { word: "Married", translation: "Your marital status after you have a wedding and a husband or wife." },
+    { word: "Welcome", translation: "What you say to make someone feel happy and comfortable when they arrive." },
+
+    // Profesiones y ocupaciones
+    { word: "accountant", translation: "I work with numbers, taxes, and money for a company." },
+    { word: "architect", translation: "I draw the plans and designs for houses and big buildings." },
+    { word: "cashier", translation: "I take your money and give you change at the supermarket." },
+    { word: "chef", translation: "I wear a tall white hat and cook delicious food in a restaurant." },
+    { word: "doctor", translation: "I work in a hospital and help you feel better when you are sick." },
+    { word: "engineer", translation: "I use science and math to design machines, roads, or bridges." },
+    { word: "flight attendant", translation: "I help you, bring you food, and keep you safe inside an airplane." },
+    { word: "lawyer", translation: "I defend people in court and know all about the laws." },
+    { word: "manager", translation: "I am the boss who directs the team and organizes the business." },
+    { word: "nurse", translation: "I assist doctors and take care of patients in a clinic." },
+    { word: "pilot", translation: "I sit in the cockpit and fly airplanes across the sky." },
+    { word: "receptionist", translation: "I sit at the front desk, answer calls, and greet visitors." },
+    { word: "salesperson", translation: "My job is to help you buy things in a store." },
+    { word: "scientist", translation: "I do experiments in a lab to discover new things about nature." },
+    { word: "secretary", translation: "I organize files, write emails, and help my boss with paperwork." },
+    { word: "student", translation: "I go to school or university to learn new things." },
+    { word: "teacher", translation: "I stand at the front of the classroom and help students learn." },
+    { word: "veterinarian", translation: "I am the doctor you visit when your dog or cat is sick." },
+    { word: "waiter", translation: "I take your food order and bring it to your table in a restaurant." },
+    { word: "waitress", translation: "A woman who takes your food order and serves you at a restaurant." },
+    { word: "actor", translation: "A man who performs in movies, TV shows, or theater plays." },
+    { word: "actress", translation: "A woman who plays a character in a movie or a play." },
+    { word: "musician", translation: "I play instruments like the guitar or piano, or write songs." },
+    { word: "artist", translation: "I use paint, pencils, or clay to create beautiful visual things." },
+    { word: "police officer", translation: "I wear a uniform, catch criminals, and keep the streets safe." },
+    { word: "firefighter", translation: "I put out dangerous fires and drive a big red truck." },
+    { word: "driver", translation: "I operate cars, buses, or taxis to take you where you need to go." },
+    { word: "builder", translation: "I use bricks, wood, and tools to physically construct houses." },
+
+    // Nacionalidades
+    { word: "American", translation: "A person born in the United States." },
+    { word: "Brazilian", translation: "A person from Rio de Janeiro or São Paulo who likely speaks Portuguese." },
+    { word: "Canadian", translation: "A person from the country north of the US, where maple syrup is famous." },
+    { word: "Chinese", translation: "A person from the most populated country in Asia, where the Great Wall is." },
+    { word: "French", translation: "A person from the country of the Eiffel Tower and croissants." },
+    { word: "German", translation: "A person from Berlin, Frankfurt, or Munich." },
+    { word: "Italian", translation: "A person from the land of pizza, pasta, and Rome." },
+    { word: "Japanese", translation: "A person from the island nation famous for sushi, anime, and Tokyo." },
+    { word: "Mexican", translation: "A person from the country directly south of the United States." },
+    { word: "Spanish", translation: "A person from Europe, specifically from Madrid or Barcelona." },
+    { word: "British", translation: "A person from London, England, or other parts of the UK." },
+    { word: "Colombian", translation: "A person from the land of world-famous coffee, Shakira, and Bogotá." },
+    { word: "Peruvian", translation: "A person from the South American country where Machu Picchu is located." },
+    { word: "Argentinian", translation: "A person from the country of tango, Messi, and Buenos Aires." },
+
+    // Objetos y palabras de entorno de estudio
+    { word: "classroom", translation: "The room in a school where students sit and lessons happen." },
+    { word: "notebook", translation: "A book with empty paper pages where you write your notes." },
+    { word: "textbook", translation: "A heavy book containing information about a specific school subject." },
+    { word: "dictionary", translation: "A book or app where you look up what words mean from A to Z." },
+    { word: "alphabet", translation: "The set of 26 letters from A to Z used to write English words." },
+    { word: "number", translation: "1, 2, 3, 50, and 100 are examples of this." }
+],
+                grammar: [
+    {
+        rules: "Verb To Be: I am, You are, He/She/It is, We/They are. Used for names, nationalities, professions, and age.",
+        examples: ["I am a student.", "She is from Spain.", "They are not married."]
+    },
+    {
+        rules: "Subject Pronouns: Used to replace nouns and act as the subject of a sentence (I, you, he, she, it, we, they).",
+        examples: ["He is an architect.", "We are in the classroom.", "They are from Canada."]
+    },
+    {
+        rules: "Possessive Adjectives: Used to show ownership or possession (my, your, his, her, its, our, their).",
+        examples: ["What is your name?", "His job is stressful.", "Our teacher is from London."]
+    },
+    {
+        rules: "Statements with Be: Affirmative and negative sentences using the verb to be.",
+        examples: ["I am a doctor.", "You are not single.", "It is a new notebook."]
+    },
+    {
+        rules: "Wh-Questions with Be: Questions used to ask for information. What (things), Where (places), Who (people), How (conditions/descriptions).",
+        examples: ["Where are you from?", "What is your address?", "Who is your teacher?", "How are you?"]
+    },
+    {
+        rules: "Yes/No Questions with Be: Invert the verb and subject to ask questions that require a yes or no answer.",
+        examples: ["Are you a teacher?", "Is she married?", "Are they from Brazil?"]
+    },
+    {
+        rules: "Short Answers Affirmative: Short answers for yes/no questions. Note: Never use contractions in the affirmative!",
+        examples: ["Yes, I am.", "Yes, he is.", "Yes, they are."]
+    },
+    {
+        rules: "Short Answers Negative: Short answers for yes/no questions using contractions.",
+        examples: ["No, I'm not.", "No, he's not (or he isn't).", "No, they're not (or they aren't)."]
+    }
+],
                 quiz: [
-                    { q: "What ___ your name?", a: ["is", "am", "are", "be"], c: "is" },
-                    { q: "Where ___ you from?", a: ["are", "is", "am", "do"], c: "are" },
-                    { q: "I ___ 25 years old.", a: ["am", "have", "is", "has"], c: "am" },
-                    { q: "___ she married?", a: ["Is", "Are", "Am", "Does"], c: "Is" }
-                ]
+    // Quiz original
+    { q: "What ___ your name?", a: ["is", "am", "are", "be"], c: "is" },
+    { q: "Where ___ you from?", a: ["are", "is", "am", "do"], c: "are" },
+    { q: "I ___ 25 years old.", a: ["am", "have", "is", "has"], c: "am" },
+    { q: "___ she married?", a: ["Is", "Are", "Am", "Does"], c: "Is" },
+
+    // Nuevas adiciones estructuradas con q, a, y c
+    { q: "Where _______ your teacher from?", a: ["am", "is", "are"], c: "is" },
+    { q: "Choose the correct possessive adjective: 'He is a doctor. _______ name is Robert.'", a: ["His", "Her", "Your"], c: "His" },
+    { q: "Are you and your friends from Madrid? No, _______ aren't.", a: ["we", "they", "you"], c: "we" },
+    { q: "_______ is that man over there? - Oh, he is the new marketing manager.", a: ["What", "Where", "Who"], c: "Who" },
+    { q: "Is she an architect? - Yes, _______.", a: ["she's", "she is", "is she"], c: "she is" },
+    { q: "They work in a restaurant. They are _______.", a: ["cashiers", "chefs", "nurses"], c: "chefs" },
+    { q: "What is _______ email address, Sarah?", a: ["your", "you", "his"], c: "your" },
+    { q: "How _______ you spell your last name?", a: ["are", "is", "do"], c: "do" },
+    { q: "Identify the mistake: 'She am a very good mechanical engineer.'", a: ["She", "am", "engineer"], c: "am" },
+    { q: "We are from Kyoto. We are _______.", a: ["Chinese", "Japanese", "Korean"], c: "Japanese" },
+    { q: "_______ is your phone number? - It's 555-1234.", a: ["What", "Who", "Where"], c: "What" },
+    { q: "Are they flight attendants? - No, they _______.", a: ["aren't", "not are", "am not"], c: "aren't" },
+    { q: "This is my dog. _______ name is Max.", a: ["His", "Its", "Our"], c: "Its" },
+    { q: "Who are those people? - _______ are my new classmates.", a: ["They", "We", "He"], c: "They" },
+    { q: "Mr. and Mrs. Smith are lawyers. _______ office is downtown.", a: ["Our", "Their", "Your"], c: "Their" },
+    { q: "Excuse me, _______ you the new receptionist?", a: ["is", "am", "are"], c: "are" },
+    { q: "_______ is Tokyo? - It's in Japan.", a: ["What", "Where", "How"], c: "Where" },
+    { q: "How _______ your parents today? - They are doing great, thanks!", a: ["is", "am", "are"], c: "are" },
+    { q: "I work in a school. I am a _______.", a: ["teacher", "waiter", "lawyer"], c: "teacher" },
+    { q: "Select the correct negative contraction for 'We are not':", a: ["We aren't", "We am not", "We isn't"], c: "We aren't" }
+]
             },
-            "u3-4": {
-                badge: "Units 3-4",
-                title: "Family, Friends & Everyday Objects",
-                prompts: [
-                    "Do you have any brothers or sisters? Tell me about them.",
-                    "Describe your best friend. What is their name and job?",
-                    "What objects do you carry in your bag or backpack every day?",
-                    "Who is your favorite family member and why?"
-                ],
-                vocabulary: [
-                    { word: "Brother", translation: "Hermano" },
-                    { word: "Daughter", translation: "Hija" },
-                    { word: "Parents", translation: "Padres" },
-                    { word: "Wallet", translation: "Billetera" },
-                    { word: "Keys", translation: "Llaves" },
-                    { word: "Laptop", translation: "Computadora portátil" },
-                    { word: "Friend", translation: "Amigo/a" },
-                    { word: "Watch", translation: "Reloj de pulsera" }
-                ],
-                grammar: {
-                    rules: "Possessive adjectives (my, your, his, her, its, our, their) and possessive 's for family relationships and belongings.",
-                    examples: ["This is my brother's car.", "Her parents are very nice.", "Our house is small."]
-                },
-                quiz: [
-                    { q: "This is my ___ laptop. (The laptop belonging to my sister)", a: ["sister's", "sisters", "sister", "sisters'"], c: "sister's" },
-                    { q: "They live with ___ grandparents.", a: ["their", "them", "they", "theirs"], c: "their" },
-                    { q: "He has two ___.", a: ["children", "childs", "childes", "childrens"], c: "children" },
-                    { q: "Where are my ___? I cannot open the door.", a: ["keys", "wallet", "watch", "pen"], c: "keys" }
-                ]
-            },
+            "u3-4": { 
+    badge: "Units 3-4", 
+    title: "Daily Routines, Shopping & Entertainment", 
+    prompts: [
+        "What time do you usually get up in the morning, and what is your first daily activity?",
+        "Look at your classmates' outfits. Describe what someone is wearing today using a color and a clothing item.",
+        "Imagine you are in a clothing store. How do you ask the clerk for the price of a jacket and a pair of shoes?",
+        "Do you prefer casual clothes like jeans and T-shirts, or formal clothes like suits and dresses? Why?",
+        "What kind of entertainment do you like? Do you prefer going to the movies, concerts, or watching series at home?",
+        "Invite a classmate to go to a rock concert this Saturday night using the structure: 'Would you like to...?'",
+        "Ask a partner what time they eat breakfast, lunch, and dinner. Use prepositions like 'at', 'around', or 'early'.",
+        "Compare two things you own (e.g., your smartphone and your computer). Which one is bigger, newer, or more expensive?",
+        "Do you study English in the morning, in the afternoon, or at night? Answer using complete sentences with 'do/don't'.",
+        "Think of your favorite movie or book. Why do you like it? Answer using an object pronoun (me, him, her, it, them)."
+    ],
+    vocabulary: [
+        { word: "jacket", translation: "A short coat that you wear over your clothes to stay warm outside." },
+        { word: "sweater", translation: "A warm piece of clothing with long sleeves, often made of wool, that you pull over your head." },
+        { word: "t-shirt", translation: "A casual top with short sleeves and no collar, shaped like the letter T." },
+        { word: "jeans", translation: "Casual pants made of strong blue denim cotton fabric, loved by almost everyone." },
+        { word: "pants", translation: "An outer piece of clothing that covers your body from the waist down to your ankles, covering each leg separately." },
+        { word: "skirt", translation: "A piece of clothing worn by women or girls that hangs down from the waist." },
+        { word: "dress", translation: "A one-piece garment for women or girls that covers the body and hangs down over the legs." },
+        { word: "suit", translation: "A set of formal clothes made of the same fabric, including a jacket and pants or a skirt." },
+        { word: "shirt", translation: "A piece of clothing for the upper body, typically with a collar, buttons down the front, and long or short sleeves." },
+        { word: "shoes", translation: "Coverings for your feet, usually made of leather or plastic, with a strong sole." },
+        { word: "boots", translation: "Strong shoes that cover your foot and part of your lower leg, excellent for rainy days." },
+        { word: "sneakers", translation: "Soft, comfortable shoes that people wear for playing sports or casual walking." },
+        { word: "socks", translation: "Soft pieces of clothing that you wear on your feet inside your shoes." },
+        { word: "hat", translation: "A covering for your head, often worn for warmth, fashion, or protection from the sun." },
+        { word: "cap", translation: "A soft, flat hat with a curved peak at the front, very common in baseball." },
+        { word: "gloves", translation: "Coverings for your hands with separate spaces for each finger, used to protect against cold." },
+        { word: "scarf", translation: "A long strip of cloth that you wear around your neck to stay warm." },
+        { word: "tie", translation: "A long, narrow strip of cloth tied around the shirt collar under a suit jacket." },
+        { word: "cotton", translation: "A natural soft white material from a plant, used to make cool and breathable t-shirts." },
+        { word: "leather", translation: "A strong, flexible material made from the skin of animals, famous for expensive jackets and boots." },
+        { word: "wool", translation: "Thick, warm hair that comes from sheep, used to make heavy winter sweaters." },
+        { word: "silk", translation: "A delicate, smooth, and expensive luxury fabric made from threads produced by silkworms." },
+        { word: "plastic", translation: "An artificial light material that can be shaped into objects like cheap watches or raincoats." },
+        { word: "gold", translation: "A very valuable yellow metal used to make precious jewelry like wedding rings." },
+        { word: "silver", translation: "A valuable shiny, greyish-white metal used to make coins, necklaces, and earrings." },
+        { word: "expensive", translation: "Something that costs a lot of money; the opposite of cheap." },
+        { word: "cheap", translation: "Low in price; something that costs very little money." },
+        { word: "concert", translation: "A public musical performance where musicians sing or play instruments for an audience." },
+        { word: "movie", translation: "A story recorded by a camera as a set of moving images and shown in a cinema or on TV." },
+        { word: "play", translation: "A live dramatic performance on a theater stage with actors portraying a story." },
+        { word: "party", translation: "A social gathering of people to enjoy music, food, dancing, or a celebration." },
+        { word: "museum", translation: "A building where historical, scientific, or artistic objects are kept and displayed to the public." },
+        { word: "festival", translation: "A series of public celebratory events, often featuring live music, food, and culture." },
+        { word: "restaurant", translation: "A commercial place where people pay to sit down, order, and eat meals cooked on the premises." },
+        { word: "cafeteria", translation: "A restaurant or dining room in a school or business where customers serve themselves." },
+        { word: "get up", translation: "The action of physically leaving your bed after waking up in the morning." },
+        { word: "take a shower", translation: "The daily routine of washing your body while standing under spraying water." },
+        { word: "eat breakfast", translation: "To consume the very first meal of the day, typically in the morning." },
+        { word: "go to work", translation: "To travel or head to your workplace to perform your professional job." },
+        { word: "study", translation: "To spend time learning and practicing a subject, like doing English homework." },
+        { word: "watch tv", translation: "To sit down and look at programs, movies, or series broadcasted on a television screen." },
+        { word: "sleep", translation: "The natural state of rest in bed where your eyes are closed and your mind relaxes at night." },
+        { word: "this", translation: "Demonstrative word used for one single object that is near or close to you." },
+        { word: "that", translation: "Demonstrative word used for one single object that is far away from you." },
+        { word: "these", translation: "Demonstrative word used for multiple objects that are near or close to you." },
+        { word: "those", translation: "Demonstrative word used for multiple objects that are far away from you." },
+        { word: "one", translation: "A word used to replace a singular noun to avoid repeating it unnecessarily." },
+        { word: "ones", translation: "A word used to replace a plural noun to avoid repeating it unnecessarily." },
+        { word: "large", translation: "A big size for clothing; the opposite of small." },
+        { word: "medium", translation: "A middle clothing size; between small and large." },
+        { word: "small", translation: "A little clothing size; for petite frames or short statures." },
+        { word: "boring", translation: "Not interesting at all; something that makes you feel tired or unexcited." }
+    ],
+    grammar: [
+        {
+            rules: "Demonstratives (Singular/Plural & Near/Far): Use 'this' (singular) and 'these' (plural) for things close to you. Use 'that' (singular) and 'those' (plural) for things far from you.",
+            examples: ["This jacket in my hand is leather.", "Those shoes over there across the room look expensive.", "These jeans look great, but I don't like that hat on the top shelf."]
+        },
+        {
+            rules: "Pronouns 'one/ones': Used to substitute a noun to prevent repetitive phrasing. Use 'one' for singular items and 'ones' for plural items.",
+            examples: ["Which shirt do you prefer? The blue one or the red one?", "I don't like the black shoes, I like the white ones."]
+        },
+        {
+            rules: "Adjective Comparison (Short vs Long): For short adjectives, add '-er' to the end. For long adjectives with two or more syllables, place 'more' before the base adjective.",
+            examples: ["This cotton sweater is cheaper than the wool jacket.", "Gold rings are more expensive than silver earrings."]
+        },
+        {
+            rules: "Yes/No Questions with Do/Does: Use 'Do' with pronouns I, you, we, they. Use 'Does' with third-person singular pronouns he, she, it. The main verb always stays in base form.",
+            examples: ["Do you want to go to a festival?", "Does she wake up at 6:00 a.m. every day?", "Do they like casual clothes?"]
+        },
+        {
+            rules: "Object Pronouns Placement: Object pronouns receive the action in a sentence and must be placed directly after verbs or prepositions (me, you, him, her, it, us, them).",
+            examples: ["I love this pop concert! I really enjoy it.", "Robert is at the mall, go look for him.", "The teacher is talking to us."]
+        },
+        {
+            rules: "Modal Would for Invitations: Use the formal phrase 'Would you like to' followed by a verb in base form to make polite invitations.",
+            examples: ["Would you like to see a movie with me tonight?", "Would they like to visit the art museum on Saturday?"]
+        },
+        {
+            rules: "Prepositions of Time (at, in, on): Use 'at' for specific times or hours, 'in' for parts of the day (morning/afternoon/evening), and 'on' for specific days of the week.",
+            examples: ["I take a shower at 7:15 a.m.", "We usually go shopping in the afternoon.", "They go to rock concerts on weekends."]
+        }
+    ],
+    quiz: [
+        { q: "How much is _______ leather jacket over there on the hanger?", a: ["this", "that", "these"], c: "that" },
+        { q: "I don't like the green socks. I prefer the white _______.", a: ["one", "ones", "it"], c: "ones" },
+        { q: "This silk dress is _______ than the cotton one.", a: ["more expensive", "expensiver", "most expensive"], c: "more expensive" },
+        { q: "Which shirt do you want? - I want the blue _______.", a: ["one", "ones", "them"], c: "one" },
+        { q: "_______ your sister work in a downtown office?", a: ["Do", "Is", "Does"], c: "Does" },
+        { q: "What kind of movies do you like? - I really love _______.", a: ["they", "them", "their"], c: "them" },
+        { q: "Would you like _______ to a pop concert tonight?", a: ["go", "going", "to go"], c: "to go" },
+        { q: "We usually have English class _______ the morning.", a: ["at", "in", "on"], c: "in" },
+        { q: "Our exam is _______ Friday at 9:00 a.m.", a: ["on", "at", "in"], c: "on" },
+        { q: "Identify the mistake: 'Those shoes are more cheaper than my boots.'", a: ["Those", "more cheaper", "than"], c: "more cheaper" },
+        { q: "_______ much are these gold earrings?", a: ["What", "How", "Which"], c: "How" },
+        { q: "Which jacket do you like better? - The _______ one.", a: ["wool", "wools", "woolen"], c: "wool" },
+        { q: "Do you like this t-shirt? - Yes, I like _______ a lot.", a: ["him", "it", "her"], c: "it" },
+        { q: "_______ you want to see a movie with us tonight?", a: ["Do", "Does", "Are"], c: "Do" },
+        { q: "This smartphone is _______ than that old phone.", a: ["small", "smaller", "more small"], c: "smaller" },
+        { q: "My father wakes up early, usually _______ around 5:30 a.m.", a: ["at", "on", "in"], c: "at" },
+        { q: "I love this book. Please give it to _______.", a: ["I", "me", "my"], c: "me" },
+        { q: "Does your brother like sports? - No, he _______.", a: ["don't", "doesn't", "isn't"], c: "doesn't" },
+        { q: "Look at _______ birds high up in that distant tree!", a: ["these", "this", "those"], c: "those" },
+        { q: "Would your friends like to visit the museum? - Yes, they _______.", a: ["will", "do", "would"], c: "would" }
+    ]
+},
             "u5-6": {
-                badge: "Units 5-6",
-                title: "Daily Routines, Habits & Free Time",
-                prompts: [
-                    "What time do you usually wake up and go to bed on weekdays?",
-                    "Describe your typical morning routine before school or work.",
-                    "What hobbies or activities do you enjoy doing on weekends?",
-                    "How often do you exercise or watch TV during the week?"
-                ],
-                vocabulary: [
-                    { word: "Wake up", translation: "Despertarse" },
-                    { word: "Breakfast", translation: "Desayuno" },
-                    { word: "Shower", translation: "Ducha" },
-                    { word: "Always", translation: "Siempre" },
-                    { word: "Sometimes", translation: "A veces" },
-                    { word: "Never", translation: "Nunca" },
-                    { word: "Exercise", translation: "Hacer ejercicio" },
-                    { word: "Weekends", translation: "Fines de semana" }
-                ],
-                grammar: {
-                    rules: "Present Simple for habits and routines. Use -s/-es for third person singular (He, She, It). Adverbs of frequency go before the main verb.",
-                    examples: ["She walks to work every day.", "I always drink coffee in the morning.", "He doesn't like sports."]
-                },
-                quiz: [
-                    { q: "She ___ to the gym on Mondays.", a: ["goes", "go", "going", "gone"], c: "goes" },
-                    { q: "I ___ watch horror movies. I hate them.", a: ["never", "always", "sometimes", "usually"], c: "never" },
-                    { q: "What time ___ you have lunch?", a: ["do", "does", "is", "are"], c: "do" },
-                    { q: "He ___ drink tea; he prefers hot chocolate.", a: ["doesn't", "don't", "isn't", "not"], c: "doesn't" }
-                ]
-            },
-            "u7-8": {
-                badge: "Units 7-8",
-                title: "Our Home, Neighborhood & Places",
-                prompts: [
-                    "Describe your house or apartment. How many rooms does it have?",
-                    "What is your favorite room in your home and why?",
-                    "Is there a supermarket, bank, or park near your house?",
-                    "What can tourists visit or see in your town or neighborhood?"
-                ],
-                vocabulary: [
-                    { word: "Kitchen", translation: "Cocina" },
-                    { word: "Bedroom", translation: "Dormitorio" },
-                    { word: "Living room", translation: "Sala de estar" },
-                    { word: "Park", translation: "Parque" },
-                    { word: "Supermarket", translation: "Supermercado" },
-                    { word: "Behind", translation: "Detrás de" },
-                    { word: "Next to", translation: "Al lado de" },
-                    { word: "Between", translation: "Entre (dos cosas)" }
-                ],
-                grammar: {
-                    rules: "There is (singular) / There are (plural) for existence. Prepositions of place (in, on, under, next to, behind, in front of) to show locations.",
-                    examples: ["There is a big sofa in the living room.", "There are three bedrooms upstairs.", "The pharmacy is next to the bank."]
-                },
-                quiz: [
-                    { q: "___ a bank near here?", a: ["Is there", "There is", "Are there", "There are"], c: "Is there" },
-                    { q: "There ___ four chairs around the dining table.", a: ["are", "is", "am", "be"], c: "are" },
-                    { q: "The keys are ___ the kitchen table.", a: ["on", "in", "underneath", "between"], c: "on" },
-                    { q: "The library is ___ the hospital and the school.", a: ["between", "next to", "behind", "in front of"], c: "between" }
-                ]
-            },
-            "u9-10": {
-                badge: "Units 9-10",
-                title: "Food, Drinks, Shopping & Dining Out",
-                prompts: [
-                    "What is your favorite meal of the day and what do you eat?",
-                    "What food items do you need to buy next time you shop?",
-                    "Do you prefer eating at home or going out to restaurants?",
-                    "Talk about a traditional dish from your country. What is in it?"
-                ],
-                vocabulary: [
-                    { word: "Vegetables", translation: "Verduras" },
-                    { word: "Chicken", translation: "Pollo" },
-                    { word: "Fruit", translation: "Fruta" },
-                    { word: "Rice", translation: "Arroz" },
-                    { word: "Cheese", translation: "Queso" },
-                    { word: "Water", translation: "Agua" },
-                    { word: "Delicious", translation: "Delicioso" },
-                    { word: "Restaurant", translation: "Restaurante" }
-                ],
-                grammar: {
-                    rules: "Countable and Uncountable nouns. Use 'some' in positive sentences and 'any' in negative sentences or questions. Much/Many expressions.",
-                    examples: ["I have some apples.", "Is there any milk left?", "We don't need much sugar."]
-                },
-                quiz: [
-                    { q: "Would you like ___ water?", a: ["some", "any", "a", "many"], c: "some" },
-                    { q: "I don't have ___ tomatoes to make the salad.", a: ["any", "some", "much", "an"], c: "any" },
-                    { q: "How ___ eggs do we need for the cake?", a: ["many", "much", "some", "any"], c: "many" },
-                    { q: "We need to buy some ___ at the market.", a: ["rice", "rices", "banana", "potato"], c: "rice" }
-                ]
-            },
-            "u11-12": {
-                badge: "Units 11-12",
-                title: "Abilities, Talents & Current Actions",
-                prompts: [
-                    "What sports or musical instruments can you play well?",
-                    "Can you speak more than two languages? Which ones?",
-                    "What are you doing right now at this exact moment?",
-                    "Look out the window. What are people doing outside?"
-                ],
-                vocabulary: [
-                    { word: "Speak", translation: "Hablar" },
-                    { word: "Swim", translation: "Nadar" },
-                    { word: "Cook", translation: "Cocinar" },
-                    { word: "Drive", translation: "Conducir" },
-                    { word: "Reading", translation: "Leyendo" },
-                    { word: "Studying", translation: "Estudiando" },
-                    { word: "Working", translation: "Trabajando" },
-                    { word: "Running", translation: "Corriendo" }
-                ],
-                grammar: {
-                    rules: "Modal verb 'can' for ability (same for all subjects, followed by base verb). Present Continuous (am/is/are + verb-ing) for actions happening now.",
-                    examples: ["I can swim fast, but I can't fly.", "What are you studying right now?", "They are watching a movie."]
-                },
-                quiz: [
-                    { q: "She can ___ delicious Italian pizzas.", a: ["cook", "cooks", "cooking", "cooked"], c: "cook" },
-                    { q: "Listen! The baby ___ right now.", a: ["is crying", "cries", "crying", "cry"], c: "is crying" },
-                    { q: "What ___ you doing at the moment?", a: ["are", "is", "am", "do"], c: "are" },
-                    { q: "I ___ drive a bus. I don't have a commercial license.", a: ["can't", "can", "am not", "don't"], c: "can't" }
-                ]
-            },
-            "u13-14": {
-                badge: "Units 13-14",
-                title: "Past Experiences, Memories & Life Events",
-                prompts: [
-                    "Where were you born and where did you grow up?",
-                    "What did you do last weekend? Tell me about your activities.",
-                    "Think about your last vacation. Where did you go and stay?",
-                    "When was the last time you celebrated a birthday or party?"
-                ],
-                vocabulary: [
-                    { word: "Was / Were", translation: "Era / Estaba / Fue" },
-                    { word: "Yesterday", translation: "Ayer" },
-                    { word: "Last night", translation: "Anoche" },
-                    { word: "Travel", translation: "Viajar" },
-                    { word: "Bought", translation: "Compró / Compré" },
-                    { word: "Went", translation: "Fue / Fui" },
-                    { word: "Vacation", translation: "Vacaciones" },
-                    { word: "Born", translation: "Nacido" }
-                ],
-                grammar: {
-                    rules: "Past Simple of Verb To Be (was/were) and regular/irregular verbs. Used for finished actions in a specific past time frame.",
-                    examples: ["We were happy yesterday.", "I visited my uncle last week.", "They went to New York in 2022."]
-                },
-                quiz: [
-                    { q: "Where ___ you yesterday morning?", a: ["were", "was", "did", "are"], c: "were" },
-                    { q: "She ___ a new dress two days ago.", a: ["bought", "buyed", "buys", "buy"], c: "bought" },
-                    { q: "They ___ not watch the soccer game last night.", a: ["did", "do", "were", "was"], c: "did" },
-                    { q: "I ___ to the beach last summer.", a: ["went", "go", "was gone", "gone"], c: "went" }
-                ]
-            },
-            "u15-16": {
-                badge: "Units 15-16",
-                title: "Future Plans, Ambitions & Weather",
-                prompts: [
-                    "What are your plans for tomorrow evening?",
-                    "Where are you going to travel on your next vacation?",
-                    "What is the weather like today in your city?",
-                    "What are your long-term study or career goals?"
-                ],
-                vocabulary: [
-                    { word: "Tomorrow", translation: "Mañana (día)" },
-                    { word: "Next year", translation: "El próximo año" },
-                    { word: "Sunny", translation: "Soleado" },
-                    { word: "Raining", translation: "Lloviendo" },
-                    { word: "Cold", translation: "Frío" },
-                    { word: "Travel", translation: "Viajar" },
-                    { word: "Intention", translation: "Intención" },
-                    { word: "Plan", translation: "Plan" }
-                ],
-                grammar: {
-                    rules: "Future plans using 'be going to + verb' to express clear intentions or safe predictions based on evidence.",
-                    examples: ["I am going to study tonight.", "It is going to rain look at those black clouds.", "They are going to move soon."]
-                },
-                quiz: [
-                    { q: "We are ___ buy a new house next year.", a: ["going to", "go to", "will to", "going"], c: "going to" },
-                    { q: "Look at the dark clouds! It is going to ___.", a: ["rain", "rains", "raining", "rained"], c: "rain" },
-                    { q: "___ you going to visit your family tomorrow?", a: ["Are", "Is", "Am", "Do"], c: "Are" },
-                    { q: "I am going to ___ English in London next semester.", a: ["study", "studies", "studying", "studied"], c: "study" }
-                ]
-            }
+    badge: "Units 5-6",
+    title: "Family, Sports, Hobbies & Lifestyles",
+    prompts: [
+        "What sport or exercise activity are you doing these days to stay healthy?",
+        "Think of your family members. Tell a partner what two of them are doing right now.",
+        "How often do you go to the gym, play soccer, or go running? Answer using a frequency adverb.",
+        "How well do you play video games or cook? Rate your skill level using words like 'very well', 'pretty well', or 'not very well'.",
+        "How long do you usually spend on social media or watching TV every single day?",
+        "Are you working or studying hard right now? Answer with a correct short answer in the Present Continuous.",
+        "Are most of your classmates from this city? Answer using a quantifier like 'all', 'most', or 'a few'.",
+        "What is your absolute favorite sport to watch on TV? How good are you at playing it in real life?",
+        "Imagine you are planning a family reunion. Who is coming and what activities are you preparing for them?",
+        "Ask your partner: 'What are you wearing today?' and 'What is the teacher doing right now?'"
+    ],
+    vocabulary: [
+        { word: "soccer", translation: "A game played by two teams of eleven players using a round ball that players kick up and down the field." },
+        { word: "basketball", translation: "A game played on a court where players try to bounce and throw a large ball through a high hoop." },
+        { word: "tennis", translation: "A sport where two or four players use rackets to hit a yellow ball back and forth over a net." },
+        { word: "volleyball", translation: "A game in which two teams use their hands to hit a ball back and forth over a high net without letting it touch the ground." },
+        { word: "baseball", translation: "A sport played with a bat and ball where players run around four bases to score points." },
+        { word: "swimming", translation: "The activity or sport of moving through water using your arms and legs." },
+        { word: "running", translation: "The action or sport of moving rapidly on foot, faster than walking." },
+        { word: "cycling", translation: "The sport or activity of riding a bicycle." },
+        { word: "gymnastics", translation: "Exercises developing or demonstrating physical agility and coordination, often on bars or mats." },
+        { word: "karate", translation: "A traditional Japanese martial art of self-defense using hand strikes and kicks." },
+        { word: "yoga", translation: "A system of physical postures, breathing techniques, and meditation used for health and relaxation." },
+        { word: "fitness", translation: "The condition of being physically healthy, strong, and in good shape." },
+        { word: "exercise", translation: "Physical activity that you do to make your body strong and healthy." },
+        { word: "workout", translation: "A session of vigorous physical exercise or training, typically in a gym." },
+        { word: "athlete", translation: "A person who is trained or skilled in exercises, sports, or games." },
+        { word: "always", translation: "At all times; 100% of the time." },
+        { word: "usually", translation: "Under normal conditions; generally or normally." },
+        { word: "often", translation: "Many times; frequently." },
+        { word: "sometimes", translation: "Occasionally; from time to time." },
+        { word: "hardly ever", translation: "Almost never; very rarely." },
+        { word: "never", translation: "At no time; 0% of the time." },
+        { word: "frequently", translation: "Regularly or often." },
+        { word: "father", translation: "A man in relation to his natural or adopted child." },
+        { word: "mother", translation: "A woman in relation to her natural or adopted child." },
+        { word: "brother", translation: "A man or boy in relation to other sons of his parents." },
+        { word: "sister", translation: "A woman or girl in relation to other daughters of her parents." },
+        { word: "grandfather", translation: "The father of your father or mother." },
+        { word: "grandmother", translation: "The mother of your father or mother." },
+        { word: "uncle", translation: "The brother of your father or mother, or the husband of your aunt." },
+        { word: "aunt", translation: "The sister of your father or mother, or the wife of your uncle." },
+        { word: "cousin", translation: "A child of your uncle or aunt." },
+        { word: "nephew", translation: "A son of your brother or sister." },
+        { word: "niece", translation: "A daughter of your brother or sister." },
+        { word: "parents", translation: "A father and a mother considered together." },
+        { word: "relatives", translation: "Members of your family, such as aunts, uncles, and cousins." },
+        { word: "husband", translation: "The man that a person is married to." },
+        { word: "wife", translation: "The woman that a person is married to." },
+        { word: "child", translation: "A young human being below the age of full development; a son or daughter." },
+        { word: "children", translation: "The plural form of child; young human beings." },
+        { word: "all", translation: "The whole quantity or total number; 100% of a group." },
+        { word: "most", translation: "The greatest amount or quantity; nearly all of a group." },
+        { word: "some", translation: "An unspecified amount or number of a group; a part of it." },
+        { word: "few", translation: "A small number of people or things; not many." },
+        { word: "excellent", translation: "Extremely good or of exceptionally high quality." },
+        { word: "good", translation: "Having qualities that are desirable, satisfactory, or above average." },
+        { word: "average", translation: "An ordinary standard or level; not bad but not excellent." },
+        { word: "terrible", translation: "Extremely bad, unpleasant, or of very poor quality." },
+        { word: "habits", translation: "Things that you do often and regularly, sometimes without thinking." }
+    ],
+    grammar: [
+        {
+            rules: "Present Continuous Use: Use for actions happening right now, at this exact moment.",
+            examples: ["I am studying English right now.", "She is speaking to her father.", "They are not playing soccer at the moment."]
+        },
+        {
+            rules: "Present Continuous Structure: Formed using Subject + verb Be (am/is/are) + Main Verb ending in -ing.",
+            examples: ["He is exercising at the gym.", "We are planning a family dinner.", "I am writing a text message."]
+        },
+        {
+            rules: "Present Continuous Yes/No Questions: Move 'be' to the front to create direct questions.",
+            examples: ["Are you listening to music?", "Is your sister cooking breakfast?", "Are they working hard today?"]
+        },
+        {
+            rules: "Quantifiers Scale & Placement: Scale: All (100%) -> Nearly all -> Most -> Some -> A few -> No one (0%). Place quantifiers directly before the plural noun.",
+            examples: ["All students need to study.", "Most of my relatives live here.", "A few classmates are married."]
+        },
+        {
+            rules: "Adverbs of Frequency Position: Place them BEFORE the main verb, but AFTER the verb Be.",
+            examples: ["I always exercise in the morning.", "He is never late for basketball practice.", "We sometimes watch tennis on TV."]
+        },
+        {
+            rules: "Questions with How often & How long: Used to ask about the frequency or duration of an action.",
+            examples: ["How often do you swim? - Twice a week.", "How long do you spend on social media? - Two hours."]
+        },
+        {
+            rules: "Questions with How well & How good: 'How well' is used to ask about performance or skill. 'How good' is used with 'at' to ask about general ability.",
+            examples: ["How well do you speak English? - Pretty well.", "How good are you at basketball? - I am excellent at it."]
+        }
+    ],
+    quiz: [
+        { q: "Listen! My sister _______ the piano in her bedroom right now.", a: ["plays", "is playing", "are playing"], c: "is playing" },
+        { q: "How _______ do you play soccer? - About twice a week on weekends.", a: ["often", "long", "well"], c: "often" },
+        { q: "I _______ go to the gym on Sundays because it is closed.", a: ["always", "sometimes", "never"], c: "never" },
+        { q: "_______ of my friends are married. Nearly all of them, except for Robert.", a: ["Most", "A few", "No one"], c: "Most" },
+        { q: "Are your parents watching a movie? - Yes, they _______.", a: ["do", "are watching", "are"], c: "are" },
+        { q: "How well do you play tennis? - Not _______ well, I am a beginner.", a: ["very", "good", "much"], c: "very" },
+        { q: "My brother is really good _______ playing chess.", a: ["at", "in", "on"], c: "at" },
+        { q: "How _______ time do you spend working out every day? - One hour.", a: ["often", "long", "much"], c: "much" },
+        { q: "Identify the mistake: 'We are watch an exciting soccer match at the stadium.'", a: ["are", "watch", "exciting"], c: "watch" },
+        { q: "Where _______ your cousins living these days?", a: ["is", "am", "are"], c: "are" },
+        { q: "I am a vegetarian. I _______ eat meat or chicken.", a: ["usually", "sometimes", "never"], c: "never" },
+        { q: "In our country, _______ people love soccer. It's the absolute number one sport.", a: ["nearly all", "a few", "no one"], c: "nearly all" },
+        { q: "What is your uncle doing? - He _______ breakfast right now.", a: ["cooks", "is cooking", "cooking"], c: "is cooking" },
+        { q: "My grandmother _______ arrives early to family dinners. She hates being late.", a: ["always", "hardly ever", "never"], c: "always" },
+        { q: "How good are you at cooking? - I am _______ at it. My food is terrible.", a: ["great", "pretty good", "not very good"], c: "not very good" },
+        { q: "Are you and Mary studying together? - No, we _______.", a: ["don't", "aren't", "not are"], c: "aren't" },
+        { q: "My aunt is a professional athlete. She exercises _______ every day.", a: ["almost always", "never", "hardly ever"], c: "almost always" },
+        { q: "_______ people in my class speak three languages. Only two students!", a: ["Most", "All", "A few"], c: "A few" },
+        { q: "How long is your daily commute? - It takes _______ 45 minutes.", a: ["around", "at", "on"], c: "around" },
+        { q: "Identify the mistake: 'My father is always late for his basketball matches.'", a: ["is always", "for his", "No mistake, it's correct!"], c: "No mistake, it's correct!" }
+    ]
+},
+            "u7-8": { 
+    badge: "Units 7-8", 
+    title: "Vacations, Cities, Neighborhoods & Food", 
+    prompts: [
+        "Where did you go on your last vacation? Tell a partner three activities you did there.",
+        "Where were you yesterday at 8:00 p.m.? Answer using complete sentences with 'was' or 'were'.",
+        "Describe your neighborhood. What places are there? (e.g., 'There is a big supermarket, there are two parks...').",
+        "What did you eat for breakfast this morning? Did you cook it yourself or buy it?",
+        "Think of your favorite city in the world. Why was it special? What did you see there?",
+        "Imagine you are preparing a pizza. Name three count ingredients and two noncount ingredients you need.",
+        "How do you get to the nearest bus stop or subway station from your current classroom? Use prepositions of place.",
+        "Were you a good student in elementary school? Answer using a short answer with 'was/were'.",
+        "Think of a bad trip or vacation experience. What went wrong? Use at least three past tense verbs.",
+        "Is there any milk, sugar, or coffee left in your kitchen right now? Answer using 'there is/are' + 'some/any'."
+    ],
+    vocabulary: [
+        { word: "vacation", translation: "A period of time when you are free from work or school to rest or travel." },
+        { word: "trip", translation: "An occasion when you travel from one place to another and come back again." },
+        { word: "hotel", translation: "A building where you pay to stay in a room when you are traveling." },
+        { word: "beach", translation: "An area of sand or small stones beside the ocean or a lake." },
+        { word: "museum", translation: "A building where many valuable historical, artistic, or scientific objects are displayed." },
+        { word: "souvenir", translation: "Something you buy or keep to remind yourself of a special holiday or place." },
+        { word: "travel", translation: "The general activity of making a journey on an airplane, bus, or car to a distant place." },
+        { word: "relax", translation: "To rest and completely clear your mind after working hard or exercising." },
+        { word: "flight", translation: "A scheduled journey made through the air inside a passenger airplane." },
+        { word: "was", translation: "The singular past tense form of the verb Be; used with I, he, she, and it." },
+        { word: "were", translation: "The plural past tense form of the verb Be; used with you, we, and they." },
+        { word: "went", translation: "The irregular past tense form of the verb 'go'." },
+        { word: "bought", translation: "The irregular past tense form of the verb 'buy'." },
+        { word: "ate", translation: "The irregular past tense form of the verb 'eat'." },
+        { word: "drank", translation: "The irregular past tense form of the verb 'drink'." },
+        { word: "saw", translation: "The irregular past tense form of the verb 'see'." },
+        { word: "came", translation: "The irregular past tense form of the verb 'come'." },
+        { word: "had", translation: "The irregular past tense form of the verb 'have'." },
+        { word: "made", translation: "The irregular past tense form of the verb 'make'." },
+        { word: "took", translation: "The irregular past tense form of the verb 'take'." },
+        { word: "supermarket", translation: "A very large commercial store where customers buy food and household items." },
+        { word: "restaurant", translation: "A public place where you order meals and eat them at a table." },
+        { word: "pharmacy", translation: "A specialized shop where medicines are prepared, packaged, and sold." },
+        { word: "bank", translation: "A safe building where people keep, deposit, exchange, or borrow money." },
+        { word: "park", translation: "A public green area with trees and grass where people walk, play, or relax." },
+        { word: "bookstore", translation: "A retail shop where individuals can purchase books, magazines, and maps." },
+        { word: "hospital", translation: "A large medical facility where sick or injured patients receive expert healthcare." },
+        { word: "station", translation: "A terminal building on a transit line where buses or trains stop regularly." },
+        { word: "neighborhood", translation: "The specific area or district where people live inside a town or city." },
+        { word: "avenue", translation: "A wide urban street, usually lined with trees and running perpendicular to streets." },
+        { word: "street", translation: "A public road in a city or town that has houses or shops alongside it." },
+        { word: "corner", translation: "The exact point where two streets meet or intersect at an angle." },
+        { word: "across", translation: "On the opposite side of a street, road, river, or open space." },
+        { word: "between", translation: "In the space separating two specific objects, buildings, or points." },
+        { word: "behind", translation: "At or towards the back of a building, person, or object." },
+        { word: "next to", translation: "Right beside something, with no other buildings or objects in between." },
+        { word: "apple", translation: "A round, crisp count fruit with red, green, or yellow skin and white flesh." },
+        { word: "banana", translation: "A long, curved count fruit with a thick yellow skin that grows in tropical climates." },
+        { word: "tomato", translation: "A round, juicy red count vegetable (botanically a fruit) used in salads and sauces." },
+        { word: "onion", translation: "A round count vegetable with many layers that has a sharp taste and strong smell." },
+        { word: "milk", translation: "A white noncount liquid produced by cows, used for drinking or making cheese." },
+        { word: "cheese", translation: "A solid noncount food made from milk curd, popular on pizzas and sandwiches." },
+        { word: "bread", translation: "A common noncount food made by baking a mixture of flour, water, and yeast." },
+        { word: "sugar", translation: "A sweet noncount crystalline substance obtained from sugar cane, used to sweeten drinks." },
+        { word: "salt", translation: "A white crystalline noncount mineral substance used to season or preserve savory food." },
+        { word: "rice", translation: "Short or long grains of a noncount cereal plant, a major staple food in Asia and Latam." },
+        { word: "meat", translation: "The flesh of animals eaten as noncount food, such as beef or pork." },
+        { word: "chicken", translation: "The flesh of a domestic fowl used as food; can be count or noncount depending on context." },
+        { word: "vegetables", translation: "Plants or parts of plants eaten as count food, such as potatoes, carrots, or broccoli." },
+        { word: "fruit", translation: "The sweet, fleshy, edible product of a tree or plant, usually containing seeds." },
+        { word: "water", translation: "A clear, transparent noncount liquid that forms the seas, lakes, and rain." },
+        { word: "coffee", translation: "A hot dark-brown noncount drink made from roasted and ground seeds." },
+        { word: "juice", translation: "The liquid noncount drink obtained from pressing fruits or vegetables." },
+        { word: "delicious", translation: "Having a highly pleasing or wonderful taste; exceptionally appetizing." },
+        { word: "boring", translation: "Dull, tedious, or entirely uninteresting; making you feel tired or uninspired." }
+    ],
+    grammar: [
+        {
+            rules: "Simple Past with Be: Use 'was' for singular subjects (I, he, she, it) and 'were' for plural subjects (you, we, they) to describe past states or locations.",
+            examples: ["I was at a beautiful beach last week.", "They were not at the hotel yesterday at 9:00 p.m.", "Was there a museum in that old city?"]
+        },
+        {
+            rules: "Simple Past Regular vs Irregular: Regular verbs add '-ed' or '-d' to their base form. Irregular verbs change entirely and must be learned individually.",
+            examples: ["We relaxed and talked about our favorite food.", "She went to New York and bought many souvenirs.", "I ate a delicious pizza and drank juice."]
+        },
+        {
+            rules: "Simple Past Negatives & Questions: Use the auxiliary 'did not' or 'didn't' followed by the verb in its BASE form for negative statements. Invert 'Did' and the subject for questions.",
+            examples: ["He didn't liked the beach? (Incorrect) -> He didn't like the beach. (Correct)", "Did you study for your exam last night? - Yes, I did."]
+        },
+        {
+            rules: "There is/are vs There was/were: 'There is/are' signals presence in the present tense. 'There was/were' signals presence in the past tense.",
+            examples: ["There is a modern pharmacy on the corner now.", "There were ten police officers at the station this morning.", "There wasn't any fresh water left in the kitchen."]
+        },
+        {
+            rules: "Count vs Noncount Nouns: Count nouns can be itemized and made plural (apples, tomatoes). Noncount nouns are viewed as a mass and cannot be counted individually (sugar, milk, money).",
+            examples: ["We need to buy three onions and a lot of rice.", "How much money did you spend on your flight tickets?"]
+        },
+        {
+            rules: "Quantifiers 'Some' and 'Any': Use 'some' for affirmative sentences with plural count or noncount nouns. Use 'any' in negative sentences or direct questions.",
+            examples: ["We bought some fresh fruit at the market.", "Is there any sugar left in the jar?", "There isn't any milk in the refrigerator."]
+        },
+        {
+            rules: "Prepositions of Place: Specialized structures ('between', 'across from', 'next to', 'on the corner of') used to define exact map coordinates or positions.",
+            examples: ["The bank is between the bookstore and the hospital.", "The public library is located directly across from the main park."]
+        }
+    ],
+    quiz: [
+        { q: "Where _______ you yesterday afternoon at 3:00 p.m.?", a: ["was", "were", "did"], c: "were" },
+        { q: "Last summer, my family and I _______ to Cancun for our vacation.", a: ["go", "goed", "went"], c: "went" },
+        { q: "I didn't _______ any souvenirs at the market because they were too expensive.", a: ["buy", "bought", "buys"], c: "buy" },
+        { q: "_______ there a good Italian restaurant in your old neighborhood?", a: ["Was", "Were", "Did"], c: "Was" },
+        { q: "We need to buy _______ apples and some milk at the grocery store.", a: ["any", "some", "much"], c: "some" },
+        { q: "Is there _______ sugar left in the jar? I want to make coffee.", a: ["some", "any", "many"], c: "any" },
+        { q: "The modern pharmacy is right _______ the bookstore and the national bank.", a: ["between", "next to", "across"], c: "between" },
+        { q: "Identify the mistake: 'She didn't liked the food at the hotel last night.'", a: ["didn't", "liked", "at the"], c: "liked" },
+        { q: "How _______ money did you spend on your flight tickets?", a: ["many", "much", "some"], c: "much" },
+        { q: "There _______ ten police officers at the station this morning.", a: ["was", "were", "is"], c: "were" },
+        { q: "My grandmother _______ delicious chocolate cookies for my birthday last week.", a: ["make", "maked", "made"], c: "made" },
+        { q: "The main supermarket is located on the _______ of Main Street and First Avenue.", a: ["corner", "across", "between"], c: "corner" },
+        { q: "Excuse me, are there _______ vegetarian options on your menu?", a: ["some", "any", "much"], c: "any" },
+        { q: "We _______ a wonderful movie at the cinema last Saturday night.", a: ["see", "saw", "seen"], c: "saw" },
+        { q: "I love bread, but I don't eat _______ of it these days.", a: ["many", "a lot", "any"], c: "a lot" },
+        { q: "Identify the mistake: 'They was very tired after the long flight from Tokyo.'", a: ["was", "tired", "after"], c: "was" },
+        { q: "There isn't _______ fresh water in that plastic bottle.", a: ["any", "some", "many"], c: "any" },
+        { q: "Did you study for the English exam? - Yes, I _______.", a: ["did", "studied", "was"], c: "did" },
+        { q: "The public library is located directly _______ from the main park.", a: ["next", "across", "between"], c: "across" },
+        { q: "Yesterday, Robert _______ up early, ate breakfast, and walked to his office.", a: ["wake", "waked", "woke"], c: "woke" }
+    ]
+},
+            "u9-10": { 
+    badge: "Units 9-10", 
+    title: "Life Events, Geography, Weather & Future Plans", 
+    prompts: [
+        "Where and when were you born? Answer using complete sentences with 'born in' or 'born on'.",
+        "What did you do last weekend? Tell a partner about your activities using at least three past tense verbs.",
+        "What is the most beautiful place or city you have ever visited? Describe it using superlative adjectives.",
+        "What are you going to do this coming weekend? Share your plans using the 'be going to' structure.",
+        "Are you going to travel anywhere during the next vacation period? Where are you going to go?",
+        "Think of a famous person from history. When was he or she born and what did they do?",
+        "Describe the weather in your city today. Do you prefer hot, sunny days or cold, rainy days?",
+        "Name three famous geographical features in your country (e.g., the longest river, the highest mountain).",
+        "How old is your oldest relative? Ask a classmate about their family using 'How old...?'",
+        "Imagine you win a million dollars. What is the very first thing you are going to buy?"
+    ],
+    vocabulary: [
+        { word: "born", translation: "Brought into life or existence; starting life as a human being." },
+        { word: "grow up", translation: "To gradually change from being a young child to becoming an adult." },
+        { word: "graduate", translation: "To successfully complete a degree or course of study at a university or school." },
+        { word: "major", translation: "The main subject or specific field of study chosen by a student at a college." },
+        { word: "move", translation: "To change your place of residence, going to live in a different house, town, or country." },
+        { word: "marry", translation: "To legally join with someone in marriage as a husband, wife, or life partner." },
+        { word: "retire", translation: "To stop working permanently, typically because you have reached an advanced age." },
+        { word: "die", translation: "To stop living completely; the permanent end of all biological functions." },
+        { word: "biography", translation: "An account or written story of a real person's life, experiences, and achievements." },
+        { word: "mountain", translation: "A large natural elevation of the earth's surface rising abruptly from the surrounding level." },
+        { word: "river", translation: "A large natural stream of fresh water flowing in a channel to the ocean or a lake." },
+        { word: "lake", translation: "A large body of water completely surrounded by land, distinct from oceans." },
+        { word: "ocean", translation: "A massive body of salt water that covers almost three-quarters of the earth's surface." },
+        { word: "desert", translation: "A large, extremely dry area of land with little water, sparse vegetation, and often sand." },
+        { word: "island", translation: "A piece of land or geographical feature that is completely surrounded by water." },
+        { word: "beach", translation: "A sandy or pebbly shore found along the edge of an ocean, sea, or lake." },
+        { word: "volcano", translation: "A mountain or hill with a crater or opening through which lava, rock fragments, and hot gas erupt." },
+        { word: "forest", translation: "A large area covered chiefly with a dense growth of trees and underbrush." },
+        { word: "highest", translation: "The superlative form of high; reaching the absolute maximum distance upward." },
+        { word: "longest", translation: "The superlative form of long; measuring the greatest distance from end to end." },
+        { word: "biggest", translation: "The superlative form of big; of the greatest size, volume, or extent." },
+        { word: "deepest", translation: "The superlative form of deep; extending far down from the top or surface." },
+        { word: "oldest", translation: "The superlative form of old; having lived or existed for the greatest number of years." },
+        { word: "hottest", translation: "The superlative form of hot; having the highest thermal temperature." },
+        { word: "coldest", translation: "The superlative form of cold; having the lowest thermal temperature." },
+        { word: "most beautiful", translation: "The superlative form of beautiful; possessing the highest level of aesthetic pleasure or beauty." },
+        { word: "sunny", translation: "A weather state characterized by bright, direct sunlight and few clouds." },
+        { word: "rainy", translation: "A weather condition featuring a lot of rainfall or continuous liquid precipitation." },
+        { word: "cloudy", translation: "An atmospheric state where visible clouds cover most or all of the sky." },
+        { word: "windy", translation: "A weather state marked by strong, noticeable currents of moving air or wind." },
+        { word: "snowy", translation: "A cold weather condition where snow falls or covers the ground completely." },
+        { word: "hot", translation: "Having a high temperature, causing a sensation of intense heat." },
+        { word: "cold", translation: "Having a low temperature, especially when compared to human body temperature." },
+        { word: "warm", translation: "Having a comfortable, moderate degree of heat; neither hot nor cold." },
+        { word: "weather", translation: "The state of the atmosphere at a specific place and time regarding heat, cloudiness, dryness, sunshine, wind, and rain." },
+        { word: "forecast", translation: "A prediction or calculated statement about future weather conditions made by experts." },
+        { word: "travel", translation: "The act or process of making a journey, typically to a distant destination for pleasure or business." },
+        { word: "vacation", translation: "A scheduled period of time spent away from home or work, traveling for leisure." },
+        { word: "trip", translation: "An excursion or short journey to a place and back for a specific purpose." },
+        { word: "flight", translation: "A journey made through the air inside a commercial passenger airplane." },
+        { word: "hotel", translation: "An establishment providing accommodation, meals, and other guest services for travelers." },
+        { word: "luggage", translation: "Suitcases, bags, and personal belongings packed for a traveler or journey." },
+        { word: "tomorrow", translation: "On the day following today; the next calendar day." },
+        { word: "tonight", translation: "On the present or coming night of the current day." },
+        { word: "next week", translation: "The week immediately following the current week." }
+    ],
+    grammar: [
+        {
+            rules: "Simple Past Wh-Questions: Formed using Wh-word + did + subject + verb in its absolute BASE form.",
+            examples: ["Where did you grow up as a child?", "Why did you move to this city last year?", "Who did you see at the cafeteria?"]
+        },
+        {
+            rules: "Born in vs. Born on: Use 'born in' to indicate geographical locations and calendar years. Use 'born on' for specific dates.",
+            examples: ["I was born in Colombia in 1995.", "My grandfather was born on October 24th, 1950.", "Alexander Fleming was born in Scotland."]
+        },
+        {
+            rules: "Superlative Adjectives (Short vs. Long): Add 'the' + '-est' to short monosyllabic adjectives. Use 'the most' before multisyllabic long adjectives.",
+            examples: ["Mount Everest is the highest mountain.", "The Nile is the longest river.", "Tokyo is one of the most exciting cities in the world."]
+        },
+        {
+            rules: "Irregular Superlatives & Comparatives: Adjectives like good and bad do not accept '-est' or 'most'. They transform completely.",
+            examples: ["That was the worst movie I have ever seen.", "This room is the best place to study.", "The Amazon River is bigger than the Mississippi."]
+        },
+        {
+            rules: "Questions with How + Adjective: Combine 'How' with specific baseline descriptive adjectives to inquire about measurements, dimensions, or age.",
+            examples: ["How deep is Lake Baikal in Russia?", "How old is that ancient castle?", "How long is the Amazon River?"]
+        },
+        {
+            rules: "Future with Be Going To (Plans & Intentions): Formed with Subject + Be (am/is/are) + going to + verb in base form. Used to indicate pre-established future plans.",
+            examples: ["We are going to buy a new car next month.", "My sister is going to graduate next semester.", "What are you going to do tomorrow night?"]
+        },
+        {
+            rules: "Future Negatives, Questions & Expressions: Place 'not' directly after Be for negatives. Invert Be and the subject for questions. Pair with specific time markers.",
+            examples: ["She is not going to travel next weekend.", "Are they going to stay at a luxury hotel? - No, they aren't.", "Is it going to rain tomorrow morning?"]
+        }
+    ],
+    quiz: [
+        { q: "Where _______ you grow up when you were a child?", a: ["did", "were", "was"], c: "did" },
+        { q: "My grandfather was born _______ October 24th, 1950.", a: ["in", "on", "at"], c: "on" },
+        { q: "Mount Everest is _______ mountain in the entire world.", a: ["the highest", "the most high", "higher than"], c: "the highest" },
+        { q: "What _______ you going to do tomorrow night after class?", a: ["do", "are", "will"], c: "are" },
+        { q: "Alexander Fleming was born _______ Scotland and discovered penicillin.", a: ["in", "on", "at"], c: "in" },
+        { q: "The Nile is _______ river in Africa.", a: ["the longer", "the longest", "the most long"], c: "the longest" },
+        { q: "How _______ is Lake Baikal in Russia? - It is about 1,642 meters deep.", a: ["deep", "long", "high"], c: "deep" },
+        { q: "Identify the mistake: 'Next Saturday, my friends are going to visiting a historical museum.'", a: ["are going", "to visiting", "historical"], c: "to visiting" },
+        { q: "We are _______ to buy a new car next month because our old one broke down.", a: ["go", "going", "goes"], c: "going" },
+        { q: "That was _______ movie I have ever seen. It was completely boring!", a: ["the worst", "the badest", "worse than"], c: "the worst" },
+        { q: "Why _______ you move to this city last year? - Because of my new job.", a: ["did", "were", "was"], c: "did" },
+        { q: "Is it going to _______ tomorrow morning? Take an umbrella just in case.", a: ["rain", "raining", "rains"], c: "rain" },
+        { q: "Amazon River is _______ than the Mississippi River.", a: ["the biggest", "bigger", "biggest"], c: "bigger" },
+        { q: "How _______ is that ancient castle? - It is almost 500 years old.", a: ["old", "high", "long"], c: "old" },
+        { q: "My sister _______ going to graduate from university next semester.", a: ["am", "is", "are"], c: "is" },
+        { q: "Identify the mistake: 'Who did you saw at the cafeteria yesterday morning?'", a: ["did", "you", "saw"], c: "saw" },
+        { q: "I think Tokyo is one of _______ cities in the world to visit.", a: ["the most exciting", "the excitingest", "more exciting"], c: "the most exciting" },
+        { q: "Are they going to stay at a luxury hotel? - No, they _______.", a: ["don't", "aren't", "won't"], c: "aren't" },
+        { q: "How _______ is the Amazon River? - It flows for over 6,400 kilometers.", a: ["long", "high", "deep"], c: "long" },
+        { q: "My parents _______ born in 1975 in a small town near the coast.", a: ["was", "were", "did"], c: "were" }
+    ]
+},
+            "u11-12": { 
+    badge: "Units 11-12", 
+    title: "Health, Body, Remedies & Food Service", 
+    prompts: [
+        "What should you do when you have a terrible headache or a bad cold? Give two pieces of advice.",
+        "Think of your English class rules. What do you have to do, and what must you not do in class?",
+        "Imagine you are in a restaurant right now. How do you politely order a steak and a glass of red wine?",
+        "Look at your phone. Is it yours, or does it belong to someone else? Answer using a possessive pronoun.",
+        "Give three instructions to a tourist who is feeling lost using imperative verbs (e.g., 'Go straight...', 'Don't cross...').",
+        "What parts of the body do you use when you play soccer, when you listen to music, and when you think?",
+        "When was the last time you felt sick? What symptoms did you have and what medicine did you take?",
+        "A friend wants to lose weight and be healthy. What should they eat and what exercise should they do?",
+        "Imagine a classmate leaves their jacket in the classroom. How do you ask if it is theirs, hers, or his?",
+        "You are at a clothing store and need a smaller size of a shirt. How do you ask the clerk using 'May I' or 'Can I'?"
+    ],
+    vocabulary: [
+        { word: "headache", translation: "A continuous, painful ache felt inside a person's head." },
+        { word: "stomachache", translation: "A sharp or dull pain localized within a person's belly or stomach region." },
+        { word: "earache", translation: "An intense, uncomfortable pain inside the inner or outer part of the ear." },
+        { word: "toothache", translation: "A severe pain caused by a damaged, infected, or cavities-ridden tooth." },
+        { word: "backache", translation: "A prolonged, heavy ache located along the spine or muscles of the back." },
+        { word: "fever", translation: "An abnormally high body temperature that usually occurs during an illness." },
+        { word: "cough", translation: "To force air out of your lungs with a sudden, loud, and repetitive sound." },
+        { word: "cold", translation: "A common, mild viral infection causing a running nose, sneezing, and a sore throat." },
+        { word: "flu", translation: "An infectious respiratory virus causing severe body aches, high fever, and exhaustion." },
+        { word: "medicine", translation: "A substance or chemical compound used to treat, cure, or relieve symptoms of illness." },
+        { word: "aspirin", translation: "A common over-the-counter pill used to reduce fever, inflammation, and basic body pain." },
+        { word: "pill", translation: "A small, solid piece of medicine that a person swallows whole with water." },
+        { word: "cough drops", translation: "Small, sweet medicated lozenges dissolved in the mouth to soothe a dry throat." },
+        { word: "bandage", translation: "A strip of fabric or sticky material used to cover, protect, or bind a physical wound." },
+        { word: "rest", translation: "To relax, stop physical work, and sleep to regain your strength and health." },
+        { word: "doctor", translation: "A highly qualified professional licensed to practice medicine and treat sick patients." },
+        { word: "dentist", translation: "A specialized medical professional who treats teeth, gums, and oral conditions." },
+        { word: "health", translation: "The general state of being free from physical illness, mental stress, or injury." },
+        { word: "head", translation: "The upper part of the body containing the brain, eyes, ears, nose, and mouth." },
+        { word: "arm", translation: "The upper limb of the human body extending from the shoulder down to the hand." },
+        { word: "leg", translation: "The lower limb of the body used chiefly for walking, running, or standing upright." },
+        { word: "hand", translation: "The terminal part of the arm, including the palm, fingers, and thumb, used to hold objects." },
+        { word: "foot", translation: "The terminal part of the leg below the ankle, on which a person stands or walks." },
+        { word: "feet", translation: "The plural form of foot; both lower appendages considered together." },
+        { word: "stomach", translation: "The internal organ in which the first part of digestion occurs." },
+        { word: "back", translation: "The posterior surface of the human body extending from the neck down to the hips." },
+        { word: "throat", translation: "The passage through which food passes to the stomach and air passes to the lungs." },
+        { word: "eye", translation: "The organ of vision that detects light and allows a person to see their surroundings." },
+        { word: "ear", translation: "The specialized external and internal organ used by humans for hearing sounds." },
+        { word: "mouth", translation: "The facial opening through which a human eats food and speaks words." },
+        { word: "mine", translation: "The first-person singular possessive pronoun indicating that an object belongs to me." },
+        { word: "yours", translation: "The second-person singular or plural possessive pronoun indicating ownership by you." },
+        { word: "his", translation: "The third-person singular masculine possessive pronoun indicating ownership by him." },
+        { word: "her", translation: "The third-person singular feminine possessive adjective used to modify a noun." },
+        { word: "hers", translation: "The third-person singular feminine possessive pronoun indicating ownership by her." },
+        { word: "ours", translation: "The first-person plural possessive pronoun indicating ownership by our group." },
+        { word: "theirs", translation: "The third-person plural possessive pronoun indicating ownership by them." },
+        { word: "should", translation: "A helping modal verb used to offer friendly advice or general recommendations." },
+        { word: "must", translation: "A strong modal verb used to indicate absolute obligation or vital necessity." },
+        { word: "have to", translation: "An expression used to indicate an external rule, social obligation, or requirement." },
+        { word: "waiter", translation: "A professional server who takes orders and brings food to tables in a restaurant." },
+        { word: "menu", translation: "A printed or digital list showing all food options and prices available at a restaurant." },
+        { word: "order", translation: "To request a specific meal, food item, or beverage from a waiter or cashier." },
+        { word: "bill", translation: "A piece of paper showing the total amount of money you have to pay for your meal." },
+        { word: "dessert", translation: "A sweet course eaten at the absolute end of a meal, like cake or ice cream." },
+        { word: "appetizer", translation: "A small dish of food served before the main course to stimulate the appetite." },
+        { word: "beverage", translation: "A formal term for any liquid drink, excluding plain water." },
+        { word: "chicken", translation: "The meat of a domestic fowl, served as a main dish or protein source." },
+        { word: "fish", translation: "The edible flesh of cold-blooded aquatic animals used as food." },
+        { word: "steak", translation: "A high-quality, thick slice of beef cut from the fleshy part of a cow." }
+    ],
+    grammar: [
+        {
+            rules: "Modal Should for Advice: Use 'should' or 'shouldn't' followed directly by a verb in its base form to give suggestions, advice, or non-binding recommendations.",
+            examples: ["You should go to the dentist as soon as possible.", "To stay healthy, you shouldn't eat too much junk food.", "You should stay in bed and rest."]
+        },
+        {
+            rules: "Have to vs. Must for Obligation: Use 'have to' or 'has to' for external requirements, laws, or rules. Use 'must' for absolute duties and 'must not' for strict prohibitions.",
+            examples: ["A professional pilot has to pass a strict medical exam.", "Tomorrow is Sunday, so I don't have to wake up early.", "If you have a broken leg, you must not lift heavy things."]
+        },
+        {
+            rules: "Imperatives for Instructions: Form affirmative commands starting directly with the base form of the verb. Form negative commands by putting 'Don't' before the base verb.",
+            examples: ["Please, open your text books and pay attention.", "Don't run near the swimming pool.", "Don't forget to do your digital homework tonight."]
+        },
+        {
+            rules: "Possessive Pronouns: Formed by words like mine, yours, his, hers, ours, and theirs. They stand completely alone to replace a possessive adjective + noun combination to eliminate redundant phrasing.",
+            examples: ["Is this your bottle? - No, it isn't mine. Mine is blue.", "I left my pen at home. Can I borrow yours?", "The big garage at the front is theirs."]
+        },
+        {
+            rules: "Polite Requests: Use structures like 'Would like', 'Can I', or 'May I' paired with a base verb to ask for permission, order restaurant items, or make polite inquiries.",
+            examples: ["Waiter, we would like to order our appetizers now.", "May I look at that expensive silver watch?", "Can I have the check, please? We need to leave."]
+        },
+        {
+            rules: "Health Suffixes & Adjectives: Attach the suffix '-ache' to physical parts (headache, backache) to specify internal pains. Use the standalone descriptive adjective 'sore' before body parts to indicate raw inflammation.",
+            examples: ["My back hurts. I have a terrible backache.", "My throat is very dry and irritated. I think I have a sore throat."]
+        }
+    ],
+    quiz: [
+        { q: "I have a terrible toothache. - You _______ go to the dentist as soon as possible.", a: ["should", "shouldn't", "don't have to"], c: "should" },
+        { q: "Excuse me, waiter. We _______ like to order our appetizers now, please.", a: ["could", "would", "can"], c: "would" },
+        { q: "Is this plastic water bottle your bottle? - No, it isn't _______. Mine is blue.", a: ["your", "mine", "yours"], c: "mine" },
+        { q: "Please, _______ your text books and pay attention to the grammar lesson.", a: ["open", "opening", "to open"], c: "open" },
+        { q: "To stay healthy, you _______ eat too much junk food or drink soda.", a: ["should", "shouldn't", "have to"], c: "shouldn't" },
+        { q: "Tomorrow is Sunday, so I _______ wake up early. I can sleep all morning.", a: ["must not", "should", "don't have to"], c: "don't have to" },
+        { q: "_______ I look at that expensive silver watch inside the display case?", a: ["May", "Would", "Do"], c: "May" },
+        { q: "Identify the mistake: 'This beautiful red scarf belongs to Mary. It is him.'", a: ["belongs", "to Mary", "him"], c: "him" },
+        { q: "My throat is very dry and irritated. I think I have a _______ throat.", a: ["ache", "sore", "pain"], c: "sore" },
+        { q: "Hey! _______ run near the swimming pool. The floor is very wet and dangerous.", a: ["Not", "Don't", "No"], c: "Don't" },
+        { q: "I left my pen at home. Can I borrow _______ for a minute?", a: ["yours", "your", "you"], c: "yours" },
+        { q: "A professional pilot _______ pass a strict medical exam every single year.", a: ["have to", "has to", "shouldn't"], c: "has to" },
+        { q: "We are ready to order. I _______ like the grilled chicken with a side salad.", a: ["will", "can", "'d"], c: "'d" },
+        { q: "Robert and Alice bought a house. The big garage at the front is _______.", a: ["their", "theirs", "them"], c: "theirs" },
+        { q: "Identify the mistake: 'You have a bad fever. You should to stay in bed and rest.'", a: ["have", "should to", "stay"], c: "should to" },
+        { q: "_______ I have the check, please? We need to leave the restaurant now.", a: ["Can", "Would", "Do"], c: "Can" },
+        { q: "If you have a broken leg, you _______ lift heavy things or play sports.", a: ["must not", "don't have to", "should"], c: "must not" },
+        { q: "Our teacher told us: '_______ forget to do your digital homework tonight.'", a: ["Don't", "No", "Not"], c: "Don't" },
+        { q: "Are these keys ours or _______? I found them on their desk.", a: ["their", "theirs", "them"], c: "theirs" },
+        { q: "My back hurts a lot. I have a terrible _______ from carrying that heavy luggage.", a: ["backache", "sore back", "back pain"], c: "backache" }
+    ]
+},
+            "u13-14": { 
+    badge: "Units 13-14", 
+    title: "Agreements, Superlatives & Future Arrangements", 
+    prompts: [
+        "A partner says: 'I love spicy Mexican food.' Agree with them using 'so' or 'too'.",
+        "A partner says: 'I can't swim in deep water.' Agree with them using 'neither' or 'either'.",
+        "What are your definitive plans for this weekend? Describe them using the Present Continuous for future (e.g., 'I am meeting my friends...').",
+        "What is the most beautiful geographical place or beach in your country? Use a superlative form to describe it.",
+        "Imagine you are at a hotel reception. Make a polite request to the receptionist using 'Would you...' or 'Will you...'.",
+        "Ask a classmate a question about distances or measurements using 'How far...?' or 'How big...?'",
+        "What are you going to do as soon as this English class finishes tonight? Use 'be going to'.",
+        "Compare two cities you know well. Which one is hotter, and which one has the biggest population?",
+        "Are you working or studying next Saturday morning? Answer using the Present Continuous for future arrangement.",
+        "Name three things you are going to change or buy next year to improve your lifestyle."
+    ],
+    vocabulary: [
+        { word: "geography", translation: "The scientific study of the earth's physical features, atmosphere, and human activity." },
+        { word: "island", translation: "A distinct piece of land that is completely surrounded by water on all sides." },
+        { word: "desert", translation: "An extremely dry, barren geographical region with little to no annual rainfall or vegetation." },
+        { word: "ocean", translation: "A continuous body of salt water that covers the vast majority of the earth's surface." },
+        { word: "river", translation: "A natural flowing stream of fresh water that runs towards an ocean, sea, or lake." },
+        { word: "lake", translation: "A static, large body of fresh or salt water surrounded entirely by land." },
+        { word: "volcano", translation: "A mountain with a rupture or vent through which molten rock, lava, and gas escape." },
+        { word: "mountain", translation: "A prominent natural elevation of the earth's surface rising steeply from its surroundings." },
+        { word: "valley", translation: "A low area of land situated directly between hills or prominent mountain ranges." },
+        { word: "canyon", translation: "A deep gorge or deep valley with extremely steep rock sides, often carved by a river." },
+        { word: "waterfall", translation: "A cascade of water falling vertically from a height, usually over a cliff or ledge." },
+        { word: "continent", translation: "One of the world's main continuous expanses of land, such as Africa, Asia, or Europe." },
+        { word: "country", translation: "A distinct nation or territory with its own sovereign government and legal boundaries." },
+        { word: "population", translation: "The total number of human beings living inside a specific city, region, or country." },
+        { word: "distance", translation: "The total amount of space separating two individual points, objects, or locations." },
+        { word: "measurement", translation: "The exact size, length, amount, or dimensions of something determined by a standard unit." },
+        { word: "spicy", translation: "Food item seasoned with aromatic or hot spices, producing a sharp or burning sensation." },
+        { word: "delicious", translation: "Having a highly pleasing, rich, or wonderful taste or aroma." },
+        { word: "healthy", translation: "Promoting good bodily condition or beneficial to a person's physical health." },
+        { word: "seafood", translation: "Edible marine animals, especially fish, crabs, lobsters, and shellfish." },
+        { word: "vegetarian", translation: "A person or a meal choice that completely excludes meat, poultry, or seafood products." },
+        { word: "dessert", translation: "A sweet confectionery dish served at the absolute conclusion of a formal dinner." },
+        { word: "beverage", translation: "Any standard liquid drink consumable by humans, excluding plain tap water." },
+        { word: "flavor", translation: "The distinctive taste or quality of a food item or drink in the mouth." },
+        { word: "so", translation: "Adverb used to express positive agreement; placed at the very start of an auxiliary response." },
+        { word: "too", translation: "Adverb used to express positive agreement; positioned at the absolute end of a statement." },
+        { word: "neither", translation: "Adverb used to express negative agreement; placed at the start of an inverted auxiliary clause." },
+        { word: "either", translation: "Adverb used to express negative agreement; paired with a negative verb at the end of a clause." },
+        { word: "would", translation: "A polite auxiliary modal used to introduce soft, respectful requests or choices." },
+        { word: "will", translation: "A modal auxiliary verb used for direct future predictions, offers, or requests." },
+        { word: "request", translation: "The formal act of asking politely or formally for something to be done." },
+        { word: "agreement", translation: "Harmony or shared opinion; thinking or feeling the exact same way as another person." },
+        { word: "disagreement", translation: "A variance of opinion or conflict; holding a completely different view on a topic." },
+        { word: "far", translation: "At, to, or a considerable distance away in space or elapsed time." },
+        { word: "long", translation: "Measuring a large amount from end to end; referring to distance or temporal duration." },
+        { word: "big", translation: "Of considerable size, physical dimensions, capacity, or general intensity." },
+        { word: "high", translation: "Extending far upward; situated a considerable distance above the ground level." },
+        { word: "deep", translation: "Extending far down from the top surface or outer edge toward the bottom." },
+        { word: "wide", translation: "Measuring a specific or large distance from side to side; broad horizontal extent." },
+        { word: "meters", translation: "A fundamental metric unit of length measurement equal to 100 centimeters." },
+        { word: "kilometers", translation: "A metric unit of distance measurement equal to 1,000 meters." },
+        { word: "miles", translation: "An imperial unit of linear distance measure equal to 1,609 meters." },
+        { word: "degrees", translation: "A unit of measurement for measuring temperature scales or geometric angles." }
+    ],
+    grammar: [
+        {
+            rules: "Agreement with Positive Statements: Express shared agreement using the formula 'So + auxiliary verb + subject' or 'Subject + auxiliary verb + too'.",
+            examples: ["I am looking forward to the vacation. - So am I.", "I love spicy food. - I do too.", "Mary loves romantic comedies, and her sister does too."]
+        },
+        {
+            rules: "Agreement with Negative Statements: Express negative agreement using the structural formulas 'Neither + auxiliary verb + subject' or 'Subject + negative auxiliary + either'.",
+            examples: ["I don't like raw fish. - I don't either.", "I can't speak French. - Neither can I.", "I'm not going to watch the match. - Neither am I."]
+        },
+        {
+            rules: "Polite Requests with Will and Would: Use 'Would you please...?' or 'Will you...?' followed by the base form of the verb to ask someone to execute a task politely.",
+            examples: ["Would you please turn down the volume?", "Will you open the door for me, please?", "Would you pass the salt?"]
+        },
+        {
+            rules: "Superlatives Evaluation & Spelling Rules: Short adjectives add 'the' + '-est' (double the final consonant if it follows a consonant-vowel-consonant pattern). Long adjectives require 'the most'. Adjectives like good become 'the best'.",
+            examples: ["The Pacific Ocean is the largest ocean.", "This restaurant serves the best chocolate cake.", "The Grand Canyon is one of the most beautiful places."]
+        },
+        {
+            rules: "How + Adjective Measurement Questions: Combine 'How' with specific baseline dimensions ('far' for distance, 'long' for length/time, 'big' for size, 'high' for altitude) to query exact statistics.",
+            examples: ["How far is it from your house to the airport?", "How long is the Nile River?", "How big is the Sahara Desert?"]
+        },
+        {
+            rules: "Future Arrangements vs. Intentions: Use the Present Continuous for pre-arranged future events involving other people, bookings, or fixed times. Use 'Be going to' for general internal plans and personal intentions.",
+            examples: ["I am having dinner with my boss this Friday night at 8:00 p.m. (Booked)", "Next summer, we are going to travel across Europe.", "What time are you meeting your team members tomorrow morning?"]
+        },
+        {
+            rules: "So/Neither Auxiliary Matching Rule: The auxiliary or modal verb utilized in the shortcut agreement phrase must perfectly align with the original speaker's tense.",
+            examples: ["I have never been to Asia. -> I haven't either.", "I am not going to the party. -> Neither am I."]
+        }
+    ],
+    quiz: [
+        { q: "I am really looking forward to the beach vacation. - _______ am I!", a: ["So", "Too", "Neither"], c: "So" },
+        { q: "I don't like eating raw fish or sushi. - I don't _______.", a: ["too", "neither", "either"], c: "either" },
+        { q: "_______ you please turn down the volume of the music? It's too loud.", a: ["Would", "So", "Neither"], c: "Would" },
+        { q: "The Pacific Ocean is _______ ocean in the entire world.", a: ["the largest", "the most large", "larger than"], c: "the largest" },
+        { q: "How _______ is it from your house to the international airport?", a: ["far", "long", "high"], c: "far" },
+        { q: "I am _______ dinner with my boss this Friday night at 8:00 p.m. (Everything is booked).", a: ["have", "having", "going to have"], c: "having" },
+        { q: "I can't speak French or Italian. - _______ can I.", a: ["So", "Either", "Neither"], c: "Neither" },
+        { q: "Identify the mistake: 'How much high is Mount Kilimanjaro in Africa?'", a: ["How much", "high", "is"], c: "How much" },
+        { q: "Next summer, we are _______ to travel across Europe by train.", a: ["go", "going", "goes"], c: "going" },
+        { q: "This restaurant serves _______ chocolate cake in the city. It's award-winning!", a: ["the best", "the goodest", "the most good"], c: "the best" },
+        { q: "Mary loves romantic comedies, and her sister _______ too.", a: ["does", "is", "loves"], c: "does" },
+        { q: "How _______ is the Nile River? - It is about 6,650 kilometers.", a: ["long", "high", "deep"], c: "long" },
+        { q: "_______ you open the door for me, please? My hands are full of bags.", a: ["Will", "So", "Either"], c: "Will" },
+        { q: "I'm not going to watch the football match tonight. - Neither _______ I.", a: ["am", "do", "can"], c: "am" },
+        { q: "The Grand Canyon is one of _______ places in the United States.", a: ["the most beautiful", "the beautifulest", "more beautiful"], c: "the most beautiful" },
+        { q: "Identify the mistake: 'We are go to a rock concert tomorrow night. I bought the tickets yesterday.'", a: ["are go", "tomorrow night", "bought"], c: "are go" },
+        { q: "How _______ is the Sahara Desert? - It covers 3.6 million square miles.", a: ["big", "long", "far"], c: "big" },
+        { q: "I have never been to Asia. - I haven't _______.", a: ["too", "either", "neither"], c: "either" },
+        { q: "What time are you _______ your team members tomorrow morning?", a: ["meet", "meeting", "met"], c: "meeting" },
+        { q: "This is _______ exam of the semester, but you can pass it if you study.", a: ["the hardest", "the most hard", "harder than"], c: "the hardest" }
+    ]
+},
+            "u15-16": { 
+    badge: "Units 15-16", 
+    title: "Life Experiences, Possibilities & Choices", 
+    prompts: [
+        "Have you ever eaten something very unusual or exotic? What was it and when did you try it?",
+        "Have you already finished all your homework for this week? Answer using 'already' or 'not yet'.",
+        "What are your plans for tomorrow afternoon? If you are not sure, answer using 'may' or 'might'.",
+        "Have you ever broken a bone or been to a hospital emergency room? Tell the story using the Simple Past.",
+        "Imagine a tourist visits your city for only 24 hours. What places should they see? Give three recommendations.",
+        "Have you ever met a famous celebrity, musician, or influencer? Who was it?",
+        "Where might you go on your next vacation if you have enough time and money? Name two possibilities.",
+        "Contrast these two sentences: 'I have traveled to Europe' and 'I went to Europe in 2024'. Explain the difference.",
+        "Have you ever lost your keys, wallet, or smartphone? How did you find it? Use the past tense.",
+        "What is an exciting activity you haven't done yet, but really want to try in the future?"
+    ],
+    vocabulary: [
+        { word: "experience", translation: "Knowledge or practical wisdom gained through direct observation or participation in events." },
+        { word: "adventure", translation: "An exciting, very unusual, and sometimes hazardous activity or experience." },
+        { word: "extreme", translation: "Reaching a high degree or intense level; completely out of the ordinary." },
+        { word: "skydiving", translation: "The sport of jumping from an airplane and executing free-fall maneuvers before deploying a parachute." },
+        { word: "scuba diving", translation: "The sport or activity of swimming underwater using a portable breathing apparatus." },
+        { word: "travel", translation: "To make a journey or excursion from your home location to a completely different place." },
+        { word: "abroad", translation: "In or to a foreign country or distinct continent outside your own nation's borders." },
+        { word: "foreign", translation: "Characteristic of or belonging to a country, language, or culture other than your own." },
+        { word: "ever", translation: "Adverb meaning 'at any point in time'; predominantly utilized inside interrogative structures." },
+        { word: "never", translation: "Adverb meaning 'at no time in the past or future'; used to state a total absence of experience." },
+        { word: "already", translation: "Adverb used to show that an action occurred sooner than expected or prior to the current moment." },
+        { word: "yet", translation: "Adverb indicating that an expected event has not happened up to now; placed at the end of clauses." },
+        { word: "since", translation: "Preposition used to specify the exact starting point of a continuous action in the past." },
+        { word: "for", translation: "Preposition used to indicate the overall duration or length of a specific period of time." },
+        { word: "just", translation: "Adverb used to express that an action was completed a very brief moment or a split second ago." },
+        { word: "before", translation: "Adverb indicating that an action occurred at an unspecified point previous to the present time." },
+        { word: "once", translation: "Adverb indicating that a specific life experience has occurred exactly one time." },
+        { word: "twice", translation: "Adverb indicating that a specific life experience has occurred exactly two times." },
+        { word: "seen", translation: "The past participle form of the irregular verb 'see', used to describe visual experiences." },
+        { word: "done", translation: "The past participle form of the irregular verb 'do', used to express completed tasks or activities." },
+        { word: "eaten", translation: "The past participle form of the irregular verb 'eat', describing food consumption experiences." },
+        { word: "drunk", translation: "The past participle form of the irregular verb 'drink', describing liquid consumption experiences." },
+        { word: "ridden", translation: "The past participle form of the irregular verb 'ride', describing bicycle, horse, or motorcycle experiences." },
+        { word: "flown", translation: "The past participle form of the irregular verb 'fly', describing aviation or airplane travel experiences." },
+        { word: "written", translation: "The past participle form of the irregular verb 'write', describing authored text or compositions." },
+        { word: "spoken", translation: "The past participle form of the irregular verb 'speak', describing verbal language use." },
+        { word: "met", translation: "The past participle form of the irregular verb 'meet', describing introductions to individuals." },
+        { word: "swum", translation: "The past participle form of the irregular verb 'swim', describing aquatic locomotive experiences." },
+        { word: "may", translation: "A modal verb used to express a strong possibility or to ask for formal permission." },
+        { word: "might", translation: "A modal verb used to express a weaker, tentative possibility or future uncertainty." },
+        { word: "could", translation: "A modal verb used to express general past ability, options, or realistic current possibilities." },
+        { word: "perhaps", translation: "Adverb used to introduce a concept expressing a tentative possibility; synonymous with maybe." },
+        { word: "maybe", translation: "Adverb used to express that something is possible but not certain to happen." },
+        { word: "possibility", translation: "A distinct chance or condition that something might happen, exist, or be true." },
+        { word: "choice", translation: "An act of selecting, picking, or choosing between two or more alternative options." },
+        { word: "option", translation: "A thing or course of action that is or may be chosen from a set of alternatives." },
+        { word: "decision", translation: "A final resolution or conclusion reached after consideration of various options." },
+        { word: "recommendation", translation: "A suggestion or piece of advice putting forward a preferred choice for someone." },
+        { word: "suggestion", translation: "An idea or plan put forward for consideration, critique, or implementation." },
+        { word: "advice", translation: "An opinion or recommendation offered to guide a person's behavior or choices." },
+        { word: "healthy", translation: "Indicating or promoting physical or mental well-being; free from illness." },
+        { word: "unhealthy", translation: "Harmful to physical health; likely to cause illness, damage, or bodily decay." },
+        { word: "habits", translation: "Settled, regular tendencies or practices that are hard to give up or change." },
+        { word: "lifestyle", translation: "The typical way of life, habits, and daily behaviors of an individual or group." },
+        { word: "improve", translation: "To make something significantly better or to achieve a higher state of quality." }
+    ],
+    grammar: [
+        {
+            rules: "Present Perfect Structure: Construct sentences using 'Subject + have/has + past participle'. Use 'has' exclusively for third-person singular subjects (he, she, it).",
+            examples: ["I have seen that new action movie twice.", "My sister has never flown in an international airplane before.", "They have been to Miami three times since they moved."]
+        },
+        {
+            rules: "Present Perfect for Indefinite Life Experiences: Use this tense to describe actions that occurred at an unnamed, non-specific time in the past where the experience matters more than the date.",
+            examples: ["Have you ever ridden a camel in the desert?", "Have you ever tried extreme skydiving?", "I have never met a professional soccer athlete in my life."]
+        },
+        {
+            rules: "Adverbs Ever, Never, Already, and Yet: Place 'ever' (questions) and 'never' (negatives) before the participle. Put 'already' between 'have/has' and the verb for early events. Place 'yet' at the absolute end of negative clauses and questions.",
+            examples: ["I have already done my laundry.", "We haven't finished our final English project yet.", "Has she called her parents today? - No, she hasn't yet."]
+        },
+        {
+            rules: "Present Perfect vs. Simple Past Contrast: Use the Present Perfect for general life experiences with no specific time marker. Instantly switch to the Simple Past the moment you introduce a specific time, date, or explicit detail.",
+            examples: ["Have you ever been to Paris? - Yes, I went there in 2023.", "I lost my car keys yesterday morning, but luckily I found them.", "We visited a beautiful national park last weekend and took photos."]
+        },
+        {
+            rules: "Modals for Future Possibility (May and Might): Use 'may' or 'might' followed directly by a base verb to express an open possibility, doubt, or a current plan that is not 100% certain.",
+            examples: ["I might order the seafood pasta instead.", "Don't walk outside without a jacket. It may get very cold tonight.", "He could be working late at his office downtown."]
+        },
+        {
+            rules: "Modals for Options and Recommendations (Could and Should): Use 'could' to offer open, safe alternatives or options. Use 'should' to deliver a much stronger, more direct piece of advice or personal recommendation.",
+            examples: ["If you want to get a cheap ticket, you could try booking online.", "What should I do for my stomachache? - You should drink mint tea."]
+        }
+    ],
+    quiz: [
+        { q: "Have you _______ ridden a camel in the desert?", a: ["ever", "never", "yet"], c: "ever" },
+        { q: "I have _______ seen that new action movie twice. I don't want to watch it again.", a: ["yet", "already", "never"], c: "already" },
+        { q: "We haven't finished our final English project _______.", a: ["already", "ever", "yet"], c: "yet" },
+        { q: "I am not sure what I want to eat. I _______ order the seafood pasta.", a: ["might", "couldn't", "have to"], c: "might" },
+        { q: "Have you ever been to Paris? - Yes, I _______ there in 2023 with my family.", a: ["have gone", "went", "have been"], c: "went" },
+        { q: "My sister _______ never flown in an international airplane before.", a: ["have", "has", "is"], c: "has" },
+        { q: "If you want to get a cheap flight ticket, you _______ try booking online on a Tuesday.", a: ["could", "yet", "might not"], c: "could" },
+        { q: "Identify the mistake: 'He has wrote three complete books in English this year.'", a: ["has", "wrote", "books"], c: "wrote" },
+        { q: "I _______ my car keys yesterday morning, but luckily I found them under the sofa.", a: ["have lost", "lost", "lose"], c: "lost" },
+        { q: "They have _______ eaten raw octopus. They hate exotic seafood.", a: ["ever", "already", "never"], c: "never" },
+        { q: "_______ your brother ever tried extreme skydiving?", a: ["Have", "Has", "Did"], c: "Has" },
+        { q: "Don't walk outside without a jacket. It _______ get very cold tonight.", a: ["may", "have to", "yet"], c: "may" },
+        { q: "I have _______ done my laundry, so my clothes are completely clean and ready.", a: ["yet", "already", "ever"], c: "already" },
+        { q: "Identify the mistake: 'Have you ever ate authentic Italian lasagna?'", a: ["Have", "ever", "ate"], c: "ate" },
+        { q: "Where is Robert? - I am not sure. He _______ be working late at his office downtown.", a: ["could", "yet", "has to"], c: "could" },
+        { q: "We _______ a beautiful national park last weekend and took many photos.", a: ["have visited", "visited", "visit"], c: "visited" },
+        { q: "Has she called her parents today? - No, she hasn't _______.", a: ["already", "ever", "yet"], c: "yet" },
+        { q: "I have _______ met a professional soccer athlete in my entire life.", a: ["never", "ever", "already"], c: "never" },
+        { q: "What should I do for my stomachache? - You _______ drink some warm mint tea.", a: ["might", "should", "yet"], c: "should" },
+        { q: "They _______ to Miami three times since they moved to the United States.", a: ["went", "have been", "were"], a: ["went", "have been", "were"], c: "have been" }
+    ]
+}
         };
 
         /* =====================================================================
@@ -658,609 +1382,765 @@
         }
 
         /* =====================================================================
-           🛠️ COMPILACIÓN DE LOS 12 MOTORES DE JUEGO (ESTÁNDAR ANTI-COLAPSO)
-           ===================================================================== */
+   🛠️ COMPILACIÓN DE LOS 12 MOTORES DE JUEGO (ESTÁNDAR ANTI-COLAPSO) - PARTE 1
+   ===================================================================== */
 
-        // 1. ENGINE: FLASHCARDS
-        function buildFlashcardsEngine(stage, vocab) {
-            let index = 0;
-            function render() {
-                stage.innerHTML = `
-                    <div class="w-full max-w-md flex flex-col items-center gap-6">
-                        <div class="flashcard-scene w-full h-64 cursor-pointer" onclick="this.querySelector('.flashcard-inner').classList.toggle('flipped')">
-                            <div class="flashcard-inner w-full h-full text-white font-black rounded-2xl shadow-xl">
-                                <div class="flashcard-front bg-slate-800 border-2 border-slate-700 flex flex-col items-center justify-center p-6 rounded-2xl">
-                                    <span class="text-xs text-amber-400 tracking-widest uppercase mb-2">English Word</span>
-                                    <p class="text-3xl">${vocab[index].word}</p>
-                                    <span class="text-xs text-slate-400 mt-8"><i class="fa-solid fa-rotate"></i> Click to flip</span>
-                                </div>
-                                <div class="flashcard-back bg-emerald-700 border-2 border-emerald-600 flex flex-col items-center justify-center p-6 rounded-2xl">
-                                    <span class="text-xs text-emerald-200 tracking-widest uppercase mb-2">Spanish Translation</span>
-                                    <p class="text-3xl">${vocab[index].translation}</p>
-                                    <span class="text-xs text-emerald-300 mt-8"><i class="fa-solid fa-rotate"></i> Click to see front</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex gap-4 w-full">
-                            <button id="card-prev" class="flex-1 bg-slate-700 text-white p-4 rounded-xl font-bold hover:bg-slate-600 disabled:opacity-30">PREVIOUS</button>
-                            <button id="card-next" class="flex-1 bg-slate-700 text-white p-4 rounded-xl font-bold hover:bg-slate-600 disabled:opacity-30">NEXT</button>
-                        </div>
-                        <p class="text-sm font-bold text-[var(--text-body)]">Card ${index + 1} of ${vocab.length}</p>
-                    </div>
-                `;
-                document.getElementById('card-prev').disabled = index === 0;
-                document.getElementById('card-next').disabled = index === vocab.length - 1;
-                document.getElementById('card-prev').onclick = () => { index--; render(); };
-                document.getElementById('card-next').onclick = () => { index++; render(); };
-            }
-            render();
-        }
+// 1. ENGINE: FLASHCARDS
+function buildFlashcardsEngine(stage, vocab) {
+    if (!vocab || vocab.length === 0) {
+        stage.innerHTML = `<div class="text-center text-slate-400">No vocabulary data available.</div>`;
+        return;
+    }
+    let index = 0;
 
-        // 2. ENGINE: QUIZ
-        function buildQuizEngine(stage, quizData) {
-            let index = 0;
-            function render() {
-                const item = quizData[index];
-                stage.innerHTML = `
-                    <div class="w-full max-w-2xl flex flex-col gap-4">
-                        <div class="bg-slate-800 border border-slate-700 p-6 rounded-xl text-center">
-                            <p class="text-xs text-red-400 tracking-wider uppercase mb-2 font-mono">Question ${index + 1} of ${quizData.length}</p>
-                            <p class="text-white font-bold">${item.q}</p>
+    function render() {
+        stage.innerHTML = `
+            <div class="w-full max-w-md flex flex-col items-center gap-6">
+                <div class="flashcard-scene w-full h-64 cursor-pointer">
+                    <div class="flashcard-inner w-full h-full text-white font-black rounded-2xl shadow-xl transition-transform duration-500 relative style-3d">
+                        <div class="flashcard-front absolute inset-0 bg-slate-800 border-2 border-slate-700 flex flex-col items-center justify-center p-6 rounded-2xl backface-hidden">
+                            <span class="text-xs text-amber-400 tracking-widest uppercase mb-2">English Word</span>
+                            <p class="text-3xl text-center">${vocab[index].word}</p>
+                            <span class="text-xs text-slate-400 mt-8"><i class="fa-solid fa-rotate"></i> Click to flip</span>
                         </div>
-                        <div class="space-y-3">
-                            ${item.a.map(opt => `
-                                <button onclick="selectQuizAnswer(this, '${opt}', '${item.c}')" class="w-full text-left bg-slate-700 hover:bg-slate-600 p-4 rounded-xl text-white font-semibold flex items-center gap-3 border border-slate-600">
-                                    <span class="bg-slate-800 text-xs px-2.5 py-1 rounded font-bold">${opt}</span>
-                                </button>
-                            `).join('')}
-                        </div>
-                        <div id="quiz-nav" class="hidden mt-4">
-                            <button id="quiz-next-btn" class="w-full bg-emerald-600 text-white p-4 rounded-xl font-bold hover:bg-emerald-500">CONTINUE</button>
+                        <div class="flashcard-back absolute inset-0 bg-emerald-700 border-2 border-emerald-600 flex flex-col items-center justify-center p-6 rounded-2xl backface-hidden rotate-y-180">
+                            <span class="text-xs text-emerald-200 tracking-widest uppercase mb-2">CLUE / TRANSLATION</span>
+                            <p class="text-xl text-center font-medium">${vocab[index].translation}</p>
+                            <span class="text-xs text-emerald-300 mt-8"><i class="fa-solid fa-rotate"></i> Click to see front</span>
                         </div>
                     </div>
-                `;
-            }
-            window.selectQuizAnswer = (btn, selected, correct) => {
-                const buttons = btn.parentElement.querySelectorAll('button');
+                </div>
+                <div class="flex gap-4 w-full">
+                    <button id="card-prev" class="flex-1 bg-slate-700 text-white p-4 rounded-xl font-bold hover:bg-slate-600 disabled:opacity-30 disabled:pointer-events-none">PREVIOUS</button>
+                    <button id="card-next" class="flex-1 bg-slate-700 text-white p-4 rounded-xl font-bold hover:bg-slate-600 disabled:opacity-30 disabled:pointer-events-none">NEXT</button>
+                </div>
+                <p class="text-sm font-bold text-slate-400">Card ${index + 1} of ${vocab.length}</p>
+            </div>
+        `;
+
+        const scene = stage.querySelector('.flashcard-scene');
+        const inner = stage.querySelector('.flashcard-inner');
+        scene.onclick = () => inner.classList.toggle('flipped');
+
+        const prevBtn = stage.querySelector('#card-prev');
+        const nextBtn = stage.querySelector('#card-next');
+
+        prevBtn.disabled = index === 0;
+        nextBtn.disabled = index === vocab.length - 1;
+
+        prevBtn.onclick = (e) => { e.stopPropagation(); index--; render(); };
+        nextBtn.onclick = (e) => { e.stopPropagation(); index++; render(); };
+    }
+    render();
+}
+
+// 2. ENGINE: QUIZ
+function buildQuizEngine(stage, quizData) {
+    if (!quizData || quizData.length === 0) {
+        stage.innerHTML = `<div class="text-center text-slate-400">No quiz data available.</div>`;
+        return;
+    }
+    let index = 0;
+
+    function render() {
+        const item = quizData[index];
+        stage.innerHTML = `
+            <div class="w-full max-w-2xl flex flex-col gap-4">
+                <div class="bg-slate-800 border border-slate-700 p-6 rounded-xl text-center">
+                    <p class="text-xs text-red-400 tracking-wider uppercase mb-2 font-mono">Question ${index + 1} of ${quizData.length}</p>
+                    <p class="text-white font-bold text-lg">${item.q}</p>
+                </div>
+                <div class="quiz-options space-y-3">
+                    ${item.a.map((opt, oIdx) => `
+                        <button data-opt="${opt}" class="w-full text-left bg-slate-700 hover:bg-slate-600 p-4 rounded-xl text-white font-semibold flex items-center gap-3 border border-slate-600 transition-all">
+                            <span class="bg-slate-800 text-xs px-2.5 py-1 rounded font-bold">${String.fromCharCode(65 + oIdx)}</span>
+                            <span>${opt}</span>
+                        </button>
+                    `).join('')}
+                </div>
+                <div id="quiz-nav" class="hidden mt-4">
+                    <button id="quiz-next-btn" class="w-full bg-emerald-600 text-white p-4 rounded-xl font-bold hover:bg-emerald-500 tracking-wide">CONTINUE</button>
+                </div>
+            </div>
+        `;
+
+        const buttons = stage.querySelectorAll('.quiz-options button');
+        buttons.forEach(btn => {
+            btn.onclick = () => {
                 buttons.forEach(b => b.disabled = true);
-                if (selected === correct) {
+                const selected = btn.getAttribute('data-opt');
+                
+                if (selected === item.c) {
                     btn.classList.add('bg-emerald-600', 'border-emerald-400');
                 } else {
                     btn.classList.add('bg-rose-600', 'border-rose-400');
                     buttons.forEach(b => {
-                        if (b.innerText.includes(correct)) b.classList.add('bg-emerald-600', 'border-emerald-400');
+                        if (b.getAttribute('data-opt') === item.c) {
+                            b.classList.add('bg-emerald-600', 'border-emerald-400');
+                        }
                     });
                 }
-                document.getElementById('quiz-nav').classList.remove('hidden');
-                document.getElementById('quiz-next-btn').onclick = () => {
+                
+                const navDiv = stage.querySelector('#quiz-nav');
+                navDiv.classList.remove('hidden');
+                stage.querySelector('#quiz-next-btn').onclick = () => {
                     index++;
                     if (index < quizData.length) render();
-                    else stage.innerHTML = `<div class="text-center text-2xl font-black text-emerald-500"><i class="fa-solid fa-circle-check text-5xl block mb-4"></i>CHALLENGE COMPLETED!</div>`;
+                    else stage.innerHTML = `<div class="text-center text-2xl font-black text-emerald-500 py-8"><i class="fa-solid fa-circle-check text-6xl block mb-4 animate-bounce"></i>CHALLENGE COMPLETED!</div>`;
                 };
             };
-            render();
-        }
+        });
+    }
+    render();
+}
 
-        // 3. ENGINE: FILL BLANKS
-        function buildFillBlanksEngine(stage, quizData) {
-            let index = 0;
-            function render() {
-                const item = quizData[index];
-                const blankSentence = item.q.replace("___", "______");
-                stage.innerHTML = `
-                    <div class="w-full max-w-2xl flex flex-col gap-6">
-                        <div class="bg-slate-800 border border-slate-700 p-8 rounded-xl text-center">
-                            <p class="text-2xl text-white font-bold tracking-wide">${blankSentence}</p>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            ${item.a.map(opt => `
-                                <button onclick="checkBlankAnswer(this, '${opt}', '${item.c}')" class="bg-slate-700 hover:bg-slate-600 text-white font-bold p-5 rounded-xl border border-slate-600 text-lg">${opt}</button>
-                            `).join('')}
-                        </div>
-                        <div id="blank-nav" class="hidden">
-                            <button id="blank-next-btn" class="w-full bg-indigo-600 text-white p-4 rounded-xl font-bold text-lg">NEXT QUESTION</button>
-                        </div>
-                    </div>
-                `;
-            }
-            window.checkBlankAnswer = (btn, selected, correct) => {
-                const buttons = btn.parentElement.querySelectorAll('button');
-                buttons.forEach(b => b.disabled = true);
-                if(selected === correct) {
-                    btn.className = "bg-emerald-600 text-white font-bold p-5 rounded-xl text-lg";
-                } else {
-                    btn.className = "bg-rose-600 text-white font-bold p-5 rounded-xl text-lg";
-                    buttons.forEach(b => { if(b.innerText === correct) b.className = "bg-emerald-600 text-white font-bold p-5 rounded-xl text-lg"; });
-                }
-                document.getElementById('blank-nav').classList.remove('hidden');
-                document.getElementById('blank-next-btn').onclick = () => {
-                    index++;
-                    if (index < quizData.length) render();
-                    else stage.innerHTML = `<div class="text-center text-2xl font-black text-indigo-500"><i class="fa-solid fa-trophy text-5xl block mb-4"></i>PERFECT JOB!</div>`;
-                };
-            };
-            render();
-        }
+// 3. ENGINE: FILL BLANKS
+function buildFillBlanksEngine(stage, quizData) {
+    if (!quizData || quizData.length === 0) {
+        stage.innerHTML = `<div class="text-center text-slate-400">No data available.</div>`;
+        return;
+    }
+    let index = 0;
 
-        // 4. ENGINE: WORD SEARCH
-        function buildWordSearchEngine(stage, vocab) {
-            const targetWords = vocab.map(v => v.word.toUpperCase().replace(/\s+/g, '')).slice(0, 4);
-            const size = 10;
-            let grid = Array(size).fill(null).map(() => Array(size).fill(''));
-            
-            // Colocación básica horizontal de palabras objetivo
-            targetWords.forEach((word, idx) => {
-                let row = idx * 2;
-                let startCol = Math.floor(Math.random() * (size - word.length));
-                for(let i=0; i<word.length; i++) {
-                    grid[row][startCol + i] = word[i];
-                }
-            });
-            
-            // Relleno aleatorio
-            const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            for(let r=0; r<size; r++) {
-                for(let c=0; c<size; c++) {
-                    if(grid[r][c] === '') grid[r][c] = alphabet[Math.floor(Math.random() * alphabet.length)];
-                }
-            }
-
-            let foundWords = [];
-            stage.innerHTML = `
-                <div class="flex flex-col md:flex-row gap-8 items-center w-full max-w-4xl">
-                    <div class="grid grid-cols-10 gap-1 bg-slate-800 p-3 rounded-xl border border-slate-700 w-full md:w-auto">
-                        ${grid.map((row, rIdx) => row.map((letter, cIdx) => `
-                            <button data-row="${rIdx}" data-col="${cIdx}" onclick="cellClick(this, '${letter}')" class="w-10 h-10 aspect-square bg-slate-700 text-white font-black text-sm rounded flex items-center justify-center hover:bg-slate-600">${letter}</button>
-                        `).join('')).join('')}
-                    </div>
-                    <div class="flex-1 flex flex-col gap-4 w-full">
-                        <h4 class="text-sm font-bold text-[var(--text-title)] uppercase tracking-wider">Words to find:</h4>
-                        <div class="grid grid-cols-2 gap-2">
-                            ${targetWords.map(w => `<div id="ws-${w}" class="bg-slate-800 border border-slate-700 p-3 rounded-xl text-center font-bold text-slate-400 line-through-target">${w}</div>`).map(html => html).join('')}
-                        </div>
-                        <div class="mt-4 p-3 bg-slate-800/50 border border-slate-700 rounded-xl">
-                            <p class="text-xs text-slate-400">Current Selection: <span id="ws-current" class="text-base font-black text-amber-500 ml-2"></span></p>
-                        </div>
-                        <button onclick="clearSearchSelection()" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 rounded-xl">CLEAR SELECTION</button>
-                    </div>
+    function render() {
+        const item = quizData[index];
+        const blankSentence = item.q.includes("___") ? item.q.replace("___", "_______") : item.q;
+        stage.innerHTML = `
+            <div class="w-full max-w-2xl flex flex-col gap-6">
+                <div class="bg-slate-800 border border-slate-700 p-8 rounded-xl text-center">
+                    <p class="text-2xl text-white font-bold tracking-wide">${blankSentence}</p>
                 </div>
-            `;
-
-            let currentString = "";
-            let selectedCoords = [];
-
-            window.cellClick = (btn, letter) => {
-                if(btn.classList.contains('bg-emerald-600')) return;
-                btn.classList.toggle('bg-amber-500');
-                
-                const r = btn.getAttribute('data-row');
-                const c = btn.getAttribute('data-col');
-                
-                if(btn.classList.contains('bg-amber-500')) {
-                    currentString += letter;
-                    selectedCoords.push({r, c, btn});
-                } else {
-                    currentString = currentString.replace(letter, '');
-                    selectedCoords = selectedCoords.filter(coord => !(coord.r === r && coord.c === c));
-                }
-                
-                document.getElementById('ws-current').innerText = currentString;
-                
-                if(targetWords.includes(currentString) && !foundWords.includes(currentString)) {
-                    foundWords.push(currentString);
-                    document.getElementById(`ws-${currentString}`).className = "bg-emerald-900 border border-emerald-700 p-3 rounded-xl text-center font-bold text-emerald-400 line-through";
-                    selectedCoords.forEach(coord => {
-                        coord.btn.className = "w-10 h-10 bg-emerald-600 text-white font-black text-sm rounded flex items-center justify-center";
-                    });
-                    clearSearchSelection();
-                    
-                    if(foundWords.length === targetWords.length) {
-                        stage.innerHTML = `<div class="text-center text-2xl font-black text-emerald-500"><i class="fa-solid fa-face-smile text-5xl block mb-4"></i>FANTASTIC! WORDS FOUND!</div>`;
-                    }
-                }
-            };
-
-            window.clearSearchSelection = () => {
-                selectedCoords.forEach(coord => {
-                    if(!coord.btn.classList.contains('bg-emerald-600')) {
-                        coord.btn.className = "w-10 h-10 bg-slate-700 text-white font-black text-sm rounded flex items-center justify-center hover:bg-slate-600";
-                    }
-                });
-                currentString = "";
-                selectedCoords = [];
-                document.getElementById('ws-current').innerText = "";
-            };
-        }
-
-        // 5. ENGINE: MEMORY MATCH
-        function buildMemoryMatchEngine(stage, vocab) {
-            let selectedItems = vocab.slice(0, 4);
-            let deck = [];
-            selectedItems.forEach((item, idx) => {
-                deck.push({ id: idx, text: item.word, type: 'eng', pairId: idx });
-                deck.push({ id: idx, text: item.translation, type: 'esp', pairId: idx });
-            });
-            deck.sort(() => Math.random() - 0.5);
-
-            stage.innerHTML = `
-                <div id="memory-board" class="grid grid-cols-4 gap-4 w-full max-w-3xl">
-                    ${deck.map((card, index) => `
-                        <button onclick="flipMemoryCard(this, ${index})" class="h-28 bg-slate-800 border-2 border-slate-700 text-slate-800 font-bold rounded-xl flex items-center justify-center p-3 text-sm transition-all overflow-hidden">
-                            <span class="hidden text-white font-black text-base">${card.text}</span>
-                            <span class="card-back-mark text-slate-500 text-2xl font-black">?</span>
-                        </button>
+                <div class="blanks-options grid grid-cols-2 gap-4">
+                    ${item.a.map(opt => `
+                        <button data-opt="${opt}" class="bg-slate-700 hover:bg-slate-600 text-white font-bold p-5 rounded-xl border border-slate-600 text-lg transition-all">${opt}</button>
                     `).join('')}
                 </div>
-            `;
+                <div id="blank-nav" class="hidden">
+                    <button id="blank-next-btn" class="w-full bg-indigo-600 text-white p-4 rounded-xl font-bold text-lg hover:bg-indigo-500">NEXT QUESTION</button>
+                </div>
+            </div>
+        `;
 
-            let firstCard = null;
-            let pairsFound = 0;
-
-            window.flipMemoryCard = (btn, idx) => {
-                if (btn.classList.contains('matched') || btn === firstCard?.btn) return;
-                
-                btn.querySelector('.card-back-mark').classList.add('hidden');
-                btn.querySelector('span:first-child').classList.remove('hidden');
-                btn.classList.add('bg-indigo-600', 'border-indigo-400');
-
-                if (!firstCard) {
-                    firstCard = { btn, cardData: deck[idx] };
-                } else {
-                    const secondCardData = deck[idx];
-                    const buttons = document.querySelectorAll('#memory-board button');
-                    buttons.forEach(b => b.disabled = true);
-
-                    if (firstCard.cardData.pairId === secondCardData.pairId && firstCard.cardData.type !== secondCardData.type) {
-                        // Match exitoso
-                        setTimeout(() => {
-                            firstCard.btn.className = "h-28 bg-emerald-950 border-2 border-emerald-500 text-emerald-400 font-black rounded-xl flex items-center justify-center p-3 text-base matched";
-                            btn.className = "h-28 bg-emerald-950 border-2 border-emerald-500 text-emerald-400 font-black rounded-xl flex items-center justify-center p-3 text-base matched";
-                            firstCard = null;
-                            pairsFound++;
-                            buttons.forEach(b => b.disabled = false);
-                            if (pairsFound === selectedItems.length) {
-                                stage.innerHTML = `<div class="text-center text-2xl font-black text-emerald-500"><i class="fa-solid fa-medal text-5xl block mb-4"></i>EXCELLENT MEMORY SHARPENED!</div>`;
-                            }
-                        }, 600);
-                    } else {
-                        // Error de emparejamiento
-                        setTimeout(() => {
-                            firstCard.btn.className = "h-28 bg-slate-800 border-2 border-slate-700 text-slate-800 font-bold rounded-xl flex items-center justify-center p-3 text-sm";
-                            firstCard.btn.querySelector('.card-back-mark').classList.remove('hidden');
-                            firstCard.btn.querySelector('span:first-child').classList.add('hidden');
-
-                            btn.className = "h-28 bg-slate-800 border-2 border-slate-700 text-slate-800 font-bold rounded-xl flex items-center justify-center p-3 text-sm";
-                            btn.querySelector('.card-back-mark').classList.remove('hidden');
-                            btn.querySelector('span:first-child').classList.add('hidden');
-
-                            firstCard = null;
-                            buttons.forEach(b => b.disabled = false);
-                        }, 1000);
-                    }
-                }
-            };
-        }
-
-        // 6. ENGINE: CATEGORY SORT
-        function buildCategorySortEngine(stage, blockData) {
-            const categories = ["Vocabulary Words", "Grammar Elements"];
-            let items = [];
-            blockData.vocabulary.slice(0, 3).forEach(v => items.push({ text: v.word, cat: "Vocabulary Words" }));
-            blockData.grammar.examples.slice(0, 2).forEach(g => items.push({ text: g, cat: "Grammar Elements" }));
-            items.sort(() => Math.random() - 0.5);
-
-            let index = 0;
-            function render() {
-                if (index >= items.length) {
-                    stage.innerHTML = `<div class="text-center text-2xl font-black text-emerald-500"><i class="fa-solid fa-circle-check text-5xl block mb-4"></i>ALL CATEGORIES SORTED WELL!</div>`;
-                    return;
-                }
-                const current = items[index];
-                stage.innerHTML = `
-                    <div class="w-full max-w-xl flex flex-col gap-6 text-center">
-                        <span class="text-xs font-mono font-bold text-slate-400 tracking-widest uppercase">Classify item ${index + 1} of ${items.length}</span>
-                        <div class="bg-slate-800 border-2 border-slate-700 p-8 rounded-2xl shadow-inner">
-                            <p class="text-2xl font-black text-white tracking-wide">${current.text}</p>
-                        </div>
-                        <div class="flex flex-col sm:flex-row gap-4">
-                            ${categories.map(cat => `
-                                <button onclick="sortItemAction(this, '${cat}', '${current.cat}')" class="flex-1 bg-slate-700 hover:bg-slate-600 text-white font-bold p-4 rounded-xl border border-slate-600">${cat}</button>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            }
-            window.sortItemAction = (btn, selectedCat, correctCat) => {
-                const buttons = btn.parentElement.querySelectorAll('button');
+        const buttons = stage.querySelectorAll('.blanks-options button');
+        buttons.forEach(btn => {
+            btn.onclick = () => {
                 buttons.forEach(b => b.disabled = true);
-                if (selectedCat === correctCat) {
-                    btn.className = "flex-1 bg-emerald-600 text-white font-bold p-4 rounded-xl";
+                const selected = btn.getAttribute('data-opt');
+
+                if (selected === item.c) {
+                    btn.className = "bg-emerald-600 text-white font-bold p-5 rounded-xl text-lg border border-emerald-400";
                 } else {
-                    btn.className = "flex-1 bg-rose-600 text-white font-bold p-4 rounded-xl";
-                    buttons.forEach(b => { if(b.innerText === correctCat) b.className = "flex-1 bg-emerald-600 text-white font-bold p-4 rounded-xl"; });
+                    btn.className = "bg-rose-600 text-white font-bold p-5 rounded-xl text-lg border border-rose-400";
+                    buttons.forEach(b => {
+                        if (b.getAttribute('data-opt') === item.c) b.className = "bg-emerald-600 text-white font-bold p-5 rounded-xl text-lg border border-emerald-400";
+                    });
+                }
+
+                stage.querySelector('#blank-nav').classList.remove('hidden');
+                stage.querySelector('#blank-next-btn').onclick = () => {
+                    index++;
+                    if (index < quizData.length) render();
+                    else stage.innerHTML = `<div class="text-center text-2xl font-black text-indigo-500 py-8"><i class="fa-solid fa-trophy text-6xl block mb-4 text-amber-400 animate-pulse"></i>PERFECT JOB!</div>`;
+                };
+            };
+        });
+    }
+    render();
+}
+
+// 4. ENGINE: WORD SEARCH
+function buildWordSearchEngine(stage, vocab) {
+    if (!vocab || vocab.length === 0) return;
+    const targetWords = vocab.map(v => v.word.toUpperCase().replace(/\s+/g, '')).slice(0, 4);
+    const size = 10;
+    let grid = Array(size).fill(null).map(() => Array(size).fill(''));
+    
+    targetWords.forEach((word, idx) => {
+        let row = idx * 2; 
+        let startCol = Math.floor(Math.random() * (size - word.length + 1));
+        for (let i = 0; i < word.length; i++) {
+            grid[row][startCol + i] = word[i];
+        }
+    });
+    
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
+            if (grid[r][c] === '') grid[r][c] = alphabet[Math.floor(Math.random() * alphabet.length)];
+        }
+    }
+
+    let foundWords = [];
+    let selectedCoords = []; // [{r, c, letter, btn}]
+
+    function updateUI() {
+        const currentString = selectedCoords.map(coord => coord.letter).join('');
+        stage.querySelector('#ws-current').innerText = currentString;
+
+        if (targetWords.includes(currentString) && !foundWords.includes(currentString)) {
+            foundWords.push(currentString);
+            const wordBadge = stage.querySelector(`#ws-${currentString}`);
+            if (wordBadge) wordBadge.className = "bg-emerald-900 border border-emerald-700 p-3 rounded-xl text-center font-bold text-emerald-400 line-through animate-pulse";
+            
+            selectedCoords.forEach(coord => {
+                coord.btn.className = "w-10 h-10 bg-emerald-600 text-white font-black text-sm rounded flex items-center justify-center exact-match";
+                coord.btn.disabled = true;
+            });
+            clearSelection();
+
+            if (foundWords.length === targetWords.length) {
+                stage.innerHTML = `<div class="text-center text-2xl font-black text-emerald-500 py-8"><i class="fa-solid fa-face-smile text-6xl block mb-4 animate-bounce"></i>FANTASTIC! ALL WORDS FOUND!</div>`;
+            }
+        }
+    }
+
+    function clearSelection() {
+        selectedCoords.forEach(coord => {
+            if (!coord.btn.classList.contains('exact-match')) {
+                coord.btn.className = "w-10 h-10 aspect-square bg-slate-700 text-white font-black text-sm rounded flex items-center justify-center hover:bg-slate-600";
+            }
+        });
+        selectedCoords = [];
+        stage.querySelector('#ws-current').innerText = "";
+    }
+
+    stage.innerHTML = `
+        <div class="flex flex-col md:flex-row gap-8 items-center w-full max-w-4xl">
+            <div class="ws-grid grid grid-cols-10 gap-1 bg-slate-800 p-3 rounded-xl border border-slate-700 w-full md:w-auto">
+                ${grid.map((row, rIdx) => row.map((letter, cIdx) => `
+                    <button data-row="${rIdx}" data-col="${cIdx}" data-letter="${letter}" class="w-10 h-10 aspect-square bg-slate-700 text-white font-black text-sm rounded flex items-center justify-center hover:bg-slate-600 transition-colors">${letter}</button>
+                `).join('')).join('')}
+            </div>
+            <div class="flex-1 flex flex-col gap-4 w-full">
+                <h4 class="text-sm font-bold text-slate-300 uppercase tracking-wider">Words to find:</h4>
+                <div class="grid grid-cols-2 gap-2">
+                    ${targetWords.map(w => `<div id="ws-${w}" class="bg-slate-800 border border-slate-700 p-3 rounded-xl text-center font-bold text-slate-400">${w}</div>`).join('')}
+                </div>
+                <div class="mt-4 p-3 bg-slate-800/50 border border-slate-700 rounded-xl">
+                    <p class="text-xs text-slate-400">Current Selection: <span id="ws-current" class="text-base font-black text-amber-500 ml-2"></span></p>
+                </div>
+                <button id="ws-clear-btn" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 rounded-xl tracking-wide">CLEAR SELECTION</button>
+            </div>
+        </div>
+    `;
+
+    stage.querySelectorAll('.ws-grid button').forEach(btn => {
+        btn.onclick = () => {
+            const r = parseInt(btn.getAttribute('data-row'));
+            const c = parseInt(btn.getAttribute('data-col'));
+            const letter = btn.getAttribute('data-letter');
+
+            const index = selectedCoords.findIndex(coord => coord.r === r && coord.c === c);
+            if (index > -1) {
+                btn.className = "w-10 h-10 aspect-square bg-slate-700 text-white font-black text-sm rounded flex items-center justify-center hover:bg-slate-600";
+                selectedCoords.splice(index, 1);
+            } else {
+                btn.className = "w-10 h-10 aspect-square bg-amber-500 text-slate-900 font-black text-sm rounded flex items-center justify-center";
+                selectedCoords.push({ r, c, letter, btn });
+            }
+            updateUI();
+        };
+    });
+
+    stage.querySelector('#ws-clear-btn').onclick = clearSelection;
+}
+
+// 5. ENGINE: MEMORY MATCH
+function buildMemoryMatchEngine(stage, vocab) {
+    if (!vocab || vocab.length === 0) return;
+    let selectedItems = vocab.slice(0, 4);
+    let deck = [];
+    selectedItems.forEach((item, idx) => {
+        deck.push({ text: item.word, type: 'eng', pairId: idx });
+        deck.push({ text: item.translation, type: 'esp', pairId: idx });
+    });
+    deck.sort(() => Math.random() - 0.5);
+
+    stage.innerHTML = `
+        <div id="memory-board" class="grid grid-cols-4 gap-4 w-full max-w-3xl">
+            ${deck.map((card, index) => `
+                <button data-idx="${index}" class="h-28 bg-slate-800 border-2 border-slate-700 font-bold rounded-xl flex items-center justify-center p-3 text-sm transition-all overflow-hidden">
+                    <span class="hidden text-white font-black text-sm text-center card-text">${card.text}</span>
+                    <span class="card-back-mark text-slate-500 text-2xl font-black">?</span>
+                </button>
+            `).join('')}
+        </div>
+    `;
+
+    let firstCard = null;
+    let pairsFound = 0;
+    let lockBoard = false;
+    const buttons = stage.querySelectorAll('#memory-board button');
+
+    buttons.forEach(btn => {
+        btn.onclick = () => {
+            if (lockBoard || btn.classList.contains('matched') || btn === firstCard?.btn) return;
+
+            const idx = parseInt(btn.getAttribute('data-idx'));
+            btn.querySelector('.card-back-mark').classList.add('hidden');
+            btn.querySelector('.card-text').classList.remove('hidden');
+            btn.classList.add('bg-indigo-600', 'border-indigo-400');
+
+            if (!firstCard) {
+                firstCard = { btn, data: deck[idx] };
+            } else {
+                lockBoard = true;
+                const secondCardData = deck[idx];
+
+                if (firstCard.data.pairId === secondCardData.pairId && firstCard.data.type !== secondCardData.type) {
+                    setTimeout(() => {
+                        firstCard.btn.className = "h-28 bg-emerald-950 border-2 border-emerald-500 text-emerald-400 font-black rounded-xl flex items-center justify-center p-3 text-sm matched animate-pulse";
+                        btn.className = "h-28 bg-emerald-950 border-2 border-emerald-500 text-emerald-400 font-black rounded-xl flex items-center justify-center p-3 text-sm matched animate-pulse";
+                        
+                        firstCard = null;
+                        pairsFound++;
+                        lockBoard = false;
+
+                        if (pairsFound === selectedItems.length) {
+                            stage.innerHTML = `<div class="text-center text-2xl font-black text-emerald-500 py-8"><i class="fa-solid fa-medal text-6xl block mb-4 text-amber-400"></i>EXCELLENT MEMORY SHARPENED!</div>`;
+                        }
+                    }, 500);
+                } else {
+                    setTimeout(() => {
+                        firstCard.btn.className = "h-28 bg-slate-800 border-2 border-slate-700 font-bold rounded-xl flex items-center justify-center p-3 text-sm";
+                        firstCard.btn.querySelector('.card-back-mark').classList.remove('hidden');
+                        firstCard.btn.querySelector('.card-text').classList.add('hidden');
+
+                        btn.className = "h-28 bg-slate-800 border-2 border-slate-700 font-bold rounded-xl flex items-center justify-center p-3 text-sm";
+                        btn.querySelector('.card-back-mark').classList.remove('hidden');
+                        btn.querySelector('.card-text').classList.add('hidden');
+
+                        firstCard = null;
+                        lockBoard = false;
+                    }, 1000);
+                }
+            }
+        };
+    });
+}
+
+// 6. ENGINE: CATEGORY SORT
+function buildCategorySortEngine(stage, blockData) {
+    if (!blockData || !blockData.vocabulary || !blockData.grammar) return;
+    const categories = ["Vocabulary Words", "Grammar Elements"];
+    let items = [];
+    blockData.vocabulary.slice(0, 3).forEach(v => items.push({ text: v.word, cat: "Vocabulary Words" }));
+    
+    const examples = blockData.grammar.examples || (blockData.grammar[0] ? blockData.grammar[0].examples : []);
+    examples.slice(0, 2).forEach(g => items.push({ text: g, cat: "Grammar Elements" }));
+    
+    items.sort(() => Math.random() - 0.5);
+    let index = 0;
+
+    function render() {
+        if (index >= items.length) {
+            stage.innerHTML = `<div class="text-center text-2xl font-black text-emerald-500 py-8"><i class="fa-solid fa-circle-check text-6xl block mb-4"></i>ALL CATEGORIES SORTED WELL!</div>`;
+            return;
+        }
+        const current = items[index];
+        stage.innerHTML = `
+            <div class="w-full max-w-xl flex flex-col gap-6 text-center">
+                <span class="text-xs font-mono font-bold text-slate-400 tracking-widest uppercase">Classify item ${index + 1} of ${items.length}</span>
+                <div class="bg-slate-800 border-2 border-slate-700 p-8 rounded-2xl shadow-inner">
+                    <p class="text-xl font-black text-white tracking-wide">${current.text}</p>
+                </div>
+                <div class="sort-actions flex flex-col sm:flex-row gap-4">
+                    ${categories.map(cat => `
+                        <button data-cat="${cat}" class="flex-1 bg-slate-700 hover:bg-slate-600 text-white font-bold p-4 rounded-xl border border-slate-600 transition-all">${cat}</button>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+
+        const buttons = stage.querySelectorAll('.sort-actions button');
+        buttons.forEach(btn => {
+            btn.onclick = () => {
+                buttons.forEach(b => b.disabled = true); // Bloqueo anti-click masivo
+                const selectedCat = btn.getAttribute('data-cat');
+
+                if (selectedCat === current.cat) {
+                    btn.className = "flex-1 bg-emerald-600 text-white font-bold p-4 rounded-xl border border-emerald-400";
+                } else {
+                    btn.className = "flex-1 bg-rose-600 text-white font-bold p-4 rounded-xl border border-rose-400";
+                    buttons.forEach(b => {
+                        if (b.getAttribute('data-cat') === current.cat) b.className = "flex-1 bg-emerald-600 text-white font-bold p-4 rounded-xl border border-emerald-400";
+                    });
                 }
                 setTimeout(() => { index++; render(); }, 1200);
             };
-            render();
+        });
+    }
+    render();
+}
+
+// 7. ENGINE: HANGMAN
+function buildHangmanEngine(stage, vocab) {
+    if (!vocab || vocab.length === 0) return;
+    const item = vocab[Math.floor(Math.random() * vocab.length)];
+    const targetWord = item.word.toUpperCase().replace(/[^A-Z]/g, '');
+    let guessedLetters = [];
+    let failures = 0;
+    const maxFailures = 5;
+
+    function render() {
+        let displayStr = "";
+        for (let char of targetWord) {
+            if (guessedLetters.includes(char)) {
+                displayStr += `<span class="mx-1 border-b-4 border-emerald-500 px-1 text-2xl font-black text-white">${char}</span>`;
+            } else {
+                displayStr += `<span class="mx-1 border-b-4 border-slate-600 px-1 text-2xl font-black text-slate-500">_</span>`;
+            }
         }
 
-        // 7. ENGINE: HANGMAN
-        function buildHangmanEngine(stage, vocab) {
-            const item = vocab[Math.floor(Math.random() * vocab.length)];
-            const targetWord = item.word.toUpperCase().replace(/[^A-Z]/g, '');
-            let guessedLetters = [];
-            let failures = 0;
-            const maxFailures = 5;
+        const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+        stage.innerHTML = `
+            <div class="w-full max-w-2xl flex flex-col items-center gap-6">
+                <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl w-full text-center">
+                    <span class="text-xs text-amber-500 font-bold uppercase tracking-widest block mb-1">Clue / Meaning:</span>
+                    <p class="text-lg font-medium text-slate-200">"${item.translation}"</p>
+                </div>
+                <div id="hangman-word-slots" class="flex justify-center my-6 py-2 overflow-x-auto max-w-full">
+                    ${displayStr}
+                </div>
+                <div class="w-full bg-slate-700 h-3 rounded-full overflow-hidden relative">
+                    <div class="bg-rose-500 h-full transition-all duration-300" style="width: ${(failures / maxFailures) * 100}%"></div>
+                </div>
+                <p class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest">Integrity Counter: ${maxFailures - failures} attempts remaining</p>
+                <div class="hangman-keyboard grid grid-cols-7 gap-1.5 w-full mt-4">
+                    ${alphabet.map(letter => {
+                        const used = guessedLetters.includes(letter);
+                        return `<button data-letter="${letter}" ${used ? 'disabled' : ''} class="p-2 font-bold rounded text-sm transition-all ${used ? 'bg-slate-800 text-slate-600 pointer-events-none' : 'bg-slate-700 text-white hover:bg-slate-600'}">${letter}</button>`;
+                    }).join('')}
+                </div>
+            </div>
+        `;
 
-            function render() {
-                let displayStr = "";
-                for(let char of targetWord) {
-                    if(guessedLetters.includes(char)) displayStr += `<span class="mx-1 border-b-4 border-emerald-500 px-1 text-2xl font-black text-white">${char}</span>`;
-                    else displayStr += `<span class="mx-1 border-b-4 border-slate-600 px-1 text-2xl font-black text-slate-500">_</span>`;
-                }
-
-                const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-                stage.innerHTML = `
-                    <div class="w-full max-w-2xl flex flex-col items-center gap-6">
-                        <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl w-full text-center">
-                            <span class="text-xs text-amber-500 font-bold uppercase tracking-widest block mb-1">Clue/Translation:</span>
-                            <p class="text-xl font-bold text-slate-200">"${item.translation}"</p>
-                        </div>
-                        <div id="hangman-word-slots" class="flex justify-center my-6 py-2 overflow-x-auto max-w-full">
-                            ${displayStr}
-                        </div>
-                        <div class="w-full bg-slate-700 h-3 rounded-full overflow-hidden relative">
-                            <div class="bg-rose-500 h-full transition-all duration-300" style="width: ${(failures / maxFailures) * 100}%"></div>
-                        </div>
-                        <p class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest">Integrity Counter: ${maxFailures - failures} attempts remaining</p>
-                        <div id="keyboard" class="grid grid-cols-7 gap-1.5 w-full mt-4">
-                            ${alphabet.map(letter => {
-                                const used = guessedLetters.includes(letter);
-                                return `<button onclick="guessLetterAction(this, '${letter}')" ${used ? 'disabled' : ''} class="p-2 font-bold rounded text-sm ${used ? 'bg-slate-800 text-slate-600' : 'bg-slate-700 text-white hover:bg-slate-600'}">${letter}</button>`;
-                            }).join('')}
-                        </div>
-                    </div>
-                `;
-            }
-
-            window.guessLetterAction = (btn, letter) => {
+        stage.querySelectorAll('.hangman-keyboard button').forEach(btn => {
+            btn.onclick = () => {
+                const letter = btn.getAttribute('data-letter');
                 guessedLetters.push(letter);
-                if(!targetWord.includes(letter)) {
-                    failures++;
-                }
                 
-                // Comprobaciones de Estado Final
+                if (!targetWord.includes(letter)) failures++;
+
                 const won = targetWord.split("").every(l => guessedLetters.includes(l));
-                if(won) {
-                    stage.innerHTML = `<div class="text-center text-2xl font-black text-emerald-500"><i class="fa-solid fa-trophy text-5xl block mb-4"></i>CRACKED IT! WORD WAS "${targetWord}"</div>`;
-                } else if(failures >= maxFailures) {
-                    stage.innerHTML = `<div class="text-center text-2xl font-black text-rose-500"><i class="fa-solid fa-skull-crossbones text-5xl block mb-4"></i>GAME OVER! CORRECT WORD: "${targetWord}"</div>`;
+                if (won) {
+                    stage.innerHTML = `<div class="text-center text-2xl font-black text-emerald-500 py-8"><i class="fa-solid fa-trophy text-6xl block mb-4 text-amber-400 animate-bounce"></i>CRACKED IT! THE WORD WAS "${targetWord}"</div>`;
+                } else if (failures >= maxFailures) {
+                    stage.innerHTML = `<div class="text-center text-2xl font-black text-rose-500 py-8"><i class="fa-solid fa-skull-crossbones text-6xl block mb-4 animate-pulse"></i>GAME OVER!<br><span class="text-base text-slate-400 font-normal">Correct word was:</span> <span class="text-white">${targetWord}</span></div>`;
                 } else {
                     render();
                 }
             };
-            render();
-        }
+        });
+    }
+    render();
+}
 
         // 8. ENGINE: WORD WHEEL
-        function buildWordWheelEngine(stage, vocab) {
-            const validWords = vocab.map(v => v.word.toUpperCase());
-            const letters = ["A", "E", "O", "T", "R", "S", "I", "N", "C", "L"];
-            let userBuild = "";
+function buildWordWheelEngine(stage, vocab) {
+    const validWords = vocab.map(v => v.word.toUpperCase());
+    const letters = ["A", "E", "O", "T", "R", "S", "I", "N", "C", "L"];
+    let userBuild = "";
 
-            function render() {
-                stage.innerHTML = `
-                    <div class="w-full max-w-md flex flex-col items-center gap-6">
-                        <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl w-full text-center">
-                            <span class="text-xs text-slate-400 font-bold block mb-1">Constructed String:</span>
-                            <p id="wheel-string" class="text-3xl font-black tracking-widest text-amber-500 min-h-[36px]">${userBuild}</p>
-                        </div>
-                        <div class="grid grid-cols-4 gap-3 w-full">
-                            ${letters.map(l => `<button onclick="wheelAddLetter('${l}')" class="bg-slate-700 hover:bg-slate-600 text-white font-black text-lg p-4 rounded-xl border border-slate-600">${l}</button>`).join('')}
-                        </div>
-                        <div class="flex gap-2 w-full mt-2">
-                            <button onclick="wheelClear()" class="flex-1 bg-slate-800 border border-slate-700 text-rose-400 font-bold p-3 rounded-xl">CLEAR</button>
-                            <button onclick="wheelSubmit()" class="flex-1 bg-emerald-600 text-white font-bold p-3 rounded-xl hover:bg-emerald-500">SUBMIT VALUE</button>
-                        </div>
-                        <div class="w-full text-left bg-slate-800/40 p-3 rounded-xl border border-slate-700">
-                            <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Target suggestions match length:</p>
-                            <p class="text-xs text-slate-500">Try creating words matching vocabulary strings.</p>
-                        </div>
-                    </div>
-                `;
-            }
-
-            window.wheelAddLetter = (l) => { userBuild += l; document.getElementById('wheel-string').innerText = userBuild; };
-            window.wheelClear = () => { userBuild = ""; document.getElementById('wheel-string').innerText = ""; };
-            window.wheelSubmit = () => {
-                let match = validWords.some(w => w.includes(userBuild)) && userBuild.length >= 2;
-                if(match) {
-                    stage.innerHTML = `<div class="text-center text-2xl font-black text-emerald-500"><i class="fa-solid fa-circle-check text-5xl block mb-4"></i>VALID CHAIN DISCOVERED!</div>`;
-                } else {
-                    alert("String does not match block combinations. Try again!");
-                    wheelClear();
-                }
-            };
-            render();
-        }
-
-        // 9. ENGINE: TIC-TAC-TOE
-        function buildTicTacToeEngine(stage, quizData) {
-            let board = Array(9).fill('');
-            let questionPool = [...quizData];
-
-            function render() {
-                stage.innerHTML = `
-                    <div class="w-full max-w-md flex flex-col items-center gap-4">
-                        <p class="text-xs font-bold text-slate-400 tracking-wider text-center uppercase">Click any cell to answer a question and place your mark (X)</p>
-                        <div class="grid grid-cols-3 gap-2 bg-slate-800 p-3 rounded-xl border border-slate-700 w-full aspect-square">
-                            ${board.map((cell, idx) => `
-                                <button onclick="triggerTicCell(${idx})" class="bg-slate-700 text-white text-3xl font-black rounded-xl flex items-center justify-center hover:bg-slate-600">${cell}</button>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            }
-
-            window.triggerTicCell = (idx) => {
-                if(board[idx] !== '') return;
-                const item = questionPool[Math.floor(Math.random() * questionPool.length)];
-                
-                stage.innerHTML = `
-                    <div class="w-full max-w-xl flex flex-col gap-4">
-                        <div class="bg-slate-800 p-5 rounded-xl border border-slate-700 text-center">
-                            <p class="text-white font-bold">${item.q}</p>
-                        </div>
-                        <div class="space-y-2">
-                            ${item.a.map(opt => `<button onclick="resolveTicCell(${idx}, '${opt}', '${item.c}')" class="w-full bg-slate-700 text-white p-4 rounded-xl font-medium text-left border border-slate-600 hover:bg-slate-600">${opt}</button>`).join('')}
-                        </div>
-                    </div>
-                `;
-            };
-
-            window.resolveTicCell = (idx, selected, correct) => {
-                if(selected === correct) {
-                    board[idx] = 'X';
-                    // Pequeña IA aleatoria para oponente (O)
-                    let empties = board.map((c, i) => c === '' ? i : null).filter(v => v !== null);
-                    if(empties.length > 0) {
-                        let aiChoice = empties[Math.floor(Math.random() * empties.length)];
-                        board[aiChoice] = 'O';
-                    }
-                } else {
-                    alert("Wrong answer! Turn skipped.");
-                    let empties = board.map((c, i) => c === '' ? i : null).filter(v => v !== null);
-                    if(empties.length > 0) {
-                        let aiChoice = empties[Math.floor(Math.random() * empties.length)];
-                        board[aiChoice] = 'O';
-                    }
-                }
-                
-                // Comprobación rápida de fin
-                if(board.filter(c => c === '').length === 0) {
-                    stage.innerHTML = `<div class="text-center text-2xl font-black text-indigo-500"><i class="fa-solid fa-flag text-5xl block mb-4"></i>BOARD COMPLETE!</div>`;
-                } else {
-                    render();
-                }
-            };
-            render();
-        }
-
-        // 10. ENGINE: FIND ERRORS
-        function buildFindErrorsEngine(stage, quizData) {
-            let errorItems = [
-                { broken: "She live in London with her family.", patch: "lives", hint: "Third person singular -s missing." },
-                { broken: "Where are my keys? I cannot found them.", patch: "find", hint: "Modal verb 'cannot' takes base form." },
-                { broken: "There is three books on the wooden table.", patch: "are", hint: "Plural noun demands plural existence verb." }
-            ];
-            let index = 0;
-
-            function render() {
-                if(index >= errorItems.length) {
-                    stage.innerHTML = `<div class="text-center text-2xl font-black text-emerald-500"><i class="fa-solid fa-shield-halved text-5xl block mb-4"></i>ALL STATEMENTS SECURED!</div>`;
-                    return;
-                }
-                const item = errorItems[index];
-                stage.innerHTML = `
-                    <div class="w-full max-w-xl flex flex-col gap-4">
-                        <span class="text-xs text-rose-400 font-mono font-bold tracking-widest uppercase text-center">Locate the broken element</span>
-                        <div class="bg-slate-800 p-6 rounded-xl border-2 border-rose-900/50 text-center">
-                            <p class="text-xl text-white font-bold italic">"${item.broken}"</p>
-                        </div>
-                        <div class="p-2 bg-slate-800 rounded-xl border border-slate-700">
-                            <input type="text" id="error-input" placeholder="Type the correct word here..." class="w-full bg-slate-900 text-white p-4 rounded-lg text-center font-bold text-lg border border-slate-600 focus:outline-none focus:border-amber-500">
-                        </div>
-                        <button onclick="testErrorFix('${item.patch}')" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-4 rounded-xl">VALIDATE REPAIR</button>
-                        <p class="text-xs text-slate-500 text-center mt-2">Clue: ${item.hint}</p>
-                    </div>
-                `;
-            }
-
-            window.testErrorFix = (correctPatch) => {
-                const userVal = document.getElementById('error-input').value.trim().toLowerCase();
-                if(userVal === correctPatch.toLowerCase()) {
-                    alert("Excellent correction!");
-                    index++;
-                    render();
-                } else {
-                    alert(`Incorrect fix. Look closely at the grammatical rules!`);
-                }
-            };
-            render();
-        }
-
-        // 11. ENGINE: REORDER STEPS
-        function buildReorderStepsEngine(stage, grammarData) {
-            let rawStr = grammarData.examples[0] || "I am a working student";
-            let trueTokens = rawStr.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").split(" ");
-            let shuffled = [...trueTokens].sort(() => Math.random() - 0.5);
-            let selection = [];
-
-            function render() {
-                stage.innerHTML = `
-                    <div class="w-full max-w-2xl flex flex-col gap-6">
-                        <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest text-center">Arrange words in syntactically correct sequence</span>
-                        
-                        <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 min-h-[80px] flex items-center justify-center gap-2 flex-wrap">
-                            ${selection.map((w, idx) => `<button onclick="popStepWord(${idx})" class="bg-indigo-600 text-white font-bold px-4 py-2.5 rounded-lg border border-indigo-400 shadow-sm">${w}</button>`).join('')}
-                        </div>
-
-                        <div class="flex items-center justify-center gap-2 flex-wrap bg-slate-900/40 p-4 rounded-xl border border-slate-800">
-                            ${shuffled.map((w, idx) => `<button id="shf-${idx}" onclick="pushStepWord('${w}', ${idx})" class="bg-slate-700 hover:bg-slate-600 text-white font-bold px-4 py-2.5 rounded-lg border border-slate-600">${w}</button>`).join('')}
-                        </div>
-
-                        <div class="flex gap-2">
-                            <button onclick="resetStepsEngine()" class="flex-1 bg-slate-800 text-slate-400 font-bold py-3 rounded-xl border border-slate-700">RESET BOARD</button>
-                            <button onclick="validateStepsEngine()" class="flex-1 bg-emerald-600 text-white font-bold py-3 rounded-xl hover:bg-emerald-500">VALIDATE SYNTAX</button>
-                        </div>
-                    </div>
-                `;
-            }
-
-            window.pushStepWord = (word, idx) => {
-                selection.push(word);
-                document.getElementById(`shf-${idx}`).style.visibility = 'hidden';
-                render();
-            };
-
-            window.popStepWord = (idx) => {
-                selection.splice(idx, 1);
-                resetStepsEngine(); 
-            };
-
-            window.resetStepsEngine = () => { selection = []; render(); };
-
-            window.validateStepsEngine = () => {
-                if(selection.join(' ') === trueTokens.join(' ')) {
-                    stage.innerHTML = `<div class="text-center text-2xl font-black text-emerald-500"><i class="fa-solid fa-square-poll-horizontal text-5xl block mb-4"></i>PERFECT SYNTAX ALIGNMENT!</div>`;
-                } else {
-                    alert("Sentence sequence invalid. Review structure rules!");
-                    window.resetStepsEngine();
-                }
-            };
-            render();
-        }
-
-        // 12. ENGINE: JEOPARDY
-        function buildJeopardyEngine(stage, blockData) {
-            stage.innerHTML = `
-                <div class="w-full max-w-xl flex flex-col gap-4 text-center">
-                    <span class="text-xs text-emerald-400 font-mono tracking-widest uppercase font-black">Final Master Assessment</span>
-                    <h4 class="text-xl font-bold text-white mb-2">Review current structure rules to uncover answers:</h4>
-                    <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 text-left space-y-2">
-                        <p class="text-xs font-bold text-slate-400 tracking-wider uppercase">Active Grammar Core Guidelines:</p>
-                        <p class="text-sm font-medium text-slate-300 leading-relaxed italic">"${blockData.grammar.rules}"</p>
-                    </div>
-                    <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 text-left">
-                        <p class="text-xs font-bold text-amber-500 tracking-wider uppercase mb-2">Example Target Reference Pattern:</p>
-                        <ul class="list-disc pl-5 text-xs text-slate-400 space-y-1">
-                            ${blockData.grammar.examples.map(ex => `<li>${ex}</li>`).join('')}
-                        </ul>
-                    </div>
-                    <button onclick="closeActiveGameModal()" class="w-full bg-slate-700 text-white font-bold py-4 rounded-xl mt-2">I HAVE REVIEWED IT</button>
+    function render() {
+        stage.innerHTML = `
+            <div class="w-full max-w-md flex flex-col items-center gap-6">
+                <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl w-full text-center">
+                    <span class="text-xs text-slate-400 font-bold block mb-1">Constructed String:</span>
+                    <p id="wheel-string" class="text-3xl font-black tracking-widest text-amber-500 min-h-[36px]">${userBuild}</p>
                 </div>
-            `;
+                <div class="grid grid-cols-4 gap-3 w-full" id="wheel-letters-grid">
+                    ${letters.map(l => `<button data-letter="${l}" class="bg-slate-700 hover:bg-slate-600 text-white font-black text-lg p-4 rounded-xl border border-slate-600">${l}</button>`).join('')}
+                </div>
+                <div class="flex gap-2 w-full mt-2">
+                    <button id="wheel-btn-clear" class="flex-1 bg-slate-800 border border-slate-700 text-rose-400 font-bold p-3 rounded-xl">CLEAR</button>
+                    <button id="wheel-btn-submit" class="flex-1 bg-emerald-600 text-white font-bold p-3 rounded-xl hover:bg-emerald-500">SUBMIT VALUE</button>
+                </div>
+                <div class="w-full text-left bg-slate-800/40 p-3 rounded-xl border border-slate-700">
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Target suggestions match length:</p>
+                    <p class="text-xs text-slate-500">Try creating words matching vocabulary strings.</p>
+                </div>
+            </div>
+        `;
+        bindEvents();
+    }
+
+    function bindEvents() {
+        stage.querySelectorAll('#wheel-letters-grid button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                userBuild += btn.dataset.letter;
+                stage.querySelector('#wheel-string').innerText = userBuild;
+            });
+        });
+
+        stage.querySelector('#wheel-btn-clear').addEventListener('click', () => {
+            userBuild = "";
+            stage.querySelector('#wheel-string').innerText = "";
+        });
+
+        stage.querySelector('#wheel-btn-submit').addEventListener('click', () => {
+            let match = validWords.some(w => w === userBuild) && userBuild.length >= 2;
+            if(match) {
+                stage.innerHTML = `<div class="text-center text-2xl font-black text-emerald-500"><i class="fa-solid fa-circle-check text-5xl block mb-4"></i>VALID CHAIN DISCOVERED!</div>`;
+            } else {
+                alert("String does not match block combinations. Try again!");
+                userBuild = "";
+                stage.querySelector('#wheel-string').innerText = "";
+            }
+        });
+    }
+    render();
+}
+
+// 9. ENGINE: TIC-TAC-TOE
+function buildTicTacToeEngine(stage, quizData) {
+    let board = Array(9).fill('');
+    let questionPool = [...quizData];
+
+    function checkWin(player) {
+        const winPatterns = [
+            [0,1,2], [3,4,5], [6,7,8], // Rows
+            [0,3,6], [1,4,7], [2,5,8], // Columns
+            [0,4,8], [2,4,6]           // Diagonals
+        ];
+        return winPatterns.some(pattern => pattern.every(idx => board[idx] === player));
+    }
+
+    function renderBoard() {
+        stage.innerHTML = `
+            <div class="w-full max-w-md flex flex-col items-center gap-4">
+                <p class="text-xs font-bold text-slate-400 tracking-wider text-center uppercase">Click any cell to answer a question and place your mark (X)</p>
+                <div class="grid grid-cols-3 gap-2 bg-slate-800 p-3 rounded-xl border border-slate-700 w-full aspect-square" id="tic-grid">
+                    ${board.map((cell, idx) => `
+                        <button data-idx="${idx}" class="bg-slate-700 text-white text-3xl font-black rounded-xl flex items-center justify-center hover:bg-slate-600 min-h-[80px]">${cell}</button>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+
+        stage.querySelectorAll('#tic-grid button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.dataset.idx);
+                if(board[idx] !== '') return;
+                triggerQuestion(idx);
+            });
+        });
+    }
+
+    function triggerQuestion(idx) {
+        if(questionPool.length === 0) questionPool = [...quizData];
+        const item = questionPool[Math.floor(Math.random() * questionPool.length)];
+        
+        stage.innerHTML = `
+            <div class="w-full max-w-xl flex flex-col gap-4">
+                <div class="bg-slate-800 p-5 rounded-xl border border-slate-700 text-center">
+                    <p class="text-white font-bold">${item.q}</p>
+                </div>
+                <div class="space-y-2" id="tic-options">
+                    ${item.a.map(opt => `<button data-opt="${opt}" class="w-full bg-slate-700 text-white p-4 rounded-xl font-medium text-left border border-slate-600 hover:bg-slate-600">${opt}</button>`).join('')}
+                </div>
+            </div>
+        `;
+
+        stage.querySelectorAll('#tic-options button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                resolveTurn(idx, btn.dataset.opt, item.c);
+            });
+        });
+    }
+
+    function resolveTurn(idx, selected, correct) {
+        if(selected === correct) {
+            board[idx] = 'X';
+            if(checkWin('X')) {
+                stage.innerHTML = `<div class="text-center text-2xl font-black text-emerald-500"><i class="fa-solid fa-trophy text-5xl block mb-4"></i>YOU WIN THE MATCH!</div>`;
+                return;
+            }
+        } else {
+            alert("Wrong answer! Turn skipped.");
         }
+
+        // AI opponent turn execution
+        let empties = board.map((c, i) => c === '' ? i : null).filter(v => v !== null);
+        if(empties.length > 0) {
+            let aiChoice = empties[Math.floor(Math.random() * empties.length)];
+            board[aiChoice] = 'O';
+            if(checkWin('O')) {
+                stage.innerHTML = `<div class="text-center text-2xl font-black text-rose-500"><i class="fa-solid fa-robot text-5xl block mb-4"></i>AI WINS THE MATCH!</div>`;
+                return;
+            }
+        }
+        
+        if(board.filter(c => c === '').length === 0) {
+            stage.innerHTML = `<div class="text-center text-2xl font-black text-indigo-500"><i class="fa-solid fa-flag text-5xl block mb-4"></i>BOARD COMPLETE! DRAW GAME.</div>`;
+        } else {
+            renderBoard();
+        }
+    }
+    renderBoard();
+}
+
+// 10. ENGINE: FIND ERRORS (Versión tolerante a fallos y multipropiedad)
+function buildFindErrorsEngine(stage, quizData) {
+    
+    // Fallback seguro por si viene vacío
+    let rawItems = (quizData && quizData.length > 0) ? quizData : [
+        { broken: "She live in London with her family.", patch: "lives", hint: "Third person singular -s missing." }
+    ];
+
+    // Mapeamos los datos dinámicamente para soportar tanto {broken, patch} como {q, c}
+    let errorItems = rawItems.map(item => {
+        return {
+            // Si no existe item.broken, busca en item.q (pregunta habitual)
+            broken: item.broken || item.q || "Missing sentence string",
+            // Si no existe item.patch, busca en item.c (respuesta correcta habitual)
+            patch: item.patch || item.c || "",
+            // Si no hay hint, dejamos un string vacío para que no pinche undefined
+            hint: item.hint || item.clue || "Look closely at the grammar structure."
+        };
+    });
+
+    let index = 0;
+
+    function render() {
+        if(index >= errorItems.length) {
+            stage.innerHTML = `<div class="text-center text-2xl font-black text-emerald-500"><i class="fa-solid fa-shield-halved text-5xl block mb-4"></i>ALL STATEMENTS SECURED!</div>`;
+            return;
+        }
+        
+        const item = errorItems[index];
+        
+        stage.innerHTML = `
+            <div class="w-full max-w-xl flex flex-col gap-4">
+                <span class="text-xs text-rose-400 font-mono font-bold tracking-widest uppercase text-center">Locate the broken element</span>
+                <div class="bg-slate-800 p-6 rounded-xl border-2 border-rose-900/50 text-center">
+                    <p class="text-xl text-white font-bold italic">"${item.broken}"</p>
+                </div>
+                <div class="p-2 bg-slate-800 rounded-xl border border-slate-700">
+                    <input type="text" id="error-input" placeholder="Type the correct word here..." class="w-full bg-slate-900 text-white p-4 rounded-lg text-center font-bold text-lg border border-slate-600 focus:outline-none focus:border-amber-500">
+                </div>
+                <button id="error-btn-validate" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-4 rounded-xl">VALIDATE REPAIR</button>
+                <p class="text-xs text-slate-500 text-center mt-2">Clue: ${item.hint}</p>
+            </div>
+        `;
+        
+        stage.querySelector('#error-btn-validate').addEventListener('click', () => {
+            const userVal = stage.querySelector('#error-input').value.trim().toLowerCase();
+            if(userVal === item.patch.toLowerCase()) {
+                alert("Excellent correction!");
+                index++;
+                render();
+            } else {
+                alert(`Incorrect fix. Look closely at the grammatical rules!`);
+            }
+        });
+    }
+    render();
+}
+
+// 11. ENGINE: REORDER STEPS
+function buildReorderStepsEngine(stage, grammarData) {
+    let rawStr = grammarData.examples[0] || "I am a working student";
+    let trueTokens = rawStr.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").split(" ");
+    
+    // Store original token map data to cleanly identify items during retrieval actions
+    let shuffledPool = trueTokens.map((word, originalIndex) => ({ word, originalIndex }));
+    shuffledPool.sort(() => Math.random() - 0.5);
+    
+    let selection = [];
+
+    function render() {
+        stage.innerHTML = `
+            <div class="w-full max-w-2xl flex flex-col gap-6">
+                <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest text-center">Arrange words in syntactically correct sequence</span>
+                
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 min-h-[80px] flex items-center justify-center gap-2 flex-wrap" id="reorder-selection-zone">
+                    ${selection.map((token, idx) => `<button data-idx="${idx}" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-4 py-2.5 rounded-lg border border-indigo-400 shadow-sm">${token.word}</button>`).join('')}
+                </div>
+
+                <div class="flex items-center justify-center gap-2 flex-wrap bg-slate-900/40 p-4 rounded-xl border border-slate-800" id="reorder-pool-zone">
+                    ${shuffledPool.map((token) => {
+                        const isChosen = selection.some(s => s.originalIndex === token.originalIndex);
+                        return `<button data-orig-idx="${token.originalIndex}" class="bg-slate-700 hover:bg-slate-600 text-white font-bold px-4 py-2.5 rounded-lg border border-slate-600 ${isChosen ? 'invisible' : ''}">${token.word}</button>`;
+                    }).join('')}
+                </div>
+
+                <div class="flex gap-2">
+                    <button id="reorder-btn-reset" class="flex-1 bg-slate-800 text-slate-400 font-bold py-3 rounded-xl border border-slate-700">RESET BOARD</button>
+                    <button id="reorder-btn-validate" class="flex-1 bg-emerald-600 text-white font-bold py-3 rounded-xl hover:bg-emerald-500">VALIDATE SYNTAX</button>
+                </div>
+            </div>
+        `;
+        bindEvents();
+    }
+
+    function bindEvents() {
+        stage.querySelectorAll('#reorder-pool-zone button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const origIdx = parseInt(btn.dataset.origIdx);
+                const token = shuffledPool.find(t => t.originalIndex === origIdx);
+                if (!selection.some(s => s.originalIndex === origIdx)) {
+                    selection.push(token);
+                    render();
+                }
+            });
+        });
+
+        stage.querySelectorAll('#reorder-selection-zone button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetIdx = parseInt(btn.dataset.idx);
+                selection.splice(targetIdx, 1);
+                render();
+            });
+        });
+
+        stage.querySelector('#reorder-btn-reset').addEventListener('click', () => {
+            selection = [];
+            render();
+        });
+
+        stage.querySelector('#reorder-btn-validate').addEventListener('click', () => {
+            const resultStr = selection.map(s => s.word).join(' ');
+            if(resultStr === trueTokens.join(' ')) {
+                stage.innerHTML = `<div class="text-center text-2xl font-black text-emerald-500"><i class="fa-solid fa-square-poll-horizontal text-5xl block mb-4"></i>PERFECT SYNTAX ALIGNMENT!</div>`;
+            } else {
+                alert("Sentence sequence invalid. Review structure rules!");
+                selection = [];
+                render();
+            }
+        });
+    }
+    render();
+}
+
+// 12. ENGINE: JEOPARDY
+function buildJeopardyEngine(stage, blockData) {
+    stage.innerHTML = `
+        <div class="w-full max-w-xl flex flex-col gap-4 text-center">
+            <span class="text-xs text-emerald-400 font-mono tracking-widest uppercase font-black">Final Master Assessment</span>
+            <h4 class="text-xl font-bold text-white mb-2">Review current structure rules to uncover answers:</h4>
+            <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 text-left space-y-2">
+                <p class="text-xs font-bold text-slate-400 tracking-wider uppercase">Active Grammar Core Guidelines:</p>
+                <p class="text-sm font-medium text-slate-300 leading-relaxed italic">"${blockData.grammar.rules}"</p>
+            </div>
+            <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 text-left">
+                <p class="text-xs font-bold text-amber-500 tracking-wider uppercase mb-2">Example Target Reference Pattern:</p>
+                <p class="text-xs text-slate-400 space-y-1">
+                    ${blockData.grammar.examples.map(ex => `• ${ex}<br>`).join('')}
+                </p>
+            </div>
+            <button id="jeopardy-btn-close" class="w-full bg-slate-700 text-white font-bold py-4 rounded-xl mt-2 hover:bg-slate-600 transition-colors">I HAVE REVIEWED IT</button>
+        </div>
+    `;
+
+    stage.querySelector('#jeopardy-btn-close').addEventListener('click', () => {
+        if (typeof window.closeActiveGameModal === 'function') {
+            window.closeActiveGameModal();
+        } else {
+            stage.innerHTML = `<div class="text-center text-xl font-bold text-slate-400">Review complete. Assessment loaded!</div>`;
+        }
+    });
+}
     </script>
 </body>
 </html>

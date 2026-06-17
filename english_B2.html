@@ -1210,58 +1210,65 @@ function buildHangmanEngine(stage, vocab) {
 }
 
         // 8. ENGINE: WORD WHEEL
+        // 8. ENGINE: WORD WHEEL
 function buildWordWheelEngine(stage, vocab) {
-    const validWords = vocab.map(v => v.word.toUpperCase());
-    const letters = ["A", "E", "O", "T", "R", "S", "I", "N", "C", "L"];
-    let userBuild = "";
+    let isSpinning = false;
 
     function render() {
         stage.innerHTML = `
-            <div class="w-full max-w-md flex flex-col items-center gap-6">
-                <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl w-full text-center">
-                    <span class="text-xs text-slate-400 font-bold block mb-1">Constructed String:</span>
-                    <p id="wheel-string" class="text-3xl font-black tracking-widest text-amber-500 min-h-[36px]">${userBuild}</p>
+            <div class="w-full max-w-lg flex flex-col items-center gap-6">
+                <div id="wheel-display" class="bg-slate-800 border-4 border-amber-500 p-8 rounded-full w-64 h-64 flex flex-col items-center justify-center text-center shadow-[0_0_30px_rgba(245,158,11,0.3)]">
+                    <span class="text-xs text-amber-400 font-bold uppercase">Spinning...</span>
+                    <h2 id="wheel-text" class="text-3xl font-black text-white my-2">READY</h2>
                 </div>
-                <div class="grid grid-cols-4 gap-3 w-full" id="wheel-letters-grid">
-                    ${letters.map(l => `<button data-letter="${l}" class="bg-slate-700 hover:bg-slate-600 text-white font-black text-lg p-4 rounded-xl border border-slate-600">${l}</button>`).join('')}
-                </div>
-                <div class="flex gap-2 w-full mt-2">
-                    <button id="wheel-btn-clear" class="flex-1 bg-slate-800 border border-slate-700 text-rose-400 font-bold p-3 rounded-xl">CLEAR</button>
-                    <button id="wheel-btn-submit" class="flex-1 bg-emerald-600 text-white font-bold p-3 rounded-xl hover:bg-emerald-500">SUBMIT VALUE</button>
-                </div>
-                <div class="w-full text-left bg-slate-800/40 p-3 rounded-xl border border-slate-700">
-                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Target suggestions match length:</p>
-                    <p class="text-xs text-slate-500">Try creating words matching vocabulary strings.</p>
-                </div>
+                
+                <button id="wheel-btn-spin" class="w-full bg-emerald-600 text-white font-black p-4 rounded-xl hover:bg-emerald-500 transition-all">
+                    SPIN THE WHEEL
+                </button>
             </div>
         `;
         bindEvents();
     }
 
-    function bindEvents() {
-        stage.querySelectorAll('#wheel-letters-grid button').forEach(btn => {
-            btn.addEventListener('click', () => {
-                userBuild += btn.dataset.letter;
-                stage.querySelector('#wheel-string').innerText = userBuild;
-            });
-        });
+    function spin() {
+        if (isSpinning) return;
+        isSpinning = true;
+        
+        let counter = 0;
+        const speed = 100; // Velocidad de cambio de palabras
+        const totalSpins = 15; // Cuántas veces cambiará la palabra
 
-        stage.querySelector('#wheel-btn-clear').addEventListener('click', () => {
-            userBuild = "";
-            stage.querySelector('#wheel-string').innerText = "";
-        });
+        const interval = setInterval(() => {
+            const randomEntry = vocab[Math.floor(Math.random() * vocab.length)];
+            stage.querySelector('#wheel-text').innerText = randomEntry.word.toUpperCase();
+            counter++;
 
-        stage.querySelector('#wheel-btn-submit').addEventListener('click', () => {
-            let match = validWords.some(w => w === userBuild) && userBuild.length >= 2;
-            if(match) {
-                stage.innerHTML = `<div class="text-center text-2xl font-black text-emerald-500"><i class="fa-solid fa-circle-check text-5xl block mb-4"></i>VALID CHAIN DISCOVERED!</div>`;
-            } else {
-                alert("String does not match block combinations. Try again!");
-                userBuild = "";
-                stage.querySelector('#wheel-string').innerText = "";
+            if (counter >= totalSpins) {
+                clearInterval(interval);
+                isSpinning = false;
+                showStoryPrompt(vocab[Math.floor(Math.random() * vocab.length)]);
             }
-        });
+        }, speed);
     }
+
+    function showStoryPrompt(finalEntry) {
+        stage.innerHTML = `
+            <div class="w-full max-w-lg animate-fade-in">
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 text-center mb-6">
+                    <p class="text-emerald-400 font-bold">YOUR WORD IS:</p>
+                    <h2 class="text-5xl font-black text-white my-4">${finalEntry.word.toUpperCase()}</h2>
+                </div>
+                <textarea id="story-input" class="w-full h-32 bg-slate-900 border border-slate-700 rounded-xl p-4 text-white" placeholder="Write your story here..."></textarea>
+                <button id="wheel-btn-save" class="w-full mt-4 bg-amber-500 text-slate-900 font-black p-4 rounded-xl">SAVE STORY</button>
+            </div>
+        `;
+        // Aquí podrías añadir el evento para guardar la historia
+    }
+
+    function bindEvents() {
+        stage.querySelector('#wheel-btn-spin').addEventListener('click', spin);
+    }
+
     render();
 }
 

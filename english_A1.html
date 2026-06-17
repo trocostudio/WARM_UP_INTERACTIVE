@@ -2038,36 +2038,86 @@ function buildFindErrorsEngine(stage, quizData) {
     render();
 }
 
-// 11. ENGINE: REORDER STEPS
+// 11. ENGINE: REORDER STEPS (Soporte Multi-Ejemplo con Banco Seguro de 15 Oraciones)
 function buildReorderStepsEngine(stage, grammarData) {
-    let rawStr = grammarData.examples[0] || "I am a working student";
-    let trueTokens = rawStr.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").split(" ");
+    // Obtenemos la lista completa de ejemplos de la unidad si existen
+    const sentencesPool = grammarData?.examples || [];
     
-    // Store original token map data to cleanly identify items during retrieval actions
-    let shuffledPool = trueTokens.map((word, originalIndex) => ({ word, originalIndex }));
-    shuffledPool.sort(() => Math.random() - 0.5);
-    
+    // Si no hay ejemplos en la unidad, se activa el banco de datos seguro de 15 oraciones
+    if (sentencesPool.length === 0) {
+        sentencesPool.push(
+            "I am a working student",
+            "She is learning english today",
+            "They have been working here for two years",
+            "We are going to visit London next summer",
+            "He does not understand the new grammar rules",
+            "What time does the english class start tomorrow",
+            "You should practice your speaking skills every day",
+            "My friend bought a new motorcycle last week",
+            "They were watching a movie when I called",
+            "She has already finished her homework",
+            "If it rains tomorrow we will stay home",
+            "Where did you go for your last vacation",
+            "I can speak three languages fluently",
+            "This interactive simulator was built with javascript",
+            "Learning a new language opens many professional doors"
+        );
+    }
+
+    let currentIndex = 0;
+    let trueTokens = [];
+    let shuffledPool = [];
     let selection = [];
 
+    // Inicializa o cambia la oración actual basados en el índice
+    function initSentence() {
+        selection = [];
+        let rawStr = sentencesPool[currentIndex];
+        
+        // Limpieza de signos comunes sin romper contracciones
+        let cleanStr = rawStr.replace(/[.,\/#!$%\^&\*;:{}=\_`~()?]/g, "").replace(/\s+/g, " ").trim();
+        trueTokens = cleanStr.split(" ").filter(token => token.length > 0);
+        
+        // Creamos la bolsa mezclada
+        shuffledPool = trueTokens.map((word, originalIndex) => ({ word, originalIndex }));
+        shuffledPool.sort(() => Math.random() - 0.5);
+    }
+
     function render() {
+        if (currentIndex >= sentencesPool.length) {
+            stage.innerHTML = `
+                <div class="text-center text-2xl font-black text-emerald-500 py-6">
+                    <i class="fa-solid fa-graduation-cap text-5xl block mb-4"></i>
+                    ALL SENTENCES REORDERED SUCCESSFULLY!
+                </div>`;
+            return;
+        }
+
         stage.innerHTML = `
             <div class="w-full max-w-2xl flex flex-col gap-6">
-                <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest text-center">Arrange words in syntactically correct sequence</span>
+                <div class="flex justify-between items-center px-2">
+                    <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest">Arrange words in sequence</span>
+                    <span class="text-xs font-mono font-bold bg-slate-800 text-amber-500 px-3 py-1 rounded-full border border-slate-700">Sentence ${currentIndex + 1} of ${sentencesPool.length}</span>
+                </div>
                 
                 <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 min-h-[80px] flex items-center justify-center gap-2 flex-wrap" id="reorder-selection-zone">
-                    ${selection.map((token, idx) => `<button data-idx="${idx}" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-4 py-2.5 rounded-lg border border-indigo-400 shadow-sm">${token.word}</button>`).join('')}
+                    ${selection.map((token, idx) => `
+                        <button data-idx="${idx}" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-4 py-2.5 rounded-lg border border-indigo-400 shadow-sm transition-all transform active:scale-95">${token.word}</button>
+                    `).join('')}
                 </div>
 
                 <div class="flex items-center justify-center gap-2 flex-wrap bg-slate-900/40 p-4 rounded-xl border border-slate-800" id="reorder-pool-zone">
                     ${shuffledPool.map((token) => {
                         const isChosen = selection.some(s => s.originalIndex === token.originalIndex);
-                        return `<button data-orig-idx="${token.originalIndex}" class="bg-slate-700 hover:bg-slate-600 text-white font-bold px-4 py-2.5 rounded-lg border border-slate-600 ${isChosen ? 'invisible' : ''}">${token.word}</button>`;
+                        return `
+                            <button data-orig-idx="${token.originalIndex}" class="bg-slate-700 hover:bg-slate-600 text-white font-bold px-4 py-2.5 rounded-lg border border-slate-600 transition-all ${isChosen ? 'invisible pointer-events-none' : ''}">${token.word}</button>
+                        `;
                     }).join('')}
                 </div>
 
                 <div class="flex gap-2">
-                    <button id="reorder-btn-reset" class="flex-1 bg-slate-800 text-slate-400 font-bold py-3 rounded-xl border border-slate-700">RESET BOARD</button>
-                    <button id="reorder-btn-validate" class="flex-1 bg-emerald-600 text-white font-bold py-3 rounded-xl hover:bg-emerald-500">VALIDATE SYNTAX</button>
+                    <button id="reorder-btn-reset" class="flex-1 bg-slate-800 text-slate-400 font-bold py-3 rounded-xl border border-slate-700 hover:bg-slate-700/60 transition-colors">RESET BOARD</button>
+                    <button id="reorder-btn-validate" class="flex-1 bg-emerald-600 text-white font-bold py-3 rounded-xl hover:bg-emerald-500 transition-colors">VALIDATE SYNTAX</button>
                 </div>
             </div>
         `;
@@ -2075,17 +2125,19 @@ function buildReorderStepsEngine(stage, grammarData) {
     }
 
     function bindEvents() {
+        // Añadir palabra a la selección
         stage.querySelectorAll('#reorder-pool-zone button').forEach(btn => {
             btn.addEventListener('click', () => {
                 const origIdx = parseInt(btn.dataset.origIdx);
                 const token = shuffledPool.find(t => t.originalIndex === origIdx);
-                if (!selection.some(s => s.originalIndex === origIdx)) {
+                if (token && !selection.some(s => s.originalIndex === origIdx)) {
                     selection.push(token);
                     render();
                 }
             });
         });
 
+        // Retirar palabra de la selección de forma individual
         stage.querySelectorAll('#reorder-selection-zone button').forEach(btn => {
             btn.addEventListener('click', () => {
                 const targetIdx = parseInt(btn.dataset.idx);
@@ -2094,15 +2146,24 @@ function buildReorderStepsEngine(stage, grammarData) {
             });
         });
 
+        // Botón Resetear tablero actual
         stage.querySelector('#reorder-btn-reset').addEventListener('click', () => {
             selection = [];
             render();
         });
 
+        // Botón Validar sintaxis
         stage.querySelector('#reorder-btn-validate').addEventListener('click', () => {
             const resultStr = selection.map(s => s.word).join(' ');
-            if(resultStr === trueTokens.join(' ')) {
-                stage.innerHTML = `<div class="text-center text-2xl font-black text-emerald-500"><i class="fa-solid fa-square-poll-horizontal text-5xl block mb-4"></i>PERFECT SYNTAX ALIGNMENT!</div>`;
+            const targetStr = trueTokens.join(' ');
+
+            if (resultStr.toLowerCase() === targetStr.toLowerCase()) {
+                alert("Excellent sequence alignment!");
+                currentIndex++; // Avanza al siguiente ejemplo
+                if (currentIndex < sentencesPool.length) {
+                    initSentence(); // Regenera los tokens con la nueva oración
+                }
+                render();
             } else {
                 alert("Sentence sequence invalid. Review structure rules!");
                 selection = [];
@@ -2110,36 +2171,57 @@ function buildReorderStepsEngine(stage, grammarData) {
             }
         });
     }
+
+    // Inicialización del juego
+    initSentence();
     render();
 }
 
-// 12. ENGINE: JEOPARDY
+// 12. ENGINE: JEOPARDY (Versión Blindada y Tolerante)
 function buildJeopardyEngine(stage, blockData) {
+    // Extraemos de forma segura previniendo errores si faltan subpropiedades
+    const rulesText = blockData?.grammar?.rules || "No direct rules specified for this module. Review general structures.";
+    const examplesArray = blockData?.grammar?.examples || blockData?.examples || [];
+
     stage.innerHTML = `
         <div class="w-full max-w-xl flex flex-col gap-4 text-center">
             <span class="text-xs text-emerald-400 font-mono tracking-widest uppercase font-black">Final Master Assessment</span>
             <h4 class="text-xl font-bold text-white mb-2">Review current structure rules to uncover answers:</h4>
+            
             <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 text-left space-y-2">
                 <p class="text-xs font-bold text-slate-400 tracking-wider uppercase">Active Grammar Core Guidelines:</p>
-                <p class="text-sm font-medium text-slate-300 leading-relaxed italic">"${blockData.grammar.rules}"</p>
+                <p class="text-sm font-medium text-slate-300 leading-relaxed italic">"${rulesText}"</p>
             </div>
+            
+            ${examplesArray.length > 0 ? `
             <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 text-left">
                 <p class="text-xs font-bold text-amber-500 tracking-wider uppercase mb-2">Example Target Reference Pattern:</p>
-                <p class="text-xs text-slate-400 space-y-1">
-                    ${blockData.grammar.examples.map(ex => `• ${ex}<br>`).join('')}
-                </p>
+                <ul class="text-xs text-slate-400 space-y-2 list-none pl-0">
+                    ${examplesArray.map(ex => `<li class="flex items-start gap-2"><span>•</span><span>${ex}</span></li>`).join('')}
+                </ul>
             </div>
-            <button id="jeopardy-btn-close" class="w-full bg-slate-700 text-white font-bold py-4 rounded-xl mt-2 hover:bg-slate-600 transition-colors">I HAVE REVIEWED IT</button>
+            ` : ''}
+            
+            <button id="jeopardy-btn-close" class="w-full bg-emerald-600 text-white font-bold py-4 rounded-xl mt-2 hover:bg-emerald-500 transition-colors">I HAVE REVIEWED IT</button>
         </div>
     `;
 
-    stage.querySelector('#jeopardy-btn-close').addEventListener('click', () => {
-        if (typeof window.closeActiveGameModal === 'function') {
-            window.closeActiveGameModal();
-        } else {
-            stage.innerHTML = `<div class="text-center text-xl font-bold text-slate-400">Review complete. Assessment loaded!</div>`;
-        }
-    });
+    // Handler seguro usando addEventListener nativo
+    const closeBtn = stage.querySelector('#jeopardy-btn-close');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            if (typeof window.closeActiveGameModal === 'function') {
+                window.closeActiveGameModal();
+            } else {
+                stage.innerHTML = `
+                    <div class="text-center p-6 bg-slate-800 rounded-xl border border-slate-700">
+                        <i class="fa-solid fa-circle-check text-emerald-500 text-4xl mb-2 block"></i>
+                        <p class="text-lg font-bold text-white">Review complete.</p>
+                        <p class="text-xs text-slate-400 mt-1">Assessment loaded successfully.</p>
+                    </div>`;
+            }
+        });
+    }
 }
     </script>
 </body>

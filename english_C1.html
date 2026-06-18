@@ -1395,61 +1395,206 @@ function buildTicTacToeEngine(stage, quizData) {
     renderBoard();
 }
 
-// 10. ENGINE: FIND ERRORS (Versión tolerante a fallos y multipropiedad)
-function buildFindErrorsEngine(stage, quizData) {
+// 10. ENGINE: FIND ERRORS (Nivel C1 - Banco Fijo de 20 Oraciones Nativas)
+function buildFindErrorsEngine(stage) {
     
-    // Fallback seguro por si viene vacío
-    let rawItems = (quizData && quizData.length > 0) ? quizData : [
-        { broken: "She live in London with her family.", patch: "lives", hint: "Third person singular -s missing." }
+    // Base de datos fija y exclusiva del motor (Nivel C1)
+    const c1Database = [
+        {
+            broken: "Had it not been for your timely advice, I would fail the exam.",
+            wrongWord: "fail",
+            patch: "have failed",
+            hint: "Condicionales invertidos de tercera clase: La consecuencia de una hipótesis pasada que no ocurrió exige un condicional perfecto ('would have failed')."
+        },
+        {
+            broken: "It is imperative that the candidate submits the portfolio before Friday.",
+            wrongWord: "submits",
+            patch: "submit",
+            hint: "Subjuntivo mandatorio: Adjetivos de urgencia o importancia ('imperative', 'vital', 'essential') seguidos de 'that' requieren el verbo en su forma base (infinitivo sin 'to')."
+        },
+        {
+            broken: "Rarely we have witnessed such an outstanding artistic performance.",
+            wrongWord: "we",
+            patch: "have we (Rarely have we witnessed...)",
+            hint: "Inversión negativa avanzada: Al iniciar una oración con un adverbio de frecuencia negativa o restrictiva ('Rarely'), el sujeto y el verbo auxiliar deben invertirse."
+        },
+        {
+            broken: "Walking down the street, the old building came into view.",
+            wrongWord: "the", // El error conceptual está en que "the old building" parece ser el que camina
+            patch: "I saw the old building (Modificador colgante)",
+            hint: "Participio colgante (Dangling modifier): El sujeto de la cláusula principal ('the old building') debe ser quien realiza la acción del gerundio inicial ('Walking'). Un edificio no camina."
+        },
+        {
+            broken: "What bugs me most about the situation are his constant excuses.",
+            wrongWord: "are",
+            patch: "is",
+            hint: "Cleft Sentences (Oraciones hendidas con 'What'): Cuando la cláusula con 'What' funciona como sujeto introduciendo una idea o hecho como un todo, el verbo principal debe ir en singular ('is')."
+        },
+        {
+            broken: "We had no alternative but accepting their strict terms.",
+            wrongWord: "accepting",
+            patch: "to accept",
+            hint: "Estructuras fijas avanzadas: La frase 'have no alternative/choice but' exige ser seguida por un infinitivo con 'to', no por un gerundio."
+        },
+        {
+            broken: "The manager objected to change the schedule at such short notice.",
+            wrongWord: "change",
+            patch: "changing",
+            hint: "Preposiciones dependientes de nivel experto: En la estructura 'object to', la palabra 'to' es una preposición pura, por lo que el verbo siguiente debe ir en gerundio (-ing)."
+        },
+        {
+            broken: "The new policy provides a strong incentive to working harder.",
+            wrongWord: "working",
+            patch: "to work",
+            hint: "Sustantivos con infinitivo: A diferencia de 'object to', el sustantivo 'incentive' se acopla con un infinitivo con 'to' ('incentive to do something')."
+        },
+        {
+            broken: "I bought the dress but I didn't need to wear it because the party was casual, so it remained in the bag.", // Control de contexto
+            broken: "We bought tickets in advance, but the museum was free, so we needn't have bought them.", // Control correcto
+            broken: "I needn't to bring my umbrella, as it didn't rain at all.",
+            wrongWord: "to",
+            patch: "bring (sin 'to')",
+            hint: "Modal 'needn't': Cuando 'need' actúa como un verbo modal negativo ('needn't'), se comporta como 'mustn't' o 'shouldn't' y va seguido directamente de un infinitivo sin 'to'."
+        },
+        {
+            broken: "Try as he might, but he could not solve the complex riddle.",
+            wrongWord: "but",
+            patch: "eliminar 'but'",
+            hint: "Inversión concesiva: La estructura empática 'Try as he might' (Por más que lo intentara) ya funciona como un conector de contraste. Añadir 'but' es redundante e incorrecto."
+        },
+        {
+            broken: "The committee is composed by experts from various scientific fields.",
+            wrongWord: "by",
+            patch: "of (composed of)",
+            hint: "Colocaciones pasivas: El adjetivo/participio 'composed' se combina fija y formalmente con la preposición 'of' para denotar partes de un todo."
+        },
+        {
+            broken: "I would rather you don't mention this matter to anyone else.",
+            wrongWord: "don't",
+            patch: "didn't",
+            hint: "Preferencias sobre el presente de terceros: La estructura 'would rather + sujeto' exige el uso del Pasado Simple con valor de subjuntivo para expresar una preferencia actual."
+        },
+        {
+            broken: "The criteria used for the selection process was highly controversial.",
+            wrongWord: "was",
+            patch: "were",
+            hint: "Plurales de origen griego/latino: La palabra 'criteria' es el plural de 'criterion'. Al ser un sujeto plural, requiere el verbo 'were'."
+        },
+        {
+            broken: "Under no circumstances you should disclose your password to anyone.",
+            wrongWord: "you",
+            patch: "should you (Under no circumstances should you...)",
+            hint: "Inversión negativa estricta: Iniciar una frase con una locución adverbial negativa como 'Under no circumstances' obliga a invertir el orden del sujeto y el verbo modal."
+        },
+        {
+            broken: "He was accused of having committed the crime, which he flatly denied.", // Control
+            broken: "The suspect denied having saw the victim on the night of the crime.",
+            wrongWord: "saw",
+            patch: "seen",
+            hint: "Gerundio de aspecto perfecto: La estructura 'having + participio pasado' se usa para referirse a acciones pasadas finalizadas. 'Saw' es pasado simple; necesitas 'seen'."
+        },
+        {
+            broken: "She behaves as if she is the owner of this multinational corporation.",
+            wrongWord: "is",
+            patch: "were (Valor de subjuntivo hipótetico)",
+            hint: "Cláusulas hipotéticas: Después de 'as if' o 'as though', cuando describimos una situación irreal o altamente improbable, se utiliza 'were' en lugar de 'is/was'."
+        },
+        {
+            broken: "However difficult was the exam, she managed to pass with flying colors.",
+            wrongWord: "was",
+            patch: "the exam was (However difficult the exam was...)",
+            hint: "Cláusulas concesivas con 'However': El orden correcto después de 'However + adjetivo' debe ser Sujeto + Verbo, sin invertir la estructura."
+        },
+        {
+            broken: "I cannot help but to wonder what might have happened otherwise.",
+            wrongWord: "to",
+            patch: "wonder (sin 'to')",
+            hint: "Modismos avanzados: La estructura semiformal 'cannot help but' va seguida directamente de un infinitivo sin 'to' (bare infinitive)."
+        },
+        {
+            broken: "They recommended that the project is postponed until next quarter.",
+            wrongWord: "is",
+            patch: "be (Subjuntivo pasivo: 'that the project be postponed')",
+            hint: "Subjuntivo en voz pasiva: El verbo de sugerencia 'recommend' seguido de 'that' requiere que la voz pasiva subsiguiente use la forma base 'be' en lugar de 'is/are'."
+        },
+        {
+            broken: "The economic crisis resulted to a drastic drop in consumer spending.",
+            wrongWord: "to",
+            patch: "in (resulted in)",
+            hint: "Preposiciones dependientes de causa/efecto: El verbo 'result' cuando introduce una consecuencia o efecto siempre exige la preposición 'in'."
+        }
     ];
 
-    // Mapeamos los datos dinámicamente para soportar tanto {broken, patch} como {q, c}
-    let errorItems = rawItems.map(item => {
+    // Normalizamos los datos de la base interna directamente
+    let errorItems = c1Database.map(item => {
         return {
-            // Si no existe item.broken, busca en item.q (pregunta habitual)
-            broken: item.broken || item.q || "Missing sentence string",
-            // Si no existe item.patch, busca en item.c (respuesta correcta habitual)
-            patch: item.patch || item.c || "",
-            // Si no hay hint, dejamos un string vacío para que no pinche undefined
-            hint: item.hint || item.clue || "Look closely at the grammar structure."
+            broken: item.broken,
+            wrongWord: item.wrongWord.toLowerCase().trim(),
+            patch: item.patch,
+            hint: item.hint
         };
     });
 
     let index = 0;
 
     function render() {
-        if(index >= errorItems.length) {
-            stage.innerHTML = `<div class="text-center text-2xl font-black text-emerald-500"><i class="fa-solid fa-shield-halved text-5xl block mb-4"></i>ALL STATEMENTS SECURED!</div>`;
+        if (index >= errorItems.length) {
+            stage.innerHTML = `
+                <div class="text-center p-8 bg-slate-800 rounded-xl border-2 border-emerald-500/30 max-w-xl mx-auto shadow-xl">
+                    <i class="fa-solid fa-trophy text-6xl text-amber-400 block mb-4 animate-bounce"></i>
+                    <h2 class="text-2xl font-black text-emerald-400 tracking-wide uppercase mb-2">¡NIVEL C1 PERFECCIONADO!</h2>
+                    <p class="text-slate-400 text-sm">Has demostrado una agudeza visual y un dominio gramatical dignos de un usuario avanzado o bilingüe.</p>
+                </div>
+            `;
             return;
         }
         
         const item = errorItems[index];
+        const words = item.broken.split(" ");
+        
+        const wordsHTML = words.map((word) => {
+            // Limpieza estricta de signos de puntuación (soporta comas y paréntesis avanzados)
+            const cleanWord = word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g,"").toLowerCase();
+            return `
+                <button data-word="${cleanWord}" class="word-token text-base text-white font-semibold bg-slate-700/60 hover:bg-rose-600 border border-slate-600 px-3 py-2 rounded-lg transition-all m-1 transform active:scale-95 shadow-sm">
+                    ${word}
+                </button>
+            `;
+        }).join("");
         
         stage.innerHTML = `
-            <div class="w-full max-w-xl flex flex-col gap-4">
-                <span class="text-xs text-rose-400 font-mono font-bold tracking-widest uppercase text-center">Locate the broken element</span>
-                <div class="bg-slate-800 p-6 rounded-xl border-2 border-rose-900/50 text-center">
-                    <p class="text-xl text-white font-bold italic">"${item.broken}"</p>
+            <div class="w-full max-w-xl flex flex-col gap-4 bg-slate-900/40 p-6 rounded-2xl border border-slate-800 backdrop-blur-sm mx-auto">
+                <div class="flex justify-between items-center px-1">
+                    <span class="text-xs text-rose-400 font-mono font-bold tracking-widest uppercase">Detecta el error (Nivel C1)</span>
+                    <span class="text-xs text-slate-500 font-mono font-bold">Progreso: ${index + 1}/${errorItems.length}</span>
                 </div>
-                <div class="p-2 bg-slate-800 rounded-xl border border-slate-700">
-                    <input type="text" id="error-input" placeholder="Type the correct word here..." class="w-full bg-slate-900 text-white p-4 rounded-lg text-center font-bold text-lg border border-slate-600 focus:outline-none focus:border-amber-500">
+                
+                <div class="bg-slate-800/90 p-6 rounded-xl border border-slate-700 text-center flex flex-wrap justify-center items-center gap-1 shadow-inner">
+                    ${wordsHTML}
                 </div>
-                <button id="error-btn-validate" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-4 rounded-xl">VALIDATE REPAIR</button>
-                <p class="text-xs text-slate-500 text-center mt-2">Clue: ${item.hint}</p>
+                
+                <div class="bg-slate-800/40 p-3 rounded-lg border border-slate-800/80 flex items-start gap-2.5">
+                    <span class="text-amber-500 text-sm">💡</span>
+                    <p class="text-xs text-slate-400 leading-relaxed"><strong class="text-slate-300">Pista:</strong> ${item.hint}</p>
+                </div>
             </div>
         `;
         
-        stage.querySelector('#error-btn-validate').addEventListener('click', () => {
-            const userVal = stage.querySelector('#error-input').value.trim().toLowerCase();
-            if(userVal === item.patch.toLowerCase()) {
-                alert("Excellent correction!");
-                index++;
-                render();
-            } else {
-                alert(`Incorrect fix. Look closely at the grammatical rules!`);
-            }
+        stage.querySelectorAll('.word-token').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const clickedWord = e.target.getAttribute('data-word');
+                
+                if (clickedWord === item.wrongWord) {
+                    alert(`¡Espectacular! Encontraste el error: "${e.target.innerText}". Lo correcto sería: "${item.patch}".`);
+                    index++;
+                    render();
+                } else {
+                    alert(`"${e.target.innerText}" es sintácticamente correcto en este contexto. ¡Sigue analizando!`);
+                }
+            });
         });
     }
+
     render();
 }
 

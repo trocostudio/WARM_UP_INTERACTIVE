@@ -1637,61 +1637,205 @@ function buildTicTacToeEngine(stage, quizData) {
     renderBoard();
 }
 
-// 10. ENGINE: FIND ERRORS (Versión tolerante a fallos y multipropiedad)
-function buildFindErrorsEngine(stage, quizData) {
+// // 10. ENGINE: FIND ERRORS (Nivel B1 - Banco Fijo de 20 Oraciones Nativas)
+function buildFindErrorsEngine(stage) {
     
-    // Fallback seguro por si viene vacío
-    let rawItems = (quizData && quizData.length > 0) ? quizData : [
-        { broken: "She live in London with her family.", patch: "lives", hint: "Third person singular -s missing." }
+    // Base de datos fija y exclusiva del motor (Nivel B1)
+    const b1Database = [
+        {
+            broken: "If I won the lottery, I will buy a huge house.",
+            wrongWord: "will",
+            patch: "would",
+            hint: "Segundo Condicional: Si la condición está en pasado imaginario (won), el resultado debe usar 'would'."
+        },
+        {
+            broken: "The new stadium was built by a famous company last year.", // Control
+            broken: "The book was wrote by a famous Spanish author.",
+            wrongWord: "wrote",
+            patch: "written",
+            hint: "Voz Pasiva: El verbo principal después de 'was/were' debe ir en participio pasado, no en pasado simple."
+        },
+        {
+            broken: "He reminded me to stop smoking because it is unhealthy.", // Control
+            broken: "I look forward to hear from you soon.",
+            wrongWord: "hear",
+            patch: "hearing",
+            hint: "La estructura formal 'look forward to' exige que el verbo siguiente vaya en gerundio (-ing)."
+        },
+        {
+            broken: "She said me that she was moving to Canada.",
+            wrongWord: "said",
+            patch: "told (o añade 'to' -> 'said to me')",
+            hint: "El verbo 'say' no acepta un objeto directo de persona inmediatamente. Necesitas usar 'told me'."
+        },
+        {
+            broken: "The success of the project depends of your hard work.",
+            wrongWord: "of",
+            patch: "on",
+            hint: "Preposiciones dependientes: El verbo 'depend' siempre se combina con la preposición 'on'."
+        },
+        {
+            broken: "Although it was raining heavily, but we went for a walk.",
+            wrongWord: "but",
+            patch: "eliminar 'but'",
+            hint: "¡Redundancia! Si ya inicias la frase con el conector de contraste 'Although', no debes usar 'but' en la segunda parte."
+        },
+        {
+            broken: "I am used to get up early in the morning now.",
+            wrongWord: "get",
+            patch: "getting",
+            hint: "La estructura 'be used to' (estar acostumbrado a) requiere un verbo terminado en '-ing'."
+        },
+        {
+            broken: "He asked me where did I live.",
+            wrongWord: "did",
+            patch: "eliminar 'did' y cambiar a 'where I lived'",
+            hint: "Discurso Indirecto (Reported Speech): Las preguntas indirectas pierden la estructura de pregunta y el auxiliar 'did'."
+        },
+        {
+            broken: "I've been playing tennis since three hours and I'm tired.",
+            wrongWord: "since",
+            patch: "for",
+            hint: "Presente Perfecto Continuo: Para expresar la duración total de la acción usamos 'for'."
+        },
+        {
+            broken: "You don't have to park here; it is strictly forbidden.",
+            wrongWord: "don't", // Al marcar 'don't' se asume el error 'don't have to'
+            patch: "mustn't",
+            hint: "Falta de obligación ('don't have to') no es lo mismo que prohibición absoluta. Usa 'mustn't'."
+        },
+        {
+            broken: "The woman which lives next door is a talented musician.",
+            wrongWord: "which",
+            patch: "who / that",
+            hint: "Cláusulas relativas: Para hacer referencia a personas se utiliza 'who' o 'that', nunca 'which'."
+        },
+        {
+            broken: "I stopped to drink coffee because it made me too nervous.",
+            wrongWord: "to", // Captura el infinitivo erróneo en este contexto
+            patch: "drinking (gerundio)",
+            hint: "El verbo 'stop' cambia de significado: 'stop + -ing' significa abandonar un hábito de forma definitiva."
+        },
+        {
+            broken: "I would travel more if I have more free time.",
+            wrongWord: "have",
+            patch: "had",
+            hint: "Segundo Condicional: La parte de la oración que lleva el 'if' debe ir en pasado simple."
+        },
+        {
+            broken: "She accused him for stealing her expensive watch.",
+            wrongWord: "for",
+            patch: "of",
+            hint: "Preposiciones dependientes: El verbo 'accuse' siempre va acompañado de la preposición 'of' (accuse someone of doing something)."
+        },
+        {
+            broken: "The children were boring during the long political speech.",
+            wrongWord: "boring",
+            patch: "bored",
+            hint: "Adjetivos en -ed vs -ing: Usa '-ed' (bored) para describir cómo se sienten las personas debido a algo."
+        },
+        {
+            broken: "Unless you don't study hard, you won't pass the exam.",
+            wrongWord: "don't",
+            patch: "eliminar 'don't study' por 'study'",
+            hint: "El conector 'Unless' significa 'a menos que' y ya aporta el sentido negativo. La frase siguiente debe ser afirmativa."
+        },
+        {
+            broken: "I suggest to take a taxi to the airport.",
+            wrongWord: "to", // Rompe el 'to take'
+            patch: "taking (gerundio)",
+            hint: "El verbo 'suggest' (sugerir) exige que la acción inmediata posterior vaya en gerundio (-ing)."
+        },
+        {
+            broken: "He has gone to Rome twice this year, but he is back now.",
+            wrongWord: "gone",
+            patch: "been",
+            hint: "Been vs Gone: Usa 'been' si la persona fue y ya regresó. Usa 'gone' si todavía está allí."
+        },
+        {
+            broken: "I'll call you as soon as I will arrive at the hotel.",
+            wrongWord: "will",
+            patch: "arrive (presente simple)",
+            hint: "En las cláusulas de tiempo del futuro (después de 'as soon as', 'when', 'until'), se usa el presente simple."
+        },
+        {
+            broken: "The police is investigating the robbery at the bank.",
+            wrongWord: "is",
+            patch: "are",
+            hint: "Sustantivos colectivos: En inglés, la palabra 'police' siempre se considera un sujeto plural y lleva 'are'."
+        }
     ];
 
-    // Mapeamos los datos dinámicamente para soportar tanto {broken, patch} como {q, c}
-    let errorItems = rawItems.map(item => {
+    // Normalizamos los datos de la base interna directamente
+    let errorItems = b1Database.map(item => {
         return {
-            // Si no existe item.broken, busca en item.q (pregunta habitual)
-            broken: item.broken || item.q || "Missing sentence string",
-            // Si no existe item.patch, busca en item.c (respuesta correcta habitual)
-            patch: item.patch || item.c || "",
-            // Si no hay hint, dejamos un string vacío para que no pinche undefined
-            hint: item.hint || item.clue || "Look closely at the grammar structure."
+            broken: item.broken,
+            wrongWord: item.wrongWord.toLowerCase().trim(),
+            patch: item.patch,
+            hint: item.hint
         };
     });
 
     let index = 0;
 
     function render() {
-        if(index >= errorItems.length) {
-            stage.innerHTML = `<div class="text-center text-2xl font-black text-emerald-500"><i class="fa-solid fa-shield-halved text-5xl block mb-4"></i>ALL STATEMENTS SECURED!</div>`;
+        if (index >= errorItems.length) {
+            stage.innerHTML = `
+                <div class="text-center p-8 bg-slate-800 rounded-xl border-2 border-emerald-500/30 max-w-xl mx-auto shadow-xl">
+                    <i class="fa-solid fa-trophy text-6xl text-amber-400 block mb-4 animate-bounce"></i>
+                    <h2 class="text-2xl font-black text-emerald-400 tracking-wide uppercase mb-2">¡NIVEL B1 LOGRADO!</h2>
+                    <p class="text-slate-400 text-sm">Has dominado los errores intermedios más complejos del idioma.</p>
+                </div>
+            `;
             return;
         }
         
         const item = errorItems[index];
+        const words = item.broken.split(" ");
+        
+        const wordsHTML = words.map((word) => {
+            // Limpieza de puntuación para evitar fallos por comas o puntos y coma
+            const cleanWord = word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g,"").toLowerCase();
+            return `
+                <button data-word="${cleanWord}" class="word-token text-base text-white font-semibold bg-slate-700/60 hover:bg-rose-600 border border-slate-600 px-3 py-2 rounded-lg transition-all m-1 transform active:scale-95 shadow-sm">
+                    ${word}
+                </button>
+            `;
+        }).join("");
         
         stage.innerHTML = `
-            <div class="w-full max-w-xl flex flex-col gap-4">
-                <span class="text-xs text-rose-400 font-mono font-bold tracking-widest uppercase text-center">Locate the broken element</span>
-                <div class="bg-slate-800 p-6 rounded-xl border-2 border-rose-900/50 text-center">
-                    <p class="text-xl text-white font-bold italic">"${item.broken}"</p>
+            <div class="w-full max-w-xl flex flex-col gap-4 bg-slate-900/40 p-6 rounded-2xl border border-slate-800 backdrop-blur-sm mx-auto">
+                <div class="flex justify-between items-center px-1">
+                    <span class="text-xs text-rose-400 font-mono font-bold tracking-widest uppercase">Detecta el error (Nivel B1)</span>
+                    <span class="text-xs text-slate-500 font-mono font-bold">Progreso: ${index + 1}/${errorItems.length}</span>
                 </div>
-                <div class="p-2 bg-slate-800 rounded-xl border border-slate-700">
-                    <input type="text" id="error-input" placeholder="Type the correct word here..." class="w-full bg-slate-900 text-white p-4 rounded-lg text-center font-bold text-lg border border-slate-600 focus:outline-none focus:border-amber-500">
+                
+                <div class="bg-slate-800/90 p-6 rounded-xl border border-slate-700 text-center flex flex-wrap justify-center items-center gap-1 shadow-inner">
+                    ${wordsHTML}
                 </div>
-                <button id="error-btn-validate" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-4 rounded-xl">VALIDATE REPAIR</button>
-                <p class="text-xs text-slate-500 text-center mt-2">Clue: ${item.hint}</p>
+                
+                <div class="bg-slate-800/40 p-3 rounded-lg border border-slate-800/80 flex items-start gap-2.5">
+                    <span class="text-amber-500 text-sm">💡</span>
+                    <p class="text-xs text-slate-400 leading-relaxed"><strong class="text-slate-300">Pista:</strong> ${item.hint}</p>
+                </div>
             </div>
         `;
         
-        stage.querySelector('#error-btn-validate').addEventListener('click', () => {
-            const userVal = stage.querySelector('#error-input').value.trim().toLowerCase();
-            if(userVal === item.patch.toLowerCase()) {
-                alert("Excellent correction!");
-                index++;
-                render();
-            } else {
-                alert(`Incorrect fix. Look closely at the grammatical rules!`);
-            }
+        stage.querySelectorAll('.word-token').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const clickedWord = e.target.getAttribute('data-word');
+                
+                if (clickedWord === item.wrongWord) {
+                    alert(`¡Excelente! Encontraste el error: "${e.target.innerText}". Lo correcto sería: "${item.patch}".`);
+                    index++;
+                    render();
+                } else {
+                    alert(`"${e.target.innerText}" es correcto en esta oración. ¡Sigue buscando!`);
+                }
+            });
         });
     }
+
     render();
 }
 

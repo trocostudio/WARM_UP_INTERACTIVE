@@ -1774,61 +1774,206 @@ function buildTicTacToeEngine(stage, quizData) {
 
     renderBoard();
 }
-// 10. ENGINE: FIND ERRORS (Versión tolerante a fallos y multipropiedad)
-function buildFindErrorsEngine(stage, quizData) {
+// 10. ENGINE: FIND ERRORS (Nivel A2 - Banco Fijo de 20 Oraciones Nativas)
+function buildFindErrorsEngine(stage) {
     
-    // Fallback seguro por si viene vacío
-    let rawItems = (quizData && quizData.length > 0) ? quizData : [
-        { broken: "She live in London with her family.", patch: "lives", hint: "Third person singular -s missing." }
+    // Base de datos fija y exclusiva del motor (Nivel A2)
+    const a2Database = [
+        {
+            broken: "She is more taller than her older sister.",
+            wrongWord: "more",
+            patch: "taller (sin 'more')",
+            hint: "No mezcles 'more' con un adjetivo corto que ya termina en '-er'."
+        },
+        {
+            broken: "We buyed a new car two weeks ago.",
+            wrongWord: "buyed",
+            patch: "bought",
+            hint: "El verbo 'buy' es irregular en pasado. No se le añade '-ed'."
+        },
+        {
+            broken: "I have lived here since three years.",
+            wrongWord: "since",
+            patch: "for",
+            hint: "Usa 'for' para hablar de un periodo de tiempo (duración) y 'since' para un punto de inicio."
+        },
+        {
+            broken: "He decided going to the cinema alone.",
+            wrongWord: "going",
+            patch: "to go",
+            hint: "El verbo 'decide' debe ir seguido de un infinitivo con 'to'."
+        },
+        {
+            broken: "This is the book who I told you about.",
+            wrongWord: "who",
+            patch: "which / that",
+            hint: "Usa 'who' para personas, pero para objetos o cosas debes usar 'which' o 'that'."
+        },
+        {
+            broken: "There are too much people in this room.",
+            wrongWord: "much",
+            patch: "many",
+            hint: "La palabra 'people' es contable y plural. Usa 'many' en lugar de 'much'."
+        },
+        {
+            broken: "If it rains tomorrow, I stay at home.",
+            wrongWord: "stay",
+            patch: "will stay",
+            hint: "Primer Condicional: Si la condición está en presente, el resultado necesita futuro con 'will'."
+        },
+        {
+            broken: "I was walking home when it started rain.",
+            wrongWord: "rain",
+            patch: "to rain / raining",
+            hint: "El verbo 'start' necesita ir seguido de un infinitivo ('to rain') o un gerundio ('raining')."
+        },
+        {
+            broken: "She sings very good, she should record a song.",
+            wrongWord: "good",
+            patch: "well",
+            hint: "Usa el adverbio 'well' para describir CÓMO se realiza una acción (sing), no el adjetivo 'good'."
+        },
+        {
+            broken: "Have you ever went to London?",
+            wrongWord: "went",
+            patch: "been / gone",
+            hint: "En el Presente Perfecto, el verbo principal debe ir en participio, no en pasado simple."
+        },
+        {
+            broken: "I don't have some money in my wallet.",
+            wrongWord: "some",
+            patch: "any",
+            hint: "En oraciones negativas e interrogativas comunes, usamos 'any' en lugar de 'some'."
+        },
+        {
+            broken: "The laptop is mine, but you can use it.",
+            wrongWord: "mine", // Nota: Al pinchar notarás el error en la estructura si fuera adjetivo, pero aquí el error es "is mine" si fuera possessive adjective. Vamos a afinar la frase para que el token roto sea claro:
+            broken: "This is mine laptop, not yours.",
+            wrongWord: "mine",
+            patch: "my",
+            hint: "Antes de un sustantivo (laptop) se usa el adjetivo posesivo 'my', no el pronombre 'mine'."
+        },
+        {
+            broken: "You don't must smoke in the hospital.",
+            wrongWord: "don't", // O "don't must" entero, pero tokenizado será 'don't'
+            patch: "mustn't",
+            hint: "Para prohibiciones estrictas, la forma negativa del modal es 'must not' o 'mustn't'."
+        },
+        {
+            broken: "He is the most bad player in the team.",
+            wrongWord: "bad", // 'most bad' es el error completo
+            patch: "worst",
+            hint: "El superlativo de 'bad' es completamente irregular."
+        },
+        {
+            broken: "We are listening to the teacher carefully.", // Frase trampa o de control? Cambiémosla por un error real:
+            broken: "We are listen to the music right now.",
+            wrongWord: "listen",
+            patch: "listening",
+            hint: "Presente continuo: después de 'are' necesitas el verbo con terminación '-ing'."
+        },
+        {
+            broken: "I enjoy to play video games at night.",
+            wrongWord: "play", // 'to play' es el error
+            patch: "playing (sin 'to')",
+            hint: "El verbo 'enjoy' siempre va seguido de un verbo en gerundio con '-ing'."
+        },
+        {
+            broken: "She has been to Paris last year.",
+            wrongWord: "has", // El error es usar Presente Perfecto con un tiempo específico definido
+            patch: "went (eliminar 'has been to')",
+            hint: "Si mencionas exactamente cuándo ocurrió (last year), debes usar Pasado Simple, no Presente Perfecto."
+        },
+        {
+            broken: "They didn't saw the movie yesterday.",
+            wrongWord: "saw",
+            patch: "see",
+            hint: "En el pasado negativo, el auxiliar 'didn't' ya indica el pasado; el verbo principal vuelve a su forma base."
+        },
+        {
+            broken: "This test is more easy than the last one.",
+            wrongWord: "more",
+            patch: "easier (sin 'more')",
+            hint: "Los adjetivos de dos sílabas que terminan en 'y' cambian a '-ier' y no llevan 'more'."
+        },
+        {
+            broken: "How many luggage do you have?",
+            wrongWord: "many",
+            patch: "much",
+            hint: "La palabra 'luggage' (equipaje) es incontable en inglés. Debes preguntar con 'How much'."
+        }
     ];
 
-    // Mapeamos los datos dinámicamente para soportar tanto {broken, patch} como {q, c}
-    let errorItems = rawItems.map(item => {
+    // Normalizamos los datos de la base interna directamente
+    let errorItems = a2Database.map(item => {
         return {
-            // Si no existe item.broken, busca en item.q (pregunta habitual)
-            broken: item.broken || item.q || "Missing sentence string",
-            // Si no existe item.patch, busca en item.c (respuesta correcta habitual)
-            patch: item.patch || item.c || "",
-            // Si no hay hint, dejamos un string vacío para que no pinche undefined
-            hint: item.hint || item.clue || "Look closely at the grammar structure."
+            broken: item.broken,
+            wrongWord: item.wrongWord.toLowerCase().trim(),
+            patch: item.patch,
+            hint: item.hint
         };
     });
 
     let index = 0;
 
     function render() {
-        if(index >= errorItems.length) {
-            stage.innerHTML = `<div class="text-center text-2xl font-black text-emerald-500"><i class="fa-solid fa-shield-halved text-5xl block mb-4"></i>ALL STATEMENTS SECURED!</div>`;
+        if (index >= errorItems.length) {
+            stage.innerHTML = `
+                <div class="text-center p-8 bg-slate-800 rounded-xl border-2 border-emerald-500/30 max-w-xl mx-auto shadow-xl">
+                    <i class="fa-solid fa-trophy text-6xl text-amber-400 block mb-4 animate-bounce"></i>
+                    <h2 class="text-2xl font-black text-emerald-400 tracking-wide uppercase mb-2">¡NIVEL A2 ASEGURADO!</h2>
+                    <p class="text-slate-400 text-sm">Has superado los desafíos gramaticales del nivel pre-intermedio.</p>
+                </div>
+            `;
             return;
         }
         
         const item = errorItems[index];
+        const words = item.broken.split(" ");
+        
+        const wordsHTML = words.map((word) => {
+            // Limpieza estricta de puntuación para evitar fallos de coincidencia
+            const cleanWord = word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g,"").toLowerCase();
+            return `
+                <button data-word="${cleanWord}" class="word-token text-base text-white font-semibold bg-slate-700/60 hover:bg-rose-600 border border-slate-600 px-3 py-2 rounded-lg transition-all m-1 transform active:scale-95 shadow-sm">
+                    ${word}
+                </button>
+            `;
+        }).join("");
         
         stage.innerHTML = `
-            <div class="w-full max-w-xl flex flex-col gap-4">
-                <span class="text-xs text-rose-400 font-mono font-bold tracking-widest uppercase text-center">Locate the broken element</span>
-                <div class="bg-slate-800 p-6 rounded-xl border-2 border-rose-900/50 text-center">
-                    <p class="text-xl text-white font-bold italic">"${item.broken}"</p>
+            <div class="w-full max-w-xl flex flex-col gap-4 bg-slate-900/40 p-6 rounded-2xl border border-slate-800 backdrop-blur-sm mx-auto">
+                <div class="flex justify-between items-center px-1">
+                    <span class="text-xs text-rose-400 font-mono font-bold tracking-widest uppercase">Detecta el error (Nivel A2)</span>
+                    <span class="text-xs text-slate-500 font-mono font-bold">Progreso: ${index + 1}/${errorItems.length}</span>
                 </div>
-                <div class="p-2 bg-slate-800 rounded-xl border border-slate-700">
-                    <input type="text" id="error-input" placeholder="Type the correct word here..." class="w-full bg-slate-900 text-white p-4 rounded-lg text-center font-bold text-lg border border-slate-600 focus:outline-none focus:border-amber-500">
+                
+                <div class="bg-slate-800/90 p-6 rounded-xl border border-slate-700 text-center flex flex-wrap justify-center items-center gap-1 shadow-inner">
+                    ${wordsHTML}
                 </div>
-                <button id="error-btn-validate" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-4 rounded-xl">VALIDATE REPAIR</button>
-                <p class="text-xs text-slate-500 text-center mt-2">Clue: ${item.hint}</p>
+                
+                <div class="bg-slate-800/40 p-3 rounded-lg border border-slate-800/80 flex items-start gap-2.5">
+                    <span class="text-amber-500 text-sm">💡</span>
+                    <p class="text-xs text-slate-400 leading-relaxed"><strong class="text-slate-300">Pista:</strong> ${item.hint}</p>
+                </div>
             </div>
         `;
         
-        stage.querySelector('#error-btn-validate').addEventListener('click', () => {
-            const userVal = stage.querySelector('#error-input').value.trim().toLowerCase();
-            if(userVal === item.patch.toLowerCase()) {
-                alert("Excellent correction!");
-                index++;
-                render();
-            } else {
-                alert(`Incorrect fix. Look closely at the grammatical rules!`);
-            }
+        stage.querySelectorAll('.word-token').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const clickedWord = e.target.getAttribute('data-word');
+                
+                if (clickedWord === item.wrongWord) {
+                    alert(`¡Excelente! Encontraste el error: "${e.target.innerText}". Lo correcto sería: "${item.patch}".`);
+                    index++;
+                    render();
+                } else {
+                    alert(`"${e.target.innerText}" es correcto en esta oración. ¡Sigue buscando!`);
+                }
+            });
         });
     }
+
     render();
 }
 

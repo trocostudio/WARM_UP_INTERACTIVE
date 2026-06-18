@@ -1737,51 +1737,255 @@ function buildReorderStepsEngine(stage, grammarData) {
     render();
 }
 
-// 12. ENGINE: JEOPARDY (Versión Blindada y Tolerante)
+// 12. ENGINE: JEOPARDY (Transformado a Quién Quiere Ser Millonario - Versión Inglés)
 function buildJeopardyEngine(stage, blockData) {
-    // Extraemos de forma segura previniendo errores si faltan subpropiedades
-    const rulesText = blockData?.grammar?.rules || "No direct rules specified for this module. Review general structures.";
-    const examplesArray = blockData?.grammar?.examples || blockData?.examples || [];
+    // 1. QUESTION BANK (60 questions divided into 4 difficulty levels)
+    // Each level provides questions for a specific stage of the game (Level 1: Q1-Q5, Level 2: Q6-Q10, etc.)
+    const questionBank = {
+        1: [ // Easy (General Knowledge) - 15 Questions
+            { q: "What color are the sleeves on a traditional vest?", o: ["Red", "Blue", "A vest has no sleeves", "Yellow"], a: 2 },
+            { q: "How many days are in a leap year?", o: ["365", "366", "364", "367"], a: 1 },
+            { q: "Which gas do humans need to breathe to survive?", o: ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"], a: 0 },
+            { q: "On which continent is Egypt located?", o: ["Asia", "Europe", "America", "Africa"], a: 3 },
+            { q: "Which is the longest river in the world?", o: ["Amazon River", "Nile", "Mississippi", "Danube"], a: 0 },
+            { q: "How many colors are there in a standard rainbow?", o: ["5", "6", "7", "8"], a: 2 },
+            { q: "What is the capital city of France?", o: ["London", "Rome", "Berlin", "Paris"], a: 3 },
+            { q: "Which animal is known as the 'Ship of the Desert'?", o: ["Horse", "Camel", "Elephant", "Donkey"], a: 1 },
+            { q: "How many bones does an adult human body typically have?", o: ["106", "206", "306", "406"], a: 1 },
+            { q: "Which fairy tale character loses her glass slipper?", o: ["Snow White", "Cinderella", "Rapunzel", "Sleeping Beauty"], a: 1 },
+            { q: "What is the name of the closest star to Earth?", o: ["Proxima Centauri", "Sirius", "The Sun", "North Star"], a: 2 },
+            { q: "Which instrument is used to measure temperature?", o: ["Barometer", "Thermometer", "Speedometer", "Compass"], a: 1 },
+            { q: "How many sides does a standard stop sign have?", o: ["6", "8", "5", "10"], a: 1 },
+            { q: "Which frozen water body falls from the sky during winter?", o: ["Rain", "Snow", "Dew", "Fog"], a: 1 },
+            { q: "What is the primary language spoken in Brazil?", o: ["Spanish", "English", "Brazilian", "Portuguese"], a: 3 }
+        ],
+        2: [ // Medium-Low - 15 Questions
+            { q: "Which country is famously shaped like a boot?", o: ["Spain", "Greece", "Italy", "France"], a: 2 },
+            { q: "What is the largest planet in our solar system?", o: ["Earth", "Jupiter", "Saturn", "Neptune"], a: 1 },
+            { q: "Who painted the famous 'Mona Lisa'?", o: ["Van Gogh", "Da Vinci", "Picasso", "Michelangelo"], a: 1 },
+            { q: "How many keys does a standard classical piano have?", o: ["88", "76", "92", "64"], a: 0 },
+            { q: "Which is the largest ocean on Earth?", o: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"], a: 3 },
+            { q: "Which organ in the human body is responsible for pumping blood?", o: ["Lungs", "Brain", "Liver", "Heart"], a: 3 },
+            { q: "What is the currency used in Japan?", o: ["Yuan", "Won", "Yen", "Baht"], a: 2 },
+            { q: "Which planet is known as the 'Red Planet'?", o: ["Venus", "Mars", "Jupiter", "Saturn"], a: 1 },
+            { q: "Who was the first president of the United States?", o: ["Thomas Jefferson", "Abraham Lincoln", "George Washington", "John Adams"], a: 2 },
+            { q: "What is the hardest natural substance found on Earth?", o: ["Gold", "Iron", "Diamond", "Quartz"], a: 2 },
+            { q: "Which country invented the popular fast food 'Pizza'?", o: ["Greece", "United States", "France", "Italy"], a: 3 },
+            { q: "How many continents are there on Earth?", o: ["5", "6", "7", "8"], a: 2 },
+            { q: "Which device do we use to type words onto a computer screen?", o: ["Mouse", "Monitor", "Keyboard", "Printer"], a: 2 },
+            { q: "What do bees collect from flowers to make honey?", o: ["Water", "Nectar", "Leaves", "Pollen"], a: 1 },
+            { q: "Which country is home to the Kangaroo?", o: ["New Zealand", "South Africa", "Australia", "Kenya"], a: 2 }
+        ],
+        3: [ // Medium-High - 15 Questions
+            { q: "What is the most abundant chemical element in the universe?", o: ["Oxygen", "Helium", "Hydrogen", "Carbon"], a: 2 },
+            { q: "In which year did the Berlin Wall fall?", o: ["1985", "1989", "1991", "1993"], a: 1 },
+            { q: "What is the capital city of Australia?", o: ["Sydney", "Melbourne", "Canberra", "Brisbane"], a: 2 },
+            { q: "Which country gifted the Statue of Liberty to the United States?", o: ["France", "United Kingdom", "Germany", "Italy"], a: 0 },
+            { q: "What is the rarest and most expensive natural metal in the world?", o: ["Gold", "Platinum", "Rhodium", "Palladium"], a: 2 },
+            { q: "What is the chemical symbol for Gold?", o: ["Gd", "Ag", "Au", "Fe"], a: 2 },
+            { q: "Which novel features characters named 'Prongos', 'Moony', 'Padfoot', and 'Wormtail'?", o: ["The Lord of the Rings", "Harry Potter", "The Chronicles of Narnia", "Percy Jackson"], a: 1 },
+            { q: "Who is considered the author of the epic poems 'The Iliad' and 'The Odyssey'?", o: ["Socrates", "Plato", "Aristotle", "Homer"], a: 3 },
+            { q: "Which internal organ is capable of fully regenerating itself?", o: ["Heart", "Liver", "Kidney", "Lungs"], a: 1 },
+            { q: "What is the name of the longest mountain range above water on Earth?", o: ["The Rockies", "The Himalayas", "The Alps", "The Andes"], a: 3 },
+            { q: "Which scientist discovered penicillin in 1928?", o: ["Louis Pasteur", "Alexander Fleming", "Marie Curie", "Gregor Mendel"], a: 1 },
+            { q: "Which empire built the ancient city of Machu Picchu?", o: ["Aztec Empire", "Mayan Empire", "Inca Empire", "Roman Empire"], a: 2 },
+            { q: "What is the main component of a volcano's eruption before it reaches the surface?", o: ["Lava", "Magma", "Ash", "Basalt"], a: 1 },
+            { q: "In which European city is the headquarters of the European Union located?", o: ["Paris", "Geneva", "Brussels", "Strasbourg"], a: 2 },
+            { q: "What historical event began on July 14, 1789, with the storming of the Bastille?", o: ["The French Revolution", "The American Revolution", "The Industrial Revolution", "World War I"], a: 0 }
+        ],
+        4: [ // Hard - 15 Questions
+            { q: "What is the deepest known point in the Earth's oceans?", o: ["Java Trench", "Puerto Rico Trench", "Mariana Trench", "Tonga Trench"], a: 2 },
+            { q: "Which philosopher wrote the book 'Thus Spoke Zarathustra'?", o: ["Kant", "Nietzsche", "Schopenhauer", "Hegel"], a: 1 },
+            { q: "How many hearts does an octopus have?", o: ["One", "Two", "Three", "Four"], a: 2 },
+            { q: "What is the approximate speed of light?", o: ["300,000 km/s", "150,000 km/s", "500,000 km/s", "1,000,000 km/s"], a: 0 },
+            { q: "Which British author created the detective Sherlock Holmes?", o: ["Agatha Christie", "Arthur Conan Doyle", "Edgar Allan Poe", "Stephen King"], a: 1 },
+            { q: "What is the name of the first artificial satellite launched into space in 1957?", o: ["Apollo 11", "Sputnik 1", "Voyager 1", "Hubble"], a: 1 },
+            { q: "Which unit of measurement is used to quantify electrical resistance?", o: ["Volt", "Ampere", "Watt", "Ohm"], a: 3 },
+            { q: "Who was the first woman to win a Nobel Prize?", o: ["Rosalind Franklin", "Marie Curie", "Ada Lovelace", "Jane Goodall"], a: 1 },
+            { q: "What is the capital city of Iceland?", o: ["Reykjavik", "Oslo", "Helsinki", "Copenhagen"], a: 0 },
+            { q: "Which gas makes up approximately 78% of the Earth's atmosphere?", o: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Argon"], a: 2 },
+            { q: "What is the painting style characterized by tiny, distinct dots of color called?", o: ["Impressionism", "Cubism", "Pointillism", "Surrealism"], a: 2 },
+            { q: "In programming, what does the 'HTTP' acronym stand for?", o: ["Hypertext Transfer Protocol", "High Transfer Text Process", "Hyper Text Tracking Protocol", "Home Text Transfer Page"], a: 0 },
+            { q: "How many lines are in a traditional literary sonnet?", o: ["12", "14", "16", "10"], a: 1 },
+            { q: "Which bone is the longest and strongest bone in the human skeleton?", o: ["Tibia", "Fibula", "Femur", "Humerus"], a: 2 },
+            { q: "Who was the mythological Greek god of the underworld?", o: ["Zeus", "Poseidon", "Hades", "Ares"], a: 2 }
+        ]
+    };
 
-    stage.innerHTML = `
-        <div class="w-full max-w-xl flex flex-col gap-4 text-center">
-            <span class="text-xs text-emerald-400 font-mono tracking-widest uppercase font-black">Final Master Assessment</span>
-            <h4 class="text-xl font-bold text-white mb-2">Review current structure rules to uncover answers:</h4>
-            
-            <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 text-left space-y-2">
-                <p class="text-xs font-bold text-slate-400 tracking-wider uppercase">Active Grammar Core Guidelines:</p>
-                <p class="text-sm font-medium text-slate-300 leading-relaxed italic">"${rulesText}"</p>
-            </div>
-            
-            ${examplesArray.length > 0 ? `
-            <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 text-left">
-                <p class="text-xs font-bold text-amber-500 tracking-wider uppercase mb-2">Example Target Reference Pattern:</p>
-                <ul class="text-xs text-slate-400 space-y-2 list-none pl-0">
-                    ${examplesArray.map(ex => `<li class="flex items-start gap-2"><span>•</span><span>${ex}</span></li>`).join('')}
-                </ul>
-            </div>
-            ` : ''}
-            
-            <button id="jeopardy-btn-close" class="w-full bg-emerald-600 text-white font-bold py-4 rounded-xl mt-2 hover:bg-emerald-500 transition-colors">I HAVE REVIEWED IT</button>
-        </div>
-    `;
+    // 2. PRIZE SCALE (20 progressive steps)
+    const prizeScale = [
+        "$100", "$200", "$300", "$500", "$1,000",        // Q1 - Q5
+        "$2,000", "$4,000", "$8,000", "$16,000", "$32,000",  // Q6 - Q10
+        "$64,000", "$125,000", "$250,000", "$500,000", "$1,000,000", // Q11 - Q15
+        "$2,000,000", "$4,000,000", "$6,000,000", "$8,000,000", "$10,000,000" // Q16 - Q20
+    ];
 
-    // Handler seguro usando addEventListener nativo
-    const closeBtn = stage.querySelector('#jeopardy-btn-close');
-    if (closeBtn) {
-        closeBtn.addEventListener('click', () => {
-            if (typeof window.closeActiveGameModal === 'function') {
-                window.closeActiveGameModal();
-            } else {
-                stage.innerHTML = `
-                    <div class="text-center p-6 bg-slate-800 rounded-xl border border-slate-700">
-                        <i class="fa-solid fa-circle-check text-emerald-500 text-4xl mb-2 block"></i>
-                        <p class="text-lg font-bold text-white">Review complete.</p>
-                        <p class="text-xs text-slate-400 mt-1">Assessment loaded successfully.</p>
-                    </div>`;
-            }
+    // 3. SESSION QUESTION SELECTION
+    // Randomly shuffles and selects 5 questions from each difficulty level to make up the 20 total questions
+    function getRandomQuestions(bank) {
+        const selected = [];
+        for (let level = 1; level <= 4; level++) {
+            const levelQuestions = [...(bank[level] || bank[1])];
+            // Shuffle current level questions
+            levelQuestions.sort(() => Math.random() - 0.5);
+            // Take the first 5
+            selected.push(...levelQuestions.slice(0, 5));
+        }
+        return selected;
+    }
+
+    const currentSessionQuestions = getRandomQuestions(questionBank);
+    let currentStep = 0; // Ranges from 0 to 19
+
+    // 4. GAME RENDER FUNCTION
+    function renderQuestion() {
+        if (currentStep >= 20) {
+            renderEndGame(true); // Ultimate Victory
+            return;
+        }
+
+        const questionData = currentSessionQuestions[currentStep];
+        const currentPrize = prizeScale[currentStep];
+        const progressPercent = ((currentStep + 1) / 20) * 100;
+
+        stage.innerHTML = `
+            <div class="w-full max-w-2xl flex flex-col gap-4 text-center animate-fade-in">
+                <!-- Status Header -->
+                <div class="flex justify-between items-center bg-slate-900/80 px-4 py-2 rounded-xl border border-slate-800">
+                    <span class="text-xs text-amber-400 font-mono tracking-widest uppercase font-black">
+                        QUESTION ${currentStep + 1} / 20
+                    </span>
+                    <span class="text-md font-bold text-emerald-400 font-mono bg-emerald-950/50 px-3 py-1 rounded-lg border border-emerald-800/50">
+                        Current Stake: ${currentPrize}
+                    </span>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden border border-slate-700">
+                    <div class="bg-gradient-to-r from-amber-500 to-emerald-500 h-full transition-all duration-500" style="width: ${progressPercent}%"></div>
+                </div>
+                
+                <!-- Question Container -->
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-xl min-h-[120px] flex items-center justify-center">
+                    <h4 class="text-xl font-bold text-white leading-relaxed">${questionData.q}</h4>
+                </div>
+                
+                <!-- Options Grid -->
+                <div id="millonario-options" class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
+                    ${questionData.o.map((option, index) => {
+                        const letter = String.fromCharCode(65 + index); // A, B, C, D
+                        return `
+                            <button data-index="${index}" class="option-btn group flex items-center text-left bg-slate-900 border border-slate-700 hover:border-amber-500 rounded-xl p-4 transition-all duration-200 active:scale-[0.98]">
+                                <span class="bg-slate-800 text-amber-400 font-mono font-bold w-8 h-8 rounded-lg flex items-center justify-center mr-3 border border-slate-700 group-hover:bg-amber-500 group-hover:text-slate-950 transition-colors">
+                                    ${letter}
+                                </span>
+                                <span class="text-sm font-semibold text-slate-200 group-hover:text-white transition-colors">${option}</span>
+                            </button>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+        `;
+
+        // Attach event listeners to option buttons
+        const optionButtons = stage.querySelectorAll('.option-btn');
+        optionButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const selectedIndex = parseInt(btn.getAttribute('data-index'));
+                checkAnswer(selectedIndex, btn, optionButtons);
+            });
         });
     }
+
+    // 5. ANSWER VALIDATION WITH VISUAL FEEDBACK
+    function checkAnswer(selectedIndex, selectedBtn, allButtons) {
+        const questionData = currentSessionQuestions[currentStep];
+        const correctIndex = questionData.a;
+
+        // Disable all buttons immediately to prevent multi-clicking
+        allButtons.forEach(b => b.disabled = true);
+
+        if (selectedIndex === correctIndex) {
+            // Correct Answer Animation (Green)
+            selectedBtn.classList.remove('border-slate-700', 'hover:border-amber-500');
+            selectedBtn.classList.add('bg-emerald-950', 'border-emerald-500', 'text-white');
+            selectedBtn.querySelector('span').classList.add('bg-emerald-500', 'text-slate-950');
+
+            // Dramatic pause before next question
+            setTimeout(() => {
+                currentStep++;
+                renderQuestion();
+            }, 1500);
+        } else {
+            // Incorrect Answer Animation (Red)
+            selectedBtn.classList.remove('border-slate-700', 'hover:border-amber-500');
+            selectedBtn.classList.add('bg-rose-950', 'border-rose-500', 'text-white');
+            selectedBtn.querySelector('span').classList.add('bg-rose-500', 'text-slate-950');
+
+            // Highlight the correct answer in the background
+            const correctBtn = Array.from(allButtons).find(b => parseInt(b.getAttribute('data-index')) === correctIndex);
+            if (correctBtn) {
+                correctBtn.classList.add('bg-emerald-950/50', 'border-emerald-500/50');
+            }
+
+            // Dramatic pause before game over screen
+            setTimeout(() => {
+                renderEndGame(false);
+            }, 2000);
+        }
+    }
+
+    // 6. END GAME SCREEN
+    function renderEndGame(isVictory) {
+        let finalPrize = "$0";
+        if (isVictory) {
+            finalPrize = prizeScale[19];
+        } else if (currentStep > 0) {
+            finalPrize = prizeScale[currentStep - 1]; // Take home what was earned in the previous tier
+        }
+
+        stage.innerHTML = `
+            <div class="text-center p-8 bg-slate-800 rounded-xl border border-slate-700 max-w-md w-full shadow-2xl animate-fade-in space-y-4">
+                <div>
+                    ${isVictory ? `
+                        <div class="w-16 h-16 bg-amber-500/10 border border-amber-500 rounded-full flex items-center justify-center mx-auto mb-2 text-amber-400 text-3xl animate-bounce">🏆</div>
+                        <p class="text-2xl font-black text-white uppercase tracking-wide">AMAZING!</p>
+                        <p class="text-xs text-amber-400 font-semibold uppercase tracking-widest mt-1">You answered all 20 questions successfully</p>
+                    ` : `
+                        <div class="w-16 h-16 bg-rose-500/10 border border-rose-500 rounded-full flex items-center justify-center mx-auto mb-2 text-rose-400 text-3xl">❌</div>
+                        <p class="text-2xl font-black text-white uppercase tracking-wide">GAME OVER</p>
+                        <p class="text-xs text-rose-400 font-semibold uppercase tracking-widest mt-1">Incorrect Answer</p>
+                    `}
+                </div>
+
+                <div class="bg-slate-900 p-4 rounded-xl border border-slate-750">
+                    <p class="text-xs text-slate-400 uppercase font-bold tracking-wider">Final Prize Won</p>
+                    <p class="text-3xl font-black text-emerald-400 font-mono mt-1">${finalPrize}</p>
+                </div>
+
+                <button id="millonario-btn-close" class="w-full bg-emerald-600 text-white font-bold py-4 rounded-xl hover:bg-emerald-500 transition-all shadow-lg active:scale-[0.99]">
+                    ${isVictory ? 'CLAIM REWARD' : 'EXIT TRIVIA'}
+                </button>
+            </div>
+        `;
+
+        const closeBtn = stage.querySelector('#millonario-btn-close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                if (typeof window.closeActiveGameModal === 'function') {
+                    window.closeActiveGameModal();
+                } else {
+                    stage.innerHTML = `
+                        <div class="text-center p-6 bg-slate-800 rounded-xl border border-slate-700">
+                            <p class="text-lg font-bold text-white">Session finalized safely.</p>
+                        </div>`;
+                }
+            });
+        }
+    }
+
+    // Initialize the game by rendering the first question
+    renderQuestion();
 }
     </script>
 </body>

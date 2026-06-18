@@ -2030,11 +2030,11 @@ function buildTicTacToeEngine(stage, quizData) {
 
     renderBoard();
 }
-// 10. ENGINE: FIND ERRORS (Nivel A1 - Banco de 20 Oraciones)
-function buildFindErrorsEngine(stage, customQuizData) {
+// 10. ENGINE: FIND ERRORS (Nivel A1 - Banco Fijo de 20 Oraciones Nativas)
+function buildFindErrorsEngine(stage) {
     
-    // Base de datos nativa con 20 preguntas esenciales de Nivel A1
-    const defaultA1Database = [
+    // Base de datos fija y exclusiva del motor (Nivel A1)
+    const a1Database = [
         {
             broken: "She are a doctor at the hospital.",
             wrongWord: "are",
@@ -2103,7 +2103,7 @@ function buildFindErrorsEngine(stage, customQuizData) {
         },
         {
             broken: "We are speak English in class.",
-            wrongWord: "speak", // O puedes interpretarlo como que sobra 'are'
+            wrongWord: "speak",
             patch: "speak (sin 'are')",
             hint: "No mezcles el verbo 'to be' (are) con un verbo normal en presente simple."
         },
@@ -2134,8 +2134,8 @@ function buildFindErrorsEngine(stage, customQuizData) {
         {
             broken: "Are you a student? Yes, I'm.",
             wrongWord: "i'm",
-            hint: "En respuestas cortas afirmativas, nunca se usan contracciones. Lo correcto es 'Yes, I am'.",
-            patch: "I am"
+            patch: "I am",
+            hint: "En respuestas cortas afirmativas, nunca se usan contracciones. Lo correcto es 'Yes, I am'."
         },
         {
             broken: "We went to the cinema tomorrow.",
@@ -2157,16 +2157,13 @@ function buildFindErrorsEngine(stage, customQuizData) {
         }
     ];
 
-    // Si pasas datos por parámetro los usa; si no, carga el banco de 20 preguntas A1
-    let rawItems = (customQuizData && customQuizData.length > 0) ? customQuizData : defaultA1Database;
-
-    // Normalizamos la estructura interna de los datos
-    let errorItems = rawItems.map(item => {
+    // Normalizamos los datos de la base interna directamente
+    let errorItems = a1Database.map(item => {
         return {
-            broken: item.broken || "Missing sentence",
-            wrongWord: (item.wrongWord || item.patch || "").toLowerCase().trim(),
-            patch: item.patch || "",
-            hint: item.hint || "Presta atención a la estructura gramatical."
+            broken: item.broken,
+            wrongWord: item.wrongWord.toLowerCase().trim(),
+            patch: item.patch,
+            hint: item.hint
         };
     });
 
@@ -2185,13 +2182,10 @@ function buildFindErrorsEngine(stage, customQuizData) {
         }
         
         const item = errorItems[index];
-        
-        // Separamos la oración por espacios
         const words = item.broken.split(" ");
         
-        // Generamos los botones limpiando puntuación para la validación interna
         const wordsHTML = words.map((word) => {
-            // Removemos signos comunes (?, ., ,, !) para que no afecten el match
+            // Limpieza estricta de puntuación para evitar fallos de coincidencia
             const cleanWord = word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g,"").toLowerCase();
             return `
                 <button data-word="${cleanWord}" class="word-token text-lg text-white font-semibold bg-slate-700/60 hover:bg-rose-600 border border-slate-600 px-3 py-2 rounded-lg transition-all m-1 transform active:scale-95 shadow-sm">
@@ -2207,12 +2201,10 @@ function buildFindErrorsEngine(stage, customQuizData) {
                     <span class="text-xs text-slate-500 font-mono font-bold">Progreso: ${index + 1}/${errorItems.length}</span>
                 </div>
                 
-                <!-- Caja contenedora de la oración interactiva -->
                 <div class="bg-slate-800/90 p-6 rounded-xl border border-slate-700 text-center flex flex-wrap justify-center items-center gap-1 shadow-inner">
                     ${wordsHTML}
                 </div>
                 
-                <!-- Pista dinámica -->
                 <div class="bg-slate-800/40 p-3 rounded-lg border border-slate-800/80 flex items-start gap-2.5">
                     <span class="text-amber-500 text-sm">💡</span>
                     <p class="text-xs text-slate-400 leading-relaxed"><strong class="text-slate-300">Pista:</strong> ${item.hint}</p>
@@ -2220,20 +2212,14 @@ function buildFindErrorsEngine(stage, customQuizData) {
             </div>
         `;
         
-        // Listener para procesar los clics
         stage.querySelectorAll('.word-token').forEach(button => {
             button.addEventListener('click', (e) => {
                 const clickedWord = e.target.getAttribute('data-word');
                 
                 if (clickedWord === item.wrongWord) {
-                    let feedback = `¡Excelente! Encontraste el error: "${e.target.innerText}".`;
-                    if(item.patch) {
-                        feedback += ` Lo correcto sería usar "${item.patch}".`;
-                    }
-                    alert(feedback);
-                    
+                    alert(`¡Excelente! Encontraste el error: "${e.target.innerText}". Lo correcto sería usar "${item.patch}".`);
                     index++;
-                    render(); // Carga la siguiente pregunta de forma automática
+                    render();
                 } else {
                     alert(`"${e.target.innerText}" es correcto en esta oración. ¡Sigue buscando!`);
                 }
@@ -2241,10 +2227,8 @@ function buildFindErrorsEngine(stage, customQuizData) {
         });
     }
 
-    // Iniciar el juego
     render();
 }
-
 // 11. ENGINE: REORDER STEPS (Soporte Multi-Ejemplo con Banco Seguro de 15 Oraciones)
 function buildReorderStepsEngine(stage, grammarData) {
     // Obtenemos la lista completa de ejemplos de la unidad si existen

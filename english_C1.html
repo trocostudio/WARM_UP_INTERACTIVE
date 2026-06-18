@@ -1267,10 +1267,11 @@ function buildWordWheelEngine(stage, vocab) {
     render();
 }
 
-// 9. ENGINE: TIC-TAC-TOE
+// 9. ENGINE: TIC-TAC-TOE (PVP STUDENT MODE)
 function buildTicTacToeEngine(stage, quizData) {
     let board = Array(9).fill('');
     let questionPool = [...quizData];
+    let currentTurn = 'X'; // El estudiante 1 empieza siendo 'X'
 
     function checkWin(player) {
         const winPatterns = [
@@ -1284,11 +1285,30 @@ function buildTicTacToeEngine(stage, quizData) {
     function renderBoard() {
         stage.innerHTML = `
             <div class="w-full max-w-md flex flex-col items-center gap-4">
-                <p class="text-xs font-bold text-slate-400 tracking-wider text-center uppercase">Click any cell to answer a question and place your mark (X)</p>
+                <!-- Indicador de turno dinámico -->
+                <div class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-full text-center shadow-lg">
+                    <p class="text-sm font-semibold text-slate-200">
+                        Current Turn: <span class="font-black text-xl ${currentTurn === 'X' ? 'text-sky-400' : 'text-amber-400'}">${currentTurn}</span>
+                    </p>
+                </div>
+                
+                <p class="text-xs font-bold text-slate-400 tracking-wider text-center uppercase">
+                    Player ${currentTurn}, click any cell to answer and place your mark
+                </p>
+
                 <div class="grid grid-cols-3 gap-2 bg-slate-800 p-3 rounded-xl border border-slate-700 w-full aspect-square" id="tic-grid">
-                    ${board.map((cell, idx) => `
-                        <button data-idx="${idx}" class="bg-slate-700 text-white text-3xl font-black rounded-xl flex items-center justify-center hover:bg-slate-600 min-h-[80px]">${cell}</button>
-                    `).join('')}
+                    ${board.map((cell, idx) => {
+                        // Color dinámico según la marca del estudiante
+                        let colorClass = "text-white";
+                        if (cell === 'X') colorClass = "text-sky-400";
+                        if (cell === 'O') colorClass = "text-amber-400";
+
+                        return `
+                            <button data-idx="${idx}" class="bg-slate-700 ${colorClass} text-4xl font-black rounded-xl flex items-center justify-center hover:bg-slate-600 transition-colors min-h-[80px]">
+                                ${cell}
+                            </button>
+                        `;
+                    }).join('')}
                 </div>
             </div>
         `;
@@ -1308,11 +1328,22 @@ function buildTicTacToeEngine(stage, quizData) {
         
         stage.innerHTML = `
             <div class="w-full max-w-xl flex flex-col gap-4">
-                <div class="bg-slate-800 p-5 rounded-xl border border-slate-700 text-center">
-                    <p class="text-white font-bold">${item.q}</p>
+                <!-- Alerta de quién está respondiendo -->
+                <div class="text-center">
+                    <span class="px-3 py-1 text-xs font-bold tracking-widest uppercase rounded-md bg-slate-700 text-slate-300">
+                        Question for Player ${currentTurn}
+                    </span>
+                </div>
+
+                <div class="bg-slate-800 p-5 rounded-xl border border-slate-700 text-center shadow-md">
+                    <p class="text-white font-bold text-lg">${item.q}</p>
                 </div>
                 <div class="space-y-2" id="tic-options">
-                    ${item.a.map(opt => `<button data-opt="${opt}" class="w-full bg-slate-700 text-white p-4 rounded-xl font-medium text-left border border-slate-600 hover:bg-slate-600">${opt}</button>`).join('')}
+                    ${item.a.map(opt => `
+                        <button data-opt="${opt}" class="w-full bg-slate-700 text-white p-4 rounded-xl font-medium text-left border border-slate-600 hover:bg-slate-600 transition-all">
+                            ${opt}
+                        </button>
+                    `).join('')}
                 </div>
             </div>
         `;
@@ -1326,32 +1357,41 @@ function buildTicTacToeEngine(stage, quizData) {
 
     function resolveTurn(idx, selected, correct) {
         if(selected === correct) {
-            board[idx] = 'X';
-            if(checkWin('X')) {
-                stage.innerHTML = `<div class="text-center text-2xl font-black text-emerald-500"><i class="fa-solid fa-trophy text-5xl block mb-4"></i>YOU WIN THE MATCH!</div>`;
+            // El estudiante actual responde bien: se le asigna la casilla
+            board[idx] = currentTurn;
+            
+            // Verificar si el estudiante actual ganó
+            if(checkWin(currentTurn)) {
+                stage.innerHTML = `
+                    <div class="text-center p-8 bg-slate-800 rounded-2xl border border-slate-700 shadow-xl max-w-sm mx-auto">
+                        <i class="fa-solid fa-trophy text-6xl block mb-4 ${currentTurn === 'X' ? 'text-sky-400' : 'text-amber-400'} animate-bounce"></i>
+                        <div class="text-2xl font-black text-white">PLAYER ${currentTurn} WINS THE MATCH!</div>
+                    </div>
+                `;
                 return;
             }
         } else {
-            alert("Wrong answer! Turn skipped.");
+            // Regla pedagógica: Si responde mal, pierde el turno y no se marca nada.
+            alert(`Wrong answer! Player ${currentTurn} missed the chance.`);
         }
 
-        // AI opponent turn execution
-        let empties = board.map((c, i) => c === '' ? i : null).filter(v => v !== null);
-        if(empties.length > 0) {
-            let aiChoice = empties[Math.floor(Math.random() * empties.length)];
-            board[aiChoice] = 'O';
-            if(checkWin('O')) {
-                stage.innerHTML = `<div class="text-center text-2xl font-black text-rose-500"><i class="fa-solid fa-robot text-5xl block mb-4"></i>AI WINS THE MATCH!</div>`;
-                return;
-            }
-        }
-        
+        // Verificar si el tablero está lleno (Empate)
         if(board.filter(c => c === '').length === 0) {
-            stage.innerHTML = `<div class="text-center text-2xl font-black text-indigo-500"><i class="fa-solid fa-flag text-5xl block mb-4"></i>BOARD COMPLETE! DRAW GAME.</div>`;
-        } else {
-            renderBoard();
+            stage.innerHTML = `
+                <div class="text-center p-8 bg-slate-800 rounded-2xl border border-slate-700 shadow-xl max-w-sm mx-auto">
+                    <i class="fa-solid fa-handshake text-5xl block mb-4 text-indigo-400"></i>
+                    <div class="text-2xl font-black text-indigo-400">DRAW GAME!</div>
+                    <p class="text-slate-400 text-sm mt-2">The board is full.</p>
+                </div>
+            `;
+            return;
         }
+
+        // Cambiar el turno de forma alterna para la siguiente ronda
+        currentTurn = (currentTurn === 'X') ? 'O' : 'X';
+        renderBoard();
     }
+
     renderBoard();
 }
 

@@ -2030,61 +2030,218 @@ function buildTicTacToeEngine(stage, quizData) {
 
     renderBoard();
 }
-// 10. ENGINE: FIND ERRORS (Versión tolerante a fallos y multipropiedad)
-function buildFindErrorsEngine(stage, quizData) {
+// 10. ENGINE: FIND ERRORS (Nivel A1 - Banco de 20 Oraciones)
+function buildFindErrorsEngine(stage, customQuizData) {
     
-    // Fallback seguro por si viene vacío
-    let rawItems = (quizData && quizData.length > 0) ? quizData : [
-        { broken: "She live in London with her family.", patch: "lives", hint: "Third person singular -s missing." }
+    // Base de datos nativa con 20 preguntas esenciales de Nivel A1
+    const defaultA1Database = [
+        {
+            broken: "She are a doctor at the hospital.",
+            wrongWord: "are",
+            patch: "is",
+            hint: "Verbo 'to be' para tercera persona singular (He/She/It)."
+        },
+        {
+            broken: "I has two cats and a dog.",
+            wrongWord: "has",
+            patch: "have",
+            hint: "Verbo 'to have' con el pronombre de primera persona (I)."
+        },
+        {
+            broken: "He like pizza very much.",
+            wrongWord: "like",
+            patch: "likes",
+            hint: "En presente simple, añade una '-s' al verbo con He/She/It."
+        },
+        {
+            broken: "They is playing in the park.",
+            wrongWord: "is",
+            patch: "are",
+            hint: "Verbo 'to be' para sujetos en plural (They)."
+        },
+        {
+            broken: "Where does you live?",
+            wrongWord: "does",
+            patch: "do",
+            hint: "Auxiliar de pregunta en presente para el pronombre 'You'."
+        },
+        {
+            broken: "I want an apple and a orange.",
+            wrongWord: "a",
+            patch: "an",
+            hint: "Usa 'an' si la siguiente palabra empieza con sonido de vocal (orange)."
+        },
+        {
+            broken: "This are my favorite book.",
+            wrongWord: "are",
+            patch: "is",
+            hint: "'This' se usa para un solo objeto en singular."
+        },
+        {
+            broken: "Her is my best friend.",
+            wrongWord: "her",
+            patch: "She",
+            hint: "Necesitas un pronombre de sujeto (I, You, He, She...) al inicio, no un posesivo."
+        },
+        {
+            broken: "There are three childs in the garden.",
+            wrongWord: "childs",
+            patch: "children",
+            hint: "El plural de 'child' es irregular. No se le añade '-s'."
+        },
+        {
+            broken: "I go to bed on night.",
+            wrongWord: "on",
+            patch: "at",
+            hint: "Con la palabra 'night' siempre usamos la preposición 'at'."
+        },
+        {
+            broken: "She don't like milk in her coffee.",
+            wrongWord: "don't",
+            patch: "doesn't",
+            hint: "El auxiliar negativo para He/She/It en presente es 'doesn't'."
+        },
+        {
+            broken: "We are speak English in class.",
+            wrongWord: "speak", // O puedes interpretarlo como que sobra 'are'
+            patch: "speak (sin 'are')",
+            hint: "No mezcles el verbo 'to be' (are) con un verbo normal en presente simple."
+        },
+        {
+            broken: "Do he play tennis on Saturdays?",
+            wrongWord: "do",
+            patch: "Does",
+            hint: "Para preguntas con He/She/It, usa el auxiliar 'Does'."
+        },
+        {
+            broken: "Look at those beautifuls flowers.",
+            wrongWord: "beautifuls",
+            patch: "beautiful",
+            hint: "¡Recuerda! En inglés los adjetivos nunca, nunca van en plural."
+        },
+        {
+            broken: "My brother birthday is in May.",
+            wrongWord: "brother",
+            patch: "brother's",
+            hint: "Falta el genitivo sajón ('s) para indicar que el cumpleaños pertenece al hermano."
+        },
+        {
+            broken: "I live at Madrid, the capital of Spain.",
+            wrongWord: "at",
+            patch: "in",
+            hint: "Para ciudades y países grandes, usamos la preposición 'in'."
+        },
+        {
+            broken: "Are you a student? Yes, I'm.",
+            wrongWord: "i'm",
+            hint: "En respuestas cortas afirmativas, nunca se usan contracciones. Lo correcto es 'Yes, I am'.",
+            patch: "I am"
+        },
+        {
+            broken: "We went to the cinema tomorrow.",
+            wrongWord: "tomorrow",
+            patch: "yesterday",
+            hint: "El verbo 'went' está en pasado (fuimos). La palabra de tiempo no encaja."
+        },
+        {
+            broken: "He driving a blue car right now.",
+            wrongWord: "driving",
+            patch: "is driving",
+            hint: "Para el Presente Continuo necesitas: Sujeto + Verbo TO BE + Verbo con -ING."
+        },
+        {
+            broken: "I usually drink coffee in the Mondays.",
+            wrongWord: "in",
+            patch: "on",
+            hint: "Con los días de la semana siempre se utiliza la preposición 'on'."
+        }
     ];
 
-    // Mapeamos los datos dinámicamente para soportar tanto {broken, patch} como {q, c}
+    // Si pasas datos por parámetro los usa; si no, carga el banco de 20 preguntas A1
+    let rawItems = (customQuizData && customQuizData.length > 0) ? customQuizData : defaultA1Database;
+
+    // Normalizamos la estructura interna de los datos
     let errorItems = rawItems.map(item => {
         return {
-            // Si no existe item.broken, busca en item.q (pregunta habitual)
-            broken: item.broken || item.q || "Missing sentence string",
-            // Si no existe item.patch, busca en item.c (respuesta correcta habitual)
-            patch: item.patch || item.c || "",
-            // Si no hay hint, dejamos un string vacío para que no pinche undefined
-            hint: item.hint || item.clue || "Look closely at the grammar structure."
+            broken: item.broken || "Missing sentence",
+            wrongWord: (item.wrongWord || item.patch || "").toLowerCase().trim(),
+            patch: item.patch || "",
+            hint: item.hint || "Presta atención a la estructura gramatical."
         };
     });
 
     let index = 0;
 
     function render() {
-        if(index >= errorItems.length) {
-            stage.innerHTML = `<div class="text-center text-2xl font-black text-emerald-500"><i class="fa-solid fa-shield-halved text-5xl block mb-4"></i>ALL STATEMENTS SECURED!</div>`;
+        if (index >= errorItems.length) {
+            stage.innerHTML = `
+                <div class="text-center p-8 bg-slate-800 rounded-xl border-2 border-emerald-500/30 max-w-xl mx-auto shadow-xl">
+                    <i class="fa-solid fa-trophy text-6xl text-amber-400 block mb-4 animate-bounce"></i>
+                    <h2 class="text-2xl font-black text-emerald-400 tracking-wide uppercase mb-2">¡EXCELENTE TRABAJO!</h2>
+                    <p class="text-slate-400 text-sm">Has completado las 20 correcciones y asegurado tu nivel A1.</p>
+                </div>
+            `;
             return;
         }
         
         const item = errorItems[index];
         
+        // Separamos la oración por espacios
+        const words = item.broken.split(" ");
+        
+        // Generamos los botones limpiando puntuación para la validación interna
+        const wordsHTML = words.map((word) => {
+            // Removemos signos comunes (?, ., ,, !) para que no afecten el match
+            const cleanWord = word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g,"").toLowerCase();
+            return `
+                <button data-word="${cleanWord}" class="word-token text-lg text-white font-semibold bg-slate-700/60 hover:bg-rose-600 border border-slate-600 px-3 py-2 rounded-lg transition-all m-1 transform active:scale-95 shadow-sm">
+                    ${word}
+                </button>
+            `;
+        }).join("");
+        
         stage.innerHTML = `
-            <div class="w-full max-w-xl flex flex-col gap-4">
-                <span class="text-xs text-rose-400 font-mono font-bold tracking-widest uppercase text-center">Locate the broken element</span>
-                <div class="bg-slate-800 p-6 rounded-xl border-2 border-rose-900/50 text-center">
-                    <p class="text-xl text-white font-bold italic">"${item.broken}"</p>
+            <div class="w-full max-w-xl flex flex-col gap-4 bg-slate-900/40 p-6 rounded-2xl border border-slate-800 backdrop-blur-sm mx-auto">
+                <div class="flex justify-between items-center px-1">
+                    <span class="text-xs text-rose-400 font-mono font-bold tracking-widest uppercase">Detecta el error</span>
+                    <span class="text-xs text-slate-500 font-mono font-bold">Progreso: ${index + 1}/${errorItems.length}</span>
                 </div>
-                <div class="p-2 bg-slate-800 rounded-xl border border-slate-700">
-                    <input type="text" id="error-input" placeholder="Type the correct word here..." class="w-full bg-slate-900 text-white p-4 rounded-lg text-center font-bold text-lg border border-slate-600 focus:outline-none focus:border-amber-500">
+                
+                <!-- Caja contenedora de la oración interactiva -->
+                <div class="bg-slate-800/90 p-6 rounded-xl border border-slate-700 text-center flex flex-wrap justify-center items-center gap-1 shadow-inner">
+                    ${wordsHTML}
                 </div>
-                <button id="error-btn-validate" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-4 rounded-xl">VALIDATE REPAIR</button>
-                <p class="text-xs text-slate-500 text-center mt-2">Clue: ${item.hint}</p>
+                
+                <!-- Pista dinámica -->
+                <div class="bg-slate-800/40 p-3 rounded-lg border border-slate-800/80 flex items-start gap-2.5">
+                    <span class="text-amber-500 text-sm">💡</span>
+                    <p class="text-xs text-slate-400 leading-relaxed"><strong class="text-slate-300">Pista:</strong> ${item.hint}</p>
+                </div>
             </div>
         `;
         
-        stage.querySelector('#error-btn-validate').addEventListener('click', () => {
-            const userVal = stage.querySelector('#error-input').value.trim().toLowerCase();
-            if(userVal === item.patch.toLowerCase()) {
-                alert("Excellent correction!");
-                index++;
-                render();
-            } else {
-                alert(`Incorrect fix. Look closely at the grammatical rules!`);
-            }
+        // Listener para procesar los clics
+        stage.querySelectorAll('.word-token').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const clickedWord = e.target.getAttribute('data-word');
+                
+                if (clickedWord === item.wrongWord) {
+                    let feedback = `¡Excelente! Encontraste el error: "${e.target.innerText}".`;
+                    if(item.patch) {
+                        feedback += ` Lo correcto sería usar "${item.patch}".`;
+                    }
+                    alert(feedback);
+                    
+                    index++;
+                    render(); // Carga la siguiente pregunta de forma automática
+                } else {
+                    alert(`"${e.target.innerText}" es correcto en esta oración. ¡Sigue buscando!`);
+                }
+            });
         });
     }
+
+    // Iniciar el juego
     render();
 }
 

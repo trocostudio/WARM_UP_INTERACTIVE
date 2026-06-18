@@ -1400,61 +1400,207 @@ function buildTicTacToeEngine(stage, quizData) {
     renderBoard();
 }
 
-// 10. ENGINE: FIND ERRORS (Versión tolerante a fallos y multipropiedad)
-function buildFindErrorsEngine(stage, quizData) {
+// 10. ENGINE: FIND ERRORS (Nivel B2 - Banco Fijo de 20 Oraciones Nativas)
+function buildFindErrorsEngine(stage) {
     
-    // Fallback seguro por si viene vacío
-    let rawItems = (quizData && quizData.length > 0) ? quizData : [
-        { broken: "She live in London with her family.", patch: "lives", hint: "Third person singular -s missing." }
+    // Base de datos fija y exclusiva del motor (Nivel B2)
+    const b2Database = [
+        {
+            broken: "If I had studied harder at university, I would have a better job now.", // Control de condicional mixto válido, vamos a meter el error común:
+            broken: "If I would have known you were coming, I would have baked a cake.",
+            wrongWord: "would", // Error en la cláusula del 'If' en tercer condicional
+            patch: "had (If I had known...)",
+            hint: "Tercer Condicional: La cláusula que contiene el 'if' nunca lleva el auxiliar 'would'; debe ir en Pasado Perfecto."
+        },
+        {
+            broken: "Hardly I had arrived at the station when the train left.",
+            wrongWord: "i", // Error de orden/inversión
+            patch: "had I (Hardly had I arrived...)",
+            hint: "Inversión adverbial: Cuando empiezas una oración con un adverbio negativo o restrictivo como 'Hardly', debes invertir el sujeto y el auxiliar."
+        },
+        {
+            broken: "I look forward to see you at the conference next month.", // B1, actualicemos a B2:
+            broken: "I am completely professional, so I am not used to be treated like this.",
+            wrongWord: "be",
+            patch: "being",
+            hint: "La estructura 'be used to' (estar acostumbrado a) requiere obligatoriamente que el verbo subsiguiente vaya en gerundio (-ing)."
+        },
+        {
+            broken: "He suggested that she goes to the doctor immediately.",
+            wrongWord: "goes",
+            patch: "go (Subjuntivo) o 'should go'",
+            hint: "Estructuras de mandato/sugerencia: El verbo 'suggest' seguido de una cláusula con 'that' activa el modo subjuntivo, exigiendo el verbo en su forma base."
+        },
+        {
+            broken: "I had my car repair at the local garage yesterday.",
+            wrongWord: "repair",
+            patch: "repaired",
+            hint: "Estructura Causativa: Para expresar que alguien más hizo un trabajo por ti, la estructura es 'Have + objeto + participio pasado'."
+        },
+        {
+            broken: "Despite she felt extremely tired, she finished the report on time.",
+            wrongWord: "despite",
+            patch: "In spite of / Despite the fact that (o cambiar a 'Despite feeling')",
+            hint: "El conector 'Despite' nunca puede ir seguido directamente por una cláusula completa con sujeto y verbo. Requiere un sustantivo o un gerundio."
+        },
+        {
+            broken: "She congratulated me for passing my driving test.",
+            wrongWord: "for",
+            patch: "on",
+            hint: "Preposiciones dependientes avanzadas: El verbo 'congratulate' exige de forma fija la preposición 'on' (congratulate someone on something)."
+        },
+        {
+            broken: "I wish I didn't lose my passport during my trip last summer.",
+            wrongWord: "didn't",
+            patch: "hadn't (I wish I hadn't lost...)",
+            hint: "Deseos sobre el pasado (Wishes about the past): Para expresar arrepentimiento sobre algo que ya pasó, debes usar el Pasado Perfecto."
+        },
+        {
+            broken: "You should have saw the look on his face when he won.",
+            wrongWord: "saw",
+            patch: "seen",
+            hint: "Modales Perfectos: Los modales de deducción o arrepentimiento en el pasado utilizan 'should/must/could + have + participio pasado'."
+        },
+        {
+            broken: "The company is planning to lay down fifty workers next month.",
+            wrongWord: "down",
+            patch: "off (lay off)",
+            hint: "Phrasal Verbs de negocios: El término correcto para referirse al despido de trabajadores por razones económicas es 'lay off'."
+        },
+        {
+            broken: "I suggest you to try the seafood pasta; it is excellent.",
+            wrongWord: "to",
+            patch: "trying (o 'that you try')",
+            hint: "El verbo 'suggest' jamás admite un infinitivo con 'to' cuando se dirige a una persona. Usa gerundio o una estructura con 'that'."
+        },
+        {
+            broken: "No sooner had he sat down than the phone rang.", // Control
+            broken: "No sooner I had closed my eyes than the alarm went off.",
+            wrongWord: "i",
+            patch: "had I (No sooner had I...)",
+            hint: "Inversión enfática: Al iniciar la oración con 'No sooner', el orden del sujeto y el verbo auxiliar del Pasado Perfecto debe invertirse."
+        },
+        {
+            broken: "I can't help to think that something is wrong with this plan.",
+            wrongWord: "to",
+            patch: "thinking (gerundio)",
+            hint: "Expresiones idiomáticas: La estructura 'can't help' (no poder evitar) siempre va seguida de un verbo terminado en '-ing'."
+        },
+        {
+            broken: "It is high time the government takes action against inflation.",
+            wrongWord: "takes",
+            patch: "took (pasado con valor de subjuntivo)",
+            hint: "La expresión 'It is high time...' (Ya va siendo hora de que...) requiere gramaticalmente que el verbo de la acción vaya en Pasado Simple."
+        },
+        {
+            broken: "She recommended me a very good restaurant in the city center.", // Control válido, pero busquemos el error de patrón:
+            broken: "She recommended me to visit the national museum.",
+            wrongWord: "me",
+            patch: "visiting / that I visit",
+            hint: "Al igual que 'suggest', el verbo 'recommend' no acepta la estructura 'recommend + objeto + to + infinitivo'."
+        },
+        {
+            broken: "Having finishing her homework, she went out with her friends.",
+            wrongWord: "finishing",
+            patch: "finished",
+            hint: "Cláusulas de participio perfecto: Para indicar que una acción se completó antes que otra, se usa 'Having + participio pasado'."
+        },
+        {
+            broken: "He denied to steal the money from the cash register.",
+            wrongWord: "to",
+            patch: "stealing (gerundio)",
+            hint: "Verbos de reporte: El verbo 'deny' (negar) requiere ser seguido por un gerundio, no por un infinitivo."
+        },
+        {
+            broken: "I am not liking this new coffee blend at all.",
+            wrongWord: "liking",
+            patch: "like (I don't like...)",
+            hint: "Verbos Estativos (Stative Verbs): Verbos de preferencia o emoción como 'like' no se utilizan en tiempos continuos, sino en presente simple."
+        },
+        {
+            broken: "The car needs to wash before we leave for our road trip.",
+            wrongWord: "wash",
+            patch: "washing / to be washed",
+            hint: "Voz pasiva con 'need': El verbo 'need' estructurado de forma pasiva requiere un gerundio ('needs washing') o un infinitivo pasivo ('needs to be washed')."
+        },
+        {
+            broken: "He was accused of commit fraud by the board of directors.",
+            wrongWord: "commit",
+            patch: "committing",
+            hint: "Preposiciones y verbos: Cualquier verbo colocado inmediatamente después de una preposición (en este caso 'of') debe ir en su forma de gerundio (-ing)."
+        }
     ];
 
-    // Mapeamos los datos dinámicamente para soportar tanto {broken, patch} como {q, c}
-    let errorItems = rawItems.map(item => {
+    // Normalizamos los datos de la base interna directamente
+    let errorItems = b2Database.map(item => {
         return {
-            // Si no existe item.broken, busca en item.q (pregunta habitual)
-            broken: item.broken || item.q || "Missing sentence string",
-            // Si no existe item.patch, busca en item.c (respuesta correcta habitual)
-            patch: item.patch || item.c || "",
-            // Si no hay hint, dejamos un string vacío para que no pinche undefined
-            hint: item.hint || item.clue || "Look closely at the grammar structure."
+            broken: item.broken,
+            wrongWord: item.wrongWord.toLowerCase().trim(),
+            patch: item.patch,
+            hint: item.hint
         };
     });
 
     let index = 0;
 
     function render() {
-        if(index >= errorItems.length) {
-            stage.innerHTML = `<div class="text-center text-2xl font-black text-emerald-500"><i class="fa-solid fa-shield-halved text-5xl block mb-4"></i>ALL STATEMENTS SECURED!</div>`;
+        if (index >= errorItems.length) {
+            stage.innerHTML = `
+                <div class="text-center p-8 bg-slate-800 rounded-xl border-2 border-emerald-500/30 max-w-xl mx-auto shadow-xl">
+                    <i class="fa-solid fa-trophy text-6xl text-amber-400 block mb-4 animate-bounce"></i>
+                    <h2 class="text-2xl font-black text-emerald-400 tracking-wide uppercase mb-2">¡NIVEL B2 DOMINADO!</h2>
+                    <p class="text-slate-400 text-sm">Has demostrado un control impecable sobre los matices más complejos del inglés intermedio-alto.</p>
+                </div>
+            `;
             return;
         }
         
         const item = errorItems[index];
+        const words = item.broken.split(" ");
+        
+        const wordsHTML = words.map((word) => {
+            // Limpieza estricta de signos de puntuación avanzados
+            const cleanWord = word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g,"").toLowerCase();
+            return `
+                <button data-word="${cleanWord}" class="word-token text-base text-white font-semibold bg-slate-700/60 hover:bg-rose-600 border border-slate-600 px-3 py-2 rounded-lg transition-all m-1 transform active:scale-95 shadow-sm">
+                    ${word}
+                </button>
+            `;
+        }).join("");
         
         stage.innerHTML = `
-            <div class="w-full max-w-xl flex flex-col gap-4">
-                <span class="text-xs text-rose-400 font-mono font-bold tracking-widest uppercase text-center">Locate the broken element</span>
-                <div class="bg-slate-800 p-6 rounded-xl border-2 border-rose-900/50 text-center">
-                    <p class="text-xl text-white font-bold italic">"${item.broken}"</p>
+            <div class="w-full max-w-xl flex flex-col gap-4 bg-slate-900/40 p-6 rounded-2xl border border-slate-800 backdrop-blur-sm mx-auto">
+                <div class="flex justify-between items-center px-1">
+                    <span class="text-xs text-rose-400 font-mono font-bold tracking-widest uppercase">Detecta el error (Nivel B2)</span>
+                    <span class="text-xs text-slate-500 font-mono font-bold">Progreso: ${index + 1}/${errorItems.length}</span>
                 </div>
-                <div class="p-2 bg-slate-800 rounded-xl border border-slate-700">
-                    <input type="text" id="error-input" placeholder="Type the correct word here..." class="w-full bg-slate-900 text-white p-4 rounded-lg text-center font-bold text-lg border border-slate-600 focus:outline-none focus:border-amber-500">
+                
+                <div class="bg-slate-800/90 p-6 rounded-xl border border-slate-700 text-center flex flex-wrap justify-center items-center gap-1 shadow-inner">
+                    ${wordsHTML}
                 </div>
-                <button id="error-btn-validate" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-4 rounded-xl">VALIDATE REPAIR</button>
-                <p class="text-xs text-slate-500 text-center mt-2">Clue: ${item.hint}</p>
+                
+                <div class="bg-slate-800/40 p-3 rounded-lg border border-slate-800/80 flex items-start gap-2.5">
+                    <span class="text-amber-500 text-sm">💡</span>
+                    <p class="text-xs text-slate-400 leading-relaxed"><strong class="text-slate-300">Pista:</strong> ${item.hint}</p>
+                </div>
             </div>
         `;
         
-        stage.querySelector('#error-btn-validate').addEventListener('click', () => {
-            const userVal = stage.querySelector('#error-input').value.trim().toLowerCase();
-            if(userVal === item.patch.toLowerCase()) {
-                alert("Excellent correction!");
-                index++;
-                render();
-            } else {
-                alert(`Incorrect fix. Look closely at the grammatical rules!`);
-            }
+        stage.querySelectorAll('.word-token').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const clickedWord = e.target.getAttribute('data-word');
+                
+                if (clickedWord === item.wrongWord) {
+                    alert(`¡Excelente! Encontraste el error: "${e.target.innerText}". Lo correcto sería: "${item.patch}".`);
+                    index++;
+                    render();
+                } else {
+                    alert(`"${e.target.innerText}" es correcto en esta oración. ¡Sigue buscando!`);
+                }
+            });
         });
     }
+
     render();
 }
 

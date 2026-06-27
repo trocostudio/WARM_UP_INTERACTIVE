@@ -1472,62 +1472,65 @@
 
         <main class="main-container" id="main-missions-container">
 
-            <!-- ==================== STATION 1: THE WHISPERING WOODS ==================== -->
-            <section id="station-panel-1" class="mission-screen">
-                <button class="return-btn" onclick="returnToHub()">◀ Return to Map</button>
-                <div class="split-layout">
-                    <div class="panel-card">
-                        <div class="panel-title">
-                            Audio Word Bank (Aleatorio)
-                            <div>
-                                <span class="badge badge-a1a2">A1-A2</span> 
-                                <span class="badge badge-c1">B1-C1</span>
-                            </div>
-                        </div>
-                        <p style="margin-bottom: 12px; font-size:0.9rem; color:#8b7355;">Selecciona el orden correcto: SHADOW &rarr; ELOQUENT &rarr; ANCIENT &rarr; OBSCURE</p>
-                        <div class="word-grid" id="s1-word-grid-root">
-                            <!-- Injected dynamically by the script -->
-                        </div>
-                    </div>
-                    <div>
-                        <!-- Hidden Riddle Block -->
-                        <div class="panel-card" id="s1-riddle-wrapper" style="display: none; border-color: #d4af37;">
-                            <div class="panel-title" style="color: #10b981;">🔓 Sequence Correct! Custom Logic Riddle</div>
-                            <p style="margin-bottom: 18px; font-style: italic; font-size:1.1rem; border-left: 4px solid #10b981; padding-left:12px; color: #cbd5e1;">
-                                "I pass through the woods but make no sound; I have roots that no one sees, and I am taller than trees. What am I?"
-                            </p>
-                            <div style="display:flex; gap:10px; margin-bottom:15px;">
-                                <input type="text" id="s1-riddle-input" placeholder="Type answer in English..." style="flex:1; padding:10px; background:#0b0908; border:2px solid #5c4738; border-radius:12px; color:white; font-weight:bold;">
-                                <button class="reveal-btn action-btn-blue" onclick="checkS1Riddle()">Verify</button>
-                            </div>
-                            <!-- Facilitator Lifeline Button -->
-                            <button class="reveal-btn" style="background: linear-gradient(135deg, #7f1d1d, #991b1b); border-bottom-color: #581c1c; color: white;" onclick="toggleRevealContent('s1-key-riddle')">🆘 Facilitator Lifeline</button>
-                            <div id="s1-key-riddle" class="hidden-content" style="color: #34d399; font-weight: bold; border-color: #10b981; background-color: #064e3b;">
-                                Answer: MOUNTAIN (or A MOUNTAIN)
-                            </div>
-                        </div>
-
-                        <!-- Hidden Navigation Task Block -->
-                        <div class="panel-card" id="s1-navigation-wrapper" style="display: none; border-color: #10b981;">
-                            <div class="panel-title" style="color: #a78bfa;">🎯 Final Token Location Unlocked</div>
-                            <p style="font-size:1.1rem; line-height:1.6; color:#ebd6b7; font-weight: 700; background: #0b0908; padding: 15px; border-radius:16px; border-left: 5px solid #a78bfa;">
-                                "Where icy bytes and crunchy snacks collide, in metallic armor, my neon lights hide. Pay your tribute of coins or swipe with pride, and look close to the base where the packages slide!"
-                            </p>
-                        </div>
-
-                        <div class="panel-card">
-                            <div class="panel-title">Synonyms & Antonyms Key</div>
-                            <button class="reveal-btn" onclick="toggleRevealContent('s1-key-syn')">&#128065; Toggle Key Layout</button>
-                            <div id="s1-key-syn" class="hidden-content">
-                                <strong>SHADOW:</strong> Syn: Shade | Ant: Light<br>
-                                <strong>ELOQUENT:</strong> Syn: Articulate | Ant: Inarticulate<br>
-                                <strong>ANCIENT:</strong> Syn: Antique | Ant: Modern<br>
-                                <strong>OBSCURE:</strong> Syn: Hidden | Ant: Clear
-                            </div>
-                        </div>
-                    </div>
+           <section id="station-panel-1" class="mission-screen">
+    <button class="return-btn" onclick="returnToHub()">◀ Return to Map</button>
+    <div class="split-layout">
+        <div class="panel-card">
+            <div class="panel-title">
+                Audio Word Bank (Aleatorio)
+                <div>
+                    <span class="badge badge-a1a2">A1-A2</span> 
+                    <span class="badge badge-c1">B1-C1</span>
                 </div>
-            </section>
+            </div>
+            
+            <div class="contenedor-reproductor" style="margin: 15px 0; text-align: center;">
+                <audio controls style="width: 100%; max-width: 100%;">
+                    <source src="audio1.mp3" type="audio/mpeg">
+                    Tu navegador no soporta el elemento de audio.
+                </audio>
+            </div>
+
+            <p style="margin-bottom: 12px; font-size:0.9rem; color:#8b7355;">Selecciona el orden correcto: SHADOW &rarr; ELOQUENT &rarr; ANCIENT &rarr; OBSCURE</p>
+            <div class="word-grid" id="s1-word-grid-root">
+                </div>
+        </div>
+        <div>
+            <div class="panel-card" id="s1-riddle-wrapper" style="display: none; border-color: #d4af37;">
+                <div class="panel-title" style="color: #10b981;">🔓 Sequence Correct! Custom Logic Riddle</div>
+                <p style="margin-bottom: 18px; font-style: italic; font-size:1.1rem; border-left: 4px solid #10b981; padding-left:12px; color: #cbd5e1;">
+                    "I pass through the woods but make no sound; I have roots that no one sees, and I am taller than trees. What am I?"
+                </p>
+                <div style="display:flex; gap:10px; margin-bottom:15px;">
+                    <input type="text" id="s1-riddle-input" placeholder="Type answer in English..." style="flex:1; padding:10px; background:#0b0908; border:2px solid #5c4738; border-radius:12px; color:white; font-weight:bold;">
+                    <button class="reveal-btn action-btn-blue" onclick="checkS1Riddle()">Verify</button>
+                </div>
+                <button class="reveal-btn" style="background: linear-gradient(135deg, #7f1d1d, #991b1b); border-bottom-color: #581c1c; color: white;" onclick="toggleRevealContent('s1-key-riddle')">🆘 Facilitator Lifeline</button>
+                <div id="s1-key-riddle" class="hidden-content" style="color: #34d399; font-weight: bold; border-color: #10b981; background-color: #064e3b;">
+                    Answer: MOUNTAIN (or A MOUNTAIN)
+                </div>
+            </div>
+
+            <div class="panel-card" id="s1-navigation-wrapper" style="display: none; border-color: #10b981;">
+                <div class="panel-title" style="color: #a78bfa;">🎯 Final Token Location Unlocked</div>
+                <p style="font-size:1.1rem; line-height:1.6; color:#ebd6b7; font-weight: 700; background: #0b0908; padding: 15px; border-radius:16px; border-left: 5px solid #a78bfa;">
+                    "Where icy bytes and crunchy snacks collide, in metallic armor, my neon lights hide. Pay your tribute of coins or swipe with pride, and look close to the base where the packages slide!"
+                </p>
+            </div>
+
+            <div class="panel-card">
+                <div class="panel-title">Synonyms & Antonyms Key</div>
+                <button class="reveal-btn" onclick="toggleRevealContent('s1-key-syn')">&#128065; Toggle Key Layout</button>
+                <div id="s1-key-syn" class="hidden-content">
+                    <strong>SHADOW:</strong> Syn: Shade | Ant: Light<br>
+                    <strong>ELOQUENT:</strong> Syn: Articulate | Ant: Inarticulate<br>
+                    <strong>ANCIENT:</strong> Syn: Antique | Ant: Modern<br>
+                    <strong>OBSCURE:</strong> Syn: Hidden | Ant: Clear
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
             <!-- ==================== STATION 2: RHYTHM SYNC BATTLE ==================== -->
             <section id="station-panel-2" class="mission-screen">

@@ -29,7 +29,7 @@
             --grad-b1: linear-gradient(135deg, #10b981, #047857);
             --grad-b2: linear-gradient(135deg, #f97316, #c2410c);
             --grad-c1: linear-gradient(135deg, #8b5cf6, #6d28d9);
-            --grad-dashboard: linear-gradient(135deg, #6366f1, #4f46e5); /* Nuevo gradiente para SMART DASHBOARD */
+            --grad-dashboard: linear-gradient(135deg, #6366f1, #4f46e5);
         }
 
         [data-theme="dark"] {
@@ -52,6 +52,54 @@
             flex-direction: column;
             align-items: center;
             overflow-x: hidden;
+        }
+
+        /* --- PANTALLA DE CARGA (LOADER) --- */
+        #loader-container {
+            position: fixed;
+            inset: 0;
+            background-color: var(--bg-base);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000; /* Por encima de todo, incluyendo la firma */
+            gap: 1.5rem;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        #loader-gif {
+            width: 150px; /* Puedes ajustar el tamaño de tus GIFs aquí */
+            height: auto;
+        }
+
+        .progress-bar-container {
+            width: 200px;
+            height: 6px;
+            background-color: var(--border-ui);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 50%;
+            background: var(--grad-dashboard);
+            border-radius: 10px;
+            animation: infinite-loading 1.5s infinite ease-in-out;
+        }
+
+        @keyframes infinite-loading {
+            0% { left: -50%; width: 30%; }
+            50% { left: 25%; width: 50%; }
+            100% { left: 100%; width: 30%; }
+        }
+
+        /* Esconder el loader de forma fluida */
+        #loader-container.hidden {
+            opacity: 0;
+            visibility: hidden;
         }
 
         /* --- STICKY CONFIGURATIONS --- */
@@ -134,7 +182,6 @@
             animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        /* Responsive staggered delays initialized dynamically or via static selectors */
         .level-card:nth-child(1) { animation-delay: 0.05s; --accent-g: var(--grad-intro); }
         .level-card:nth-child(2) { animation-delay: 0.15s; --accent-g: var(--grad-a1); }
         .level-card:nth-child(3) { animation-delay: 0.25s; --accent-g: var(--grad-a2); }
@@ -142,7 +189,6 @@
         .level-card:nth-child(5) { animation-delay: 0.45s; --accent-g: var(--grad-b2); }
         .level-card:nth-child(6) { animation-delay: 0.55s; --accent-g: var(--grad-c1); }
         
-        /* Modificación para centrar la séptima tarjeta en la parte inferior */
         .level-card:nth-child(7) { 
             animation-delay: 0.65s; 
             --accent-g: var(--grad-dashboard); 
@@ -210,7 +256,7 @@
             font-size: 0.95rem;
             font-weight: 600;
             color: var(--text-title);
-            min-height: 48px; /* Ensures seamless touchscreen target criteria */
+            min-height: 48px;
         }
 
         .arrow-glyph {
@@ -238,48 +284,44 @@
             .matrix-grid { grid-template-columns: 1fr; gap: 1.5rem; }
             .theme-toggle { top: 1rem; right: 1rem; }
             
-            /* En pantallas móviles se cancela el centrado de grid para que actúe normal */
             .level-card:nth-child(7) {
                 grid-column: auto;
                 max-width: none;
             }
         }
 
-        /* --- CONFIGURACIÓN DE LOS PERSONAJES (RESPONSIVOS) --- */
+        /* --- CONFIGURACIÓN DE LOS PERSONAJES --- */
         .personaje {
             position: fixed;
             bottom: 0;
-            width: 300px; /* Tamaño grande para pantallas de PC */
+            width: 300px;
             height: auto;
             z-index: 10;
             pointer-events: none;
             animation: moveDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
 
-        .personaje-izq {
-            left: 1rem;
-        }
+        .personaje-izq { left: 1rem; }
+        .personaje-der { right: 1rem; }
 
-        .personaje-der {
-            right: 1rem;
-        }
-
-        /* Ajuste automático para pantallas móviles y tablets */
         @media (max-width: 1300px) {
             .personaje {
-                width: 200px; /* Reducimos el tamaño en móviles para que no estorben */
-                opacity: 0.6;  /* Un poco de transparencia para integrarse mejor de fondo */
+                width: 200px;
+                opacity: 0.6;
             }
-            .personaje-izq {
-                left: 0.5rem;
-            }
-            .personaje-der {
-                right: 0.5rem;
-            }
+            .personaje-izq { left: 0.5rem; }
+            .personaje-der { right: 0.5rem; }
         }
     </style>
 </head>
 <body>
+
+    <div id="loader-container">
+        <img id="loader-gif" src="" alt="Cargando animación...">
+        <div class="progress-bar-container">
+            <div class="progress-bar-fill"></div>
+        </div>
+    </div>
 
     <button class="theme-toggle" id="themeSwitchBtn" aria-label="Toggle structural theme">🌓</button>
 
@@ -298,6 +340,11 @@
     <div id="firma-seguridad" style="position:fixed;bottom:20px;left:30px;font-family:Georgia, 'Times New Roman', serif;font-style:italic;font-size:14px;opacity:0.7;z-index:9999;pointer-events:none;">Creado por Tony Salas & German Peña</div>
 
     <script>
+        // SELECCIÓN ALEATORIA DEL GIF ANTES DE QUE TODO LO DEMÁS CARGUE
+        const totalGifs = 5;
+        const randomGifNumber = Math.floor(Math.random() * totalGifs) + 1; // Número entre 1 y 5
+        document.getElementById('loader-gif').src = `${randomGifNumber}.gif`;
+
         // --- DATA DICTIONARY ---
         const CONFIG_DATA = {
             levels: [
@@ -389,7 +436,6 @@
             },
 
             registerInteractiveActions() {
-                // Theme toggle execution
                 const actionThemeBtn = document.getElementById('themeSwitchBtn');
                 if (actionThemeBtn) {
                     actionThemeBtn.addEventListener('click', () => {
@@ -399,7 +445,6 @@
                     });
                 }
 
-                // Card route execution
                 const interactiveCards = document.querySelectorAll('.level-card');
                 interactiveCards.forEach(element => {
                     element.addEventListener('click', () => {
@@ -412,9 +457,16 @@
             }
         };
 
-        // Fire UI creation on initial render
+        // EVENTO MODIFICADO: Cuando todo el DOM y recursos estén cargados, quitamos el loader
         document.addEventListener('DOMContentLoaded', () => {
             PortalApp.init();
+        });
+
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader-container');
+            if(loader) {
+                loader.classList.add('hidden');
+            }
         });
 
         // --- MANDATORY CRYPTOGRAPHIC INTEGRITY CHECK ---

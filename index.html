@@ -63,13 +63,13 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            z-index: 10000; /* Por encima de todo, incluyendo la firma */
+            z-index: 10000;
             gap: 1.5rem;
             transition: opacity 0.5s ease, visibility 0.5s ease;
         }
 
         #loader-gif {
-            width: 400px; /* Puedes ajustar el tamaño de tus GIFs aquí */
+            width: 500px;
             height: auto;
         }
 
@@ -96,7 +96,7 @@
             100% { left: 100%; width: 30%; }
         }
 
-        /* Esconder el loader de forma fluida */
+        /* Ocultado fluido controlado por JS */
         #loader-container.hidden {
             opacity: 0;
             visibility: hidden;
@@ -340,10 +340,22 @@
     <div id="firma-seguridad" style="position:fixed;bottom:20px;left:30px;font-family:Georgia, 'Times New Roman', serif;font-style:italic;font-size:14px;opacity:0.7;z-index:9999;pointer-events:none;">Creado por Tony Salas & German Peña</div>
 
     <script>
-        // SELECCIÓN ALEATORIA DEL GIF ANTES DE QUE TODO LO DEMÁS CARGUE
+        // --- PROCESAMIENTO E INYECCIÓN DE GIF ALEATORIO ---
         const totalGifs = 5;
-        const randomGifNumber = Math.floor(Math.random() * totalGifs) + 1; // Número entre 1 y 5
-        document.getElementById('loader-gif').src = `${randomGifNumber}.gif`;
+        const randomGifNumber = Math.floor(Math.random() * totalGifs) + 1; 
+        const loaderImg = document.getElementById('loader-gif');
+        
+        loaderImg.src = `${randomGifNumber}.gif`;
+
+        // Sistema de contingencia por si se borra o no se encuentra el GIF
+        loaderImg.onerror = function() {
+            this.style.display = 'none';
+            const backupIcon = document.createElement('div');
+            backupIcon.style.fontSize = '4.5rem';
+            backupIcon.innerHTML = '📝';
+            backupIcon.className = 'welcome';
+            loaderImg.parentNode.insertBefore(backupIcon, loaderImg);
+        };
 
         // --- DATA DICTIONARY ---
         const CONFIG_DATA = {
@@ -457,15 +469,18 @@
             }
         };
 
-        // EVENTO MODIFICADO: Cuando todo el DOM y recursos estén cargados, quitamos el loader
+        // Renderizado de la UI en la carga del DOM
         document.addEventListener('DOMContentLoaded', () => {
             PortalApp.init();
         });
 
+        // MANEJO E INTEGRACIÓN FORZADA DEL TIEMPO DE CARGA (1.8s)
         window.addEventListener('load', () => {
             const loader = document.getElementById('loader-container');
-            if(loader) {
-                loader.classList.add('hidden');
+            if (loader) {
+                setTimeout(() => {
+                    loader.classList.add('hidden');
+                }, 1800); // 1.8 segundos exactos garantizados
             }
         });
 

@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Academy Pronunciation Program</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Poppins & Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        h1, h2, h3, .font-poppins {
+            font-family: 'Poppins', sans-serif;
+        }
+        /* Custom scrollbar matching branding */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #dc2626;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #b91c1c;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
+
+    <!-- TOP BRANDING & HEADER -->
+    <header class="bg-red-600 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col lg:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('welcome')">
+                <div class="bg-white text-red-600 p-2.5 rounded-xl shadow-inner flex items-center justify-center">
+                    <i data-lucide="speech" class="w-8 h-8 stroke-[2.5]"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-extrabold tracking-tight uppercase font-poppins">
+                        Smart Academy
+                    </h1>
+                    <p class="text-xs font-semibold uppercase tracking-widest text-red-100">
+                        Pronunciation Program & Fluency Lab
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Navigation Tabs -->
+            <nav class="flex flex-wrap gap-2 justify-center">
+                <button onclick="switchTab('welcome')" id="btn-welcome" class="tab-btn px-4 py-2 rounded-lg font-bold text-sm transition-all duration-200 bg-white text-red-600 shadow-md">
+                    <span class="flex items-center gap-1.5"><i data-lucide="home" class="w-4 h-4"></i> Home</span>
+                </button>
+                <button onclick="switchTab('chart')" id="btn-chart" class="tab-btn px-4 py-2 rounded-lg font-bold text-sm transition-all duration-200 hover:bg-red-700 text-white">
+                    <span class="flex items-center gap-1.5"><i data-lucide="grid" class="w-4 h-4"></i> IPA Chart</span>
+                </button>
+                <button onclick="switchTab('gym')" id="btn-gym" class="tab-btn px-4 py-2 rounded-lg font-bold text-sm transition-all duration-200 hover:bg-red-700 text-white">
+                    <span class="flex items-center gap-1.5"><i data-lucide="dumbbell" class="w-4 h-4"></i> Minimal Pairs</span>
+                </button>
+                <button onclick="switchTab('mouth')" id="btn-mouth" class="tab-btn px-4 py-2 rounded-lg font-bold text-sm transition-all duration-200 hover:bg-red-700 text-white">
+                    <span class="flex items-center gap-1.5"><i data-lucide="smile" class="w-4 h-4"></i> Mouth Trainer</span>
+                </button>
+                <button onclick="switchTab('quiz')" id="btn-quiz" class="tab-btn px-4 py-2 rounded-lg font-bold text-sm transition-all duration-200 hover:bg-red-700 text-white">
+                    <span class="flex items-center gap-1.5"><i data-lucide="trophy" class="w-4 h-4"></i> Quiz Zone</span>
+                </button>
+                <button onclick="switchTab('fases')" id="btn-fases" class="tab-btn px-4 py-2 rounded-lg font-bold text-sm transition-all duration-200 hover:bg-red-700 text-white">
+                    <span class="flex items-center gap-1.5"><i data-lucide="calendar" class="w-4 h-4"></i> Pilot Phases</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN APP CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
+        
+        <!-- ==============================================
+             TAB 0: WELCOME & DASHBOARD
+             ============================================== -->
+        <section id="tab-welcome" class="tab-content block">
+            <div class="bg-gradient-to-br from-red-600 to-red-800 rounded-3xl p-8 text-white shadow-xl mb-8 relative overflow-hidden">
+                <div class="absolute right-0 bottom-0 opacity-10 transform translate-x-12 translate-y-12">
+                    <i data-lucide="speech" class="w-96 h-96"></i>
+                </div>
+                <div class="relative z-10 max-w-2xl">
+                    <span class="bg-white/20 text-white text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full backdrop-blur-sm">PILOT PROJECT 2026</span>
+                    <h2 class="text-3xl md:text-5xl font-extrabold font-poppins mt-4 mb-3 leading-tight">
+                        Welcome to the Pronunciation Lab!
+                    </h2>
+                    <p class="text-red-100 text-sm md:text-base leading-relaxed mb-6">
+                        Designed to transform Smartzone environments into highly interactive centers for phonetics, physical articulation, and native speech patterns. Get ready to train your ears and vocal cords.
+                    </p>
+                    <div class="flex flex-wrap gap-3">
+                        <button onclick="switchTab('chart')" class="bg-white text-red-600 hover:bg-red-50 font-bold px-6 py-3 rounded-xl shadow-md transition-all flex items-center gap-2 text-sm">
+                            Start Practice <i data-lucide="play" class="w-4 h-4 fill-current"></i>
+                        </button>
+                        <button onclick="openTroubleshooter()" class="bg-red-700/50 hover:bg-red-700 text-white border border-red-500 font-bold px-5 py-3 rounded-xl transition-all flex items-center gap-2 text-sm">
+                            <i data-lucide="volume-x" class="w-4 h-4"></i> Can't hear the audio?
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Navigation Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Card 1 -->
+                <div onclick="switchTab('chart')" class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all cursor-pointer hover:-translate-y-1 group">
+                    <div class="bg-red-50 text-red-600 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:bg-red-600 group-hover:text-white transition-all">
+                        <i data-lucide="grid" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-slate-800 mb-1">Interactive IPA Chart</h3>
+                    <p class="text-xs text-slate-500">Learn the 44 official English phonemes with customized mouth and articulation guides.</p>
+                </div>
+
+                <!-- Card 2 -->
+                <div onclick="switchTab('gym')" class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all cursor-pointer hover:-translate-y-1 group">
+                    <div class="bg-red-50 text-red-600 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:bg-red-600 group-hover:text-white transition-all">
+                        <i data-lucide="dumbbell" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-slate-800 mb-1">Minimal Pairs Gym</h3>
+                    <p class="text-xs text-slate-500">Sharpen your auditory and visual discrimination using easily confused word pairs.</p>
+                </div>
+
+                <!-- Card 3 -->
+                <div onclick="switchTab('mouth')" class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all cursor-pointer hover:-translate-y-1 group">
+                    <div class="bg-red-50 text-red-600 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:bg-red-600 group-hover:text-white transition-all">
+                        <i data-lucide="smile" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-slate-800 mb-1">Mouth Trainer</h3>
+                    <p class="text-xs text-slate-500">Pure physical mechanics: learn about vocal vibration, word stress, and rhythm.</p>
+                </div>
+
+                <!-- Card 4 -->
+                <div onclick="switchTab('quiz')" class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all cursor-pointer hover:-translate-y-1 group">
+                    <div class="bg-red-50 text-red-600 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:bg-red-600 group-hover:text-white transition-all">
+                        <i data-lucide="trophy" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-slate-800 mb-1">Quiz Zone</h3>
+                    <p class="text-xs text-slate-500">Put your ears to the test with our smart, randomized 10-question auditory quiz.</p>
+                </div>
+            </div>
+
+            <!-- Integrated troubleshooter warning panel -->
+            <div id="troubleshooter-panel" class="hidden bg-white rounded-3xl p-6 border border-red-100 shadow-md mb-8">
+                <div class="flex items-start gap-4">
+                    <div class="bg-red-100 text-red-600 p-3 rounded-full flex-shrink-0">
+                        <i data-lucide="settings" class="w-6 h-6"></i>
+                    </div>
+                    <div class="w-full">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-lg text-slate-800">Audio Troubleshooting Console</h3>
+                            <button onclick="closeTroubleshooter()" class="text-slate-400 hover:text-slate-600">
+                                <i data-lucide="x" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                        <p class="text-sm text-slate-600 mt-1 mb-4">
+                            If you cannot hear the phonemes or example words clearly, please follow these quick technical recommendations:
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs mb-4">
+                            <div class="p-3 bg-slate-50 rounded-xl border">
+                                <strong class="text-red-600 block mb-1">1. Browser Lock Mechanism</strong>
+                                Some browsers block speech synthesis engines until you interact with the page. Click the unlock button below to force activation.
+                            </div>
+                            <div class="p-3 bg-slate-50 rounded-xl border">
+                                <strong class="text-red-600 block mb-1">2. Hardware-Level Verification</strong>
+                                Unsure if your speakers are muted? Click "Synthetic Sound Test" to generate a pure audio frequency directly using the browser's audio processor.
+                            </div>
+                            <div class="p-3 bg-slate-50 rounded-xl border">
+                                <strong class="text-red-600 block mb-1">3. System Language Support</strong>
+                                Make sure your active browser tab is not muted and your operating system has standard English voice packs installed.
+                            </div>
+                        </div>
+                        <div class="flex gap-2 flex-wrap">
+                            <button onclick="forceVoiceUnlock()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2.5 rounded-lg text-xs transition-all flex items-center gap-1.5">
+                                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Unlock Speech Engine
+                            </button>
+                            <button onclick="testSynthesizerBeep()" class="bg-slate-800 hover:bg-slate-900 text-white font-bold px-4 py-2.5 rounded-lg text-xs transition-all flex items-center gap-1.5">
+                                <i data-lucide="activity" class="w-3.5 h-3.5"></i> Synthetic Sound Test (Beep)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ==============================================
+             TAB 1: COMPLETE INTERACTIVE IPA CHART 
+             ============================================== -->
+        <section id="tab-chart" class="tab-content hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Left: Complete IPA Soundboard -->
+                <div class="lg:col-span-2 bg-white rounded-3xl p-6 shadow-md border border-slate-100">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 border-b pb-4 gap-4">
+                        <div>
+                            <h2 class="text-xl font-bold font-poppins flex items-center gap-2 text-slate-800">
+                                <i data-lucide="volume-2" class="text-red-600"></i> Interactive Phonemic Chart
+                            </h2>
+                            <p class="text-sm text-slate-500">Select any phoneme to learn its physical pronunciation mechanics and hear its sound.</p>
+                        </div>
+                        <!-- Sound Category Sub-filters -->
+                        <div class="flex gap-1.5 bg-slate-100 p-1 rounded-xl self-start">
+                            <button onclick="filterIPA('vowels')" id="ipa-sub-vowels" class="ipa-filter-btn px-3 py-1.5 text-xs font-bold rounded-lg transition-all bg-white text-slate-800 shadow-sm">Vowels</button>
+                            <button onclick="filterIPA('diphthongs')" id="ipa-sub-diphthongs" class="ipa-filter-btn px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-800">Diphthongs</button>
+                            <button onclick="filterIPA('consonants')" id="ipa-sub-consonants" class="ipa-filter-btn px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-800">Consonants</button>
+                        </div>
+                    </div>
+
+                    <!-- Grid containers for IPA sounds -->
+                    <!-- Vowels (Monophthongs) Grid -->
+                    <div id="ipa-vowels-grid" class="ipa-grid grid grid-cols-4 sm:grid-cols-6 gap-3">
+                        <!-- Filled by JS -->
+                    </div>
+
+                    <!-- Diphthongs Grid -->
+                    <div id="ipa-diphthongs-grid" class="ipa-grid hidden grid grid-cols-4 sm:grid-cols-4 gap-3">
+                        <!-- Filled by JS -->
+                    </div>
+
+                    <!-- Consonants Grid -->
+                    <div id="ipa-consonants-grid" class="ipa-grid hidden grid grid-cols-4 sm:grid-cols-6 gap-3">
+                        <!-- Filled by JS -->
+                    </div>
+                    
+                    <!-- Sound Warning Help -->
+                    <div class="mt-6 flex items-start gap-2.5 p-3.5 bg-red-50 border border-red-100 rounded-xl text-red-800 text-xs">
+                        <i data-lucide="info" class="w-4 h-4 flex-shrink-0 mt-0.5"></i>
+                        <p><strong>Audio Note:</strong> This application utilizes the Speech Synthesis engine (Web Speech API) built into your operating system. For optimal results, configure your browser's default voice to English.</p>
+                    </div>
+                </div>
+
+                <!-- Right: Live Dynamic Detail Panel -->
+                <div id="details-panel" class="bg-white rounded-3xl p-6 shadow-md border border-slate-100 sticky top-24 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start border-b pb-4 mb-6">
+                            <div>
+                                <span class="bg-red-100 text-red-600 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full" id="panel-category">Sound Details</span>
+                                <h2 class="text-6xl font-black text-red-600 mt-2 font-poppins" id="panel-symbol">/ə/</h2>
+                                <h3 class="text-lg font-bold text-slate-800 mt-1" id="panel-name">The Schwa Sound</h3>
+                            </div>
+                            <button onclick="pronounceCurrentSound()" class="bg-red-600 hover:bg-red-700 text-white p-4 rounded-2xl shadow-md transition-all duration-200 flex items-center justify-center transform hover:scale-105 active:scale-95">
+                                <i data-lucide="play" class="w-6 h-6 fill-current"></i>
+                            </button>
+                        </div>
+
+                        <!-- Mouth/Physical articulation guidelines -->
+                        <div class="space-y-4 mb-6">
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                                    <i data-lucide="speech" class="w-3.5 h-3.5 text-red-500"></i> Mouth Mechanics
+                                </h4>
+                                <p class="text-sm text-slate-700 font-medium mt-1.5 leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-100" id="panel-mouth">
+                                    Lips completely relaxed, tongue resting in a neutral central position. The most common and effortless English sound.
+                                </p>
+                            </div>
+
+                            <div id="spanish-warning-box" class="p-3 bg-amber-50 border border-amber-100 rounded-xl">
+                                <h4 class="text-xs font-bold text-amber-800 uppercase tracking-wider flex items-center gap-1.5">
+                                    <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-amber-500"></i> Spanish Speaker Alert!
+                                </h4>
+                                <p class="text-xs text-amber-700 mt-1" id="panel-warning">
+                                    Spanish speakers often incorrectly replace this sound with a hard 'a' or 'o'. Keep it lazy and neutral!
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Minimal pairs/examples section -->
+                        <div>
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5 mb-2.5">
+                                <i data-lucide="list-music" class="w-3.5 h-3.5 text-red-500"></i> Example Practice Words
+                            </h4>
+                            <div class="space-y-2" id="panel-examples">
+                                <!-- Example word rows (dynamically created) -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Progress Badge -->
+                    <div class="border-t pt-4 mt-6 flex justify-between items-center text-xs text-slate-400">
+                        <span>Smart Academy Pronunciation Lab</span>
+                        <span class="flex items-center gap-1"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-red-500"></i> Interactive Module</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==============================================
+             TAB 2: MINIMAL PAIRS GYM
+             ============================================== -->
+        <section id="tab-gym" class="tab-content hidden">
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-md border border-slate-100 mb-6">
+                <div class="border-b pb-4 mb-6">
+                    <h2 class="text-2xl font-bold font-poppins text-slate-800 flex items-center gap-2">
+                        <i data-lucide="dumbbell" class="text-red-600"></i> Minimal Pairs Gym
+                    </h2>
+                    <p class="text-slate-500 text-sm md:text-base">Train your ears and voice by differentiating words that sound almost identical, but feature entirely distinct phonemes.</p>
+                </div>
+
+                <!-- Minimal pairs list -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="minimal-pairs-container">
+                    <!-- Dynamic Generation in JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ==============================================
+             TAB 3: MOUTH TRAINER
+             ============================================== -->
+        <section id="tab-mouth" class="tab-content hidden">
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-md border border-slate-100">
+                <div class="border-b pb-4 mb-6">
+                    <h2 class="text-2xl font-bold font-poppins text-slate-800 flex items-center gap-2">
+                        <i data-lucide="smile" class="text-red-600"></i> Mouth Training Visuals & Mechanics
+                    </h2>
+                    <p class="text-slate-500 text-sm">Understand your physical speech organs. The secret to native-sounding pronunciation resides in muscle training.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Column 1: Voiced vs Voiceless Anatomy interactive graphic -->
+                    <div class="bg-slate-50 rounded-2xl p-6 border border-slate-100">
+                        <h3 class="text-lg font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <i data-lucide="radio" class="text-red-600"></i> Voiced vs. Voiceless Sounds (Vocal Cords)
+                        </h3>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-6">
+                            This is the most crucial mechanical split in English speech. <strong>Voiced</strong> sounds require your vocal cords to physically vibrate, whereas <strong>Voiceless</strong> sounds are made with pure air passing through your teeth and lips.
+                        </p>
+
+                        <!-- Live interactive feedback simulation -->
+                        <div class="space-y-4">
+                            <!-- Voiceless card -->
+                            <div class="bg-white p-4 rounded-xl border border-slate-200 hover:border-red-500 transition-all cursor-pointer" onclick="testVibration(false)">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-bold uppercase text-slate-500">Voiceless</span>
+                                    <span class="bg-slate-100 text-slate-600 px-2.5 py-0.5 rounded text-xs font-bold">PURE AIR</span>
+                                </div>
+                                <p class="text-xs text-slate-500 mb-3">Touch your throat while pronouncing these sounds. You will feel zero mechanical vibration:</p>
+                                <div class="flex gap-2">
+                                    <span class="bg-slate-50 px-3 py-1.5 rounded-lg font-bold text-sm text-slate-700 border">/p/ (pen)</span>
+                                    <span class="bg-slate-50 px-3 py-1.5 rounded-lg font-bold text-sm text-slate-700 border">/s/ (see)</span>
+                                    <span class="bg-slate-50 px-3 py-1.5 rounded-lg font-bold text-sm text-slate-700 border">/f/ (fan)</span>
+                                    <span class="bg-slate-50 px-3 py-1.5 rounded-lg font-bold text-sm text-slate-700 border">/ʃ/ (she)</span>
+                                </div>
+                                <div class="mt-3 flex items-center gap-1.5 text-xs text-red-600 font-bold">
+                                    <i data-lucide="play-circle" class="w-4 h-4"></i> Click to simulate and practice
+                                </div>
+                            </div>
+
+                            <!-- Voiced card -->
+                            <div class="bg-white p-4 rounded-xl border border-slate-200 hover:border-red-500 transition-all cursor-pointer" onclick="testVibration(true)">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-bold uppercase text-red-600">Voiced</span>
+                                    <span class="bg-red-50 text-red-600 px-2.5 py-0.5 rounded text-xs font-bold">VIBRATION</span>
+                                </div>
+                                <p class="text-xs text-slate-500 mb-3">Touch your throat again. Your vocal cords must physically buzz and hum:</p>
+                                <div class="flex gap-2">
+                                    <span class="bg-slate-50 px-3 py-1.5 rounded-lg font-bold text-sm text-slate-700 border">/b/ (bed)</span>
+                                    <span class="bg-slate-50 px-3 py-1.5 rounded-lg font-bold text-sm text-slate-700 border">/z/ (zoo)</span>
+                                    <span class="bg-slate-50 px-3 py-1.5 rounded-lg font-bold text-sm text-slate-700 border">/v/ (van)</span>
+                                    <span class="bg-slate-50 px-3 py-1.5 rounded-lg font-bold text-sm text-slate-700 border">/ʒ/ (vision)</span>
+                                </div>
+                                <div class="mt-3 flex items-center gap-1.5 text-xs text-red-600 font-bold">
+                                    <i data-lucide="play-circle" class="w-4 h-4"></i> Click to simulate and practice
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Vocal cord dynamic alert feedback -->
+                        <div id="vocal-feedback-box" class="mt-4 p-3 bg-slate-200 text-slate-700 rounded-xl text-center text-xs font-bold transition-all h-10 flex items-center justify-center">
+                            Click on any card above to test articulation vibration
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Word Stress and Pitch Rules -->
+                    <div class="space-y-6">
+                        <div class="bg-slate-50 rounded-2xl p-6 border border-slate-100">
+                            <h3 class="text-lg font-bold text-slate-800 mb-3 flex items-center gap-2">
+                                <i data-lucide="music" class="text-red-600"></i> Rhythm & Structure: Word Stress
+                            </h3>
+                            <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                                In English, words can change their meaning entirely based on which syllable is physically stressed. Observe this noun versus verb difference:
+                            </p>
+
+                            <div class="space-y-3">
+                                <div class="bg-white p-3.5 rounded-xl border flex items-center justify-between">
+                                    <div>
+                                        <span class="text-xs font-bold text-slate-400 block">NOUN - Stress on 1st syllable</span>
+                                        <span class="text-lg font-bold text-slate-800"><span class="text-red-600 underline">RE</span>cord</span>
+                                        <span class="text-xs text-slate-500 block">A physical disk or document of information.</span>
+                                    </div>
+                                    <button onclick="playAccentText('REcord')" class="bg-slate-100 hover:bg-red-100 text-slate-600 hover:text-red-600 p-2.5 rounded-lg transition-all">
+                                        <i data-lucide="volume-2" class="w-5 h-5"></i>
+                                    </button>
+                                </div>
+
+                                <div class="bg-white p-3.5 rounded-xl border flex items-center justify-between">
+                                    <div>
+                                        <span class="text-xs font-bold text-slate-400 block">VERB - Stress on 2nd syllable</span>
+                                        <span class="text-lg font-bold text-slate-800">re<span class="text-red-600 underline">CORD</span></span>
+                                        <span class="text-xs text-slate-500 block">To save audio, video, or data onto a device.</span>
+                                    </div>
+                                    <button onclick="playAccentText('record')" class="bg-slate-100 hover:bg-red-100 text-slate-600 hover:text-red-600 p-2.5 rounded-lg transition-all">
+                                        <i data-lucide="volume-2" class="w-5 h-5"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Intonation Section -->
+                        <div class="bg-slate-50 rounded-2xl p-6 border border-slate-100">
+                            <h3 class="text-lg font-bold text-slate-800 mb-2 flex items-center gap-2">
+                                <i data-lucide="trending-up" class="text-red-600"></i> Basic Intonation
+                            </h3>
+                            <p class="text-xs text-slate-500 mb-4">The melody of your voice distinguishes an inquiry from absolute shock.</p>
+                            <div class="grid grid-cols-2 gap-3 text-xs">
+                                <div class="bg-white p-3 rounded-xl border">
+                                    <strong class="text-red-600 block mb-1">Rising Intonation</strong>
+                                    Used for standard Yes/No questions. <br>
+                                    <em>"Do you understand? ↗"</em>
+                                </div>
+                                <div class="bg-white p-3 rounded-xl border">
+                                    <strong class="text-red-600 block mb-1">Falling Intonation</strong>
+                                    Used for statements and open questions. <br>
+                                    <em>"Where is the class? ↘"</em>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==============================================
+             TAB 4: QUIZ ZONE
+             ============================================== -->
+        <section id="tab-quiz" class="tab-content hidden">
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-md border border-slate-100 max-w-3xl mx-auto">
+                <div class="border-b pb-4 mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold font-poppins text-slate-800 flex items-center gap-2">
+                            <i data-lucide="trophy" class="text-red-600"></i> Quiz Zone: What are you hearing?
+                        </h2>
+                        <p class="text-slate-500 text-sm">Interactive test with 10 randomized questions. Assess your speech discrimination skills.</p>
+                    </div>
+                    <div class="bg-red-50 text-red-600 font-bold px-4 py-2 rounded-xl text-sm border border-red-100">
+                        Score: <span id="quiz-score">0</span> / 10
+                    </div>
+                </div>
+
+                <!-- Quiz Main Game Screen -->
+                <div id="quiz-game-panel" class="space-y-6">
+                    <!-- Progress Bar -->
+                    <div>
+                        <div class="flex justify-between text-xs font-bold text-slate-400 mb-1">
+                            <span>Question <span id="quiz-current-num">1</span> of 10</span>
+                            <span id="quiz-percent">10% Completed</span>
+                        </div>
+                        <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                            <div id="quiz-progress-bar" class="bg-red-600 h-full transition-all duration-300" style="width: 10%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Voice Speaker Button Area -->
+                    <div class="bg-slate-50 rounded-2xl p-8 flex flex-col items-center justify-center border border-dashed border-slate-200">
+                        <button onclick="playQuizWord()" class="bg-red-600 hover:bg-red-700 text-white p-6 rounded-full shadow-lg transition-all duration-200 transform hover:scale-110 active:scale-95 flex items-center justify-center mb-4">
+                            <i data-lucide="volume-2" class="w-8 h-8"></i>
+                        </button>
+                        <p class="font-bold text-slate-700 text-sm tracking-wide">Click to hear the secret word</p>
+                        <p class="text-xs text-slate-400 mt-1">Listen closely and choose the matching word option below.</p>
+                    </div>
+
+                    <!-- Multiple Choices -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <button onclick="selectAnswer(0)" id="choice-0" class="quiz-choice p-4 bg-white hover:bg-slate-50 border-2 border-slate-200 rounded-xl font-bold text-slate-700 text-lg transition-all duration-150 shadow-sm active:translate-y-0.5">
+                            Option A
+                        </button>
+                        <button onclick="selectAnswer(1)" id="choice-1" class="quiz-choice p-4 bg-white hover:bg-slate-50 border-2 border-slate-200 rounded-xl font-bold text-slate-700 text-lg transition-all duration-150 shadow-sm active:translate-y-0.5">
+                            Option B
+                        </button>
+                    </div>
+
+                    <!-- Feedback Box -->
+                    <div id="quiz-feedback" class="hidden p-4 rounded-xl text-center font-bold text-sm transition-all">
+                        Feedback Message
+                    </div>
+
+                    <!-- Next Question/Action Button -->
+                    <div class="flex justify-end">
+                        <button id="quiz-action-btn" onclick="nextQuizQuestion()" class="hidden bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-3 rounded-xl shadow-md transition-all flex items-center gap-1.5">
+                            Next Question <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quiz Results Screen -->
+                <div id="quiz-results" class="hidden text-center py-12 space-y-6">
+                    <div class="inline-block bg-red-50 text-red-600 p-6 rounded-full shadow-inner mb-2">
+                        <i data-lucide="star" class="w-16 h-16 fill-current"></i>
+                    </div>
+                    <h3 class="text-3xl font-extrabold font-poppins text-slate-800">Challenge Completed!</h3>
+                    <p class="text-slate-600 max-w-md mx-auto">You have completed the dynamic auditory discrimination challenge in the Smart Academy Pronunciation Lab.</p>
+                    
+                    <div class="bg-slate-50 p-6 rounded-2xl max-w-sm mx-auto border">
+                        <span class="text-xs text-slate-400 uppercase font-bold tracking-widest block mb-1">Your Score</span>
+                        <span class="text-5xl font-black text-red-600" id="final-score">8 / 10</span>
+                        <p class="text-sm text-slate-500 mt-2 font-semibold" id="score-critique">Excellent phonetic parsing!</p>
+                    </div>
+
+                    <button onclick="resetQuiz()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-8 py-3.5 rounded-xl shadow-lg transition-all inline-flex items-center gap-1.5">
+                        <i data-lucide="refresh-cw" class="w-4 h-4"></i> Retry the Test
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==============================================
+             TAB 5: PILOT PROGRAM FASES
+             ============================================== -->
+        <section id="tab-fases" class="tab-content hidden">
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-md border border-slate-100 mb-6">
+                <div class="border-b pb-4 mb-6">
+                    <span class="bg-red-50 text-red-600 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">Pilot Schedule</span>
+                    <h2 class="text-2xl font-bold font-poppins text-slate-800 mt-2 flex items-center gap-2">
+                        <i data-lucide="calendar" class="text-red-600"></i> Smart Academy Pronunciation Program - Pilot Phases
+                    </h2>
+                    <p class="text-slate-500 text-sm">Structured program mapping for semester-long pronunciation and rhythm development.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Column A1-A2 -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-bold text-red-600 flex items-center gap-1.5 font-poppins border-b pb-2">
+                            <span class="bg-red-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">1</span>
+                            Foundation Track (A1-A2 Levels)
+                        </h3>
+                        
+                        <!-- Fase 1 Card -->
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                            <span class="text-xs font-extrabold text-slate-400 block uppercase">Phase 1: Mechanics & Vocal Keys</span>
+                            <h4 class="font-bold text-slate-800 text-sm mt-0.5">Individual sounds with no Spanish equivalents</h4>
+                            <p class="text-xs text-slate-500 mt-1">Focusing on basic vocal mechanics: relaxed short vowels, the labiodental /v/, and the American floating /r/ sound.</p>
+                        </div>
+
+                        <!-- Fase 2 Card -->
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                            <span class="text-xs font-extrabold text-slate-400 block uppercase">Phase 2: Morphophonology Controls</span>
+                            <h4 class="font-bold text-slate-800 text-sm mt-0.5">Differentiating past tense (-ed) and plural endings (-s)</h4>
+                            <p class="text-xs text-slate-500 mt-1">Applying structural pronunciation rules to regular past tense verb markers (/t/, /d/, and /ɪd/) smoothly.</p>
+                        </div>
+
+                        <!-- Fase 3 Card -->
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                            <span class="text-xs font-extrabold text-slate-400 block uppercase">Phase 3: Silent Syllables & Rhythms</span>
+                            <h4 class="font-bold text-slate-800 text-sm mt-0.5">Silent letters and syllable omission</h4>
+                            <p class="text-xs text-slate-500 mt-1">Identifying and ignoring unpronounced letters in standard native vocabulary like 'vegetable' or 'comfortable'.</p>
+                        </div>
+                    </div>
+
+                    <!-- Column B1-C1 -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-bold text-red-600 flex items-center gap-1.5 font-poppins border-b pb-2">
+                            <span class="bg-red-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">2</span>
+                            Fluency Track (B1-C1 Levels)
+                        </h3>
+                        
+                        <!-- Fase 1 Card -->
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                            <span class="text-xs font-extrabold text-slate-400 block uppercase">Phase 1: Connected Speech Mechanics</span>
+                            <h4 class="font-bold text-slate-800 text-sm mt-0.5">Linking, reductions, and the Schwa vowel /ə/</h4>
+                            <p class="text-xs text-slate-500 mt-1">Learning consonant-to-vowel links and relaxed vowels to maintain a smooth, rapid speaking pace.</p>
+                        </div>
+
+                        <!-- Fase 2 Card -->
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                            <span class="text-xs font-extrabold text-slate-400 block uppercase">Phase 2: Natural Rhythm & Accent</span>
+                            <h4 class="font-bold text-slate-800 text-sm mt-0.5">Word Stress vs. Sentence Stress & Flap T</h4>
+                            <p class="text-xs text-slate-500 mt-1">Vocal drills highlighting structural word reduction vs. content word amplification alongside Flap T usage.</p>
+                        </div>
+
+                        <!-- Fase 3 Card -->
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                            <span class="text-xs font-extrabold text-slate-400 block uppercase">Phase 3: Intentional Nuance</span>
+                            <h4 class="font-bold text-slate-800 text-sm mt-0.5">Pitch variance, sarcasm, and persuasion techniques</h4>
+                            <p class="text-xs text-slate-500 mt-1">Controlling vocal pitch registers to negotiate, debate, and communicate emotional layers effectively.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER WITH VISIBLE CREDITS -->
+    <footer class="bg-white border-t border-slate-200 py-6 text-slate-500 text-sm text-center">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-3">
+            <p class="font-medium text-slate-600">
+                Created by <span class="font-bold text-red-600 hover:underline cursor-pointer" onclick="switchTab('welcome')">Tony Salas</span>
+            </p>
+            <p class="text-xs text-slate-400">
+                © 2026 Smart Academy Pronunciation Program. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- ==============================================
+         JAVASCRIPT LOGIC & DATABASE
+         ============================================== -->
+    <script>
+        // IPA Data Storage (All 44 Sounds)
+        const ipaDatabase = {
+            vowels: [
+                { symbol: "i:", name: "Long i Sound", mouth: "Mouth spread wide, like making a tense smile. Tongue high up and far forward.", examples: ["see", "unique", "feet"], spAlert: "Spanish speakers often make this too short, like the Spanish 'i'." },
+                { symbol: "ɪ", name: "Short i Sound", mouth: "Mouth slightly open, lips relaxed. Tongue is slightly lower than /i:/.", examples: ["ship", "fish", "it"], spAlert: "Crucial! Do not pronounce this as /i:/. This must be short and relaxed." },
+                { symbol: "e", name: "Short e Sound", mouth: "Lips wide and relaxed, jaw dropped slightly more than /ɪ/.", examples: ["bed", "men", "head"], spAlert: "Very close to the Spanish letter 'e'. Keep it short." },
+                { symbol: "æ", name: "The Apple Sound", mouth: "Open your mouth wide, jaw dropped low, tongue pushed forward and flat.", examples: ["cat", "apple", "man"], spAlert: "Do not pronounce this like /e/. Your mouth must open much wider." },
+                { symbol: "ʌ", name: "Short u Sound", mouth: "Lips relaxed, mouth open in a central neutral position.", examples: ["cup", "love", "bus"], spAlert: "Often mispronounced as an 'o'. It is a very short, relaxed grunt." },
+                { symbol: "ɑ:", name: "Long ah Sound", mouth: "Jaw dropped completely open and relaxed. Deep in the throat.", examples: ["father", "heart", "car"], spAlert: "Close to a relaxed Spanish 'a' but much deeper and longer." },
+                { symbol: "ɒ", name: "Short o Sound", mouth: "Lips slightly rounded, jaw dropped moderately.", examples: ["hot", "box", "stop"], spAlert: "Avoid pronouncing this like a hard Spanish 'o'. It is wider and lower." },
+                { symbol: "ɔ:", name: "Long aw Sound", mouth: "Lips rounded forward, jaw open and tense.", examples: ["door", "saw", "water"], spAlert: "Make your lips round like a circle. Keep it long and clear." },
+                { symbol: "ʊ", name: "Short oo Sound", mouth: "Lips slightly rounded, jaw relaxed. Tense muscles are NOT used here.", examples: ["book", "put", "good"], spAlert: "Spanish speakers tend to make this too tense, like a Spanish 'u'. Keep it lazy." },
+                { symbol: "u:", name: "Long oo Sound", mouth: "Lips tightly rounded into a circle. Tense tongue pulled backwards.", examples: ["blue", "shoe", "food"], spAlert: "Similar to the Spanish 'u' but with a more intense rounding of the lips." },
+                { symbol: "ɜ:", name: "Long er Sound", mouth: "Lips neutral, tongue flat and raised slightly in the center.", examples: ["girl", "bird", "work"], spAlert: "Extremely difficult! Do not pronounce the 'i' or 'o'. Think of a vibrating neutral buzz." },
+                { symbol: "ə", name: "The Schwa Sound", mouth: "Lips completely relaxed, mouth in neutral. Effortless neutral grunt.", examples: ["about", "banana", "listen"], spAlert: "The most common sound in English. Never accent this sound." }
+            ],
+            diphthongs: [
+                { symbol: "eɪ", name: "The Double A Sound", mouth: "Start at /e/ (bed) and smoothly glide upwards into /ɪ/ (it).", examples: ["say", "face", "train"], spAlert: "Often simplified into a single Spanish vowel. Make sure to double slide." },
+                { symbol: "aɪ", name: "The Double I Sound", mouth: "Start deep with /ɑ:/ (father) and slide into /ɪ/ (it).", examples: ["my", "light", "find"], spAlert: "Slide cleanly. Similar to the Spanish 'ai' in 'aire'." },
+                { symbol: "ɔɪ", name: "The Oy Sound", mouth: "Start with rounded /ɔ:/ and slide smoothly into /ɪ/.", examples: ["boy", "join", "choice"], spAlert: "Very similar to the Spanish sound in 'boina'." },
+                { symbol: "aʊ", name: "The Ow Sound", mouth: "Start open at /ɑ:/ and round lips fully into /ʊ/.", examples: ["now", "house", "mouth"], spAlert: "Similar to 'au' in Spanish, but with more extreme lip-rounding at the end." },
+                { symbol: "əʊ", name: "The Oh Sound", mouth: "Start neutral with /ə/ and slide into a rounded /ʊ/.", examples: ["go", "home", "show"], spAlert: "Avoid a flat Spanish 'o'. The English 'o' is always a sliding double sound." },
+                { symbol: "ɪə", name: "The Ear Sound", mouth: "Start with /ɪ/ (it) and slide down into the neutral Schwa /ə/.", examples: ["near", "here", "fear"], spAlert: "Don't roll the 'r' hard. Slide softly into the lazy central vowel." },
+                { symbol: "eə", name: "The Air Sound", mouth: "Start with /e/ (bed) and glide into the lazy Schwa /ə/.", examples: ["hair", "there", "care"], spAlert: "Keep the final transition smooth and avoid any strong 'r' tongue rolling." },
+                { symbol: "ʊə", name: "The Pure Sound", mouth: "Start at relaxed /ʊ/ and slide smoothly into Schwa /ə/.", examples: ["tour", "cure", "pure"], spAlert: "Relatively rare but important. Slide smoothly from relaxed 'u' to Schwa." }
+            ],
+            consonants: [
+                { symbol: "p", name: "Voiceless P", mouth: "Lips pressed together, then release a sharp burst of air. No voice.", examples: ["pen", "stop", "play"], spAlert: "English 'p' is 'aspirated' (it releases a puff of air). Hold a paper in front of you." },
+                { symbol: "b", name: "Voiced B", mouth: "Lips pressed together, releasing a sound powered by your vocal cords.", examples: ["bed", "job", "baby"], spAlert: "Similar to Spanish, but much stronger and more distinct vocal vibration." },
+                { symbol: "t", name: "Voiceless T", mouth: "Press tongue tip on the ridge behind your upper teeth, release puff of air.", examples: ["table", "cat", "two"], spAlert: "English 't' is aspirated. Do not let your tongue touch your teeth." },
+                { symbol: "d", name: "Voiced D", mouth: "Press tongue tip on the ridge behind upper teeth, release with strong voice.", examples: ["dog", "red", "day"], spAlert: "Vocal cords must vibrate. Keep tongue back, away from the teeth." },
+                { symbol: "k", name: "Voiceless K", mouth: "Back of tongue presses against soft palate, releases puff of air.", examples: ["key", "car", "book"], spAlert: "Releases a strong burst of air, unlike the Spanish hard 'c'." },
+                { symbol: "g", name: "Voiced G", mouth: "Back of tongue presses soft palate, releases with voice vibration.", examples: ["go", "bag", "girl"], spAlert: "Always voiced. Make it buzz slightly from the back of the throat." },
+                { symbol: "f", name: "Voiceless F", mouth: "Place upper teeth gently on your bottom lip and blow air out.", examples: ["fan", "life", "off"], spAlert: "Identical to Spanish. Clean and airy." },
+                { symbol: "v", name: "Voiced V", mouth: "Place upper teeth on bottom lip, vibrate vocal cords strongly.", examples: ["van", "love", "very"], spAlert: "CRITICAL! Spanish speakers do not have /v/. Do not bite your lip like /b/. Buzz it." },
+                { symbol: "θ", name: "Voiceless TH", mouth: "Place tongue tip gently between front teeth, blow air out smoothly.", examples: ["think", "mouth", "three"], spAlert: "Like the Castilian Spanish 'z'. Keep it airy and soft." },
+                { symbol: "ð", name: "Voiced TH", mouth: "Place tongue tip between teeth, blow air out with strong voice vibration.", examples: ["this", "mother", "they"], spAlert: "Extremely common. Vibrate your tongue tip against your front teeth." },
+                { symbol: "s", name: "Voiceless S", mouth: "Bring teeth together, squeeze air through tongue tip and front teeth.", examples: ["see", "bus", "stop"], spAlert: "Do not add an 'e' sound before words starting with S (e.g. say 'stop', not 'estop')." },
+                { symbol: "z", name: "Voiced Z", mouth: "Bring teeth together, squeeze air through with strong vocal buzz (like a bee).", examples: ["zoo", "please", "easy"], spAlert: "Spanish speakers have no /z/. Vibrate your teeth together like an angry fly." },
+                { symbol: "ʃ", name: "Voiceless SH", mouth: "Round lips forward, push tongue flatly back, blow out. Like shushing.", examples: ["she", "shop", "fish"], spAlert: "Different from Spanish 'ch'. Keep it continuous, like a long hiss." },
+                { symbol: "ʒ", name: "Voiced ZH", mouth: "Round lips forward, push tongue flatly back, squeeze air with strong voice.", examples: ["vision", "measure", "casual"], spAlert: "Think of a voiced vibrating version of 'sh'. Very rare but beautiful." },
+                { symbol: "tʃ", name: "Voiceless CH", mouth: "Press tongue behind teeth, release sharp explosive 't' + 'sh' sound.", examples: ["chair", "watch", "cheap"], spAlert: "Similar to Spanish 'ch', but sharper and more explosive." },
+                { symbol: "dʒ", name: "Voiced J", mouth: "Press tongue behind teeth, release explosive 'd' + 'zh' with strong voice.", examples: ["job", "page", "judge"], spAlert: "Vibrate your voice strongly. Do not confuse it with the Spanish 'y' or 'j'." },
+                { symbol: "m", name: "Voiced M", mouth: "Close lips fully, let voice hum through your nose.", examples: ["man", "some", "more"], spAlert: "Identical to Spanish. Always hummed clearly." },
+                { symbol: "n", name: "Voiced N", mouth: "Press tongue flat against upper ridge, let voice hum through nose.", examples: ["no", "sun", "name"], spAlert: "Similar to Spanish." },
+                { symbol: "ŋ", name: "The Nasal NG", mouth: "Back of tongue seals soft palate, hum through nose. No 'g' sound.", examples: ["sing", "think", "long"], spAlert: "Do not pronounce a hard 'g' at the end. It's a nasal hum inside the throat." },
+                { symbol: "h", name: "Voiceless H", mouth: "Breathe out smoothly from your chest. Like fogging up a mirror.", examples: ["he", "house", "hot"], spAlert: "Do not make it scratchy like a Spanish 'j'. It should be a gentle, soft sigh." },
+                { symbol: "l", name: "Voiced L", mouth: "Press tip of tongue against alveolar ridge, release voice around sides.", examples: ["light", "full", "play"], spAlert: "Keep it clear at the start of words, and dark/hollow at the end (dark L)." },
+                { symbol: "r", name: "Voiced R", mouth: "Curl tongue back slightly, lips rounded. Never let tongue touch top of mouth.", examples: ["red", "run", "car"], spAlert: "CRITICAL! Do not roll your tongue like a Spanish 'rr'. Keep it smooth and floating." },
+                { symbol: "w", name: "Voiced W", mouth: "Tightly round your lips (like 'oo') then glide instantly into next sound.", examples: ["we", "water", "wet"], spAlert: "Do not add a 'g' sound before it. It's 'water', not 'guater'." },
+                { symbol: "j", name: "The Y Sound", mouth: "Start with tongue high and flat (like 'ee') glide into next sound.", examples: ["yes", "yellow", "use"], spAlert: "Never pronounce this like a Spanish 'y' (sheismo). Keep it smooth and soft." }
+            ]
+        };
+
+        // 10 Interactive Minimal Pairs
+        const minimalPairs = [
+            { wordA: "ship", wordB: "sheep", soundA: "/ɪ/", soundB: "/i:/", description: "Short relaxed vowel vs Long tense vowel." },
+            { wordA: "cheap", wordB: "jeep", soundA: "/tʃ/", soundB: "/dʒ/", description: "Voiceless sharp CH vs Voiced vibrating J." },
+            { wordA: "ban", wordB: "van", soundA: "/b/", soundB: "/v/", description: "Lips pressed together vs Teeth biting bottom lip." },
+            { wordA: "think", wordB: "sink", soundA: "/θ/", soundB: "/s/", description: "Tongue between teeth vs Air squeezed behind teeth." },
+            { wordA: "bitch", wordB: "beach", soundA: "/ɪ/", soundB: "/i:/", description: "Short relaxed vowel vs Long tense vowel. Warning: Taboo difference!" },
+            { wordA: "cat", wordB: "cut", soundA: "/æ/", soundB: "/ʌ/", description: "Mouth wide open flat tongue vs Lazy central chest grunt." },
+            { wordA: "fan", wordB: "pan", soundA: "/f/", soundB: "/p/", description: "Air escaping lips vs explosive puff of air." },
+            { wordA: "zoo", wordB: "sue", soundA: "/z/", soundB: "/s/", description: "Voiced buzzing bee sound vs Voiceless air hiss." },
+            { wordA: "sing", wordB: "sink", soundA: "/ŋ/", soundB: "/ŋk/", description: "Nasal continuous hum vs Ending with a sharp k." },
+            { wordA: "heart", wordB: "hurt", soundA: "/ɑ:/", soundB: "/ɜ:/", description: "Deep dropped throat vowel vs Neutral centralized tongue buzz." }
+        ];
+
+        // Extended Quiz Pool of 15 questions to pick 10 randomly
+        const quizQuestionsPool = [
+            { correct: "ship", choices: ["ship", "sheep"], sound: "ship" },
+            { correct: "van", choices: ["ban", "van"], sound: "van" },
+            { correct: "cheap", choices: ["cheap", "jeep"], sound: "cheap" },
+            { correct: "think", choices: ["think", "sink"], sound: "think" },
+            { correct: "cut", choices: ["cat", "cut"], sound: "cut" },
+            { correct: "zoo", choices: ["zoo", "sue"], sound: "zoo" },
+            { correct: "live", choices: ["live", "leave"], sound: "live" },
+            { correct: "bad", choices: ["bad", "bed"], sound: "bad" },
+            { correct: "west", choices: ["west", "vest"], sound: "west" },
+            { correct: "sing", choices: ["sing", "sink"], sound: "sing" },
+            { correct: "boat", choices: ["vote", "boat"], sound: "boat" },
+            { correct: "hat", choices: ["hat", "hot"], sound: "hat" },
+            { correct: "sheet", choices: ["cheat", "sheet"], sound: "sheet" },
+            { correct: "mouth", choices: ["mouse", "mouth"], sound: "mouth" },
+            { correct: "play", choices: ["pray", "play"], sound: "play" }
+        ];
+
+        // Dynamic Active Quiz questions
+        let quizQuestions = [];
+
+        // Global State Variables
+        let currentSelectedSound = ipaDatabase.vowels[0];
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+        let speechSynth = window.speechSynthesis;
+        let voicesLoaded = false;
+
+        // Initialize App on DOM Ready
+        window.onload = function() {
+            // Render IPA charts
+            renderIPAGrid('vowels', ipaDatabase.vowels);
+            renderIPAGrid('diphthongs', ipaDatabase.diphthongs);
+            renderIPAGrid('consonants', ipaDatabase.consonants);
+
+            // Render Minimal Pairs
+            renderMinimalPairs();
+
+            // Populate Initial Detail Panel
+            updateDetailPanel(ipaDatabase.vowels[11]); // Schwa initial
+
+            // Initialize Lucide Icons
+            lucide.createIcons();
+
+            // Setup speech synthesis voices trigger
+            if (speechSynth) {
+                speechSynth.onvoiceschanged = () => {
+                    voicesLoaded = true;
+                    console.log("SpeechSynthesis: System voices updated/loaded.");
+                };
+                // Fallback warm-up
+                speechSynth.getVoices();
+            }
+
+            // Print Double-Secure Console Log
+            console.log("%c=== SMART ACADEMY PRONUNCIATION PROGRAM ===", "color: #dc2626; font-size: 20px; font-weight: bold; text-shadow: 1px 1px 2px black;");
+            console.log("%cDeveloped and Created by Tony Salas. All intellectual property secured. © 2026", "color: #334155; font-size: 14px; font-style: italic;");
+        };
+
+        // Render IPA Buttons inside dynamic grids
+        function renderIPAGrid(category, data) {
+            const container = document.getElementById(`ipa-${category}-grid`);
+            container.innerHTML = '';
+
+            data.forEach((sound, index) => {
+                const btn = document.createElement('button');
+                // Check if sound is flagged for Spanish Speakers to add badge
+                const isPriority = ["v", "ʃ", "tʃ", "ɪ", "æ", "ə", "z", "r"].includes(sound.symbol);
+                const borderClass = isPriority ? 'border-red-500 bg-red-50 hover:bg-red-100' : 'border-slate-200 hover:bg-slate-50';
+
+                btn.className = `p-4 border-2 ${borderClass} rounded-2xl flex flex-col items-center justify-center transition-all transform hover:scale-105 active:scale-95 shadow-sm relative group`;
+                btn.onclick = () => {
+                    updateDetailPanel(sound);
+                    pronounceText(sound.symbol);
+                };
+
+                btn.innerHTML = `
+                    <span class="text-3xl font-extrabold text-red-600 font-poppins">${sound.symbol}</span>
+                    <span class="text-[10px] text-slate-400 font-semibold uppercase mt-1 tracking-wider text-center truncate w-full">${sound.name.replace("Sound", "")}</span>
+                    ${isPriority ? '<span class="absolute top-1 right-1 flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-red-600"></span></span>' : ''}
+                `;
+                container.appendChild(btn);
+            });
+        }
+
+        // Filter between IPA Tabs (Vowels, Diphthongs, Consonants)
+        function filterIPA(category) {
+            document.querySelectorAll('.ipa-grid').forEach(grid => grid.classList.add('hidden'));
+            document.getElementById(`ipa-${category}-grid`).classList.remove('hidden');
+
+            document.querySelectorAll('.ipa-filter-btn').forEach(btn => {
+                btn.className = "ipa-filter-btn px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-800";
+            });
+
+            const activeBtn = document.getElementById(`ipa-sub-${category}`);
+            activeBtn.className = "ipa-filter-btn px-3 py-1.5 text-xs font-bold rounded-lg transition-all bg-white text-slate-800 shadow-sm";
+        }
+
+        // Update Dynamic Detail Panel
+        function updateDetailPanel(sound) {
+            currentSelectedSound = sound;
+            document.getElementById('panel-symbol').innerText = `/${sound.symbol}/`;
+            document.getElementById('panel-name').innerText = sound.name;
+            document.getElementById('panel-mouth').innerText = sound.mouth;
+            document.getElementById('panel-warning').innerText = sound.spAlert;
+
+            // Generate example rows
+            const examplesContainer = document.getElementById('panel-examples');
+            examplesContainer.innerHTML = '';
+
+            sound.examples.forEach(word => {
+                const row = document.createElement('div');
+                row.className = "flex items-center justify-between p-3 bg-slate-50 border border-slate-100 rounded-xl hover:border-red-200 transition-all cursor-pointer";
+                row.onclick = (e) => {
+                    e.stopPropagation();
+                    pronounceText(word);
+                };
+                row.innerHTML = `
+                    <span class="font-bold text-slate-700 capitalize flex items-center gap-2 text-sm">
+                        <i data-lucide="speech" class="w-4 h-4 text-slate-400"></i> ${word}
+                    </span>
+                    <button class="bg-white hover:bg-red-50 text-slate-600 hover:text-red-600 p-2 rounded-lg border border-slate-200 shadow-sm transition-all">
+                        <i data-lucide="volume-2" class="w-4 h-4"></i>
+                    </button>
+                `;
+                examplesContainer.appendChild(row);
+            });
+
+            // Re-render new lucide icons in dynamically loaded elements
+            lucide.createIcons();
+        }
+
+        // Render Minimal Pairs Gym List
+        function renderMinimalPairs() {
+            const container = document.getElementById('minimal-pairs-container');
+            container.innerHTML = '';
+
+            minimalPairs.forEach((pair, index) => {
+                const card = document.createElement('div');
+                card.className = "bg-slate-50 border border-slate-200 rounded-2xl p-4 md:p-5 flex flex-col justify-between hover:border-red-500 transition-all shadow-sm";
+                card.innerHTML = `
+                    <div class="flex items-center justify-between border-b pb-3 mb-3">
+                        <span class="text-[10px] font-extrabold uppercase tracking-widest text-red-600">Drill ${index + 1}</span>
+                        <p class="text-xs text-slate-400 italic">${pair.description}</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 text-center my-2">
+                        <!-- Word A -->
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-100 hover:shadow-md cursor-pointer transition-all flex flex-col items-center justify-center gap-1" onclick="pronounceText('${pair.wordA}')">
+                            <span class="text-2xl font-black text-slate-800 capitalize">${pair.wordA}</span>
+                            <span class="bg-red-50 text-red-600 px-2 py-0.5 rounded text-xs font-bold font-poppins">${pair.soundA}</span>
+                            <span class="text-[10px] text-slate-400 flex items-center gap-0.5 mt-1"><i data-lucide="volume-2" class="w-3 h-3"></i> Listen</span>
+                        </div>
+
+                        <!-- Word B -->
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-100 hover:shadow-md cursor-pointer transition-all flex flex-col items-center justify-center gap-1" onclick="pronounceText('${pair.wordB}')">
+                            <span class="text-2xl font-black text-slate-800 capitalize" id="pair-b-word-${index}">${pair.wordB}</span>
+                            <span class="bg-red-50 text-red-600 px-2 py-0.5 rounded text-xs font-bold font-poppins">${pair.soundB}</span>
+                            <span class="text-[10px] text-slate-400 flex items-center gap-0.5 mt-1"><i data-lucide="volume-2" class="w-3 h-3"></i> Listen</span>
+                        </div>
+                    </div>
+
+                    <!-- Toggle/Hide Utility to test student memory/discrimination -->
+                    <div class="mt-2.5 flex justify-between items-center bg-white p-2 rounded-xl border border-slate-100">
+                        <span class="text-xs text-slate-500 font-semibold">Want to test yourself?</span>
+                        <button onclick="toggleWordReveal(${index}, '${pair.wordB}')" id="reveal-btn-${index}" class="text-xs font-bold text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-all border border-red-200">
+                            Hide Word B
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        // Hide or Reveal Word inside Gym
+        function toggleWordReveal(index, word) {
+            const wordEl = document.getElementById(`pair-b-word-${index}`);
+            const btn = document.getElementById(`reveal-btn-${index}`);
+
+            if (wordEl.innerText === "???") {
+                wordEl.innerText = word;
+                btn.innerText = "Hide Word B";
+                btn.className = "text-xs font-bold text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-all border border-red-200";
+            } else {
+                wordEl.innerText = "???";
+                btn.innerText = "Reveal Word B";
+                btn.className = "text-xs font-bold bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg transition-all shadow-sm";
+            }
+        }
+
+        // Simulation for Voiced / Voiceless vibration
+        function testVibration(isVoiced) {
+            const feedback = document.getElementById('vocal-feedback-box');
+            if (isVoiced) {
+                feedback.className = "mt-4 p-3 bg-red-100 border border-red-200 text-red-700 rounded-xl text-center text-xs font-bold animate-pulse flex items-center justify-center gap-2";
+                feedback.innerHTML = `<i data-lucide="activity" class="w-4 h-4 text-red-600"></i> ACTIVE BUZZ! Feel your physical vocal cords vibrate in your throat.`;
+                pronounceText("buzz");
+            } else {
+                feedback.className = "mt-4 p-3 bg-slate-100 border border-slate-200 text-slate-700 rounded-xl text-center text-xs font-bold flex items-center justify-center gap-2";
+                feedback.innerHTML = `<i data-lucide="wind" class="w-4 h-4 text-slate-400"></i> FREE AIR FLUX: Pure friction across the teeth and lips. No vibration.`;
+                pronounceText("shh");
+            }
+            lucide.createIcons();
+        }
+
+        // Helper: Shuffle Array (Fisher-Yates)
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [
+                array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        // Initialize Randomized Quiz
+        function setupRandomQuiz() {
+            // Pick 10 random questions from the pool of 15
+            const shuffledPool = shuffleArray([...quizQuestionsPool]);
+            quizQuestions = shuffledPool.slice(0, 10);
+            
+            // Randomize options for each question inside
+            quizQuestions.forEach(q => {
+                q.choices = shuffleArray([...q.choices]);
+            });
+
+            currentQuizIndex = 0;
+            quizScore = 0;
+            document.getElementById('quiz-score').innerText = "0";
+            document.getElementById('quiz-results').classList.add('hidden');
+            document.getElementById('quiz-game-panel').classList.remove('hidden');
+            loadQuizQuestion();
+        }
+
+        // Quiz Logic System
+        function playQuizWord() {
+            const q = quizQuestions[currentQuizIndex];
+            pronounceText(q.sound);
+        }
+
+        // Load Quiz Question Layout
+        function loadQuizQuestion() {
+            const q = quizQuestions[currentQuizIndex];
+            
+            // UI elements resetting
+            document.getElementById('quiz-current-num').innerText = currentQuizIndex + 1;
+            document.getElementById('quiz-percent').innerText = `${(currentQuizIndex + 1) * 10}% Completed`;
+            document.getElementById('quiz-progress-bar').style.width = `${(currentQuizIndex + 1) * 10}%`;
+
+            document.getElementById('quiz-feedback').className = "hidden p-4 rounded-xl text-center font-bold text-sm transition-all";
+            document.getElementById('quiz-action-btn').classList.add('hidden');
+
+            // Set choices values on choices buttons
+            const choiceBtn0 = document.getElementById('choice-0');
+            const choiceBtn1 = document.getElementById('choice-1');
+
+            choiceBtn0.innerText = q.choices[0];
+            choiceBtn1.innerText = q.choices[1];
+
+            // Enable options
+            choiceBtn0.disabled = false;
+            choiceBtn1.disabled = false;
+            choiceBtn0.className = "quiz-choice p-4 bg-white hover:bg-slate-50 border-2 border-slate-200 rounded-xl font-bold text-slate-700 text-lg transition-all duration-150 shadow-sm active:translate-y-0.5";
+            choiceBtn1.className = "quiz-choice p-4 bg-white hover:bg-slate-50 border-2 border-slate-200 rounded-xl font-bold text-slate-700 text-lg transition-all duration-150 shadow-sm active:translate-y-0.5";
+
+            // Automatically speak word aloud when loading question
+            setTimeout(() => {
+                playQuizWord();
+            }, 600);
+        }
+
+        function selectAnswer(index) {
+            const q = quizQuestions[currentQuizIndex];
+            const selectedWord = q.choices[index];
+            const isCorrect = selectedWord === q.correct;
+
+            // Stop further input clicks
+            const choiceBtn0 = document.getElementById('choice-0');
+            const choiceBtn1 = document.getElementById('choice-1');
+            choiceBtn0.disabled = true;
+            choiceBtn1.disabled = true;
+
+            const selectedBtn = document.getElementById(`choice-${index}`);
+            const feedback = document.getElementById('quiz-feedback');
+
+            if (isCorrect) {
+                quizScore++;
+                document.getElementById('quiz-score').innerText = quizScore;
+                selectedBtn.className = "quiz-choice p-4 bg-emerald-50 border-2 border-emerald-500 text-emerald-800 rounded-xl font-bold text-lg transition-all shadow-md flex items-center justify-center gap-2";
+                selectedBtn.innerHTML = `<i data-lucide="check-circle" class="w-5 h-5 text-emerald-600"></i> Correct: ${selectedWord}`;
+                
+                feedback.className = "p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-center font-bold text-sm text-emerald-800 block";
+                feedback.innerHTML = "Excellent ear! You discriminated the sound correctly.";
+            } else {
+                selectedBtn.className = "quiz-choice p-4 bg-red-50 border-2 border-red-500 text-red-800 rounded-xl font-bold text-lg transition-all shadow-md flex items-center justify-center gap-2";
+                selectedBtn.innerHTML = `<i data-lucide="x-circle" class="w-5 h-5 text-red-600"></i> Incorrect: ${selectedWord}`;
+                
+                // Highlight the correct one
+                const correctIndex = q.choices.indexOf(q.correct);
+                const correctBtn = document.getElementById(`choice-${correctIndex}`);
+                correctBtn.className = "quiz-choice p-4 bg-emerald-50 border-2 border-emerald-500 text-emerald-800 rounded-xl font-bold text-lg transition-all shadow-md";
+
+                feedback.className = "p-4 bg-red-50 border border-red-200 rounded-xl text-center font-bold text-sm text-red-800 block";
+                feedback.innerHTML = `Whoops! The correct word was "${q.correct}". Keep training your focus!`;
+            }
+
+            document.getElementById('quiz-action-btn').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function nextQuizQuestion() {
+            currentQuizIndex++;
+            if (currentQuizIndex < quizQuestions.length) {
+                loadQuizQuestion();
+            } else {
+                // Show final results screen
+                document.getElementById('quiz-game-panel').classList.add('hidden');
+                document.getElementById('quiz-results').classList.remove('hidden');
+                document.getElementById('final-score').innerText = `${quizScore} / ${quizQuestions.length}`;
+                
+                // Show customized feedback
+                const critique = document.getElementById('score-critique');
+                if (quizScore >= 9) {
+                    critique.innerText = "Incredible Native Level! Your phonetic perception and auditory accuracy are perfect.";
+                } else if (quizScore >= 7) {
+                    critique.innerText = "Excellent Work! You accurately distinguish most of these highly confusing phonemes.";
+                } else {
+                    critique.innerText = "Good Effort! Keep testing and reviewing the IPA Chart to fine-tune your English ear.";
+                }
+            }
+        }
+
+        function resetQuiz() {
+            setupRandomQuiz();
+        }
+
+        // Global Tab Navigation Manager
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn px-4 py-2 rounded-lg font-bold text-sm transition-all duration-200 hover:bg-red-700 text-white";
+            });
+
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            activeBtn.className = "tab-btn px-4 py-2 rounded-lg font-bold text-sm transition-all duration-200 bg-white text-red-600 shadow-md";
+
+            // If entering quiz, trigger randomized setup
+            if (tabId === 'quiz') {
+                setupRandomQuiz();
+            }
+
+            // Wake up voice synthesis upon navigation to prevent browser freeze
+            forceVoiceUnlock();
+        }
+
+        // Audio Troubleshooter UI Utilities
+        function openTroubleshooter() {
+            document.getElementById('troubleshooter-panel').classList.remove('hidden');
+        }
+
+        function closeTroubleshooter() {
+            document.getElementById('troubleshooter-panel').classList.add('hidden');
+        }
+
+        // FORCE SPEECH SYNTHESIS UNLOCKING (Crucial for Chrome & Sandboxed Iframes)
+        function forceVoiceUnlock() {
+            if (!speechSynth) return;
+            try {
+                speechSynth.cancel();
+                // Warm up synthesis with a silent empty word
+                const silentWarmup = new SpeechSynthesisUtterance("");
+                silentWarmup.volume = 0;
+                speechSynth.speak(silentWarmup);
+                console.log("SpeechSynthesis: Forced audio interaction unlock triggered.");
+            } catch (err) {
+                console.error("SpeechSynthesis Unlocking Error: ", err);
+            }
+        }
+
+        // PURE AUDIO SYNTHESIZER BEEP (Fallback to test system volume)
+        function testSynthesizerBeep() {
+            try {
+                // Standard cross-browser Audio Context
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) {
+                    alert("Your browser does not support native Web Audio synthesis.");
+                    return;
+                }
+                const audioCtx = new AudioContext();
+                
+                // Create clean sinusoidal sound wave
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(440, audioCtx.currentTime); // Standard concert pitch A4
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); // Gentle volume
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                oscillator.start();
+                // Play for half a second
+                setTimeout(() => {
+                    oscillator.stop();
+                    audioCtx.close();
+                }, 500);
+
+                console.log("Web Audio Context: Synthetic audio wave playback successful.");
+            } catch (err) {
+                console.error("Could not initialize Web Audio Context due to security restrictions:", err);
+            }
+        }
+
+        // Web Speech API Wrapper
+        function pronounceCurrentSound() {
+            if (currentSelectedSound) {
+                pronounceText(currentSelectedSound.symbol);
+            }
+        }
+
+        function pronounceText(text) {
+            if (!speechSynth) {
+                console.warn("Speech API not available on this device.");
+                return;
+            }
+
+            // Cancel any ongoing speaking immediately to un-queue
+            speechSynth.cancel();
+
+            // Handle pure symbols mapping to make Voice Synthesizer output correct phonetic quality
+            let speakValue = text;
+            const symbolToWordMap = {
+                "i:": "sheep", "ɪ": "ship", "e": "bed", "æ": "cat", "ʌ": "cup", "ɑ:": "father",
+                "ɒ": "hot", "ɔ:": "door", "ʊ": "book", "u:": "blue", "ɜ:": "girl", "ə": "banana",
+                "eɪ": "say", "aɪ": "my", "ɔɪ": "boy", "aʊ": "now", "əʊ": "go", "ɪə": "near",
+                "eə": "hair", "ʊə": "tour", "p": "pen", "b": "bed", "t": "table", "d": "dog",
+                "k": "key", "g": "go", "f": "fan", "v": "van", "θ": "think", "ð": "mother",
+                "s": "see", "z": "zoo", "ʃ": "she", "ʒ": "vision", "tʃ": "chair", "dʒ": "job",
+                "m": "man", "n": "no", "ŋ": "singing", "h": "he", "l": "light", "r": "red",
+                "w": "water", "j": "yes", "buzz": "z-z-z-z", "shh": "sh-sh-sh"
+            };
+
+            if (symbolToWordMap[text]) {
+                speakValue = symbolToWordMap[text];
+            }
+
+            const utterance = new SpeechSynthesisUtterance(speakValue);
+            
+            // Setup voices list
+            const voices = speechSynth.getVoices();
+            // Prioritize English native voices (US, GB or AU)
+            const englishVoice = voices.find(v => v.lang.startsWith('en-US') || v.lang.startsWith('en-GB') || v.lang.startsWith('en-'));
+            if (englishVoice) {
+                utterance.voice = englishVoice;
+            }
+            
+            utterance.rate = 0.8; // Slightly slower for academic clarity
+            utterance.pitch = 1.0;
+            
+            // Safety handler in case speech gets stuck in browsers
+            utterance.onerror = (e) => {
+                console.warn("SpeechSynthesis error:", e);
+                // Try resetting if stuck
+                speechSynth.cancel();
+            };
+
+            speechSynth.speak(utterance);
+        }
+
+        // Support for pitch-accent words
+        function playAccentText(word) {
+            if (!speechSynth) return;
+            speechSynth.cancel();
+            const utterance = new SpeechSynthesisUtterance(word);
+            const voices = speechSynth.getVoices();
+            const englishVoice = voices.find(v => v.lang.startsWith('en-US'));
+            if (englishVoice) utterance.voice = englishVoice;
+            utterance.rate = 0.75;
+            speechSynth.speak(utterance);
+        }
+    </script>
+</body>
+</html>

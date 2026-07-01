@@ -173,7 +173,7 @@
 
             <!-- Quick Navigation Cards Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
-                <!-- Card Syllabus Matrix (NEW PRIORITY) -->
+                <!-- Card Syllabus Matrix -->
                 <div onclick="switchTab('fases')" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-2xl shadow-sm hover:shadow-md transition-all cursor-pointer hover:-translate-y-1 group">
                     <div class="bg-red-500 text-white w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-all">
                         <i data-lucide="calendar" class="w-6 h-6"></i>
@@ -308,7 +308,7 @@
                 </div>
 
                 <!-- Right: Live Dynamic Detail Panel -->
-                <div id="details-panel" class="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-md border border-slate-100 dark:border-slate-800 sticky top-24 flex flex-col justify-between">
+                <div id="details-panel" class="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-md border border-slate-100 dark:border-slate-800 sticky top-24 flex flex-col justify-between max-h-[85vh] overflow-y-auto">
                     <div>
                         <div class="flex justify-between items-start border-b dark:border-slate-800 pb-4 mb-6">
                             <div>
@@ -343,12 +343,29 @@
                         </div>
 
                         <!-- Minimal pairs/examples section -->
-                        <div>
+                        <div class="mb-6">
                             <h4 class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center gap-1.5 mb-2.5">
                                 <i data-lucide="list-music" class="w-3.5 h-3.5 text-red-500 dark:text-red-400"></i> Example Practice Words
                             </h4>
                             <div class="space-y-2" id="panel-examples">
                                 <!-- Example word rows (dynamically created) -->
+                            </div>
+                        </div>
+
+                        <!-- NEW COMPONENT: Dynamic Micro Sound Detective Inside Every Phoneme -->
+                        <div class="border-t dark:border-slate-800 pt-4 mt-6">
+                            <div class="flex justify-between items-center mb-3">
+                                <h4 class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                                    <i data-lucide="compass" class="text-red-500 dark:text-red-400"></i> Sound Detective Mini-Game
+                                </h4>
+                                <span class="bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 text-[10px] font-bold px-2 py-0.5 rounded" id="panel-detective-score">
+                                    Score: 0 / 0
+                                </span>
+                            </div>
+                            <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-dashed border-slate-200 dark:border-slate-800">
+                                <p class="text-sm leading-relaxed text-slate-700 dark:text-slate-300 font-medium select-none" id="panel-detective-text">
+                                    <!-- Dynamic clickable words generated here -->
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -415,8 +432,8 @@
                                 <div class="flex gap-2">
                                     <span class="bg-slate-50 dark:bg-slate-800 px-3 py-1.5 rounded-lg font-bold text-sm text-slate-700 dark:text-slate-300 border dark:border-slate-750">/p/ (pen)</span>
                                     <span class="bg-slate-50 dark:bg-slate-800 px-3 py-1.5 rounded-lg font-bold text-sm text-slate-700 dark:text-slate-300 border dark:border-slate-750">/s/ (see)</span>
-                                    <span class="bg-slate-50 dark:bg-slate-800 px-3 py-1.5 rounded-lg font-bold text-sm text-slate-700 dark:text-slate-300 border dark:border-slate-750">/f/ (fan)</span>
-                                    <span class="bg-slate-50 dark:bg-slate-800 px-3 py-1.5 rounded-lg font-bold text-sm text-slate-700 dark:text-slate-300 border dark:border-slate-750">/ʃ/ (she)</span>
+                                    <span class="bg-slate-50 dark:bg-slate-850 px-3 py-1.5 rounded-lg font-bold text-sm text-slate-700 dark:text-slate-300 border dark:border-slate-750">/f/ (fan)</span>
+                                    <span class="bg-slate-50 dark:bg-slate-850 px-3 py-1.5 rounded-lg font-bold text-sm text-slate-700 dark:text-slate-300 border dark:border-slate-750">/ʃ/ (she)</span>
                                 </div>
                                 <div class="mt-3 flex items-center gap-1.5 text-xs text-red-600 dark:text-red-400 font-bold">
                                     <i data-lucide="play-circle" class="w-4 h-4"></i> Click to simulate and practice
@@ -433,8 +450,8 @@
                                 <div class="flex gap-2">
                                     <span class="bg-slate-50 dark:bg-slate-800 px-3 py-1.5 rounded-lg font-bold text-sm text-slate-700 dark:text-slate-300 border dark:border-slate-750">/b/ (bed)</span>
                                     <span class="bg-slate-50 dark:bg-slate-800 px-3 py-1.5 rounded-lg font-bold text-sm text-slate-700 dark:text-slate-300 border dark:border-slate-750">/z/ (zoo)</span>
-                                    <span class="bg-slate-50 dark:bg-slate-800 px-3 py-1.5 rounded-lg font-bold text-sm text-slate-700 dark:text-slate-300 border dark:border-slate-750">/v/ (van)</span>
-                                    <span class="bg-slate-50 dark:bg-slate-800 px-3 py-1.5 rounded-lg font-bold text-sm text-slate-700 dark:text-slate-300 border dark:border-slate-750">/ʒ/ (vision)</span>
+                                    <span class="bg-slate-50 dark:bg-slate-850 px-3 py-1.5 rounded-lg font-bold text-sm text-slate-700 dark:text-slate-300 border dark:border-slate-750">/v/ (van)</span>
+                                    <span class="bg-slate-50 dark:bg-slate-850 px-3 py-1.5 rounded-lg font-bold text-sm text-slate-700 dark:text-slate-300 border dark:border-slate-750">/ʒ/ (vision)</span>
                                 </div>
                                 <div class="mt-3 flex items-center gap-1.5 text-xs text-red-600 dark:text-red-400 font-bold">
                                     <i data-lucide="play-circle" class="w-4 h-4"></i> Click to simulate and practice
@@ -595,12 +612,12 @@
              ============================================== -->
         <section id="tab-fases" class="tab-content hidden">
             <!-- Session Selector Bar -->
-            <div class="bg-white rounded-3xl p-6 shadow-md border border-slate-100 mb-8">
+            <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-md border border-slate-100 dark:border-slate-800 mb-8">
                 <div class="flex flex-col md:flex-row justify-between items-center gap-6">
                     <div>
                         <span class="bg-red-100 text-red-600 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">Interactive Pilot Core</span>
-                        <h2 class="text-2xl font-bold font-poppins text-slate-800 mt-2">15-Session Curriculum Controller</h2>
-                        <p class="text-xs text-slate-400">Select any class and proficiency group to dynamically reload targets & resources.</p>
+                        <h2 class="text-2xl font-bold font-poppins text-slate-800 dark:text-slate-100 mt-2">15-Session Curriculum Controller</h2>
+                        <p class="text-xs text-slate-400 dark:text-slate-550">Select any class and proficiency group to dynamically reload targets & resources.</p>
                     </div>
                     
                     <!-- Form Controls -->
@@ -608,7 +625,7 @@
                         <!-- Select Class Dropdown -->
                         <div class="w-full sm:w-auto">
                             <label for="syllabus-session-select" class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Select Session</label>
-                            <select id="syllabus-session-select" onchange="syncSyllabusState()" class="bg-slate-50 border border-slate-200 text-slate-700 font-bold py-2.5 px-4 rounded-xl w-full text-sm focus:outline-none focus:border-red-500 transition-all">
+                            <select id="syllabus-session-select" onchange="syncSyllabusState()" class="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 font-bold py-2.5 px-4 rounded-xl w-full text-sm focus:outline-none focus:border-red-500 transition-all">
                                 <!-- Generated Dynamically 1 to 15 -->
                             </select>
                         </div>
@@ -616,9 +633,9 @@
                         <!-- Toggle Level Group -->
                         <div class="w-full sm:w-auto">
                             <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Target Group</label>
-                            <div class="flex bg-slate-100 p-1 rounded-xl">
-                                <button id="lvl-toggle-g1" onclick="setLevelToggle('G1')" class="px-4 py-2 text-xs font-bold rounded-lg transition-all bg-white text-slate-800 shadow-sm">Group 1: A1-A2</button>
-                                <button id="lvl-toggle-g2" onclick="setLevelToggle('G2')" class="px-4 py-2 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-800">Group 2: B1-C1</button>
+                            <div class="flex bg-slate-100 dark:bg-slate-950 p-1 rounded-xl">
+                                <button id="lvl-toggle-g1" onclick="setLevelToggle('G1')" class="px-4 py-2 text-xs font-bold rounded-lg transition-all bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 shadow-sm">Group 1: A1-A2</button>
+                                <button id="lvl-toggle-g2" onclick="setLevelToggle('G2')" class="px-4 py-2 text-xs font-bold rounded-lg transition-all text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">Group 2: B1-C1</button>
                             </div>
                         </div>
                     </div>
@@ -628,26 +645,26 @@
             <!-- Dashboard of Chosen Curriculum Class -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Column 1: Lesson Target Profile -->
-                <div class="bg-white rounded-3xl p-6 shadow-md border border-slate-100 flex flex-col justify-between">
+                <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-md border border-slate-100 dark:border-slate-800 flex flex-col justify-between">
                     <div>
-                        <div class="border-b pb-4 mb-4">
+                        <div class="border-b dark:border-slate-800 pb-4 mb-4">
                             <div class="flex justify-between items-center mb-2">
                                 <span class="bg-red-50 text-red-600 text-xs font-extrabold uppercase tracking-widest px-2.5 py-1 rounded" id="syllabus-meta-number">Class 1</span>
-                                <span class="bg-slate-100 text-slate-600 text-xs font-bold px-2.5 py-1 rounded" id="syllabus-meta-track">Foundation</span>
+                                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs font-bold px-2.5 py-1 rounded" id="syllabus-meta-track">Foundation</span>
                             </div>
-                            <h3 class="text-xl font-extrabold text-slate-800 leading-snug font-poppins" id="syllabus-display-title">Voiced vs. Voiceless stops</h3>
+                            <h3 class="text-xl font-extrabold text-slate-800 dark:text-slate-100 leading-snug font-poppins" id="syllabus-display-title">Voiced vs. Voiceless stops</h3>
                         </div>
 
                         <!-- Details list -->
                         <div class="space-y-4 text-sm leading-relaxed mb-6">
                             <div>
                                 <strong class="text-xs font-bold text-slate-400 uppercase tracking-wider block">Class Focus Phonemes</strong>
-                                <span class="text-lg font-black text-red-600 mt-1 block font-poppins" id="syllabus-display-phonemes">/p/ /b/ /t/ /d/</span>
+                                <span class="text-lg font-black text-red-600 dark:text-red-400 mt-1 block font-poppins" id="syllabus-display-phonemes">/p/ /b/ /t/ /d/</span>
                             </div>
                             
                             <div>
                                 <strong class="text-xs font-bold text-slate-400 uppercase tracking-wider block">Lesson Description</strong>
-                                <p class="text-slate-600 text-xs mt-1" id="syllabus-display-desc">
+                                <p class="text-slate-600 dark:text-slate-400 text-xs mt-1" id="syllabus-display-desc">
                                     Exploring mechanical voice activity. Learn how stops release air and trigger vocal cord vibrations differently in contrastive targets.
                                 </p>
                             </div>
@@ -662,56 +679,56 @@
                     </div>
 
                     <!-- Play Lesson Highlights button -->
-                    <div class="border-t pt-4">
-                        <button onclick="playSyllabusSummary()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-xl text-xs shadow-md flex items-center justify-center gap-1.5 transition-all">
+                    <div class="border-t dark:border-slate-800 pt-4">
+                        <button onclick="playSyllabusSummary()" class="w-full bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white font-bold py-3 px-4 rounded-xl text-xs shadow-md flex items-center justify-center gap-1.5 transition-all">
                             <i data-lucide="speech" class="w-4 h-4"></i> Play Phoneme Pronunciation Target
                         </button>
                     </div>
                 </div>
 
                 <!-- Column 2: Sound Detective Module (interactive Phase 3 Reader) -->
-                <div class="bg-white rounded-3xl p-6 shadow-md border border-slate-100 lg:col-span-2">
-                    <div class="border-b pb-4 mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-md border border-slate-100 dark:border-slate-800 lg:col-span-2">
+                    <div class="border-b dark:border-slate-800 pb-4 mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <div>
-                            <h3 class="text-lg font-bold font-poppins text-slate-800 flex items-center gap-2">
-                                <i data-lucide="compass" class="text-red-600"></i> Phase 3: Sound Detective Reader
+                            <h3 class="text-lg font-bold font-poppins text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                                <i data-lucide="compass" class="text-red-600 dark:text-red-400"></i> Phase 3: Sound Detective Reader
                             </h3>
-                            <p class="text-xs text-slate-400">Click every word that contains the target phonetic sound(s) of today!</p>
+                            <p class="text-xs text-slate-400 dark:text-slate-500">Click every word that contains the target phonetic sound(s) of today!</p>
                         </div>
-                        <div class="bg-slate-100 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold" id="detective-score-display">
+                        <div class="bg-slate-100 dark:bg-slate-950 text-slate-700 dark:text-slate-350 px-3 py-1.5 rounded-lg text-xs font-bold" id="detective-score-display">
                             Detective Score: 0 / 0
                         </div>
                     </div>
 
                     <!-- Interactive text panel -->
-                    <div class="bg-slate-50 p-6 rounded-2xl border border-dashed border-slate-200 mb-6 min-h-[140px]">
-                        <p class="text-lg leading-relaxed text-slate-700 font-medium select-none" id="detective-text-container">
+                    <div class="bg-slate-50 dark:bg-slate-950 p-6 rounded-2xl border border-dashed border-slate-200 dark:border-slate-850 mb-6 min-h-[140px]">
+                        <p class="text-lg leading-relaxed text-slate-700 dark:text-slate-300 font-medium select-none" id="detective-text-container">
                             <!-- Clickable words generated here -->
                         </p>
                     </div>
 
                     <!-- Interactive Help Tip -->
-                    <div class="flex items-start gap-2 p-3 bg-red-50 border border-red-100 rounded-xl text-red-800 text-[11px]">
+                    <div class="flex items-start gap-2 p-3 bg-red-50 dark:bg-red-955/20 border border-red-100 dark:border-red-900/50 rounded-xl text-red-800 dark:text-red-400 text-[11px]">
                         <i data-lucide="help-circle" class="w-4 h-4 flex-shrink-0 mt-0.5"></i>
-                        <p><strong>How to play:</strong> Scan the paragraph for words containing the lesson's target sounds. Correct clicks turn <span class="font-bold text-emerald-600">Green</span> and trigger authentic WebSpeech pronunciations. Tricky silent letters and unrelated sounds won't work!</p>
+                        <p><strong>How to play:</strong> Scan the paragraph for words containing the lesson's target sounds. Correct clicks turn <span class="font-bold text-emerald-600 dark:text-emerald-400">Green</span> and trigger authentic WebSpeech pronunciations. Tricky silent letters and unrelated sounds won't work!</p>
                     </div>
                 </div>
             </div>
 
             <!-- Syllabus Matrix Schedule (Passive overview card below) -->
-            <div class="bg-white rounded-3xl p-6 shadow-md border border-slate-100 mt-8">
-                <h3 class="text-lg font-bold font-poppins text-slate-800 mb-4 flex items-center gap-1.5"><i data-lucide="list" class="text-red-600"></i> Semester Course Blueprint (15 Classes)</h3>
+            <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-md border border-slate-100 dark:border-slate-800 mt-8">
+                <h3 class="text-lg font-bold font-poppins text-slate-800 dark:text-slate-100 mb-4 flex items-center gap-1.5"><i data-lucide="list" class="text-red-600 dark:text-red-400"></i> Semester Course Blueprint (15 Classes)</h3>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse text-xs">
                         <thead>
-                            <tr class="bg-slate-50 border-b border-slate-100 text-slate-400 uppercase font-extrabold">
+                            <tr class="bg-slate-50 dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800 text-slate-400 dark:text-slate-500 uppercase font-extrabold">
                                 <th class="p-3 w-16">Class</th>
                                 <th class="p-3">🎒 Group 1: A1-A2 (Foundation)</th>
                                 <th class="p-3">🌊 Group 2: B1-C1 (Fluency)</th>
                                 <th class="p-3">📝 Sound Detective Objective</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-100 text-slate-600" id="matrix-table-body">
+                        <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-600 dark:text-slate-450" id="matrix-table-body">
                             <!-- Filled dynamically by JS -->
                         </tbody>
                     </table>
@@ -722,12 +739,12 @@
     </main>
 
     <!-- FOOTER WITH VISIBLE CREDITS -->
-    <footer class="bg-white border-t border-slate-200 py-6 text-slate-500 text-sm text-center">
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-850 py-6 text-slate-500 text-sm text-center">
         <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-3">
-            <p class="font-medium text-slate-600">
-                Created by <span class="font-bold text-red-600 hover:underline cursor-pointer" onclick="switchTab('welcome')">Tony Salas</span>
+            <p class="font-medium text-slate-600 dark:text-slate-400">
+                Created by <span class="font-bold text-red-600 dark:text-red-400 hover:underline cursor-pointer" onclick="switchTab('welcome')">Tony Salas</span>
             </p>
-            <p class="text-xs text-slate-400">
+            <p class="text-xs text-slate-400 dark:text-slate-500">
                 © 2026 Smart Academy Pronunciation Program. All rights reserved.
             </p>
         </div>
@@ -737,57 +754,409 @@
          JAVASCRIPT LOGIC & DATABASE
          ============================================== -->
     <script>
-        // IPA Data Storage (All 44 Sounds)
+        // IPA Data Storage (All 44 Sounds with newly added Detective Texts)
         const ipaDatabase = {
             vowels: [
-                { symbol: "i:", name: "Long i Sound", mouth: "Mouth spread wide, like making a tense smile. Tongue high up and far forward.", examples: ["see", "unique", "feet"], spAlert: "Spanish speakers often make this too short, like the Spanish 'i'." },
-                { symbol: "ɪ", name: "Short i Sound", mouth: "Mouth slightly open, lips relaxed. Tongue is slightly lower than /i:/.", examples: ["ship", "fish", "it"], spAlert: "Crucial! Do not pronounce this as /i:/. This must be short and relaxed." },
-                { symbol: "e", name: "Short e Sound", mouth: "Lips wide and relaxed, jaw dropped slightly more than /ɪ/.", examples: ["bed", "men", "head"], spAlert: "Very close to the Spanish letter 'e'. Keep it short." },
-                { symbol: "æ", name: "The Apple Sound", mouth: "Open your mouth wide, jaw dropped low, tongue pushed forward and flat.", examples: ["cat", "apple", "man"], spAlert: "Do not pronounce this like /e/. Your mouth must open much wider." },
-                { symbol: "ʌ", name: "Short u Sound", mouth: "Lips relaxed, mouth open in a central neutral position.", examples: ["cup", "love", "bus"], spAlert: "Often mispronounced as an 'o'. It is a very short, relaxed grunt." },
-                { symbol: "ɑ:", name: "Long ah Sound", mouth: "Jaw dropped completely open and relaxed. Deep in the throat.", examples: ["father", "heart", "car"], spAlert: "Close to a relaxed Spanish 'a' but much deeper and longer." },
-                { symbol: "ɒ", name: "Short o Sound", mouth: "Lips slightly rounded, jaw dropped moderately.", examples: ["hot", "box", "stop"], spAlert: "Avoid pronouncing this like a hard Spanish 'o'. It is wider and lower." },
-                { symbol: "ɔ:", name: "Long aw Sound", mouth: "Make your lips round like a circle. Keep it long and clear.", examples: ["door", "saw", "water"], spAlert: "Make your lips round like a circle. Keep it long and clear." },
-                { symbol: "ʊ", name: "Short oo Sound", mouth: "Lips slightly rounded, jaw relaxed. Tense muscles are NOT used here.", examples: ["book", "put", "good"], spAlert: "Spanish speakers tend to make this too tense, like a Spanish 'u'. Keep it lazy." },
-                { symbol: "u:", name: "Long oo Sound", mouth: "Lips tightly rounded into a circle. Tense tongue pulled backwards.", examples: ["blue", "shoe", "food"], spAlert: "Similar to the Spanish 'u' but with a more intense rounding of the lips." },
-                { symbol: "ɜ:", name: "Long er Sound", mouth: "Lips neutral, tongue flat and raised slightly in the center.", examples: ["girl", "bird", "work"], spAlert: "Extremely difficult! Do not pronounce the 'i' or 'o'. Think of a vibrating neutral buzz." },
-                { symbol: "ə", name: "The Schwa Sound", mouth: "Lips completely relaxed, mouth in neutral. Effortless neutral grunt.", examples: ["about", "banana", "listen"], spAlert: "The most common sound in English. Never accent this sound." }
+                { 
+                    symbol: "i:", 
+                    name: "Long i Sound", 
+                    mouth: "Mouth spread wide, like making a tense smile. Tongue high up and far forward.", 
+                    examples: ["see", "unique", "feet"], 
+                    spAlert: "Spanish speakers often make this too short, like the Spanish 'i'.",
+                    text: "We see three green trees under the deep sea.",
+                    correctWords: ["we", "see", "three", "green", "trees", "deep", "sea"]
+                },
+                { 
+                    symbol: "ɪ", 
+                    name: "Short i Sound", 
+                    mouth: "Mouth slightly open, lips relaxed. Tongue is slightly lower than /i:/.", 
+                    examples: ["ship", "fish", "it"], 
+                    spAlert: "Crucial! Do not pronounce this as /i:/. This must be short and relaxed.",
+                    text: "This big pink fish can swim quickly in the wind.",
+                    correctWords: ["this", "big", "pink", "fish", "swim", "quickly", "wind"]
+                },
+                { 
+                    symbol: "e", 
+                    name: "Short e Sound", 
+                    mouth: "Lips wide and relaxed, jaw dropped slightly more than /ɪ/.", 
+                    examples: ["bed", "men", "head"], 
+                    spAlert: "Very close to the Spanish letter 'e'. Keep it short.",
+                    text: "Ten friendly men slept inside a wet red tent.",
+                    correctWords: ["ten", "friendly", "men", "slept", "wet", "red", "tent"]
+                },
+                { 
+                    symbol: "æ", 
+                    name: "The Apple Sound", 
+                    mouth: "Open your mouth wide, jaw dropped low, tongue pushed forward and flat.", 
+                    examples: ["cat", "apple", "man"], 
+                    spAlert: "Do not pronounce this like /e/. Your mouth must open much wider.",
+                    text: "The angry man had an apple inside his black bag.",
+                    correctWords: ["angry", "man", "had", "an", "apple", "black", "bag"]
+                },
+                { 
+                    symbol: "ʌ", 
+                    name: "Short u Sound", 
+                    mouth: "Lips relaxed, mouth open in a central neutral position.", 
+                    examples: ["cup", "love", "bus"], 
+                    spAlert: "Often mispronounced as an 'o'. It is a very short, relaxed grunt.",
+                    text: "My mother loves to run in the summer sun.",
+                    correctWords: ["my", "mother", "loves", "run", "summer", "sun"]
+                },
+                { 
+                    symbol: "ɑ:", 
+                    name: "Long ah Sound", 
+                    mouth: "Jaw dropped completely open and relaxed. Deep in the throat.", 
+                    examples: ["father", "heart", "car"], 
+                    spAlert: "Close to a relaxed Spanish 'a' but much deeper and longer.",
+                    text: "My father parked the large car near the dark park.",
+                    correctWords: ["father", "parked", "large", "car", "dark", "park"]
+                },
+                { 
+                    symbol: "ɒ", 
+                    name: "Short o Sound", 
+                    mouth: "Lips slightly rounded, jaw dropped moderately.", 
+                    examples: ["hot", "box", "stop"], 
+                    spAlert: "Avoid pronouncing this like a hard Spanish 'o'. It is wider and lower.",
+                    text: "The hot pot was placed on top of the box.",
+                    correctWords: ["hot", "pot", "on", "top", "box"]
+                },
+                { 
+                    symbol: "ɔ:", 
+                    name: "Long aw Sound", 
+                    mouth: "Lips rounded forward, jaw open and tense.", 
+                    examples: ["door", "saw", "water"], 
+                    spAlert: "Make your lips round like a circle. Keep it long and clear.",
+                    text: "She saw the tall boy draw on the wall.",
+                    correctWords: ["saw", "tall", "boy", "draw", "wall"]
+                },
+                { 
+                    symbol: "ʊ", 
+                    name: "Short oo Sound", 
+                    mouth: "Lips slightly rounded, jaw relaxed. Tense muscles are NOT used here.", 
+                    examples: ["book", "put", "good"], 
+                    spAlert: "Spanish speakers tend to make this too tense, like a Spanish 'u'. Keep it lazy.",
+                    text: "He put the good book inside his wooden desk.",
+                    correctWords: ["put", "good", "book", "wooden"]
+                },
+                { 
+                    symbol: "u:", 
+                    name: "Long oo Sound", 
+                    mouth: "Lips tightly rounded into a circle. Tense tongue pulled backwards.", 
+                    examples: ["blue", "shoe", "food"], 
+                    spAlert: "Similar to the Spanish 'u' but with a more intense rounding of the lips.",
+                    text: "The cool blue shoes were sitting near the pool.",
+                    correctWords: ["cool", "blue", "shoes", "pool"]
+                },
+                { 
+                    symbol: "ɜ:", 
+                    name: "Long er Sound", 
+                    mouth: "Lips neutral, tongue flat and raised slightly in the center.", 
+                    examples: ["girl", "bird", "work"], 
+                    spAlert: "Extremely difficult! Do not pronounce the 'i' or 'o'. Think of a vibrating neutral buzz.",
+                    text: "The first girl saw a bird search for a worm.",
+                    correctWords: ["first", "girl", "bird", "search", "worm"]
+                },
+                { 
+                    symbol: "ə", 
+                    name: "The Schwa Sound", 
+                    mouth: "Lips completely relaxed, mouth in neutral. Effortless neutral grunt.", 
+                    examples: ["about", "banana", "listen"], 
+                    spAlert: "The most common sound in English. Never accent this sound.",
+                    text: "The doctor bought a yellow banana today for breakfast.",
+                    correctWords: ["the", "doctor", "a", "banana", "today", "for", "breakfast"]
+                }
             ],
             diphthongs: [
-                { symbol: "eɪ", name: "The Double A Sound", mouth: "Start at /e/ (bed) and smoothly glide upwards into /ɪ/ (it).", examples: ["say", "face", "train"], spAlert: "Often simplified into a single Spanish vowel. Make sure to double slide." },
-                { symbol: "aɪ", name: "The Double I Sound", mouth: "Start deep with /ɑ:/ (father) and slide into /ɪ/ (it).", examples: ["my", "light", "find"], spAlert: "Slide cleanly. Similar to the Spanish 'ai' in 'aire'." },
-                { symbol: "ɔɪ", name: "The Oy Sound", mouth: "Start with rounded /ɔ:/ and slide smoothly into /ɪ/.", examples: ["boy", "join", "choice"], spAlert: "Very similar to the Spanish sound in 'boina'." },
-                { symbol: "aʊ", name: "The Ow Sound", mouth: "Start open at /ɑ:/ and round lips fully into /ʊ/.", examples: ["now", "house", "mouth"], spAlert: "Similar to 'au' in Spanish, but with more extreme lip-rounding at the end." },
-                { symbol: "əʊ", name: "The Oh Sound", mouth: "Start neutral with /ə/ and slide into a rounded /ʊ/.", examples: ["go", "home", "show"], spAlert: "Avoid a flat Spanish 'o'. The English 'o' is always a sliding double sound." },
-                { symbol: "ɪə", name: "The Ear Sound", mouth: "Start with /ɪ/ (it) and slide down into the neutral Schwa /ə/.", examples: ["near", "here", "fear"], spAlert: "Don't roll the 'r' hard. Slide softly into the lazy central vowel." },
-                { symbol: "eə", name: "The Air Sound", mouth: "Start with /e/ (bed) and glide into the lazy Schwa /ə/.", examples: ["hair", "there", "care"], spAlert: "Keep the final transition smooth and avoid any strong 'r' tongue rolling." },
-                { symbol: "ʊə", name: "The Pure Sound", mouth: "Start at relaxed /ʊ/ and slide smoothly into Schwa /ə/.", examples: ["tour", "cure", "pure"], spAlert: "Relatively rare but important. Slide smoothly from relaxed 'u' to Schwa." }
+                { 
+                    symbol: "eɪ", 
+                    name: "The Double A Sound", 
+                    mouth: "Start at /e/ (bed) and smoothly glide upwards into /ɪ/ (it).", 
+                    examples: ["say", "face", "train"], 
+                    spAlert: "Often simplified into a single Spanish vowel. Make sure to double slide.",
+                    text: "They say the gray train will be late today.",
+                    correctWords: ["they", "say", "gray", "train", "late", "today"]
+                },
+                { 
+                    symbol: "aɪ", 
+                    name: "The Double I Sound", 
+                    mouth: "Start deep with /ɑ:/ (father) and slide into /ɪ/ (it).", 
+                    examples: ["my", "light", "find"], 
+                    spAlert: "Slide cleanly. Similar to the Spanish 'ai' in 'aire'.",
+                    text: "I like to ride my white bike at night.",
+                    correctWords: ["i", "like", "ride", "my", "white", "bike", "night"]
+                },
+                { 
+                    symbol: "ɔɪ", 
+                    name: "The Oy Sound", 
+                    mouth: "Start with rounded /ɔ:/ and slide smoothly into /ɪ/.", 
+                    examples: ["boy", "join", "choice"], 
+                    spAlert: "Very similar to the Spanish sound in 'boina'.",
+                    text: "The excited boy enjoyed playing with his new toy.",
+                    correctWords: ["boy", "enjoyed", "toy"]
+                },
+                { 
+                    symbol: "aʊ", 
+                    name: "The Ow Sound", 
+                    mouth: "Start open at /ɑ:/ and round lips fully into /ʊ/.", 
+                    examples: ["now", "house", "mouth"], 
+                    spAlert: "Similar to 'au' in Spanish, but with more extreme lip-rounding at the end.",
+                    text: "Our loud brown cow ran around the white house.",
+                    correctWords: ["our", "loud", "brown", "cow", "around", "house"]
+                },
+                { 
+                    symbol: "əʊ", 
+                    name: "The Oh Sound", 
+                    mouth: "Start neutral with /ə/ and slide into a rounded /ʊ/.", 
+                    examples: ["go", "home", "show"], 
+                    spAlert: "Avoid a flat Spanish 'o'. The English 'o' is always a sliding double sound.",
+                    text: "We must go home over the cold white snow.",
+                    correctWords: ["go", "home", "over", "cold", "snow"]
+                },
+                { 
+                    symbol: "ɪə", 
+                    name: "The Ear Sound", 
+                    mouth: "Start with /ɪ/ (it) and slide down into the neutral Schwa /ə/.", 
+                    examples: ["near", "here", "fear"], 
+                    spAlert: "Don't roll the 'r' hard. Slide softly into the lazy central vowel.",
+                    text: "We can clearly hear the small deer standing near here.",
+                    correctWords: ["clearly", "hear", "deer", "near", "here"]
+                },
+                { 
+                    symbol: "eə", 
+                    name: "The Air Sound", 
+                    mouth: "Start with /e/ (bed) and glide into the lazy Schwa /ə/.", 
+                    examples: ["hair", "there", "care"], 
+                    spAlert: "Keep the final transition smooth and avoid any strong 'r' tongue rolling.",
+                    text: "The rare hairy bear was resting over there.",
+                    correctWords: ["rare", "hairy", "bear", "there"]
+                },
+                { 
+                    symbol: "ʊə", 
+                    name: "The Pure Sound", 
+                    mouth: "Start at relaxed /ʊ/ and slide smoothly into Schwa /ə/.", 
+                    examples: ["tour", "cure", "pure"], 
+                    spAlert: "Relatively rare but important. Slide smoothly from relaxed 'u' to Schwa.",
+                    text: "The expert tour guide assured us of a pure cure.",
+                    correctWords: ["tour", "pure", "cure"]
+                }
             ],
             consonants: [
-                { symbol: "p", name: "Voiceless P", mouth: "Lips pressed together, then release a sharp burst of air. No voice.", examples: ["pen", "stop", "play"], spAlert: "English 'p' is 'aspirated' (it releases a puff of air). Hold a paper in front of you." },
-                { symbol: "b", name: "Voiced B", mouth: "Lips pressed together, releasing a sound powered by your vocal cords.", examples: ["bed", "job", "baby"], spAlert: "Similar to Spanish, but much stronger and more distinct vocal vibration." },
-                { symbol: "t", name: "Voiceless T", mouth: "Press tongue tip on the ridge behind your upper teeth, release puff of air.", examples: ["table", "cat", "two"], spAlert: "English 't' is aspirated. Do not let your tongue touch your teeth." },
-                { symbol: "d", name: "Voiced D", mouth: "Press tongue tip on the ridge behind upper teeth, release with strong voice.", examples: ["dog", "red", "day"], spAlert: "Vocal cords must vibrate. Keep tongue back, away from the teeth." },
-                { symbol: "k", name: "Voiceless K", mouth: "Back of tongue presses against soft palate, releases puff of air.", examples: ["key", "car", "book"], spAlert: "Releases a strong burst of air, unlike the Spanish hard 'c'." },
-                { symbol: "g", name: "Voiced G", mouth: "Back of tongue presses soft palate, releases with voice vibration.", examples: ["go", "bag", "girl"], spAlert: "Always voiced. Make it buzz slightly from the back of the throat." },
-                { symbol: "f", name: "Voiceless F", mouth: "Place upper teeth gently on your bottom lip and blow air out.", examples: ["fan", "life", "off"], spAlert: "Identical to Spanish. Clean and airy." },
-                { symbol: "v", name: "Voiced V", mouth: "Place upper teeth on bottom lip, vibrate vocal cords strongly.", examples: ["van", "love", "very"], spAlert: "CRITICAL! Spanish speakers do not have /v/. Do not bite your lip like /b/. Buzz it." },
-                { symbol: "θ", name: "Voiceless TH", mouth: "Place tongue tip gently between front teeth, blow air out smoothly.", examples: ["think", "mouth", "three"], spAlert: "Like the Castilian Spanish 'z'. Keep it airy and soft." },
-                { symbol: "ð", name: "Voiced TH", mouth: "Place tongue tip between teeth, blow air out with strong voice vibration.", examples: ["this", "mother", "they"], spAlert: "Extremely common. Vibrate your tongue tip against your front teeth." },
-                { symbol: "s", name: "Voiceless S", mouth: "Bring teeth together, squeeze air through tongue tip and front teeth.", examples: ["see", "bus", "stop"], spAlert: "Do not add an 'e' sound before words starting with S (e.g. say 'stop', not 'estop')." },
-                { symbol: "z", name: "Voiced Z", mouth: "Bring teeth together, squeeze air through with strong vocal buzz (like a bee).", examples: ["zoo", "please", "easy"], spAlert: "Spanish speakers have no /z/. Vibrate your teeth together like an angry fly." },
-                { symbol: "ʃ", name: "Voiceless SH", mouth: "Round lips forward, push tongue flatly back, blow out. Like shushing.", examples: ["she", "shop", "fish"], spAlert: "Different from Spanish 'ch'. Keep it continuous, like a long hiss." },
-                { symbol: "ʒ", name: "Voiced ZH", mouth: "Round lips forward, push tongue flatly back, squeeze air with strong voice.", examples: ["vision", "measure", "casual"], spAlert: "Think of a voiced vibrating version of 'sh'. Very rare but beautiful." },
-                { symbol: "tʃ", name: "Voiceless CH", mouth: "Press tongue behind teeth, release sharp explosive 't' + 'sh' sound.", examples: ["chair", "watch", "cheap"], spAlert: "Similar to Spanish 'ch', but sharper and more explosive." },
-                { symbol: "dʒ", name: "Voiced J", mouth: "Press tongue behind teeth, release explosive 'd' + 'zh' with strong voice.", examples: ["job", "page", "judge"], spAlert: "Vibrate your voice strongly. Do not confuse it with the Spanish 'y' or 'j'." },
-                { symbol: "m", name: "Voiced M", mouth: "Close lips fully, let voice hum through your nose.", examples: ["man", "some", "more"], spAlert: "Identical to Spanish. Always hummed clearly." },
-                { symbol: "n", name: "Voiced N", mouth: "Press tongue flat against upper ridge, let voice hum through nose.", examples: ["no", "sun", "name"], spAlert: "Similar to Spanish." },
-                { symbol: "ŋ", name: "The Nasal NG", mouth: "Back of tongue seals soft palate, hum through nose. No 'g' sound.", examples: ["sing", "think", "long"], spAlert: "Do not pronounce a hard 'g' at the end. It's a nasal hum inside the throat." },
-                { symbol: "h", name: "Voiceless H", mouth: "Breathe out smoothly from your chest. Like fogging up a mirror.", examples: ["he", "house", "hot"], spAlert: "Do not make it scratchy like a Spanish 'j'. It should be a gentle, soft sigh." },
-                { symbol: "l", name: "Voiced L", mouth: "Press tip of tongue against alveolar ridge, release voice around sides.", examples: ["light", "full", "play"], spAlert: "Keep it clear at the start of words, and dark/hollow at the end (dark L)." },
-                { symbol: "r", name: "Voiced R", mouth: "Curl tongue back slightly, lips rounded. Never let tongue touch top of mouth.", examples: ["red", "run", "car"], spAlert: "CRITICAL! Do not roll your tongue like a Spanish 'rr'. Keep it smooth and floating." },
-                { symbol: "w", name: "Voiced W", mouth: "Tightly round your lips (like 'oo') then glide instantly into next sound.", examples: ["we", "water", "wet"], spAlert: "Do not add a 'g' sound before it. It's 'water', not 'guater'." },
-                { symbol: "j", name: "The Y Sound", mouth: "Start with tongue high and flat (like 'ee') glide into next sound.", examples: ["yes", "yellow", "use"], spAlert: "Never pronounce this like a Spanish 'y' (sheismo). Keep it smooth and soft." }
+                { 
+                    symbol: "p", 
+                    name: "Voiceless P", 
+                    mouth: "Lips pressed together, then release a sharp burst of air. No voice.", 
+                    examples: ["pen", "stop", "play"], 
+                    spAlert: "English 'p' is 'aspirated' (it releases a puff of air). Hold a paper in front of you.",
+                    text: "Please put the small pink paper inside the pen cup.",
+                    correctWords: ["please", "put", "pink", "paper", "pen", "cup"]
+                },
+                { 
+                    symbol: "b", 
+                    name: "Voiced B", 
+                    mouth: "Lips pressed together, releasing a sound powered by your vocal cords.", 
+                    examples: ["bed", "job", "baby"], 
+                    spAlert: "Similar to Spanish, but much stronger and more distinct vocal vibration.",
+                    text: "The big baby bought a beautiful blue balloon today.",
+                    correctWords: ["big", "baby", "bought", "beautiful", "blue", "balloon"]
+                },
+                { 
+                    symbol: "t", 
+                    name: "Voiceless T", 
+                    mouth: "Press tongue tip on the ridge behind your upper teeth, release puff of air.", 
+                    examples: ["table", "cat", "two"], 
+                    spAlert: "English 't' is aspirated. Do not let your tongue touch your teeth.",
+                    text: "Take the ten tall tin cans out to the trash.",
+                    correctWords: ["take", "ten", "tall", "tin", "out", "trash"]
+                },
+                { 
+                    symbol: "d", 
+                    name: "Voiced D", 
+                    mouth: "Press tongue tip on the ridge behind upper teeth, release with strong voice.", 
+                    examples: ["dog", "red", "day"], 
+                    spAlert: "Vocal cords must vibrate. Keep tongue back, away from the teeth.",
+                    text: "The dirty dog dug a deep dark hole yesterday.",
+                    correctWords: ["dirty", "dog", "dug", "deep", "dark", "yesterday"]
+                },
+                { 
+                    symbol: "k", 
+                    name: "Voiceless K", 
+                    mouth: "Back of tongue presses against soft palate, releases puff of air.", 
+                    examples: ["key", "car", "book"], 
+                    spAlert: "Releases a strong burst of air, unlike the Spanish hard 'c'.",
+                    text: "Keep the cool black cat inside the dark kitchen.",
+                    correctWords: ["keep", "cool", "black", "cat", "kitchen"]
+                },
+                { 
+                    symbol: "g", 
+                    name: "Voiced G", 
+                    mouth: "Back of tongue presses soft palate, releases with voice vibration.", 
+                    examples: ["go", "bag", "girl"], 
+                    spAlert: "Always voiced. Make it buzz slightly from the back of the throat.",
+                    text: "The great gray goose got green grass in the garden.",
+                    correctWords: ["great", "gray", "goose", "got", "green", "grass", "garden"]
+                },
+                { 
+                    symbol: "f", 
+                    name: "Voiceless F", 
+                    mouth: "Place upper teeth gently on your bottom lip and blow air out.", 
+                    examples: ["fan", "life", "off"], 
+                    spAlert: "Identical to Spanish. Clean and airy.",
+                    text: "Four fast friendly foxes fled from the deep forest.",
+                    correctWords: ["four", "fast", "friendly", "foxes", "fled", "from", "forest"]
+                },
+                { 
+                    symbol: "v", 
+                    name: "Voiced V", 
+                    mouth: "Place upper teeth on bottom lip, vibrate vocal cords strongly.", 
+                    examples: ["van", "love", "very"], 
+                    spAlert: "CRITICAL! Spanish speakers do not have /v/. Do not bite your lip like /b/. Buzz it.",
+                    text: "Victor drove a very valuable van through the wide valley.",
+                    correctWords: ["victor", "drove", "very", "valuable", "van", "valley"]
+                },
+                { 
+                    symbol: "θ", 
+                    name: "Voiceless TH", 
+                    mouth: "Place tongue tip gently between front teeth, blow air out smoothly.", 
+                    examples: ["think", "mouth", "three"], 
+                    spAlert: "Like the Castilian Spanish 'z'. Keep it airy and soft.",
+                    text: "The thin thief thought of thirty thrilling ideas.",
+                    correctWords: ["thin", "thief", "thought", "thirty", "thrilling"]
+                },
+                { 
+                    symbol: "ð", 
+                    name: "Voiced TH", 
+                    mouth: "Place tongue tip between teeth, blow air out with strong voice vibration.", 
+                    examples: ["this", "mother", "they"], 
+                    spAlert: "Extremely common. Vibrate your tongue tip against your front teeth.",
+                    text: "This brother and that father live together in the house.",
+                    correctWords: ["this", "brother", "that", "father", "together", "the"]
+                },
+                { 
+                    symbol: "s", 
+                    name: "Voiceless S", 
+                    mouth: "Bring teeth together, squeeze air through tongue tip and front teeth.", 
+                    examples: ["see", "bus", "stop"], 
+                    spAlert: "Do not add an 'e' sound before words starting with S (e.g. say 'stop', not 'estop').",
+                    text: "Seven silly sisters sang sweet songs on Sunday.",
+                    correctWords: ["seven", "silly", "sisters", "sang", "sweet", "songs", "sunday"]
+                },
+                { 
+                    symbol: "z", 
+                    name: "Voiced Z", 
+                    mouth: "Bring teeth together, squeeze air through with strong vocal buzz (like a bee).", 
+                    examples: ["zoo", "please", "easy"], 
+                    spAlert: "Spanish speakers have no /z/. Vibrate your teeth together like an angry fly.",
+                    text: "The lazy zebra buzzed happily around the public zoo.",
+                    correctWords: ["lazy", "zebra", "buzzed", "zoo"]
+                },
+                { 
+                    symbol: "ʃ", 
+                    name: "Voiceless SH", 
+                    mouth: "Round lips forward, push tongue flatly back, blow out. Like shushing.", 
+                    examples: ["she", "shop", "fish"], 
+                    spAlert: "Different from Spanish 'ch'. Keep it continuous, like a long hiss.",
+                    text: "She showed her shiny shoes to the crowded shop.",
+                    correctWords: ["she", "showed", "shiny", "shoes", "shop"]
+                },
+                { 
+                    symbol: "ʒ", 
+                    name: "Voiced ZH", 
+                    mouth: "Round lips forward, push tongue flatly back, squeeze air with strong voice.", 
+                    examples: ["vision", "measure", "casual"], 
+                    spAlert: "Think of a voiced vibrating version of 'sh'. Very rare but beautiful.",
+                    text: "The casual decision brought great pleasure and clear vision.",
+                    correctWords: ["casual", "decision", "pleasure", "vision"]
+                },
+                { 
+                    symbol: "tʃ", 
+                    name: "Voiceless CH", 
+                    mouth: "Press tongue behind teeth, release sharp explosive 't' + 'sh' sound.", 
+                    examples: ["chair", "watch", "cheap"], 
+                    spAlert: "Similar to Spanish 'ch', but sharper and more explosive.",
+                    text: "The teacher checked the cheap watch in the kitchen.",
+                    correctWords: ["teacher", "checked", "cheap", "watch", "kitchen"]
+                },
+                { 
+                    symbol: "dʒ", 
+                    name: "Voiced J", 
+                    mouth: "Press tongue behind teeth, release explosive 'd' + 'zh' with strong voice.", 
+                    examples: ["job", "page", "judge"], 
+                    spAlert: "Vibrate your voice strongly. Do not confuse it with the Spanish 'y' or 'j'.",
+                    text: "John enjoyed drinking a glass of giant orange juice.",
+                    correctWords: ["john", "enjoyed", "giant", "orange", "juice"]
+                },
+                { 
+                    symbol: "m", 
+                    name: "Voiced M", 
+                    mouth: "Close lips fully, let voice hum through your nose.", 
+                    examples: ["man", "some", "more"], 
+                    spAlert: "Identical to Spanish. Always hummed clearly.",
+                    text: "My mother made some sweet lemon jam on Monday.",
+                    correctWords: ["my", "mother", "made", "some", "lemon", "jam", "monday"]
+                },
+                { 
+                    symbol: "n", 
+                    name: "Voiced N", 
+                    mouth: "Press tongue flat against upper ridge, let voice hum through nose.", 
+                    examples: ["no", "sun", "name"], 
+                    spAlert: "Similar to Spanish.",
+                    text: "No nice neighbor knows nine new names today.",
+                    correctWords: ["no", "nice", "neighbor", "knows", "nine", "new", "names"]
+                },
+                { 
+                    symbol: "ŋ", 
+                    name: "The Nasal NG", 
+                    mouth: "Back of tongue seals soft palate, hum through nose. No 'g' sound.", 
+                    examples: ["sing", "think", "long"], 
+                    spAlert: "Do not pronounce a hard 'g' at the end. It's a nasal hum inside the throat.",
+                    text: "Singing is exciting when playing strong songs.",
+                    correctWords: ["singing", "exciting", "playing", "strong"]
+                },
+                { 
+                    symbol: "h", 
+                    name: "Voiceless H", 
+                    mouth: "Breathe out smoothly from your chest. Like fogging up a mirror.", 
+                    examples: ["he", "house", "hot"], 
+                    spAlert: "Do not make it scratchy like a Spanish 'j'. It should be a gentle, soft sigh.",
+                    text: "He held his heavy hat high in the hall.",
+                    correctWords: ["he", "held", "his", "heavy", "hat", "high", "hall"]
+                },
+                { 
+                    symbol: "l", 
+                    name: "Voiced L", 
+                    mouth: "Press tip of tongue against alveolar ridge, release voice around sides.", 
+                    examples: ["light", "full", "play"], 
+                    spAlert: "Keep it clear at the start of words, and dark/hollow at the end (dark L).",
+                    text: "Little Lilly likes late lunches at school.",
+                    correctWords: ["little", "lilly", "likes", "late", "lunches", "school"]
+                },
+                { 
+                    symbol: "r", 
+                    name: "Voiced R", 
+                    mouth: "Curl tongue back slightly, lips rounded. Never let tongue touch top of mouth.", 
+                    examples: ["red", "run", "car"], 
+                    spAlert: "CRITICAL! Do not roll your tongue like a Spanish 'rr'. Keep it smooth and floating.",
+                    text: "The rapid red rabbit ran down the narrow road.",
+                    correctWords: ["rapid", "red", "rabbit", "ran", "narrow", "road"]
+                },
+                { 
+                    symbol: "w", 
+                    name: "Voiced W", 
+                    mouth: "Tightly round your lips (like 'oo') then glide instantly into next sound.", 
+                    examples: ["we", "water", "wet"], 
+                    spAlert: "Do not add a 'g' sound before it. It's 'water', not 'guater'.",
+                    text: "We walked through the wet wild woods yesterday.",
+                    correctWords: ["we", "walked", "wet", "wild", "woods"]
+                },
+                { 
+                    symbol: "j", 
+                    name: "The Y Sound", 
+                    mouth: "Start with tongue high and flat (like 'ee') glide into next sound.", 
+                    examples: ["yes", "yellow", "use"], 
+                    spAlert: "Never pronounce this like a Spanish 'y' (sheismo). Keep it smooth and soft.",
+                    text: "Yesterday the young boy yelled yes to his teacher.",
+                    correctWords: ["yesterday", "young", "yelled", "yes"]
+                }
             ]
         };
 
@@ -1082,12 +1451,17 @@
         let speechSynth = window.speechSynthesis;
         let voicesLoaded = false;
 
-        // NEW Syllabus Controller State
+        // Syllabus Controller State
         let activeSessionIndex = 1; // 1 to 15
         let activeLevelTrack = "G1"; // G1: A1-A2, G2: B1-C1
         let detectiveScore = 0;
         let detectiveCorrectSet = new Set();
         let clickedWordsHistory = new Set();
+
+        // NEW: Micro Detective Game inside Detail Panel State
+        let miniDetectiveScore = 0;
+        let miniDetectiveCorrectSet = new Set();
+        let miniClickedWordsHistory = new Set();
 
         // Initialize App on DOM Ready
         window.onload = function() {
@@ -1221,6 +1595,9 @@
                 examplesContainer.appendChild(row);
             });
 
+            // Trigger the newly added Micro Detective Inside Every Phoneme
+            buildMiniDetectiveGame(sound);
+
             // Re-render new lucide icons in dynamically loaded elements
             lucide.createIcons();
         }
@@ -1232,7 +1609,7 @@
 
             minimalPairs.forEach((pair, index) => {
                 const card = document.createElement('div');
-                card.className = "bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 md:p-5 flex flex-col justify-between hover:border-red-500 dark:hover:border-red-550 transition-all shadow-sm";
+                card.className = "bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 md:p-5 flex flex-col justify-between hover:border-red-500 dark:hover:border-red-555 transition-all shadow-sm";
                 card.innerHTML = `
                     <div class="flex items-center justify-between border-b dark:border-slate-800 pb-3 mb-3">
                         <span class="text-[10px] font-extrabold uppercase tracking-widest text-red-600 dark:text-red-400">Drill ${index + 1}</span>
@@ -1581,7 +1958,7 @@
         }
 
         // =======================================================
-        // NEW CURRICULUM SYLLABUS CONTROLLER & GAME PLAY LOGIC
+        // CURRICULUM SYLLABUS CONTROLLER & GAME PLAY LOGIC
         // =======================================================
 
         // Dynamic session building
@@ -1706,7 +2083,7 @@
                 const span = document.createElement('span');
                 span.className = "detective-word";
                 span.innerText = rawWord;
-                span.onclick = () => handleDetectiveWordClick(span, cleanWord, rawWord);
+                span.onclick = () => handleSoundDetectiveWordClick(span, cleanWord, rawWord);
                 
                 container.appendChild(span);
                 
@@ -1715,8 +2092,8 @@
             });
         }
 
-        // Game Click logic
-        function handleDetectiveWordClick(element, cleanWord, originalWord) {
+        // Game Click logic for the Class Syllabus Sound Detective
+        function handleSoundDetectiveWordClick(element, cleanWord, originalWord) {
             if (clickedWordsHistory.has(cleanWord)) return; // Prevent double clicking same item
 
             const isTarget = detectiveCorrectSet.has(cleanWord);
@@ -1746,9 +2123,65 @@
                 pronounceText(cleanWord);
             }
         }
+
+        // =======================================================
+        // NEW METHOD: Micro Sound Detective Inside IPA detail panel
+        // =======================================================
+        function buildMiniDetectiveGame(sound) {
+            const container = document.getElementById('panel-detective-text');
+            const scoreDisplay = document.getElementById('panel-detective-score');
+            
+            container.innerHTML = '';
+            
+            // Set mini game states
+            miniDetectiveScore = 0;
+            const targetWordsArray = sound.correctWords || [];
+            miniDetectiveCorrectSet = new Set(targetWordsArray.map(w => w.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"")));
+            miniClickedWordsHistory.clear();
+            
+            scoreDisplay.innerText = `Score: 0 / ${miniDetectiveCorrectSet.size}`;
+            
+            // Build interactive word layout
+            const soundText = sound.text || "Let's practice pronouncing this sound today.";
+            const wordsList = soundText.split(" ");
+            
+            wordsList.forEach((rawWord) => {
+                const cleanWord = rawWord.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+                const span = document.createElement('span');
+                span.className = "detective-word text-sm";
+                span.innerText = rawWord;
+                span.onclick = () => handleMiniDetectiveWordClick(span, cleanWord, rawWord);
+                
+                container.appendChild(span);
+                container.appendChild(document.createTextNode(" "));
+            });
+        }
+
+        // Game Click logic for the Micro Detail Panel Sound Detective
+        function handleMiniDetectiveWordClick(element, cleanWord, originalWord) {
+            if (miniClickedWordsHistory.has(cleanWord)) return;
+
+            const isTarget = miniDetectiveCorrectSet.has(cleanWord);
+            const scoreDisplay = document.getElementById('panel-detective-score');
+
+            if (isTarget) {
+                element.className = "detective-word text-sm detective-correct";
+                miniClickedWordsHistory.add(cleanWord);
+                miniDetectiveScore++;
+                
+                scoreDisplay.innerText = `Score: ${miniDetectiveScore} / ${miniDetectiveCorrectSet.size}`;
+                pronounceText(cleanWord);
+
+                element.style.transform = "scale(1.15)";
+                setTimeout(() => {
+                    element.style.transform = "scale(1)";
+                }, 200);
+            } else {
+                element.className = "detective-word text-sm detective-incorrect";
+                miniClickedWordsHistory.add(cleanWord);
+                pronounceText(cleanWord);
+            }
+        }
     </script>
 </body>
 </html>
-apps-fileview.texmex_20260618.00_p1
-smart_academy_pronunciation_program (4).html
-Mostrando smart_academy_pronunciation_program (4).html.

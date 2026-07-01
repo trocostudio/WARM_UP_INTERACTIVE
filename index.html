@@ -29,6 +29,8 @@
             --grad-b1: linear-gradient(135deg, #10b981, #047857);
             --grad-b2: linear-gradient(135deg, #f97316, #c2410c);
             --grad-c1: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            --grad-phono: linear-gradient(135deg, #ec4899, #be185d);
+            --grad-quest: linear-gradient(135deg, #06b6d4, #0891b2);
             --grad-dashboard: linear-gradient(135deg, #6366f1, #4f46e5);
         }
 
@@ -157,7 +159,7 @@
         /* --- CARD GRID MATRIX --- */
         .matrix-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(3, 1fr); /* Forzar exactamente 3 columnas en pantallas grandes */
             gap: 2rem;
             width: 100%;
         }
@@ -182,21 +184,16 @@
             animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
+        /* Asignación manual de retrasos y variables dinámicas de acento */
         .level-card:nth-child(1) { animation-delay: 0.05s; --accent-g: var(--grad-intro); }
-        .level-card:nth-child(2) { animation-delay: 0.15s; --accent-g: var(--grad-a1); }
-        .level-card:nth-child(3) { animation-delay: 0.25s; --accent-g: var(--grad-a2); }
-        .level-card:nth-child(4) { animation-delay: 0.35s; --accent-g: var(--grad-b1); }
-        .level-card:nth-child(5) { animation-delay: 0.45s; --accent-g: var(--grad-b2); }
-        .level-card:nth-child(6) { animation-delay: 0.55s; --accent-g: var(--grad-c1); }
-        
-        .level-card:nth-child(7) { 
-            animation-delay: 0.65s; 
-            --accent-g: var(--grad-dashboard); 
-            grid-column: 1 / -1; 
-            max-width: 380px; 
-            width: 100%;
-            margin: 0 auto; 
-        }
+        .level-card:nth-child(2) { animation-delay: 0.10s; --accent-g: var(--grad-a1); }
+        .level-card:nth-child(3) { animation-delay: 0.15s; --accent-g: var(--grad-a2); }
+        .level-card:nth-child(4) { animation-delay: 0.20s; --accent-g: var(--grad-b1); }
+        .level-card:nth-child(5) { animation-delay: 0.25s; --accent-g: var(--grad-b2); }
+        .level-card:nth-child(6) { animation-delay: 0.30s; --accent-g: var(--grad-c1); }
+        .level-card:nth-child(7) { animation-delay: 0.35s; --accent-g: var(--grad-phono); }
+        .level-card:nth-child(8) { animation-delay: 0.40s; --accent-g: var(--grad-quest); }
+        .level-card:nth-child(9) { animation-delay: 0.45s; --accent-g: var(--grad-dashboard); }
 
         .level-card::before {
             content: '';
@@ -278,16 +275,15 @@
         }
 
         /* --- VIEWPORT RESPONSIVENESS --- */
+        @media (max-width: 1024px) {
+            .matrix-grid { grid-template-columns: repeat(2, 1fr); } /* 2 columnas en tablets */
+        }
+
         @media (max-width: 640px) {
             body { padding: 5rem 1rem 2rem 1rem; }
             .welcome h1 { font-size: 2rem; }
-            .matrix-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+            .matrix-grid { grid-template-columns: 1fr; gap: 1.5rem; } /* 1 columna en móviles */
             .theme-toggle { top: 1rem; right: 1rem; }
-            
-            .level-card:nth-child(7) {
-                grid-column: auto;
-                max-width: none;
-            }
         }
 
         /* --- CONFIGURACIÓN DE LOS PERSONAJES --- */
@@ -403,6 +399,20 @@
                     destination: "english_C1.html"
                 },
                 {
+                    tag: "PHONO",
+                    title: "Phonetics Guide",
+                    desc: "Master English sounds and accent modulations. Practice oral pronunciation rules with immersive interactive exercises.",
+                    icon: "🗣️",
+                    destination: "fono.html"
+                },
+                {
+                    tag: "QUEST",
+                    title: "Treasure Hunt",
+                    desc: "Solve cryptic English riddles, map structural clues, and unlock forgotten chambers in a text-based gamified environment.",
+                    icon: "🏴‍☠️",
+                    destination: "quest.html"
+                },
+                {
                     tag: "TOOL",
                     title: "SMART DASHBOARD",
                     desc: "A tool to master the order of your class.",
@@ -457,15 +467,19 @@
                     });
                 }
 
-                const interactiveCards = document.querySelectorAll('.level-card');
-                interactiveCards.forEach(element => {
-                    element.addEventListener('click', () => {
-                        const directRoute = element.getAttribute('data-href');
-                        if (directRoute) {
-                            window.location.href = directRoute;
+                // Usar delegación de eventos para optimizar la escucha de clics en las tarjetas inyectadas
+                const targetGrid = document.getElementById('portalMatrix');
+                if (targetGrid) {
+                    targetGrid.addEventListener('click', (e) => {
+                        const card = e.target.closest('.level-card');
+                        if (card) {
+                            const directRoute = card.getAttribute('data-href');
+                            if (directRoute) {
+                                window.location.href = directRoute;
+                            }
                         }
                     });
-                });
+                }
             }
         };
 

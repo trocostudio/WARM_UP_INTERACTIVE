@@ -266,118 +266,106 @@
              TAB 1: COMPLETE INTERACTIVE IPA CHART 
              ============================================== -->
         <section id="tab-chart" class="tab-content hidden">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Left: Complete IPA Soundboard -->
-                <div class="lg:col-span-2 bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-md border border-slate-100 dark:border-slate-800">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 border-b dark:border-slate-800 pb-4 gap-4">
-                        <div>
-                            <h2 class="text-xl font-bold font-poppins flex items-center gap-2 text-slate-800 dark:text-slate-100">
-                                <i data-lucide="volume-2" class="text-red-600 dark:text-red-400"></i> Interactive Phonemic Chart
-                            </h2>
-                            <p class="text-sm text-slate-500 dark:text-slate-400">Select any phoneme to learn its physical pronunciation mechanics and hear its sound.</p>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <div class="lg:col-span-2 bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-md border border-slate-100 dark:border-slate-800 flex flex-col gap-6">
+            
+            <div>
+                <h2 class="text-xl font-bold font-poppins flex items-center gap-2 text-slate-800 dark:text-slate-100">
+                    <i data-lucide="volume-2" class="text-red-600 dark:text-red-400"></i> Interactive Phonemic Board
+                </h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400">View and click any phoneme classified simultaneously by layout structure mechanics.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 border-b dark:border-slate-800 pb-6">
+                
+                <div class="flex flex-col">
+                    <h3 class="text-xs font-bold text-red-600 dark:text-red-400 uppercase tracking-widest mb-3 flex items-center gap-1.5 border-l-2 border-red-500 pl-2">
+                        Vowels (Monophthongs)
+                    </h3>
+                    <div id="ipa-vowels-grid" class="grid grid-cols-3 sm:grid-cols-4 gap-2.5">
                         </div>
-                        <!-- Sound Category Sub-filters -->
-                        <div class="flex gap-1.5 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl self-start">
-                            <button onclick="filterIPA('vowels')" id="ipa-sub-vowels" class="ipa-filter-btn px-3 py-1.5 text-xs font-bold rounded-lg transition-all bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 shadow-sm">Vowels</button>
-                            <button onclick="filterIPA('diphthongs')" id="ipa-sub-diphthongs" class="ipa-filter-btn px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">Diphthongs</button>
-                            <button onclick="filterIPA('consonants')" id="ipa-sub-consonants" class="ipa-filter-btn px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">Consonants</button>
-                        </div>
-                    </div>
-
-                    <!-- Grid containers for IPA sounds -->
-                    <!-- Vowels (Monophthongs) Grid -->
-                    <div id="ipa-vowels-grid" class="ipa-grid grid grid-cols-4 sm:grid-cols-6 gap-3">
-                        <!-- Filled by JS -->
-                    </div>
-
-                    <!-- Diphthongs Grid -->
-                    <div id="ipa-diphthongs-grid" class="ipa-grid hidden grid grid-cols-4 sm:grid-cols-4 gap-3">
-                        <!-- Filled by JS -->
-                    </div>
-
-                    <!-- Consonants Grid -->
-                    <div id="ipa-consonants-grid" class="ipa-grid hidden grid grid-cols-4 sm:grid-cols-6 gap-3">
-                        <!-- Filled by JS -->
-                    </div>
-                    
-                    <!-- Sound Warning Help -->
-                    <div class="mt-6 flex items-start gap-2.5 p-3.5 bg-red-50 dark:bg-red-950/20 border border-red-100 dark:border-red-900/50 rounded-xl text-red-800 dark:text-red-400 text-xs">
-                        <i data-lucide="info" class="w-4 h-4 flex-shrink-0 mt-0.5"></i>
-                        <p><strong>Audio Note:</strong> This application utilizes the Speech Synthesis engine (Web Speech API) built into your operating system. For optimal results, configure your browser's default voice to English.</p>
-                    </div>
                 </div>
 
-                <!-- Right: Live Dynamic Detail Panel -->
-                <div id="details-panel" class="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-md border border-slate-100 dark:border-slate-800 sticky top-24 flex flex-col justify-between max-h-[85vh] overflow-y-auto">
-                    <div>
-                        <div class="flex justify-between items-start border-b dark:border-slate-800 pb-4 mb-6">
-                            <div>
-                                <span class="bg-red-100 dark:bg-red-950/50 text-red-600 dark:text-red-400 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full" id="panel-category">Sound Details</span>
-                                <h2 class="text-6xl font-black text-red-600 dark:text-red-400 mt-2 font-poppins" id="panel-symbol">/ə/</h2>
-                                <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 mt-1" id="panel-name">The Schwa Sound</h3>
-                            </div>
-                            <button onclick="pronounceCurrentSound()" class="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white p-4 rounded-2xl shadow-md transition-all duration-200 flex items-center justify-center transform hover:scale-105 active:scale-95">
-                                <i data-lucide="play" class="w-6 h-6 fill-current"></i>
-                            </button>
+                <div class="flex flex-col">
+                    <h3 class="text-xs font-bold text-red-600 dark:text-red-400 uppercase tracking-widest mb-3 flex items-center gap-1.5 border-l-2 border-red-500 pl-2">
+                        Diphthongs
+                    </h3>
+                    <div id="ipa-diphthongs-grid" class="grid grid-cols-3 sm:grid-cols-4 gap-2.5">
                         </div>
+                </div>
+            </div>
 
-                        <!-- Mouth/Physical articulation guidelines -->
-                        <div class="space-y-4 mb-6">
-                            <div>
-                                <h4 class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
-                                    <i data-lucide="speech" class="w-3.5 h-3.5 text-red-500 dark:text-red-400"></i> Mouth Mechanics
-                                </h4>
-                                <p class="text-sm text-slate-700 dark:text-slate-300 font-medium mt-1.5 leading-relaxed bg-slate-50 dark:bg-slate-800 p-3 rounded-xl border border-slate-100 dark:border-slate-700" id="panel-mouth">
-                                    Lips completely relaxed, tongue resting in a neutral central position. The most common and effortless English sound.
-                                </p>
-                            </div>
-
-                            <div id="spanish-warning-box" class="p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/50 rounded-xl">
-                                <h4 class="text-xs font-bold text-amber-800 dark:text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
-                                    <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-amber-500 dark:text-amber-400"></i> Spanish Speaker Alert!
-                                </h4>
-                                <p class="text-xs text-amber-700 dark:text-amber-300 mt-1" id="panel-warning">
-                                    Spanish speakers often incorrectly replace this sound with a hard 'a' or 'o'. Keep it lazy and neutral!
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Minimal pairs/examples section -->
-                        <div class="mb-6">
-                            <h4 class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center gap-1.5 mb-2.5">
-                                <i data-lucide="list-music" class="w-3.5 h-3.5 text-red-500 dark:text-red-400"></i> Example Practice Words
-                            </h4>
-                            <div class="space-y-2" id="panel-examples">
-                                <!-- Example word rows (dynamically created) -->
-                            </div>
-                        </div>
-
-                        <!-- NEW COMPONENT: Dynamic Micro Sound Detective Inside Every Phoneme -->
-                        <div class="border-t dark:border-slate-800 pt-4 mt-6">
-                            <div class="flex justify-between items-center mb-3">
-                                <h4 class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
-                                    <i data-lucide="compass" class="text-red-500 dark:text-red-400"></i> Sound Detective Mini-Game
-                                </h4>
-                                <span class="bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 text-[10px] font-bold px-2 py-0.5 rounded" id="panel-detective-score">
-                                    Score: 0 / 0
-                                </span>
-                            </div>
-                            <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-dashed border-slate-200 dark:border-slate-800">
-                                <p class="text-sm leading-relaxed text-slate-700 dark:text-slate-300 font-medium select-none" id="panel-detective-text">
-                                    <!-- Dynamic clickable words generated here -->
-                                </p>
-                            </div>
-                        </div>
+            <div class="flex flex-col">
+                <h3 class="text-xs font-bold text-red-600 dark:text-red-400 uppercase tracking-widest mb-3 flex items-center gap-1.5 border-l-2 border-red-500 pl-2">
+                    Consonants
+                </h3>
+                <div id="ipa-consonants-grid" class="grid grid-cols-4 sm:grid-cols-6 gap-2.5">
                     </div>
+            </div>
+            
+            <div class="mt-2 flex items-start gap-2.5 p-3.5 bg-red-50 dark:bg-red-950/20 border border-red-100 dark:border-red-900/50 rounded-xl text-red-800 dark:text-red-400 text-xs">
+                <i data-lucide="info" class="w-4 h-4 flex-shrink-0 mt-0.5"></i>
+                <p><strong>Audio Note:</strong> This application utilizes the Speech Synthesis engine (Web Speech API) built into your operating system.</p>
+            </div>
+        </div>
 
-                    <!-- Progress Badge -->
-                    <div class="border-t dark:border-slate-800 pt-4 mt-6 flex justify-between items-center text-xs text-slate-400">
-                        <span>Smart Academy Pronunciation Lab</span>
-                        <span class="flex items-center gap-1"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-red-500 dark:text-red-400"></i> Interactive Module</span>
+        <div id="details-panel" class="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-md border border-slate-100 dark:border-slate-800 sticky top-24 flex flex-col justify-between max-h-[85vh] overflow-y-auto">
+            <div>
+                <div class="flex justify-between items-start border-b dark:border-slate-800 pb-4 mb-6">
+                    <div>
+                        <span class="bg-red-100 dark:bg-red-950/50 text-red-600 dark:text-red-400 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full" id="panel-category">Sound Details</span>
+                        <h2 class="text-6xl font-black text-red-600 dark:text-red-400 mt-2 font-poppins" id="panel-symbol">/ə/</h2>
+                        <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 mt-1" id="panel-name">The Schwa Sound</h3>
+                    </div>
+                    <button onclick="pronounceCurrentSound()" class="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white p-4 rounded-2xl shadow-md transition-all duration-200 flex items-center justify-center transform hover:scale-105 active:scale-95">
+                        <i data-lucide="play" class="w-6 h-6 fill-current"></i>
+                    </button>
+                </div>
+                <div class="space-y-4 mb-6">
+                    <div>
+                        <h4 class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                            <i data-lucide="speech" class="w-3.5 h-3.5 text-red-500 dark:text-red-400"></i> Mouth Mechanics
+                        </h4>
+                        <p class="text-sm text-slate-700 dark:text-slate-300 font-medium mt-1.5 leading-relaxed bg-slate-50 dark:bg-slate-800 p-3 rounded-xl border border-slate-100 dark:border-slate-700" id="panel-mouth">
+                            Lips completely relaxed, tongue resting in a neutral central position.
+                        </p>
+                    </div>
+                    <div id="spanish-warning-box" class="p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/50 rounded-xl">
+                        <h4 class="text-xs font-bold text-amber-800 dark:text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                            <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-amber-500 dark:text-amber-400"></i> Spanish Speaker Alert!
+                        </h4>
+                        <p class="text-xs text-amber-700 dark:text-amber-300 mt-1" id="panel-warning">
+                            Keep it lazy and neutral!
+                        </p>
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <h4 class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center gap-1.5 mb-2.5">
+                        <i data-lucide="list-music" class="w-3.5 h-3.5 text-red-500 dark:text-red-400"></i> Example Practice Words
+                    </h4>
+                    <div class="space-y-2" id="panel-examples"></div>
+                </div>
+                <div class="border-t dark:border-slate-800 pt-4 mt-6">
+                    <div class="flex justify-between items-center mb-3">
+                        <h4 class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                            <i data-lucide="compass" class="text-red-500 dark:text-red-400"></i> Sound Detective Mini-Game
+                        </h4>
+                        <span class="bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 text-[10px] font-bold px-2 py-0.5 rounded" id="panel-detective-score">Score: 0 / 0</span>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-dashed border-slate-200 dark:border-slate-800">
+                        <p class="text-sm leading-relaxed text-slate-700 dark:text-slate-300 font-medium select-none" id="panel-detective-text"></p>
                     </div>
                 </div>
             </div>
-        </section>
+            <div class="border-t dark:border-slate-800 pt-4 mt-6 flex justify-between items-center text-xs text-slate-400">
+                <span>Smart Academy Pronunciation Lab</span>
+                <span class="flex items-center gap-1"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-red-500 dark:text-red-400"></i> Interactive Module</span>
+            </div>
+        </div>
+        
+    </div>
+</section>
 
         <!-- ==============================================
              TAB 2: MINIMAL PAIRS GYM

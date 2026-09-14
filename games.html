@@ -183,7 +183,7 @@ body {
         <div>
           <span class="w-16 h-16 rounded-2xl bg-purple-500/10 text-purple-600 flex items-center justify-center font-bold text-3xl mb-4 group-hover:scale-110 group-hover:bg-purple-600 group-hover:text-white transition-all">🪢</span>
           <h3 class="font-extrabold text-slate-900 text-xl mb-2">Tug of War</h3>
-          <p class="text-xs text-slate-500 leading-relaxed mb-4">2-Team battle! Answer quickly to pull the rope.</p>
+          <p class="text-xs text-slate-500 leading-relaxed mb-4">2-Team battle! Answer quickly to pull the rope in 5 mins.</p>
         </div>
         <button class="w-full py-2.5 bg-purple-50 text-purple-600 font-bold text-xs rounded-xl group-hover:bg-purple-600 group-hover:text-white transition">2 Teams Duel!</button>
       </div>
@@ -195,6 +195,16 @@ body {
           <p class="text-xs text-slate-500 leading-relaxed mb-4">Explain the word to your teammate facing away from the screen.</p>
         </div>
         <button class="w-full py-2.5 bg-amber-50 text-amber-600 font-bold text-xs rounded-xl group-hover:bg-amber-500 group-hover:text-white transition">Group Challenge!</button>
+      </div>
+
+      <!-- 7. PENALTY SHOOTOUT CARD -->
+      <div onclick="openGame('penaltyshoot')" class="bg-white border border-slate-200/80 hover:border-emerald-500 p-6 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer flex flex-col justify-between group">
+        <div>
+          <span class="w-16 h-16 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center font-bold text-3xl mb-4 group-hover:scale-110 group-hover:bg-emerald-500 group-hover:text-white transition-all">⚽</span>
+          <h3 class="font-extrabold text-slate-900 text-xl mb-2">Penalty Shootout</h3>
+          <p class="text-xs text-slate-500 leading-relaxed mb-4">10s to shoot vs 10s to save! Turn-based penalty shootout duel.</p>
+        </div>
+        <button class="w-full py-2.5 bg-emerald-50 text-emerald-600 font-bold text-xs rounded-xl group-hover:bg-emerald-500 group-hover:text-white transition">Start Shootout!</button>
       </div>
     </div>
   </div>
@@ -264,14 +274,17 @@ body {
     <!-- 5. TUG OF WAR AREA -->
     <div id="tugofwarView" class="hidden space-y-6">
       <div class="bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-800 space-y-3">
-        <div class="flex justify-between items-center px-6 pt-4 text-xs font-black tracking-widest z-10 relative">
-          <span class="bg-sky-500/20 text-sky-400 border border-sky-500/30 px-4 py-1.5 rounded-full shadow-lg backdrop-blur-md">
+        <div class="flex justify-between items-center px-4 sm:px-6 pt-4 text-xs font-black tracking-widest z-10 relative flex-wrap gap-2">
+          <span class="bg-sky-500/20 text-sky-400 border border-sky-500/30 px-3 sm:px-4 py-1.5 rounded-full shadow-lg backdrop-blur-md">
             BLUE TEAM: <span id="blueScore">0</span> PTS
           </span>
-          <span class="bg-amber-500/20 text-amber-300 border border-amber-500/30 px-4 py-1.5 rounded-full shadow-lg backdrop-blur-md">
+          <span class="bg-purple-500/20 text-purple-300 border border-purple-500/30 px-3 sm:px-4 py-1.5 rounded-full shadow-lg backdrop-blur-md flex items-center gap-1">
+            ⏱️ <span id="tugTimer">05:00</span>
+          </span>
+          <span class="bg-amber-500/20 text-amber-300 border border-amber-500/30 px-3 sm:px-4 py-1.5 rounded-full shadow-lg backdrop-blur-md">
             GAP: <span id="tugDiff">0</span> / 5
           </span>
-          <span class="bg-rose-500/20 text-rose-400 border border-rose-500/30 px-4 py-1.5 rounded-full shadow-lg backdrop-blur-md">
+          <span class="bg-rose-500/20 text-rose-400 border border-rose-500/30 px-3 sm:px-4 py-1.5 rounded-full shadow-lg backdrop-blur-md">
             RED TEAM: <span id="redScore">0</span> PTS
           </span>
         </div>
@@ -316,6 +329,54 @@ body {
         <button id="btnStartGuess" onclick="startGuessGame()" class="px-8 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-sm rounded-2xl shadow-lg cursor-pointer transition">Start Timer!</button>
         <button id="btnPassGuess" onclick="nextGuessWord(false)" class="hidden px-6 py-3 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-sm rounded-2xl cursor-pointer transition">Pass ➔</button>
         <button id="btnCorrectGuess" onclick="nextGuessWord(true)" class="hidden px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm rounded-2xl shadow-md cursor-pointer transition">✓ Correct!</button>
+      </div>
+    </div>
+
+    <!-- 7. PENALTY SHOOTOUT AREA -->
+    <div id="penaltyshootView" class="hidden space-y-6">
+      <div class="bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-800 space-y-4 p-4 sm:p-6">
+        
+        <div class="flex justify-between items-center text-xs font-black tracking-widest z-10 relative flex-wrap gap-2">
+          <span class="bg-sky-500/20 text-sky-400 border border-sky-500/30 px-3 sm:px-4 py-1.5 rounded-full shadow-lg backdrop-blur-md">
+            BLUE TEAM: <span id="penaltyBlueScore">0</span> GOALS
+          </span>
+          <span class="bg-amber-500/20 text-amber-300 border border-amber-500/30 px-3 sm:px-4 py-1.5 rounded-full shadow-lg backdrop-blur-md flex items-center gap-1">
+            ⏱️ <span id="penaltyTimer" class="text-amber-400 font-extrabold text-sm">10</span>s
+          </span>
+          <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-3 sm:px-4 py-1.5 rounded-full shadow-lg backdrop-blur-md">
+            ROUND: <span id="penaltyRound">1</span> / 5
+          </span>
+          <span class="bg-rose-500/20 text-rose-400 border border-rose-500/30 px-3 sm:px-4 py-1.5 rounded-full shadow-lg backdrop-blur-md">
+            RED TEAM: <span id="penaltyRedScore">0</span> GOALS
+          </span>
+        </div>
+
+        <!-- CAMPO DE FÚTBOL / ÁREA VISUAL -->
+        <div class="relative w-full h-64 sm:h-80 rounded-2xl overflow-hidden border border-slate-700 bg-gradient-to-b from-sky-400 via-emerald-600 to-emerald-800 flex items-center justify-center select-none shadow-inner">
+          <!-- ARCO -->
+          <div class="absolute top-4 w-48 sm:w-64 h-24 sm:h-28 border-4 border-white bg-white/10 rounded-t-lg backdrop-blur-xs flex items-center justify-center">
+            <!-- PORTERO -->
+            <img id="penaltyKeeperImg" src="https://w7.pngwing.com/pngs/351/365/png-transparent-goalkeeper-glove-goalkeeper-glove-sport-sports-equipment-football.png" class="h-14 sm:h-16 w-auto transition-transform duration-500" alt="Goalkeeper">
+          </div>
+
+          <!-- PATEADOR -->
+          <img id="penaltyPlayerImg" src="https://w7.pngwing.com/pngs/802/384/png-transparent-male-kicking-soccer-ball-football-player-penalty-kick-sport-sports-football-white-monochrome-human-thumbnail.png" class="absolute bottom-4 left-1/4 h-20 sm:h-24 w-auto transition-all duration-300" alt="Soccer Player">
+
+          <!-- BALÓN -->
+          <img id="penaltyBallImg" src="https://w7.pngwing.com/pngs/38/544/png-transparent-white-and-black-soccer-ball-illustration-football-kick-ball-sport-team-sports-sports-equipment.png" class="absolute bottom-6 left-1/2 -translate-x-1/2 h-8 w-8 transition-all duration-700 ease-out" alt="Soccer Ball">
+        </div>
+
+        <!-- PREGUNTA Y TURNOS -->
+        <div class="bg-slate-800 border border-slate-700 p-5 rounded-2xl space-y-3 text-center">
+          <div id="penaltyTurnBadge" class="inline-block px-4 py-1 bg-sky-500 text-slate-950 font-black text-xs uppercase rounded-full tracking-wider">
+            🔵 Blue Team — SHOOTING!
+          </div>
+          <p id="penaltyClue" class="text-sm sm:text-base font-bold text-white min-h-[40px] flex items-center justify-center">
+            "Question clue will appear here..."
+          </p>
+          <div id="penaltyOptions" class="grid grid-cols-2 sm:grid-cols-4 gap-2"></div>
+        </div>
+
       </div>
     </div>
 
@@ -435,7 +496,7 @@ function openGame(gameId) {
   document.getElementById('gamesMenu').classList.add('hidden');
   document.getElementById('gameContainer').classList.remove('hidden');
 
-  const views = ['hangmanView', 'memoryView', 'wordsearchView', 'tictactoeView', 'tugofwarView', 'guesswordView'];
+  const views = ['hangmanView', 'memoryView', 'wordsearchView', 'tictactoeView', 'tugofwarView', 'guesswordView', 'penaltyshootView'];
   views.forEach(v => {
     const el = document.getElementById(v);
     if (el) el.classList.add('hidden');
@@ -465,6 +526,10 @@ function openGame(gameId) {
     document.getElementById('gameTitle').textContent = 'Guess the Word ⏱️';
     document.getElementById('guesswordView').classList.remove('hidden');
     resetGuessUI();
+  } else if (gameId === 'penaltyshoot') {
+    document.getElementById('gameTitle').textContent = 'Penalty Shootout ⚽';
+    document.getElementById('penaltyshootView').classList.remove('hidden');
+    initPenaltyShootout();
   }
 }
 
@@ -472,6 +537,8 @@ function backToMenu() {
   document.getElementById('gameContainer').classList.add('hidden');
   document.getElementById('gamesMenu').classList.remove('hidden');
   if (guessInterval) clearInterval(guessInterval);
+  if (tugInterval) clearInterval(tugInterval);
+  if (penaltyInterval) clearInterval(penaltyInterval);
 }
 
 /* RESULTS MODAL FUNCTION */
@@ -490,6 +557,7 @@ function cerrarModalResultadosJuego() {
   else if (juegoActivoActual === 'tictactoe') initTicTacToe();
   else if (juegoActivoActual === 'tugofwar') initTugOfWar();
   else if (juegoActivoActual === 'guessword') resetGuessUI();
+  else if (juegoActivoActual === 'penaltyshoot') initPenaltyShootout();
 }
 
 /* 1. HANGMAN LOGIC */
@@ -826,14 +894,31 @@ function checkTTTWinner(p) {
   return wins.some(w => w.every(i => tttBoardState[i] === p));
 }
 
-/* 5. TUG OF WAR LOGIC */
-let blueScore = 0, redScore = 0;
+/* 5. TUG OF WAR LOGIC (CON TIMER DE 5 MIN) */
+let blueScore = 0, redScore = 0, tugTimer = 300, tugInterval = null;
 
 function initTugOfWar() {
-  blueScore = 0; redScore = 0;
+  blueScore = 0; 
+  redScore = 0;
+  tugTimer = 300; // 5 minutos en segundos
+  
+  if (tugInterval) clearInterval(tugInterval);
+
   updateTugUI();
   loadTugQuestion('blue');
   loadTugQuestion('red');
+
+  tugInterval = setInterval(() => {
+    tugTimer--;
+    const mins = Math.floor(tugTimer / 60);
+    const secs = tugTimer % 60;
+    document.getElementById('tugTimer').textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+    if (tugTimer <= 0) {
+      clearInterval(tugInterval);
+      finalizarTugPorTiempo();
+    }
+  }, 1000);
 }
 
 function updateTugUI() {
@@ -847,9 +932,21 @@ function updateTugUI() {
   rope.style.transform = `translateX(${shiftPercent}%)`;
 
   if (diff >= 5) {
-    setTimeout(() => mostrarModalResultadosJuego('Blue Team Wins! 🔵', `${blueScore} - ${redScore}`, 'Exceptional speed and English accuracy!'), 200);
+    if (tugInterval) clearInterval(tugInterval);
+    setTimeout(() => mostrarModalResultadosJuego('Blue Team Wins! 🔵', `${blueScore} - ${redScore}`, 'Exceptional speed and English accuracy! Max gap reached.'), 200);
   } else if (diff <= -5) {
-    setTimeout(() => mostrarModalResultadosJuego('Red Team Wins! 🔴', `${redScore} - ${blueScore}`, 'Exceptional speed and English accuracy!'), 200);
+    if (tugInterval) clearInterval(tugInterval);
+    setTimeout(() => mostrarModalResultadosJuego('Red Team Wins! 🔴', `${redScore} - ${blueScore}`, 'Exceptional speed and English accuracy! Max gap reached.'), 200);
+  }
+}
+
+function finalizarTugPorTiempo() {
+  if (blueScore > redScore) {
+    mostrarModalResultadosJuego('Time Up: Blue Team Wins! 🔵', `${blueScore} - ${redScore}`, 'Time is up! Blue Team had the highest score.');
+  } else if (redScore > blueScore) {
+    mostrarModalResultadosJuego('Time Up: Red Team Wins! 🔴', `${redScore} - ${blueScore}`, 'Time is up! Red Team had the highest score.');
+  } else {
+    mostrarModalResultadosJuego('Time Up: It\'s a Draw! 🤝', `${blueScore} - ${redScore}`, 'Time is up! Both teams finished with equal points.');
   }
 }
 
@@ -877,13 +974,15 @@ function loadTugQuestion(team) {
         if (team === 'blue') blueScore++; else redScore++;
       }
       updateTugUI();
-      loadTugQuestion(team);
+      if (tugTimer > 0 && Math.abs(blueScore - redScore) < 5) {
+        loadTugQuestion(team);
+      }
     };
     optEl.appendChild(btn);
   });
 }
 
-/* 6. GUESS THE WORD LOGIC (CORREGIDO) */
+/* 6. GUESS THE WORD LOGIC */
 let guessIndex = 0, guessScore = 0, guessTimer = 60, guessInterval = null;
 
 function resetGuessUI() {
@@ -945,6 +1044,151 @@ function nextGuessWord(isCorrect) {
   }
   guessIndex++;
   displayGuessWord();
+}
+
+/* 7. PENALTY SHOOTOUT LOGIC (NUEVO) */
+let penaltyBlueScore = 0, penaltyRedScore = 0;
+let penaltyCurrentRound = 1, penaltyMaxRounds = 5;
+let penaltyPhase = 'ATTACK'; // 'ATTACK' o 'DEFENSE'
+let penaltyAttackingTeam = 'blue'; // 'blue' o 'red'
+let penaltyTimer = 10, penaltyInterval = null;
+let currentPenaltyItem = null;
+
+function initPenaltyShootout() {
+  penaltyBlueScore = 0;
+  penaltyRedScore = 0;
+  penaltyCurrentRound = 1;
+  penaltyAttackingTeam = 'blue';
+  penaltyPhase = 'ATTACK';
+  updatePenaltyUI();
+  startPenaltyTurn();
+}
+
+function updatePenaltyUI() {
+  document.getElementById('penaltyBlueScore').textContent = penaltyBlueScore;
+  document.getElementById('penaltyRedScore').textContent = penaltyRedScore;
+  document.getElementById('penaltyRound').textContent = `${penaltyCurrentRound} / ${penaltyMaxRounds}`;
+  
+  const ball = document.getElementById('penaltyBallImg');
+  const keeper = document.getElementById('penaltyKeeperImg');
+  ball.style.transform = 'translate(-50%, 0) scale(1)';
+  ball.style.bottom = '1.5rem';
+  ball.style.left = '50%';
+  keeper.style.transform = 'translateX(0)';
+}
+
+function startPenaltyTurn() {
+  if (penaltyInterval) clearInterval(penaltyInterval);
+  penaltyTimer = 10;
+  document.getElementById('penaltyTimer').textContent = penaltyTimer;
+
+  currentPenaltyItem = gamesData[Math.floor(Math.random() * gamesData.length)];
+  document.getElementById('penaltyClue').textContent = `"${currentPenaltyItem.CLUE}"`;
+
+  const badge = document.getElementById('penaltyTurnBadge');
+  if (penaltyPhase === 'ATTACK') {
+    const teamName = penaltyAttackingTeam === 'blue' ? '🔵 Blue Team' : '🔴 Red Team';
+    badge.textContent = `${teamName} — ⚽ SHOOTING (10s)`;
+    badge.className = penaltyAttackingTeam === 'blue' 
+      ? "inline-block px-4 py-1 bg-sky-500 text-slate-950 font-black text-xs uppercase rounded-full tracking-wider"
+      : "inline-block px-4 py-1 bg-rose-500 text-white font-black text-xs uppercase rounded-full tracking-wider";
+  } else {
+    const defTeamName = penaltyAttackingTeam === 'blue' ? '🔴 Red Team' : '🔵 Blue Team';
+    badge.textContent = `${defTeamName} — 🧤 BLOCK SHOT! (10s)`;
+    badge.className = penaltyAttackingTeam === 'blue' 
+      ? "inline-block px-4 py-1 bg-rose-500 text-white font-black text-xs uppercase rounded-full tracking-wider"
+      : "inline-block px-4 py-1 bg-sky-500 text-slate-950 font-black text-xs uppercase rounded-full tracking-wider";
+  }
+
+  let options = [currentPenaltyItem.WORDS];
+  while (options.length < 4 && options.length < gamesData.length) {
+    let randWord = gamesData[Math.floor(Math.random() * gamesData.length)].WORDS;
+    if (!options.includes(randWord)) options.push(randWord);
+  }
+  options.sort(() => 0.5 - Math.random());
+
+  const optContainer = document.getElementById('penaltyOptions');
+  optContainer.innerHTML = '';
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.textContent = opt;
+    btn.className = "py-2.5 px-3 bg-white hover:bg-slate-100 text-slate-900 rounded-xl font-bold text-xs shadow-md transition cursor-pointer truncate";
+    btn.onclick = () => handlePenaltyAnswer(opt === currentPenaltyItem.WORDS);
+    optContainer.appendChild(btn);
+  });
+
+  penaltyInterval = setInterval(() => {
+    penaltyTimer--;
+    document.getElementById('penaltyTimer').textContent = penaltyTimer;
+    if (penaltyTimer <= 0) {
+      clearInterval(penaltyInterval);
+      handlePenaltyAnswer(false);
+    }
+  }, 1000);
+}
+
+function handlePenaltyAnswer(isCorrect) {
+  if (penaltyInterval) clearInterval(penaltyInterval);
+
+  const ball = document.getElementById('penaltyBallImg');
+  const keeper = document.getElementById('penaltyKeeperImg');
+
+  if (penaltyPhase === 'ATTACK') {
+    if (isCorrect) {
+      ball.style.transform = 'translate(-50%, -160px) scale(0.6)';
+      penaltyPhase = 'DEFENSE';
+      setTimeout(() => startPenaltyTurn(), 1000);
+    } else {
+      ball.style.transform = 'translate(80px, -40px) scale(0.8)';
+      setTimeout(() => nextPenaltyTurn(false), 1200);
+    }
+  } else if (penaltyPhase === 'DEFENSE') {
+    if (isCorrect) {
+      keeper.style.transform = 'translateX(-40px)';
+      ball.style.transform = 'translate(-40px, -150px) scale(0.6)';
+      setTimeout(() => nextPenaltyTurn(false), 1200);
+    } else {
+      keeper.style.transform = 'translateX(60px)';
+      setTimeout(() => nextPenaltyTurn(true), 1200);
+    }
+  }
+}
+
+function nextPenaltyTurn(isGoal) {
+  if (isGoal) {
+    if (penaltyAttackingTeam === 'blue') penaltyBlueScore++;
+    else penaltyRedScore++;
+  }
+
+  updatePenaltyUI();
+
+  if (penaltyAttackingTeam === 'blue') {
+    penaltyAttackingTeam = 'red';
+    penaltyPhase = 'ATTACK';
+    startPenaltyTurn();
+  } else {
+    penaltyAttackingTeam = 'blue';
+    penaltyPhase = 'ATTACK';
+    penaltyCurrentRound++;
+
+    if (penaltyCurrentRound > penaltyMaxRounds) {
+      finalizarPenaltyShootout();
+    } else {
+      startPenaltyTurn();
+    }
+  }
+}
+
+function finalizarPenaltyShootout() {
+  if (penaltyInterval) clearInterval(penaltyInterval);
+
+  if (penaltyBlueScore > penaltyRedScore) {
+    mostrarModalResultadosJuego('Blue Team Wins! 🏆⚽', `${penaltyBlueScore} - ${penaltyRedScore}`, 'Great shooting & saving performance!');
+  } else if (penaltyRedScore > penaltyBlueScore) {
+    mostrarModalResultadosJuego('Red Team Wins! 🏆⚽', `${penaltyRedScore} - ${penaltyBlueScore}`, 'Great shooting & saving performance!');
+  } else {
+    mostrarModalResultadosJuego('Draw Match! 🤝⚽', `${penaltyBlueScore} - ${penaltyRedScore}`, 'Tense duel ended in a tie!');
+  }
 }
 </script>
 </body>

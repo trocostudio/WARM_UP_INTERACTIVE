@@ -331,7 +331,7 @@ body {
       </div>
     </div>
 
-    <!-- 7. PENALTY SHOOTOUT AREA (ESCALA 1:1 PHOTOSHOP INTEGRADA) -->
+    <!-- 7. PENALTY SHOOTOUT AREA (PUNTO DE ANCLAJE COMPARTIDO) -->
     <div id="penaltyshootView" class="hidden space-y-6">
       <div class="bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-800 space-y-4 p-4 sm:p-6">
         
@@ -350,20 +350,20 @@ body {
           </span>
         </div>
 
-        <!-- CAMPO Y PERSONAJES MANTENIENDO PROPORCIÓN PHOTOSHOP -->
-        <div class="relative w-full h-80 sm:h-[420px] rounded-2xl overflow-hidden border border-slate-700 select-none shadow-2xl bg-slate-950">
+        <!-- CONTENEDOR ANCLADO AL LIENZO PHOTOSHOP -->
+        <div class="relative w-full aspect-[1377/768] rounded-2xl overflow-hidden border border-slate-700 select-none shadow-2xl bg-slate-950">
           
-          <!-- FONDO DE PORTERÍA -->
-          <img src="https://drive.google.com/thumbnail?id=1bWad_TGuyLKUz7ScoUVdpYcWrL2Nfsxl&sz=w1600" class="absolute inset-0 w-full h-full object-cover pointer-events-none" alt="Goal Field Background">
+          <!-- CAMPO (ANCLAJE BASE) -->
+          <img src="https://drive.google.com/thumbnail?id=1bWad_TGuyLKUz7ScoUVdpYcWrL2Nfsxl&sz=w1600" class="absolute inset-0 w-full h-full object-fill pointer-events-none z-0" alt="Goal Field Background">
 
-          <!-- PORTERO (Renderizado según escala original) -->
-          <img id="penaltyKeeperImg" src="https://drive.google.com/thumbnail?id=14ePNT76YwZIOpCSs4ptlWldonDwvyZ2i&sz=w1600" class="absolute bottom-[28%] left-1/2 -translate-x-1/2 h-28 sm:h-40 w-auto transition-transform duration-500 object-contain drop-shadow-2xl z-10" alt="Goalkeeper">
+          <!-- PORTERO (MISMO PUNTO DE ANCLAJE QUE EL CAMPO) -->
+          <img id="penaltyKeeperImg" src="https://drive.google.com/thumbnail?id=14ePNT76YwZIOpCSs4ptlWldonDwvyZ2i&sz=w1600" class="absolute inset-0 w-full h-full object-fill pointer-events-none transition-transform duration-500 z-10" alt="Goalkeeper">
 
-          <!-- PATEADOR (Renderizado según escala original) -->
-          <img id="penaltyPlayerImg" src="https://drive.google.com/thumbnail?id=1RMmKNl1OJ_bSZw-z80V1q1PkaD1N3qc8&sz=w1600" class="absolute bottom-2 left-6 sm:left-16 h-36 sm:h-52 w-auto transition-all duration-300 object-contain drop-shadow-2xl z-20" alt="Soccer Player">
+          <!-- PATEADOR (MISMO PUNTO DE ANCLAJE QUE EL CAMPO) -->
+          <img id="penaltyPlayerImg" src="https://drive.google.com/thumbnail?id=1RMmKNl1OJ_bSZw-z80V1q1PkaD1N3qc8&sz=w1600" class="absolute inset-0 w-full h-full object-fill pointer-events-none transition-all duration-300 z-20" alt="Soccer Player">
 
-          <!-- BALÓN (Renderizado según escala original) -->
-          <img id="penaltyBallImg" src="https://drive.google.com/thumbnail?id=11hrLhw5Sey-otpQQrxE0XjybSjpSy7TL&sz=w1600" class="absolute bottom-6 left-1/2 -translate-x-1/2 h-8 sm:h-12 w-auto transition-all duration-700 ease-out object-contain drop-shadow-2xl z-30" alt="Soccer Ball">
+          <!-- BALÓN (MISMO PUNTO DE ANCLAJE QUE EL CAMPO) -->
+          <img id="penaltyBallImg" src="https://drive.google.com/thumbnail?id=11hrLhw5Sey-otpQQrxE0XjybSjpSy7TL&sz=w1600" class="absolute inset-0 w-full h-full object-fill pointer-events-none transition-all duration-700 ease-out z-30" alt="Soccer Ball">
         </div>
 
         <!-- PREGUNTA Y TURNOS -->
@@ -1046,7 +1046,7 @@ function nextGuessWord(isCorrect) {
   displayGuessWord();
 }
 
-/* 7. PENALTY SHOOTOUT LOGIC (CONSERVANDO PROPORCIONES PHOTOSHOP) */
+/* 7. PENALTY SHOOTOUT LOGIC (ANCLAJE EXACTO AL LIENZO BASE) */
 let penaltyBlueScore = 0, penaltyRedScore = 0;
 let penaltyCurrentRound = 1, penaltyMaxRounds = 5;
 let penaltyPhase = 'ATTACK'; 
@@ -1071,10 +1071,10 @@ function updatePenaltyUI() {
   
   const ball = document.getElementById('penaltyBallImg');
   const keeper = document.getElementById('penaltyKeeperImg');
-  ball.style.transform = 'translate(-50%, 0) scale(1)';
-  ball.style.bottom = '1.5rem';
-  ball.style.left = '50%';
-  keeper.style.transform = 'translate(-50%, 0)';
+  
+  // Reiniciar a la posición inicial relativa de Photoshop
+  ball.style.transform = 'translate(0, 0) scale(1)';
+  keeper.style.transform = 'translate(0, 0)';
 }
 
 function startPenaltyTurn() {
@@ -1135,20 +1135,24 @@ function handlePenaltyAnswer(isCorrect) {
 
   if (penaltyPhase === 'ATTACK') {
     if (isCorrect) {
-      ball.style.transform = 'translate(-50%, -140px) scale(0.65)';
+      // Disparo hacia el centro del arco en relación al lienzo
+      ball.style.transform = 'translate(0, -25%) scale(0.6)';
       penaltyPhase = 'DEFENSE';
       setTimeout(() => startPenaltyTurn(), 1000);
     } else {
-      ball.style.transform = 'translate(100px, -40px) scale(0.85)';
+      // Disparo fuera del lienzo
+      ball.style.transform = 'translate(20%, -10%) scale(0.8)';
       setTimeout(() => nextPenaltyTurn(false), 1200);
     }
   } else if (penaltyPhase === 'DEFENSE') {
     if (isCorrect) {
-      keeper.style.transform = 'translate(-100px, 0)';
-      ball.style.transform = 'translate(-100px, -130px) scale(0.65)';
+      // El arquero ataja la pelota hacia el lado izquierdo
+      keeper.style.transform = 'translate(-12%, 0)';
+      ball.style.transform = 'translate(-12%, -25%) scale(0.6)';
       setTimeout(() => nextPenaltyTurn(false), 1200);
     } else {
-      keeper.style.transform = 'translate(90px, 0)';
+      // El arquero se lanza al lado equivocado (Gol)
+      keeper.style.transform = 'translate(12%, 0)';
       setTimeout(() => nextPenaltyTurn(true), 1200);
     }
   }

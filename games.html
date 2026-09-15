@@ -418,33 +418,31 @@ body {
           </span>
         </div>
 
-        <!-- CANVAS ESPACIAL (PROPORCIÓN OPTIMIZADA A 16/10) -->
+        <!-- CANVAS ESPACIAL CON FONDO DE GALAXIA HD -->
         <div class="relative w-full aspect-[16/10] rounded-2xl overflow-hidden border border-slate-700 select-none shadow-2xl bg-slate-950 flex flex-col justify-between p-4">
           
-          <!-- ESTRELLAS DE FONDO -->
-          <div class="absolute inset-0 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px] opacity-20 pointer-events-none"></div>
+          <!-- IMAGEN FONDO GALAXIA -->
+          <img src="https://drive.google.com/thumbnail?id=1tdcR5GyTogalY_khypqYxKSmjcD9qal_&sz=w1600" class="absolute inset-0 w-full h-full object-cover pointer-events-none z-0" alt="Galaxy Background">
 
           <!-- ASTEROIDE FLOTANTE (CON LA PISTA) -->
           <div id="sdAsteroid" class="relative mx-auto transition-all duration-300 ease-linear z-20 max-w-md w-full text-center">
-            <div class="bg-slate-900/90 border-2 border-amber-500/60 backdrop-blur-md rounded-2xl p-4 shadow-[0_0_20px_rgba(245,158,11,0.3)]">
+            <div class="bg-slate-950/85 border-2 border-amber-500/80 backdrop-blur-md rounded-2xl p-4 shadow-[0_0_25px_rgba(245,158,11,0.5)]">
               <span class="text-[10px] font-black uppercase text-amber-400 tracking-widest block mb-1">☄️ INCOMING ASTEROID</span>
               <p id="sdClueText" class="text-xs sm:text-base font-bold text-white leading-snug">"Clue text..."</p>
             </div>
           </div>
 
-          <!-- LÁSER (ANIMACIÓN) -->
-          <div id="sdLaser" class="absolute bottom-14 left-1/2 -translate-x-1/2 w-2 bg-cyan-400 shadow-[0_0_20px_#22d3ee] z-10 transition-all duration-200 opacity-0 rounded-full" style="height: 0px;"></div>
+          <!-- IMAGEN DEL MISIL ESPACIAL -->
+          <img id="sdLaser" src="https://drive.google.com/thumbnail?id=1DImCHuzl0D5xEz0JcowolX1TIB1z23HZ&sz=w1600" class="absolute bottom-16 left-1/2 -translate-x-1/2 w-8 sm:w-10 h-auto object-contain z-10 transition-all duration-300 opacity-0 pointer-events-none drop-shadow-[0_0_12px_rgba(239,68,68,0.9)]" alt="Space Missile">
 
-          <!-- NAVE ESPACIAL Y BASE -->
+          <!-- IMAGEN DE LA NAVE ESPACIAL -->
           <div class="relative z-20 flex justify-center items-center pb-2">
-            <div id="sdShip" class="text-4xl sm:text-6xl filter drop-shadow-[0_0_12px_rgba(56,189,248,0.9)] transition-transform duration-200">
-              🚀
-            </div>
+            <img id="sdShip" src="https://drive.google.com/thumbnail?id=1KVi8WbOUU5qzsPb9xj3yt9Mmu8LghVXL&sz=w1600" class="h-16 sm:h-20 w-auto object-contain filter drop-shadow-[0_0_15px_rgba(56,189,248,0.9)] transition-transform duration-200" alt="Spaceship">
           </div>
         </div>
 
         <!-- BOTONES DE OPCIONES DE RESPUESTA -->
-        <div class="bg-slate-800 border border-slate-700 p-4 rounded-2xl space-y-2 text-center">
+        <div class="bg-slate-800/90 border border-slate-700 p-4 rounded-2xl space-y-2 text-center">
           <span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Select Target Word to Fire:</span>
           <div id="sdOptions" class="grid grid-cols-2 sm:grid-cols-4 gap-2"></div>
         </div>
@@ -1334,8 +1332,12 @@ function nextSDAsteroid() {
   document.getElementById('sdClueText').textContent = `"${sdCurrentItem.CLUE}"`;
 
   const asteroid = document.getElementById('sdAsteroid');
+  const laser = document.getElementById('sdLaser');
+  
   sdAsteroidPos = 0;
   asteroid.style.transform = `translateY(${sdAsteroidPos}px)`;
+  laser.style.opacity = '0';
+  laser.style.transform = 'translate(-50%, 0px)';
 
   let options = [sdCurrentItem.WORDS];
   while (options.length < 4 && options.length < gamesData.length) {
@@ -1359,7 +1361,6 @@ function nextSDAsteroid() {
     sdAsteroidPos += 5;
     asteroid.style.transform = `translateY(${sdAsteroidPos}px)`;
 
-    // BAJA HASTA COLISIONAR DIRECTAMENTE CON LA NAVE (220px)
     if (sdAsteroidPos >= 220) {
       clearInterval(sdAsteroidTimer);
       handleSDImpact();
@@ -1374,17 +1375,15 @@ function shootSDLaser(isCorrect) {
   const ship = document.getElementById('sdShip');
   const asteroid = document.getElementById('sdAsteroid');
 
-  // ALTURA DEL LÁSER ADAPTADA A LA POSICIÓN ACTUAL DEL ASTEROIDE
-  const currentHeight = Math.max(20, 260 - sdAsteroidPos);
-  laser.style.height = `${currentHeight}px`;
-
-  ship.style.transform = 'scale(1.2) translateY(-5px)';
+  // ANIMACIÓN DE DISPARO DEL MISIL
+  const targetDistance = -(220 - sdAsteroidPos);
   laser.style.opacity = '1';
+  laser.style.transform = `translate(-50%, ${targetDistance}px)`;
+  ship.style.transform = 'scale(1.1)';
 
   setTimeout(() => {
-    ship.style.transform = 'scale(1) translateY(0)';
+    ship.style.transform = 'scale(1)';
     laser.style.opacity = '0';
-    laser.style.height = '0px';
 
     if (isCorrect) {
       sdScore += 100;
@@ -1392,7 +1391,6 @@ function shootSDLaser(isCorrect) {
       updateSDUI();
       nextSDAsteroid();
     } else {
-      // SI FALLA LA RESPUESTA, EL ASTEROIDE CAE RÁPIDO HASTA LA NAVE
       sdAsteroidPos = 220;
       asteroid.style.transform = `translateY(${sdAsteroidPos}px)`;
       setTimeout(() => handleSDImpact(), 200);

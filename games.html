@@ -331,7 +331,7 @@ body {
       </div>
     </div>
 
-    <!-- 7. PENALTY SHOOTOUT AREA (TIMER ARRIBA A LA IZQUIERDA DENTRO DE LA IMAGEN) -->
+    <!-- 7. PENALTY SHOOTOUT AREA -->
     <div id="penaltyshootView" class="hidden space-y-6">
       <div class="bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-800 space-y-4 p-4 sm:p-6">
         
@@ -360,6 +360,11 @@ body {
               <span class="text-[10px] sm:text-xs font-black uppercase text-amber-300 tracking-widest leading-none">⏱️ TIME:</span>
               <span id="penaltyTimer" class="text-xl sm:text-3xl font-black text-amber-400 tracking-tight drop-shadow-[0_2px_8px_rgba(251,191,36,0.5)] leading-none">10</span>s
             </div>
+          </div>
+
+          <!-- FEEDBACK TEXT FLOTANTE (GOAL / MISSED / BLOCKED / TURN INFO) -->
+          <div id="penaltyFeedback" class="absolute inset-0 flex items-center justify-center pointer-events-none z-50 opacity-0 transition-all duration-300 transform scale-50">
+            <span id="penaltyFeedbackText" class="text-5xl sm:text-7xl font-black tracking-tighter drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] uppercase"></span>
           </div>
 
           <!-- PORTERO (MISMO PUNTO DE ANCLAJE QUE EL CAMPO) -->
@@ -1077,9 +1082,38 @@ function updatePenaltyUI() {
   
   const ball = document.getElementById('penaltyBallImg');
   const keeper = document.getElementById('penaltyKeeperImg');
+  const feedback = document.getElementById('penaltyFeedback');
   
   ball.style.transform = 'translate(0, 0) scale(1)';
   keeper.style.transform = 'translate(0, 0)';
+  
+  if (feedback) {
+    feedback.classList.add('opacity-0', 'scale-50');
+    feedback.classList.remove('opacity-100', 'scale-100');
+  }
+}
+
+function showPenaltyFeedback(type, customText = '') {
+  const fbContainer = document.getElementById('penaltyFeedback');
+  const fbText = document.getElementById('penaltyFeedbackText');
+  if (!fbContainer || !fbText) return;
+
+  if (type === 'GOAL') {
+    fbText.textContent = '⚽ GOAL!';
+    fbText.className = 'text-5xl sm:text-7xl font-black text-emerald-400 drop-shadow-[0_10px_25px_rgba(52,211,153,0.8)] tracking-tight';
+  } else if (type === 'MISSED') {
+    fbText.textContent = '❌ MISSED!';
+    fbText.className = 'text-5xl sm:text-7xl font-black text-rose-500 drop-shadow-[0_10px_25px_rgba(244,63,94,0.8)] tracking-tight';
+  } else if (type === 'BLOCKED') {
+    fbText.textContent = '🧤 BLOCKED!';
+    fbText.className = 'text-5xl sm:text-7xl font-black text-amber-400 drop-shadow-[0_10px_25px_rgba(251,191,36,0.8)] tracking-tight';
+  } else if (type === 'INFO') {
+    fbText.textContent = customText;
+    fbText.className = 'text-2xl sm:text-4xl font-black text-sky-300 drop-shadow-[0_10px_20px_rgba(0,0,0,0.9)] tracking-wider text-center px-4';
+  }
+
+  fbContainer.classList.remove('opacity-0', 'scale-50');
+  fbContainer.classList.add('opacity-100', 'scale-100');
 }
 
 function startPenaltyTurn() {
@@ -1142,26 +1176,26 @@ function handlePenaltyAnswer(isCorrect) {
 
   if (penaltyPhase === 'ATTACK') {
     if (isCorrect) {
-      // Disparo exitoso hacia la izquierda (Gol)
       ball.style.transform = 'translate(-12%, -25%) scale(0.6)';
       penaltyPhase = 'DEFENSE';
-      setTimeout(() => startPenaltyTurn(), 1000);
+      showPenaltyFeedback('GOAL');
+      setTimeout(() => startPenaltyTurn(), 1200);
     } else {
-      // Disparo fallido: Se patea con fuerza a la izquierda y sale de la imagen
       ball.style.transform = 'translate(-55%, -35%) scale(0.3)';
-      setTimeout(() => nextPenaltyTurn(false), 1200);
+      showPenaltyFeedback('MISSED');
+      setTimeout(() => nextPenaltyTurn(false), 1400);
     }
   } else if (penaltyPhase === 'DEFENSE') {
     if (isCorrect) {
-      // ATAJADA: El rival patea a la izquierda y el portero vuela a la izquierda a taparla
       keeper.style.transform = 'translate(-12%, 0)';
       ball.style.transform = 'translate(-12%, -25%) scale(0.6)';
-      setTimeout(() => nextPenaltyTurn(false), 1200);
+      showPenaltyFeedback('BLOCKED');
+      setTimeout(() => nextPenaltyTurn(false), 1400);
     } else {
-      // GOL EN CONTRA (Portero falla): El balón se mueve más al fondo de la red y el arquero se vence a la derecha
       ball.style.transform = 'translate(-18%, -28%) scale(0.55)';
       keeper.style.transform = 'translate(14%, 0)';
-      setTimeout(() => nextPenaltyTurn(true), 1200);
+      showPenaltyFeedback('GOAL');
+      setTimeout(() => nextPenaltyTurn(true), 1400);
     }
   }
 }
@@ -1177,7 +1211,8 @@ function nextPenaltyTurn(isGoal) {
   if (penaltyAttackingTeam === 'blue') {
     penaltyAttackingTeam = 'red';
     penaltyPhase = 'ATTACK';
-    startPenaltyTurn();
+    showPenaltyFeedback('INFO', '🔴 RED TEAM\'S TURN!');
+    setTimeout(() => startPenaltyTurn(), 1200);
   } else {
     penaltyAttackingTeam = 'blue';
     penaltyPhase = 'ATTACK';
@@ -1186,7 +1221,8 @@ function nextPenaltyTurn(isGoal) {
     if (penaltyCurrentRound > penaltyMaxRounds) {
       finalizarPenaltyShootout();
     } else {
-      startPenaltyTurn();
+      showPenaltyFeedback('INFO', '🔵 BLUE TEAM\'S TURN!');
+      setTimeout(() => startPenaltyTurn(), 1200);
     }
   }
 }

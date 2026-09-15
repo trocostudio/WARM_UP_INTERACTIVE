@@ -1176,22 +1176,26 @@ function handlePenaltyAnswer(isCorrect) {
 
   if (penaltyPhase === 'ATTACK') {
     if (isCorrect) {
+      // Tiro bien ejecutado con dirección al arco -> Pasa al turno del portero para intentar atajarlo
       ball.style.transform = 'translate(-12%, -25%) scale(0.6)';
       penaltyPhase = 'DEFENSE';
-      showPenaltyFeedback('GOAL');
+      showPenaltyFeedback('INFO', '🧤 SAVE THE SHOT!');
       setTimeout(() => startPenaltyTurn(), 1200);
     } else {
+      // El pateador se equivoca -> Balón fuera de la cancha
       ball.style.transform = 'translate(-55%, -35%) scale(0.3)';
       showPenaltyFeedback('MISSED');
       setTimeout(() => nextPenaltyTurn(false), 1400);
     }
   } else if (penaltyPhase === 'DEFENSE') {
     if (isCorrect) {
+      // EL PORTERO ACCIONA BIEN: Ataja el tiro que iba a puerta
       keeper.style.transform = 'translate(-12%, 0)';
       ball.style.transform = 'translate(-12%, -25%) scale(0.6)';
       showPenaltyFeedback('BLOCKED');
       setTimeout(() => nextPenaltyTurn(false), 1400);
     } else {
+      // EL PORTERO SE EQUIVOCA: No logra atajarlo -> ¡GOL!
       ball.style.transform = 'translate(-18%, -28%) scale(0.55)';
       keeper.style.transform = 'translate(14%, 0)';
       showPenaltyFeedback('GOAL');
@@ -1199,6 +1203,7 @@ function handlePenaltyAnswer(isCorrect) {
     }
   }
 }
+
 
 function nextPenaltyTurn(isGoal) {
   if (isGoal) {

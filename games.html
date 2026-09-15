@@ -1147,24 +1147,25 @@ function handlePenaltyAnswer(isCorrect) {
       penaltyPhase = 'DEFENSE';
       setTimeout(() => startPenaltyTurn(), 1000);
     } else {
-      // Disparo desviado a la derecha fuera del arco
-      ball.style.transform = 'translate(20%, -10%) scale(0.8)';
+      // Disparo fallido: Se patea con fuerza a la izquierda y sale de la imagen
+      ball.style.transform = 'translate(-55%, -35%) scale(0.3)';
       setTimeout(() => nextPenaltyTurn(false), 1200);
     }
   } else if (penaltyPhase === 'DEFENSE') {
     if (isCorrect) {
-      // ATAJADA: El pateador patea a la izquierda y el portero vuela a la izquierda a taparla
+      // ATAJADA: El rival patea a la izquierda y el portero vuela a la izquierda a taparla
       keeper.style.transform = 'translate(-12%, 0)';
       ball.style.transform = 'translate(-12%, -25%) scale(0.6)';
       setTimeout(() => nextPenaltyTurn(false), 1200);
     } else {
-      // GOL EN CONTRA: El balón va a la izquierda pero el arquero se vence a la derecha
+      // GOL EN CONTRA: El rival patea a la izquierda pero el arquero se vence a la derecha
       ball.style.transform = 'translate(-12%, -25%) scale(0.6)';
       keeper.style.transform = 'translate(12%, 0)';
       setTimeout(() => nextPenaltyTurn(true), 1200);
     }
   }
 }
+
 
 function nextPenaltyTurn(isGoal) {
   if (isGoal) {

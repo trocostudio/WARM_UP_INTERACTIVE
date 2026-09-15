@@ -1158,14 +1158,13 @@ function handlePenaltyAnswer(isCorrect) {
       ball.style.transform = 'translate(-12%, -25%) scale(0.6)';
       setTimeout(() => nextPenaltyTurn(false), 1200);
     } else {
-      // GOL EN CONTRA: El rival patea a la izquierda pero el arquero se vence a la derecha
-      ball.style.transform = 'translate(-12%, -25%) scale(0.6)';
-      keeper.style.transform = 'translate(12%, 0)';
+      // GOL EN CONTRA (Portero falla): El balón se mueve más al fondo de la red y el arquero se vence a la derecha
+      ball.style.transform = 'translate(-18%, -28%) scale(0.55)';
+      keeper.style.transform = 'translate(14%, 0)';
       setTimeout(() => nextPenaltyTurn(true), 1200);
     }
   }
 }
-
 
 function nextPenaltyTurn(isGoal) {
   if (isGoal) {

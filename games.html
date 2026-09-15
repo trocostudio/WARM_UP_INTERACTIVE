@@ -409,6 +409,9 @@ body {
           <span class="bg-violet-500/20 text-violet-400 border border-violet-500/30 px-3 sm:px-4 py-1.5 rounded-full shadow-lg backdrop-blur-md">
             SCORE: <span id="sdScore">0</span> PTS
           </span>
+          <span class="bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 px-3 sm:px-4 py-1.5 rounded-full shadow-lg backdrop-blur-md flex items-center gap-1">
+            ⏱️ <span id="sdTimer" class="text-sm font-black text-amber-400">10</span>s
+          </span>
           <span class="bg-rose-500/20 text-rose-400 border border-rose-500/30 px-3 sm:px-4 py-1.5 rounded-full shadow-lg backdrop-blur-md">
             SHIELD: <span id="sdLives">❤️❤️❤️</span>
           </span>
@@ -1314,11 +1317,13 @@ function finalizarPenaltyShootout() {
   }
 }
 
-/* 8. SPACE DEFENDER LOGIC (CON EXPLOSIÓN EN NAVE AL RECIBIR IMPACTO) */
+/* 8. SPACE DEFENDER LOGIC (CON CRONÓMETRO DE 10 SEGUNDOS) */
 let sdScore = 0, sdLives = 3, sdWave = 1;
 let sdCurrentItem = null;
 let sdAsteroidTimer = null;
+let sdClockTimer = null;
 let sdAsteroidPos = 0;
+let sdTimeLeft = 10;
 
 function initSpaceDefender() {
   sdScore = 0;
@@ -1332,11 +1337,16 @@ function updateSDUI() {
   document.getElementById('sdScore').textContent = sdScore;
   document.getElementById('sdLives').textContent = '❤️'.repeat(sdLives) || '💥';
   document.getElementById('sdWave').textContent = sdWave;
+  document.getElementById('sdTimer').textContent = sdTimeLeft;
 }
 
 function nextSDAsteroid() {
   if (sdAsteroidTimer) clearInterval(sdAsteroidTimer);
+  if (sdClockTimer) clearInterval(sdClockTimer);
   if (sdLives <= 0) return;
+
+  sdTimeLeft = 10;
+  updateSDUI();
 
   sdCurrentItem = gamesData[Math.floor(Math.random() * gamesData.length)];
   document.getElementById('sdClueText').textContent = `"${sdCurrentItem.CLUE}"`;
@@ -1362,7 +1372,6 @@ function nextSDAsteroid() {
   shipExplosion.classList.remove('animate-explosion');
   shipExplosion.style.opacity = '0';
 
-  // RESET DEL MISIL EN SU POSICIÓN INICIAL SOBRE LA NAVE
   laser.style.transition = 'none';
   laser.style.opacity = '0';
   laser.style.transform = 'translate(-50%, 0px)';
@@ -1384,20 +1393,35 @@ function nextSDAsteroid() {
     optContainer.appendChild(btn);
   });
 
-  const speed = Math.max(60, 180 - (sdWave * 15));
-  sdAsteroidTimer = setInterval(() => {
-    sdAsteroidPos += 5;
-    asteroid.style.transform = `translateY(${sdAsteroidPos}px)`;
+  // TRAYECTORIA DEL ASTEROIDE SINCRONIZADA A 10 SEGUNDOS EXACTOS
+  const totalSteps = 100;
+  const stepInterval = 100; // 100ms * 100 = 10,000ms = 10s
+  const stepDistance = 220 / totalSteps;
 
-    if (sdAsteroidPos >= 220) {
+  sdAsteroidTimer = setInterval(() => {
+    sdAsteroidPos += stepDistance;
+    asteroid.style.transform = `translateY(${sdAsteroidPos}px)`;
+  }, stepInterval);
+
+  // CRONÓMETRO REGRESIVO DE 10 SEGUNDOS
+  sdClockTimer = setInterval(() => {
+    sdTimeLeft--;
+    document.getElementById('sdTimer').textContent = sdTimeLeft;
+
+    if (sdTimeLeft <= 0) {
       clearInterval(sdAsteroidTimer);
+      clearInterval(sdClockTimer);
+      
+      sdAsteroidPos = 220;
+      asteroid.style.transform = `translateY(${sdAsteroidPos}px)`;
       handleSDImpact();
     }
-  }, speed);
+  }, 1000);
 }
 
 function shootSDLaser(isCorrect) {
   if (sdAsteroidTimer) clearInterval(sdAsteroidTimer);
+  if (sdClockTimer) clearInterval(sdClockTimer);
 
   const laser = document.getElementById('sdLaser');
   const ship = document.getElementById('sdShip');
@@ -1405,7 +1429,6 @@ function shootSDLaser(isCorrect) {
   const asteroidBox = document.getElementById('sdAsteroidBox');
   const explosion = document.getElementById('sdExplosion');
 
-  // DISTANCIA RECORRIDA POR EL MISIL MÁS GRANDE HASTA EL ASTEROIDE
   const targetDistance = -(210 - sdAsteroidPos);
   
   laser.style.transition = 'transform 0.25s linear, opacity 0.1s ease';
@@ -1418,7 +1441,6 @@ function shootSDLaser(isCorrect) {
     laser.style.opacity = '0';
 
     if (isCorrect) {
-      // IMPACTO EXITOSO EN EL ASTEROIDE
       asteroidBox.style.opacity = '0';
       asteroidBox.style.transform = 'scale(0.2)';
       
@@ -1434,7 +1456,6 @@ function shootSDLaser(isCorrect) {
       }, 400);
 
     } else {
-      // RESPUESTA INCORRECTA: EL ASTEROIDE CAE Y CHOCA LA NAVE
       sdAsteroidPos = 220;
       asteroid.style.transform = `translateY(${sdAsteroidPos}px)`;
       setTimeout(() => handleSDImpact(), 200);
@@ -1447,7 +1468,6 @@ function handleSDImpact() {
   const shipExplosion = document.getElementById('sdShipExplosion');
   const canvas = document.getElementById('sdCanvasContainer');
 
-  // ANIMACIÓN DE EXPLOSIÓN EN LA NAVE Y TEMBLOR DEL CANVA
   ship.style.opacity = '0.2';
   shipExplosion.style.opacity = '1';
   shipExplosion.classList.add('animate-explosion');

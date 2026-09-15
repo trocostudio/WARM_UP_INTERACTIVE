@@ -440,8 +440,8 @@ body {
 
           <!-- CONTENEDOR ANCLADO DE NAVE + COHETE CENTRADO -->
           <div class="relative z-20 flex justify-center items-center w-full pb-2">
-            <!-- MISIL ESPACIAL -->
-            <img id="sdLaser" src="https://drive.google.com/thumbnail?id=1DImCHuzl0D5xEz0JcowolX1TIB1z23HZ&sz=w1600" class="absolute bottom-[70px] left-1/2 -translate-x-1/2 w-20 sm:w-24 h-auto object-contain z-10 opacity-0 pointer-events-none filter drop-shadow-[0_0_20px_rgba(239,68,68,0.9)]" alt="Space Missile">
+            <!-- MISIL ESPACIAL (Ajustado para spawnear directo desde su posición central) -->
+            <img id="sdLaser" src="https://drive.google.com/thumbnail?id=1DImCHuzl0D5xEz0JcowolX1TIB1z23HZ&sz=w1600" class="absolute bottom-[70px] w-20 sm:w-24 h-auto object-contain z-10 opacity-0 pointer-events-none filter drop-shadow-[0_0_20px_rgba(239,68,68,0.9)]" alt="Space Missile">
 
             <!-- NAVE ESPACIAL -->
             <img id="sdShip" src="https://drive.google.com/thumbnail?id=1KVi8WbOUU5qzsPb9xj3yt9Mmu8LghVXL&sz=w1600" class="h-36 sm:h-42 w-auto object-contain filter drop-shadow-[0_0_25px_rgba(56,189,248,0.9)] transition-all duration-200 relative z-20" alt="Spaceship">
@@ -1317,7 +1317,7 @@ function finalizarPenaltyShootout() {
   }
 }
 
-/* 8. SPACE DEFENDER LOGIC (CON CRONÓMETRO DE 10 SEGUNDOS) */
+/* 8. SPACE DEFENDER LOGIC (CON DISPARO VERTICAL DIRECTO DESDE ORIGEN) */
 let sdScore = 0, sdLives = 3, sdWave = 1;
 let sdCurrentItem = null;
 let sdAsteroidTimer = null;
@@ -1372,9 +1372,10 @@ function nextSDAsteroid() {
   shipExplosion.classList.remove('animate-explosion');
   shipExplosion.style.opacity = '0';
 
+  // RESET DEL MISIL EN SU ORIGEN
   laser.style.transition = 'none';
-laser.style.opacity = '0';
-laser.style.transform = 'translate(-50%, 0px)';
+  laser.style.opacity = '0';
+  laser.style.transform = 'translateY(0px)';
 
   let options = [sdCurrentItem.WORDS];
   while (options.length < 4 && options.length < gamesData.length) {
@@ -1393,9 +1394,9 @@ laser.style.transform = 'translate(-50%, 0px)';
     optContainer.appendChild(btn);
   });
 
-  // TRAYECTORIA DEL ASTEROIDE SINCRONIZADA A 10 SEGUNDOS EXACTOS
+  // TRAYECTORIA DEL ASTEROIDE SINCRONIZADA A 10 SEGUNDOS
   const totalSteps = 100;
-  const stepInterval = 100; // 100ms * 100 = 10,000ms = 10s
+  const stepInterval = 100; 
   const stepDistance = 220 / totalSteps;
 
   sdAsteroidTimer = setInterval(() => {
@@ -1431,16 +1432,16 @@ function shootSDLaser(isCorrect) {
 
   const targetDistance = -(210 - sdAsteroidPos);
   
-  // CORRECCIÓN: Usamos translateX(-50%) de forma consistente sin sobrescribir el eje X
+  // Reseteamos posición vertical
   laser.style.transition = 'none';
   laser.style.opacity = '1';
-  laser.style.transform = `translate(-50%, 0px)`;
+  laser.style.transform = 'translateY(0px)';
   
-  // Forzamos un reflow para asegurar la animación desde el centro de la nave
-  void laser.offsetWidth; 
+  void laser.offsetWidth; // Forzamos actualización del render del navegador
 
+  // Animación del disparador únicamente en el eje Y
   laser.style.transition = 'transform 0.25s linear, opacity 0.1s ease';
-  laser.style.transform = `translate(-50%, ${targetDistance}px)`;
+  laser.style.transform = `translateY(${targetDistance}px)`;
   ship.style.transform = 'scale(1.1)';
 
   setTimeout(() => {
@@ -1469,7 +1470,6 @@ function shootSDLaser(isCorrect) {
     }
   }, 250);
 }
-
 
 function handleSDImpact() {
   const ship = document.getElementById('sdShip');

@@ -142,7 +142,7 @@ body {
     </div>
 
     <!-- GAME CARDS -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-4">
       <div onclick="openGame('hangman')" class="bg-white border border-slate-200/80 hover:border-sky-500 p-6 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer flex flex-col justify-between group">
         <div>
           <span class="w-16 h-16 rounded-2xl bg-sky-500/10 text-sky-600 flex items-center justify-center font-bold text-3xl mb-4 group-hover:scale-110 group-hover:bg-sky-500 group-hover:text-white transition-all">🔤</span>
@@ -204,6 +204,16 @@ body {
           <p class="text-xs text-slate-500 leading-relaxed mb-4">10s to shoot vs 10s to save! Turn-based penalty shootout duel.</p>
         </div>
         <button class="w-full py-2.5 bg-emerald-50 text-emerald-600 font-bold text-xs rounded-xl group-hover:bg-emerald-500 group-hover:text-white transition">Start Shootout!</button>
+      </div>
+
+      <!-- 8. SPACE DEFENDER CARD -->
+      <div onclick="openGame('spacedefender')" class="bg-white border border-slate-200/80 hover:border-violet-500 p-6 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer flex flex-col justify-between group">
+        <div>
+          <span class="w-16 h-16 rounded-2xl bg-violet-500/10 text-violet-600 flex items-center justify-center font-bold text-3xl mb-4 group-hover:scale-110 group-hover:bg-violet-600 group-hover:text-white transition-all">🚀</span>
+          <h3 class="font-extrabold text-slate-900 text-xl mb-2">Space Defender</h3>
+          <p class="text-xs text-slate-500 leading-relaxed mb-4">Destroy incoming asteroids by answering the clues before impact!</p>
+        </div>
+        <button class="w-full py-2.5 bg-violet-50 text-violet-600 font-bold text-xs rounded-xl group-hover:bg-violet-600 group-hover:text-white transition">Defend Base!</button>
       </div>
     </div>
   </div>
@@ -391,6 +401,57 @@ body {
       </div>
     </div>
 
+    <!-- 8. SPACE DEFENDER AREA -->
+    <div id="spacedefenderView" class="hidden space-y-6">
+      <div class="bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-800 space-y-4 p-4 sm:p-6">
+        
+        <!-- HEADER / SCOREBAR -->
+        <div class="flex justify-between items-center text-xs font-black tracking-widest z-10 relative flex-wrap gap-2">
+          <span class="bg-violet-500/20 text-violet-400 border border-violet-500/30 px-3 sm:px-4 py-1.5 rounded-full shadow-lg backdrop-blur-md">
+            SCORE: <span id="sdScore">0</span> PTS
+          </span>
+          <span class="bg-rose-500/20 text-rose-400 border border-rose-500/30 px-3 sm:px-4 py-1.5 rounded-full shadow-lg backdrop-blur-md">
+            SHIELD: <span id="sdLives">❤️❤️❤️</span>
+          </span>
+          <span class="bg-amber-500/20 text-amber-300 border border-amber-500/30 px-3 sm:px-4 py-1.5 rounded-full shadow-lg backdrop-blur-md">
+            WAVE: <span id="sdWave">1</span>
+          </span>
+        </div>
+
+        <!-- CANVAS ESPACIAL -->
+        <div class="relative w-full aspect-[16/9] rounded-2xl overflow-hidden border border-slate-700 select-none shadow-2xl bg-slate-950 flex flex-col justify-between p-4">
+          
+          <!-- ESTRELLAS DE FONDO -->
+          <div class="absolute inset-0 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px] opacity-20 pointer-events-none"></div>
+
+          <!-- ASTEROIDE FLOTANTE (CON LA PISTA) -->
+          <div id="sdAsteroid" class="relative mx-auto transition-all duration-300 ease-linear z-20 max-w-md w-full text-center">
+            <div class="bg-slate-900/90 border-2 border-amber-500/60 backdrop-blur-md rounded-2xl p-4 shadow-[0_0_20px_rgba(245,158,11,0.3)]">
+              <span class="text-[10px] font-black uppercase text-amber-400 tracking-widest block mb-1">☄️ INCOMING ASTEROID</span>
+              <p id="sdClueText" class="text-xs sm:text-base font-bold text-white leading-snug">"Clue text..."</p>
+            </div>
+          </div>
+
+          <!-- LÁSER (ANIMACIÓN) -->
+          <div id="sdLaser" class="absolute bottom-12 left-1/2 -translate-x-1/2 w-1.5 bg-cyan-400 shadow-[0_0_15px_#22d3ee] z-10 transition-all duration-200 opacity-0" style="height: 0px;"></div>
+
+          <!-- NAVE ESPACIAL Y BASE -->
+          <div class="relative z-20 flex justify-center items-center">
+            <div id="sdShip" class="text-4xl sm:text-6xl filter drop-shadow-[0_0_10px_rgba(56,189,248,0.8)] transition-transform duration-200">
+              🚀
+            </div>
+          </div>
+        </div>
+
+        <!-- BOTONES DE OPCIONES DE RESPUESTA -->
+        <div class="bg-slate-800 border border-slate-700 p-4 rounded-2xl space-y-2 text-center">
+          <span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Select Target Word to Fire:</span>
+          <div id="sdOptions" class="grid grid-cols-2 sm:grid-cols-4 gap-2"></div>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 </main>
 
@@ -507,7 +568,7 @@ function openGame(gameId) {
   document.getElementById('gamesMenu').classList.add('hidden');
   document.getElementById('gameContainer').classList.remove('hidden');
 
-  const views = ['hangmanView', 'memoryView', 'wordsearchView', 'tictactoeView', 'tugofwarView', 'guesswordView', 'penaltyshootView'];
+  const views = ['hangmanView', 'memoryView', 'wordsearchView', 'tictactoeView', 'tugofwarView', 'guesswordView', 'penaltyshootView', 'spacedefenderView'];
   views.forEach(v => {
     const el = document.getElementById(v);
     if (el) el.classList.add('hidden');
@@ -541,6 +602,10 @@ function openGame(gameId) {
     document.getElementById('gameTitle').textContent = 'Penalty Shootout ⚽';
     document.getElementById('penaltyshootView').classList.remove('hidden');
     initPenaltyShootout();
+  } else if (gameId === 'spacedefender') {
+    document.getElementById('gameTitle').textContent = 'Space Defender 🚀';
+    document.getElementById('spacedefenderView').classList.remove('hidden');
+    initSpaceDefender();
   }
 }
 
@@ -550,6 +615,7 @@ function backToMenu() {
   if (guessInterval) clearInterval(guessInterval);
   if (tugInterval) clearInterval(tugInterval);
   if (penaltyInterval) clearInterval(penaltyInterval);
+  if (sdAsteroidTimer) clearInterval(sdAsteroidTimer);
 }
 
 /* RESULTS MODAL FUNCTION */
@@ -569,6 +635,7 @@ function cerrarModalResultadosJuego() {
   else if (juegoActivoActual === 'tugofwar') initTugOfWar();
   else if (juegoActivoActual === 'guessword') resetGuessUI();
   else if (juegoActivoActual === 'penaltyshoot') initPenaltyShootout();
+  else if (juegoActivoActual === 'spacedefender') initSpaceDefender();
 }
 
 /* 1. HANGMAN LOGIC */
@@ -1176,26 +1243,22 @@ function handlePenaltyAnswer(isCorrect) {
 
   if (penaltyPhase === 'ATTACK') {
     if (isCorrect) {
-      // Tiro bien ejecutado con dirección al arco -> Pasa al turno del portero para intentar atajarlo
       ball.style.transform = 'translate(-12%, -25%) scale(0.6)';
       penaltyPhase = 'DEFENSE';
       showPenaltyFeedback('INFO', '🧤 SAVE THE SHOT!');
       setTimeout(() => startPenaltyTurn(), 1200);
     } else {
-      // El pateador se equivoca -> Balón fuera de la cancha
       ball.style.transform = 'translate(-55%, -35%) scale(0.3)';
       showPenaltyFeedback('MISSED');
       setTimeout(() => nextPenaltyTurn(false), 1400);
     }
   } else if (penaltyPhase === 'DEFENSE') {
     if (isCorrect) {
-      // EL PORTERO ACCIONA BIEN: Ataja el tiro que iba a puerta
       keeper.style.transform = 'translate(-12%, 0)';
       ball.style.transform = 'translate(-12%, -25%) scale(0.6)';
       showPenaltyFeedback('BLOCKED');
       setTimeout(() => nextPenaltyTurn(false), 1400);
     } else {
-      // EL PORTERO SE EQUIVOCA: No logra atajarlo -> ¡GOL!
       ball.style.transform = 'translate(-18%, -28%) scale(0.55)';
       keeper.style.transform = 'translate(14%, 0)';
       showPenaltyFeedback('GOAL');
@@ -1203,7 +1266,6 @@ function handlePenaltyAnswer(isCorrect) {
     }
   }
 }
-
 
 function nextPenaltyTurn(isGoal) {
   if (isGoal) {
@@ -1241,6 +1303,103 @@ function finalizarPenaltyShootout() {
     mostrarModalResultadosJuego('Red Team Wins! 🏆⚽', `${penaltyRedScore} - ${penaltyBlueScore}`, 'Great shooting & saving performance!');
   } else {
     mostrarModalResultadosJuego('Draw Match! 🤝⚽', `${penaltyBlueScore} - ${penaltyRedScore}`, 'Tense duel ended in a tie!');
+  }
+}
+
+/* 8. SPACE DEFENDER LOGIC */
+let sdScore = 0, sdLives = 3, sdWave = 1;
+let sdCurrentItem = null;
+let sdAsteroidTimer = null;
+let sdAsteroidPos = 0;
+
+function initSpaceDefender() {
+  sdScore = 0;
+  sdLives = 3;
+  sdWave = 1;
+  updateSDUI();
+  nextSDAsteroid();
+}
+
+function updateSDUI() {
+  document.getElementById('sdScore').textContent = sdScore;
+  document.getElementById('sdLives').textContent = '❤️'.repeat(sdLives) || '💥';
+  document.getElementById('sdWave').textContent = sdWave;
+}
+
+function nextSDAsteroid() {
+  if (sdAsteroidTimer) clearInterval(sdAsteroidTimer);
+  if (sdLives <= 0) return;
+
+  sdCurrentItem = gamesData[Math.floor(Math.random() * gamesData.length)];
+  document.getElementById('sdClueText').textContent = `"${sdCurrentItem.CLUE}"`;
+
+  const asteroid = document.getElementById('sdAsteroid');
+  sdAsteroidPos = 0;
+  asteroid.style.transform = `translateY(${sdAsteroidPos}px)`;
+
+  let options = [sdCurrentItem.WORDS];
+  while (options.length < 4 && options.length < gamesData.length) {
+    let randWord = gamesData[Math.floor(Math.random() * gamesData.length)].WORDS;
+    if (!options.includes(randWord)) options.push(randWord);
+  }
+  options.sort(() => 0.5 - Math.random());
+
+  const optContainer = document.getElementById('sdOptions');
+  optContainer.innerHTML = '';
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.textContent = opt;
+    btn.className = "py-2.5 px-3 bg-slate-700 hover:bg-violet-600 text-white rounded-xl font-bold text-xs shadow-md transition cursor-pointer truncate border border-slate-600";
+    btn.onclick = () => shootSDLaser(opt === sdCurrentItem.WORDS);
+    optContainer.appendChild(btn);
+  });
+
+  const speed = Math.max(80, 200 - (sdWave * 15));
+  sdAsteroidTimer = setInterval(() => {
+    sdAsteroidPos += 4;
+    asteroid.style.transform = `translateY(${sdAsteroidPos}px)`;
+
+    if (sdAsteroidPos >= 140) {
+      clearInterval(sdAsteroidTimer);
+      handleSDImpact();
+    }
+  }, speed);
+}
+
+function shootSDLaser(isCorrect) {
+  if (sdAsteroidTimer) clearInterval(sdAsteroidTimer);
+
+  const laser = document.getElementById('sdLaser');
+  const ship = document.getElementById('sdShip');
+
+  ship.style.transform = 'scale(1.2) translateY(-5px)';
+  laser.style.height = '140px';
+  laser.style.opacity = '1';
+
+  setTimeout(() => {
+    ship.style.transform = 'scale(1) translateY(0)';
+    laser.style.opacity = '0';
+    laser.style.height = '0px';
+
+    if (isCorrect) {
+      sdScore += 100;
+      if (sdScore % 300 === 0) sdWave++;
+      updateSDUI();
+      nextSDAsteroid();
+    } else {
+      handleSDImpact();
+    }
+  }, 250);
+}
+
+function handleSDImpact() {
+  sdLives--;
+  updateSDUI();
+
+  if (sdLives <= 0) {
+    setTimeout(() => mostrarModalResultadosJuego('Base Destroyed! 💥', `${sdScore} PTS`, `You reached Wave ${sdWave} in Space Defender.`), 300);
+  } else {
+    nextSDAsteroid();
   }
 }
 </script>

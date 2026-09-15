@@ -1373,8 +1373,8 @@ function nextSDAsteroid() {
   shipExplosion.style.opacity = '0';
 
   laser.style.transition = 'none';
-  laser.style.opacity = '0';
-  laser.style.transform = 'translate(-50%, 0px)';
+laser.style.opacity = '0';
+laser.style.transform = 'translate(-50%, 0px)';
 
   let options = [sdCurrentItem.WORDS];
   while (options.length < 4 && options.length < gamesData.length) {
@@ -1431,8 +1431,15 @@ function shootSDLaser(isCorrect) {
 
   const targetDistance = -(210 - sdAsteroidPos);
   
-  laser.style.transition = 'transform 0.25s linear, opacity 0.1s ease';
+  // CORRECCIÓN: Usamos translateX(-50%) de forma consistente sin sobrescribir el eje X
+  laser.style.transition = 'none';
   laser.style.opacity = '1';
+  laser.style.transform = `translate(-50%, 0px)`;
+  
+  // Forzamos un reflow para asegurar la animación desde el centro de la nave
+  void laser.offsetWidth; 
+
+  laser.style.transition = 'transform 0.25s linear, opacity 0.1s ease';
   laser.style.transform = `translate(-50%, ${targetDistance}px)`;
   ship.style.transform = 'scale(1.1)';
 
@@ -1462,6 +1469,7 @@ function shootSDLaser(isCorrect) {
     }
   }, 250);
 }
+
 
 function handleSDImpact() {
   const ship = document.getElementById('sdShip');

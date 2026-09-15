@@ -85,6 +85,18 @@ body {
 .animate-explosion {
   animation: explode 0.4s ease-out forwards;
 }
+
+/* ANIMACIÓN DE SACUDIDA AL RECIBIR IMPACTO */
+@keyframes shakeCanvas {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-8px, 6px); }
+  40% { transform: translate(8px, -6px); }
+  60% { transform: translate(-6px, -4px); }
+  80% { transform: translate(6px, 4px); }
+}
+.animate-shake {
+  animation: shakeCanvas 0.35s ease-in-out;
+}
 </style>
 </head>
 <body class="text-slate-800 min-h-screen flex flex-col justify-between antialiased selection:bg-sky-500 selection:text-white">
@@ -406,7 +418,7 @@ body {
         </div>
 
         <!-- CANVAS ESPACIAL CON FONDO DE GALAXIA HD -->
-        <div class="relative w-full aspect-[16/10] rounded-2xl overflow-hidden border border-slate-700 select-none shadow-2xl bg-slate-950 flex flex-col justify-between p-4">
+        <div id="sdCanvasContainer" class="relative w-full aspect-[16/10] rounded-2xl overflow-hidden border border-slate-700 select-none shadow-2xl bg-slate-950 flex flex-col justify-between p-4">
           
           <!-- IMAGEN FONDO GALAXIA -->
           <img src="https://drive.google.com/thumbnail?id=1tdcR5GyTogalY_khypqYxKSmjcD9qal_&sz=w1600" class="absolute inset-0 w-full h-full object-cover pointer-events-none z-0" alt="Galaxy Background">
@@ -418,18 +430,25 @@ body {
               <p id="sdClueText" class="text-xs sm:text-base font-bold text-white leading-snug">"Clue text..."</p>
             </div>
             <!-- EFECTO DE EXPLOSIÓN EN EL ASTEROIDE -->
-            <div id="sdExplosion" class="absolute inset-0 flex items-center justify-center text-6xl pointer-events-none opacity-0">
+            <div id="sdExplosion" class="absolute inset-0 flex items-center justify-center text-7xl pointer-events-none opacity-0">
               💥
             </div>
           </div>
 
-          <!-- IMAGEN DEL MISIL ESPACIAL (MÁS GRANDE Y ANCLADO A LA NAVE) -->
-          <img id="sdLaser" src="https://drive.google.com/thumbnail?id=1DImCHuzl0D5xEz0JcowolX1TIB1z23HZ&sz=w1600" class="absolute bottom-24 left-1/2 -translate-x-1/2 w-14 sm:w-16 h-auto object-contain z-10 opacity-0 pointer-events-none filter drop-shadow-[0_0_15px_rgba(239,68,68,0.9)]" alt="Space Missile">
+          <!-- CONTENEDOR ANCLADO DE NAVE + COHETE CENTRADO -->
+          <div class="relative z-20 flex justify-center items-center w-full pb-2">
+            <!-- MISIL ESPACIAL -->
+            <img id="sdLaser" src="https://drive.google.com/thumbnail?id=1DImCHuzl0D5xEz0JcowolX1TIB1z23HZ&sz=w1600" class="absolute bottom-[70px] left-1/2 -translate-x-1/2 w-20 sm:w-24 h-auto object-contain z-10 opacity-0 pointer-events-none filter drop-shadow-[0_0_20px_rgba(239,68,68,0.9)]" alt="Space Missile">
 
-          <!-- IMAGEN DE LA NAVE ESPACIAL (MÁS GRANDE) -->
-          <div class="relative z-20 flex justify-center items-center pb-2">
-            <img id="sdShip" src="https://drive.google.com/thumbnail?id=1KVi8WbOUU5qzsPb9xj3yt9Mmu8LghVXL&sz=w1600" class="h-24 sm:h-28 w-auto object-contain filter drop-shadow-[0_0_20px_rgba(56,189,248,0.9)] transition-transform duration-200" alt="Spaceship">
+            <!-- NAVE ESPACIAL -->
+            <img id="sdShip" src="https://drive.google.com/thumbnail?id=1KVi8WbOUU5qzsPb9xj3yt9Mmu8LghVXL&sz=w1600" class="h-36 sm:h-42 w-auto object-contain filter drop-shadow-[0_0_25px_rgba(56,189,248,0.9)] transition-all duration-200 relative z-20" alt="Spaceship">
+
+            <!-- EXPLOSIÓN EN LA NAVE CUANDO EL METEORITO LA IMPACTA -->
+            <div id="sdShipExplosion" class="absolute inset-0 flex items-center justify-center text-8xl pointer-events-none opacity-0 z-30">
+              💥
+            </div>
           </div>
+
         </div>
 
         <!-- BOTONES DE OPCIONES DE RESPUESTA -->
@@ -1295,7 +1314,7 @@ function finalizarPenaltyShootout() {
   }
 }
 
-/* 8. SPACE DEFENDER LOGIC (CORREGIDO LÁSER/MISIL Y EXPLOSIÓN) */
+/* 8. SPACE DEFENDER LOGIC (CON EXPLOSIÓN EN NAVE AL RECIBIR IMPACTO) */
 let sdScore = 0, sdLives = 3, sdWave = 1;
 let sdCurrentItem = null;
 let sdAsteroidTimer = null;
@@ -1325,15 +1344,23 @@ function nextSDAsteroid() {
   const asteroid = document.getElementById('sdAsteroid');
   const asteroidBox = document.getElementById('sdAsteroidBox');
   const laser = document.getElementById('sdLaser');
+  const ship = document.getElementById('sdShip');
   const explosion = document.getElementById('sdExplosion');
+  const shipExplosion = document.getElementById('sdShipExplosion');
   
   sdAsteroidPos = 0;
   asteroid.style.transform = `translateY(${sdAsteroidPos}px)`;
   asteroidBox.style.opacity = '1';
   asteroidBox.style.transform = 'scale(1)';
   
+  ship.style.opacity = '1';
+  ship.style.transform = 'scale(1)';
+
   explosion.classList.remove('animate-explosion');
   explosion.style.opacity = '0';
+
+  shipExplosion.classList.remove('animate-explosion');
+  shipExplosion.style.opacity = '0';
 
   // RESET DEL MISIL EN SU POSICIÓN INICIAL SOBRE LA NAVE
   laser.style.transition = 'none';
@@ -1378,8 +1405,8 @@ function shootSDLaser(isCorrect) {
   const asteroidBox = document.getElementById('sdAsteroidBox');
   const explosion = document.getElementById('sdExplosion');
 
-  // EL MISIL VIAJA HACIA ARRIBA HASTA EL ASTEROIDE
-  const targetDistance = -(230 - sdAsteroidPos);
+  // DISTANCIA RECORRIDA POR EL MISIL MÁS GRANDE HASTA EL ASTEROIDE
+  const targetDistance = -(210 - sdAsteroidPos);
   
   laser.style.transition = 'transform 0.25s linear, opacity 0.1s ease';
   laser.style.opacity = '1';
@@ -1391,7 +1418,7 @@ function shootSDLaser(isCorrect) {
     laser.style.opacity = '0';
 
     if (isCorrect) {
-      // EXPLOSIÓN DEL ASTEROIDE AL SER IMPACTADO
+      // IMPACTO EXITOSO EN EL ASTEROIDE
       asteroidBox.style.opacity = '0';
       asteroidBox.style.transform = 'scale(0.2)';
       
@@ -1407,7 +1434,7 @@ function shootSDLaser(isCorrect) {
       }, 400);
 
     } else {
-      // SI FALLA, EL ASTEROIDE IMPACTA DIRECTAMENTE LA NAVE
+      // RESPUESTA INCORRECTA: EL ASTEROIDE CAE Y CHOCA LA NAVE
       sdAsteroidPos = 220;
       asteroid.style.transform = `translateY(${sdAsteroidPos}px)`;
       setTimeout(() => handleSDImpact(), 200);
@@ -1417,19 +1444,29 @@ function shootSDLaser(isCorrect) {
 
 function handleSDImpact() {
   const ship = document.getElementById('sdShip');
-  ship.classList.add('animate-bounce');
-  
+  const shipExplosion = document.getElementById('sdShipExplosion');
+  const canvas = document.getElementById('sdCanvasContainer');
+
+  // ANIMACIÓN DE EXPLOSIÓN EN LA NAVE Y TEMBLOR DEL CANVA
+  ship.style.opacity = '0.2';
+  shipExplosion.style.opacity = '1';
+  shipExplosion.classList.add('animate-explosion');
+
+  if (canvas) {
+    canvas.classList.add('animate-shake');
+    setTimeout(() => canvas.classList.remove('animate-shake'), 400);
+  }
+
   sdLives--;
   updateSDUI();
 
   setTimeout(() => {
-    ship.classList.remove('animate-bounce');
     if (sdLives <= 0) {
       mostrarModalResultadosJuego('Base Destroyed! 💥', `${sdScore} PTS`, `You reached Wave ${sdWave} in Space Defender.`);
     } else {
       nextSDAsteroid();
     }
-  }, 300);
+  }, 600);
 }
 </script>
 </body>

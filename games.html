@@ -331,16 +331,14 @@ body {
       </div>
     </div>
 
-    <!-- 7. PENALTY SHOOTOUT AREA (PUNTO DE ANCLAJE COMPARTIDO) -->
+    <!-- 7. PENALTY SHOOTOUT AREA (TIMER CENTRADO EN MEDIO DE LA IMAGEN) -->
     <div id="penaltyshootView" class="hidden space-y-6">
       <div class="bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-800 space-y-4 p-4 sm:p-6">
         
+        <!-- MARCADOR SUPERIOR -->
         <div class="flex justify-between items-center text-xs font-black tracking-widest z-10 relative flex-wrap gap-2">
           <span class="bg-sky-500/20 text-sky-400 border border-sky-500/30 px-3 sm:px-4 py-1.5 rounded-full shadow-lg backdrop-blur-md">
             BLUE TEAM: <span id="penaltyBlueScore">0</span> GOALS
-          </span>
-          <span class="bg-amber-500/20 text-amber-300 border border-amber-500/30 px-3 sm:px-4 py-1.5 rounded-full shadow-lg backdrop-blur-md flex items-center gap-1">
-            ⏱️ <span id="penaltyTimer" class="text-amber-400 font-extrabold text-sm">10</span>s
           </span>
           <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-3 sm:px-4 py-1.5 rounded-full shadow-lg backdrop-blur-md">
             ROUND: <span id="penaltyRound">1</span> / 5
@@ -355,6 +353,14 @@ body {
           
           <!-- CAMPO (ANCLAJE BASE) -->
           <img src="https://drive.google.com/thumbnail?id=1bWad_TGuyLKUz7ScoUVdpYcWrL2Nfsxl&sz=w1600" class="absolute inset-0 w-full h-full object-fill pointer-events-none z-0" alt="Goal Field Background">
+
+          <!-- TIMER GIGANTE CENTRADO EN EL MEDIO DE LA IMAGEN -->
+          <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-40">
+            <div class="bg-slate-950/70 border-2 border-amber-400/50 backdrop-blur-md rounded-2xl px-6 py-2 sm:px-8 sm:py-3 shadow-2xl flex flex-col items-center justify-center text-center">
+              <span class="text-[10px] sm:text-xs font-black uppercase text-amber-300 tracking-widest leading-none mb-1">TIME LEFT</span>
+              <span id="penaltyTimer" class="text-4xl sm:text-6xl font-black text-amber-400 tracking-tighter drop-shadow-[0_4px_12px_rgba(251,191,36,0.5)] leading-none">10</span>
+            </div>
+          </div>
 
           <!-- PORTERO (MISMO PUNTO DE ANCLAJE QUE EL CAMPO) -->
           <img id="penaltyKeeperImg" src="https://drive.google.com/thumbnail?id=14ePNT76YwZIOpCSs4ptlWldonDwvyZ2i&sz=w1600" class="absolute inset-0 w-full h-full object-fill pointer-events-none transition-transform duration-500 z-10" alt="Goalkeeper">
@@ -1046,7 +1052,7 @@ function nextGuessWord(isCorrect) {
   displayGuessWord();
 }
 
-/* 7. PENALTY SHOOTOUT LOGIC (ANCLAJE EXACTO AL LIENZO BASE) */
+/* 7. PENALTY SHOOTOUT LOGIC */
 let penaltyBlueScore = 0, penaltyRedScore = 0;
 let penaltyCurrentRound = 1, penaltyMaxRounds = 5;
 let penaltyPhase = 'ATTACK'; 
@@ -1072,7 +1078,6 @@ function updatePenaltyUI() {
   const ball = document.getElementById('penaltyBallImg');
   const keeper = document.getElementById('penaltyKeeperImg');
   
-  // Reiniciar a la posición inicial relativa de Photoshop
   ball.style.transform = 'translate(0, 0) scale(1)';
   keeper.style.transform = 'translate(0, 0)';
 }
@@ -1080,7 +1085,9 @@ function updatePenaltyUI() {
 function startPenaltyTurn() {
   if (penaltyInterval) clearInterval(penaltyInterval);
   penaltyTimer = 10;
-  document.getElementById('penaltyTimer').textContent = penaltyTimer;
+  
+  const timerEl = document.getElementById('penaltyTimer');
+  if (timerEl) timerEl.textContent = penaltyTimer;
 
   currentPenaltyItem = gamesData[Math.floor(Math.random() * gamesData.length)];
   document.getElementById('penaltyClue').textContent = `"${currentPenaltyItem.CLUE}"`;
@@ -1119,7 +1126,7 @@ function startPenaltyTurn() {
 
   penaltyInterval = setInterval(() => {
     penaltyTimer--;
-    document.getElementById('penaltyTimer').textContent = penaltyTimer;
+    if (timerEl) timerEl.textContent = penaltyTimer;
     if (penaltyTimer <= 0) {
       clearInterval(penaltyInterval);
       handlePenaltyAnswer(false);
@@ -1135,23 +1142,19 @@ function handlePenaltyAnswer(isCorrect) {
 
   if (penaltyPhase === 'ATTACK') {
     if (isCorrect) {
-      // Disparo hacia el centro del arco en relación al lienzo
       ball.style.transform = 'translate(0, -25%) scale(0.6)';
       penaltyPhase = 'DEFENSE';
       setTimeout(() => startPenaltyTurn(), 1000);
     } else {
-      // Disparo fuera del lienzo
       ball.style.transform = 'translate(20%, -10%) scale(0.8)';
       setTimeout(() => nextPenaltyTurn(false), 1200);
     }
   } else if (penaltyPhase === 'DEFENSE') {
     if (isCorrect) {
-      // El arquero ataja la pelota hacia el lado izquierdo
       keeper.style.transform = 'translate(-12%, 0)';
       ball.style.transform = 'translate(-12%, -25%) scale(0.6)';
       setTimeout(() => nextPenaltyTurn(false), 1200);
     } else {
-      // El arquero se lanza al lado equivocado (Gol)
       keeper.style.transform = 'translate(12%, 0)';
       setTimeout(() => nextPenaltyTurn(true), 1200);
     }

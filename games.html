@@ -418,8 +418,8 @@ body {
           </span>
         </div>
 
-        <!-- CANVAS ESPACIAL -->
-        <div class="relative w-full aspect-[16/9] rounded-2xl overflow-hidden border border-slate-700 select-none shadow-2xl bg-slate-950 flex flex-col justify-between p-4">
+        <!-- CANVAS ESPACIAL (PROPORCIÓN OPTIMIZADA A 16/10) -->
+        <div class="relative w-full aspect-[16/10] rounded-2xl overflow-hidden border border-slate-700 select-none shadow-2xl bg-slate-950 flex flex-col justify-between p-4">
           
           <!-- ESTRELLAS DE FONDO -->
           <div class="absolute inset-0 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px] opacity-20 pointer-events-none"></div>
@@ -433,11 +433,11 @@ body {
           </div>
 
           <!-- LÁSER (ANIMACIÓN) -->
-          <div id="sdLaser" class="absolute bottom-12 left-1/2 -translate-x-1/2 w-1.5 bg-cyan-400 shadow-[0_0_15px_#22d3ee] z-10 transition-all duration-200 opacity-0" style="height: 0px;"></div>
+          <div id="sdLaser" class="absolute bottom-14 left-1/2 -translate-x-1/2 w-2 bg-cyan-400 shadow-[0_0_20px_#22d3ee] z-10 transition-all duration-200 opacity-0 rounded-full" style="height: 0px;"></div>
 
           <!-- NAVE ESPACIAL Y BASE -->
-          <div class="relative z-20 flex justify-center items-center">
-            <div id="sdShip" class="text-4xl sm:text-6xl filter drop-shadow-[0_0_10px_rgba(56,189,248,0.8)] transition-transform duration-200">
+          <div class="relative z-20 flex justify-center items-center pb-2">
+            <div id="sdShip" class="text-4xl sm:text-6xl filter drop-shadow-[0_0_12px_rgba(56,189,248,0.9)] transition-transform duration-200">
               🚀
             </div>
           </div>
@@ -1354,12 +1354,13 @@ function nextSDAsteroid() {
     optContainer.appendChild(btn);
   });
 
-  const speed = Math.max(80, 200 - (sdWave * 15));
+  const speed = Math.max(60, 180 - (sdWave * 15));
   sdAsteroidTimer = setInterval(() => {
-    sdAsteroidPos += 4;
+    sdAsteroidPos += 5;
     asteroid.style.transform = `translateY(${sdAsteroidPos}px)`;
 
-    if (sdAsteroidPos >= 140) {
+    // BAJA HASTA COLISIONAR DIRECTAMENTE CON LA NAVE (220px)
+    if (sdAsteroidPos >= 220) {
       clearInterval(sdAsteroidTimer);
       handleSDImpact();
     }
@@ -1371,9 +1372,13 @@ function shootSDLaser(isCorrect) {
 
   const laser = document.getElementById('sdLaser');
   const ship = document.getElementById('sdShip');
+  const asteroid = document.getElementById('sdAsteroid');
+
+  // ALTURA DEL LÁSER ADAPTADA A LA POSICIÓN ACTUAL DEL ASTEROIDE
+  const currentHeight = Math.max(20, 260 - sdAsteroidPos);
+  laser.style.height = `${currentHeight}px`;
 
   ship.style.transform = 'scale(1.2) translateY(-5px)';
-  laser.style.height = '140px';
   laser.style.opacity = '1';
 
   setTimeout(() => {
@@ -1387,20 +1392,29 @@ function shootSDLaser(isCorrect) {
       updateSDUI();
       nextSDAsteroid();
     } else {
-      handleSDImpact();
+      // SI FALLA LA RESPUESTA, EL ASTEROIDE CAE RÁPIDO HASTA LA NAVE
+      sdAsteroidPos = 220;
+      asteroid.style.transform = `translateY(${sdAsteroidPos}px)`;
+      setTimeout(() => handleSDImpact(), 200);
     }
   }, 250);
 }
 
 function handleSDImpact() {
+  const ship = document.getElementById('sdShip');
+  ship.classList.add('animate-bounce');
+  
   sdLives--;
   updateSDUI();
 
-  if (sdLives <= 0) {
-    setTimeout(() => mostrarModalResultadosJuego('Base Destroyed! 💥', `${sdScore} PTS`, `You reached Wave ${sdWave} in Space Defender.`), 300);
-  } else {
-    nextSDAsteroid();
-  }
+  setTimeout(() => {
+    ship.classList.remove('animate-bounce');
+    if (sdLives <= 0) {
+      mostrarModalResultadosJuego('Base Destroyed! 💥', `${sdScore} PTS`, `You reached Wave ${sdWave} in Space Defender.`);
+    } else {
+      nextSDAsteroid();
+    }
+  }, 300);
 }
 </script>
 </body>

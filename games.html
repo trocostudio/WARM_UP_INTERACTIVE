@@ -331,7 +331,7 @@ body {
       </div>
     </div>
 
-    <!-- 7. PENALTY SHOOTOUT AREA (TIMER CENTRADO EN MEDIO DE LA IMAGEN) -->
+    <!-- 7. PENALTY SHOOTOUT AREA (TIMER ARRIBA A LA IZQUIERDA DENTRO DE LA IMAGEN) -->
     <div id="penaltyshootView" class="hidden space-y-6">
       <div class="bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-800 space-y-4 p-4 sm:p-6">
         
@@ -354,11 +354,11 @@ body {
           <!-- CAMPO (ANCLAJE BASE) -->
           <img src="https://drive.google.com/thumbnail?id=1bWad_TGuyLKUz7ScoUVdpYcWrL2Nfsxl&sz=w1600" class="absolute inset-0 w-full h-full object-fill pointer-events-none z-0" alt="Goal Field Background">
 
-          <!-- TIMER GIGANTE CENTRADO EN EL MEDIO DE LA IMAGEN -->
-          <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-40">
-            <div class="bg-slate-950/70 border-2 border-amber-400/50 backdrop-blur-md rounded-2xl px-6 py-2 sm:px-8 sm:py-3 shadow-2xl flex flex-col items-center justify-center text-center">
-              <span class="text-[10px] sm:text-xs font-black uppercase text-amber-300 tracking-widest leading-none mb-1">TIME LEFT</span>
-              <span id="penaltyTimer" class="text-4xl sm:text-6xl font-black text-amber-400 tracking-tighter drop-shadow-[0_4px_12px_rgba(251,191,36,0.5)] leading-none">10</span>
+          <!-- TIMER EN LA ESQUINA SUPERIOR IZQUIERDA -->
+          <div class="absolute top-3 left-3 sm:top-5 sm:left-5 pointer-events-none z-40">
+            <div class="bg-slate-950/80 border border-amber-400/50 backdrop-blur-md rounded-xl px-3 py-1.5 sm:px-4 sm:py-2 shadow-2xl flex items-center gap-2">
+              <span class="text-[10px] sm:text-xs font-black uppercase text-amber-300 tracking-widest leading-none">⏱️ TIME:</span>
+              <span id="penaltyTimer" class="text-xl sm:text-3xl font-black text-amber-400 tracking-tight drop-shadow-[0_2px_8px_rgba(251,191,36,0.5)] leading-none">10</span>s
             </div>
           </div>
 
